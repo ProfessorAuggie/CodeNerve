@@ -12,6 +12,7 @@ import { LessonPage } from './pages/LessonPage';
 import { QuizPage } from './pages/QuizPage';
 import { DashboardPage } from './pages/DashboardPage';
 import { TeacherPage } from './pages/TeacherPage';
+import { LpuPortalPage } from './pages/LpuPortalPage';
 
 // External AlgoNerve Redirect component
 const AlgoNerveRedirect: React.FC = () => {
@@ -60,8 +61,9 @@ export const App: React.FC = () => {
           {/* Problem Catalogue */}
           <Route path="/problems" element={<ProblemsPage />} />
 
-          {/* Academic University Syllabus */}
-          <Route path="/university" element={<UniversityPage />} />
+          {/* Academic LPU University Portal */}
+          <Route path="/university" element={<LpuPortalPage />} />
+          <Route path="/lpu" element={<LpuPortalPage />} />
 
           {/* Interactive Lesson Views */}
           <Route path="/lesson/:lessonId" element={<LessonPage />} />

@@ -103,6 +103,138 @@ export const HomePage: React.FC = () => {
               <div className="text-xs text-slate-400 mt-0.5">Free & Privacy-Focused</div>
             </div>
           </div>
+          {/* Dual Platform Split: Generic Public vs LPU Portal Gateway */}
+          <div className="pt-12 text-left">
+            <div className="text-center max-w-2xl mx-auto mb-8 space-y-2">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-900 border border-slate-800 text-xs text-brand-300 font-semibold">
+                <span>Select Your Learning Track</span>
+              </div>
+              <h2 className="text-2xl sm:text-3xl font-extrabold text-white">
+                Two Dedicated Ecosystems, One Platform
+              </h2>
+              <p className="text-sm text-slate-400">
+                Choose between the universal NeetCode-style interview prep tree or the official LPU University academic curriculum.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* Track 1: Generic Public Portal */}
+              <div className="relative group rounded-3xl border border-brand-500/30 bg-gradient-to-b from-slate-900/90 to-slate-950/90 p-8 shadow-xl hover:border-brand-500/60 transition-all duration-300 flex flex-col justify-between overflow-hidden">
+                <div className="absolute top-0 right-0 -mr-16 -mt-16 w-48 h-48 bg-brand-500/10 rounded-full blur-3xl pointer-events-none group-hover:bg-brand-500/20 transition" />
+                
+                <div className="space-y-5">
+                  <div className="flex items-center justify-between">
+                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-500/10 border border-brand-500/30 text-xs font-bold text-brand-300">
+                      <span>🌐 Generic Public / Global DSA</span>
+                    </div>
+                    <span className="text-xs text-slate-400 font-medium">For Everyone</span>
+                  </div>
+
+                  <div>
+                    <h3 className="text-2xl font-bold text-white group-hover:text-brand-300 transition">
+                      NeetCode Branching Roadmap
+                    </h3>
+                    <p className="text-sm text-slate-300 mt-2 leading-relaxed">
+                      Interactive 18-topic hierarchical flowchart with dotted matrix canvas and bezier curve branches. Methodically master Blind 75 / NeetCode 150 patterns from Arrays & Hashing to 2-D Dynamic Programming.
+                    </p>
+                  </div>
+
+                  <ul className="space-y-2.5 text-xs text-slate-300 pt-2">
+                    <li className="flex items-center gap-2">
+                      <span className="h-1.5 w-1.5 rounded-full bg-brand-400" />
+                      <span><strong>NeetCode Flowchart:</strong> Visual dependency graph matching the iconic roadmap</span>
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <span className="h-1.5 w-1.5 rounded-full bg-brand-400" />
+                      <span><strong>Curated Multi-Platform:</strong> 75+ problems from LeetCode, GfG, HackerRank</span>
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <span className="h-1.5 w-1.5 rounded-full bg-brand-400" />
+                      <span><strong>AlgoNerve Visualizer:</strong> Step-by-step algorithmic simulations in a new tab</span>
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <span className="h-1.5 w-1.5 rounded-full bg-brand-400" />
+                      <span><strong>Full C++ Roadmap:</strong> Modern C++20 syntax, STL, memory, and OOP</span>
+                    </li>
+                  </ul>
+                </div>
+
+                <div className="pt-8 flex flex-wrap items-center gap-3">
+                  <Link
+                    to="/roadmap"
+                    className="flex-1 min-w-[160px] flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-brand-600 hover:bg-brand-500 text-white font-bold text-xs shadow-lg shadow-brand-600/30 transition group/btn"
+                  >
+                    <span>Launch NeetCode Tree</span>
+                    <ArrowRight className="h-3.5 w-3.5 transition group-btn/hover:translate-x-1" />
+                  </Link>
+                  <Link
+                    to="/problems"
+                    className="flex items-center justify-center px-4 py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold border border-slate-700 transition"
+                  >
+                    <span>Problem List</span>
+                  </Link>
+                </div>
+              </div>
+
+              {/* Track 2: LPU Academic Portal */}
+              <div className="relative group rounded-3xl border border-emerald-500/30 bg-gradient-to-b from-slate-900/90 to-slate-950/90 p-8 shadow-xl hover:border-emerald-500/60 transition-all duration-300 flex flex-col justify-between overflow-hidden">
+                <div className="absolute top-0 right-0 -mr-16 -mt-16 w-48 h-48 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none group-hover:bg-emerald-500/20 transition" />
+                
+                <div className="space-y-5">
+                  <div className="flex items-center justify-between">
+                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-xs font-bold text-emerald-300">
+                      <span>🎓 LPU Student & Faculty Portal</span>
+                    </div>
+                    <span className="text-xs text-emerald-400 font-semibold">CSE Official</span>
+                  </div>
+
+                  <div>
+                    <h3 className="text-2xl font-bold text-white group-hover:text-emerald-300 transition">
+                      LPU B.Tech CSE Curriculum
+                    </h3>
+                    <p className="text-sm text-slate-300 mt-2 leading-relaxed">
+                      Custom tailored for Lovely Professional University students and professors. Mapped unit-by-unit with prerequisites to ace CA-1, CA-2, Midterm, and Endterm examinations.
+                    </p>
+                  </div>
+
+                  <ul className="space-y-2.5 text-xs text-slate-300 pt-2">
+                    <li className="flex items-center gap-2">
+                      <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
+                      <span><strong>CSE202 (C++ OOP):</strong> Units 1–6 (Classes, Constructors, Polymorphism, Files)</span>
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
+                      <span><strong>CSE205 (Data Structures):</strong> Units 1–6 (Arrays, Stacks, Queues, Trees, Graphs)</span>
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
+                      <span><strong>Topic Prerequisites:</strong> Clearly listed knowledge requirements for each topic</span>
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
+                      <span><strong>Exam Prep Hubs & Faculty Portal:</strong> Curated CA/MTE questions & teacher assignments</span>
+                    </li>
+                  </ul>
+                </div>
+
+                <div className="pt-8 flex flex-wrap items-center gap-3">
+                  <Link
+                    to="/lpu"
+                    className="flex-1 min-w-[160px] flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs shadow-lg shadow-emerald-600/30 transition group/btn"
+                  >
+                    <span>Enter LPU Academic Portal</span>
+                    <ArrowRight className="h-3.5 w-3.5 transition group-btn/hover:translate-x-1" />
+                  </Link>
+                  <Link
+                    to="/teacher"
+                    className="flex items-center justify-center px-4 py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold border border-slate-700 transition"
+                  >
+                    <span>Faculty Suite</span>
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 

@@ -28,7 +28,10 @@ interface UserState {
   quizScores: Record<string, { score: number; total: number; date: string }>;
   customProblemSets: CustomProblemSet[];
   
+  activePortal: 'global' | 'lpu';
+  
   // Actions
+  setActivePortal: (portal: 'global' | 'lpu') => void;
   setUser: (user: Partial<UserProfile>) => void;
   setRole: (role: UserRole) => void;
   updateProblemStatus: (problemId: string, status: ProblemStatus, notes?: string, submissionUrl?: string) => void;
@@ -94,6 +97,10 @@ export const useUserStore = create<UserState>()(
           createdAt: new Date().toISOString(),
         },
       ],
+
+      activePortal: 'global',
+
+      setActivePortal: (portal) => set({ activePortal: portal }),
 
       setUser: (updates) =>
         set((state) => ({ user: { ...state.user, ...updates } })),
