@@ -3,8 +3,6 @@ import {
   GraduationCap, 
   ZoomIn, 
   ZoomOut, 
-  Maximize2,
-  Minimize2,
   Scan,
   Shuffle 
 } from 'lucide-react';
@@ -442,7 +440,6 @@ export const LpuAcademicGraph: React.FC<LpuAcademicGraphProps> = ({ fitScreen = 
   const [hoveredNodeId, setHoveredNodeId] = useState<string | null>(null);
   const [selectedProblem, setSelectedProblem] = useState<Problem | null>(null);
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const [isFullscreen, setIsFullscreen] = useState(false);
 
   // Pan & Zoom Engine
   const [zoomLevel, setZoomLevel] = useState<number>(1);
@@ -481,25 +478,6 @@ export const LpuAcademicGraph: React.FC<LpuAcademicGraphProps> = ({ fitScreen = 
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, [fitToScreen]);
-
-  // Fullscreen escape key handler
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape' && isFullscreen) {
-        setIsFullscreen(false);
-      }
-    };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isFullscreen]);
-
-  // Refit when toggling fullscreen
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      fitToScreen();
-    }, 60);
-    return () => clearTimeout(timer);
-  }, [isFullscreen, fitToScreen]);
 
   // Non-passive native wheel listener to zoom roadmap only (prevents browser/webpage zoom & document scroll)
   useEffect(() => {
@@ -740,9 +718,7 @@ export const LpuAcademicGraph: React.FC<LpuAcademicGraphProps> = ({ fitScreen = 
 
   return (
     <div className={`relative w-full bg-[#090c14] overflow-hidden transition-all duration-200 flex flex-col ${
-      isFullscreen 
-        ? 'fixed inset-0 z-50 rounded-none w-screen h-screen' 
-        : fitScreen
+      fitScreen
         ? 'flex-1 min-h-0 h-full rounded-2xl border border-indigo-900/40 shadow-2xl'
         : 'rounded-2xl border border-indigo-900/40 shadow-2xl'
     }`}>
@@ -803,26 +779,6 @@ export const LpuAcademicGraph: React.FC<LpuAcademicGraphProps> = ({ fitScreen = 
               Reset ({Math.round(zoomLevel * 100)}%)
             </button>
           </div>
-
-          {/* Fullscreen Toggle */}
-          <button
-            onClick={() => setIsFullscreen(!isFullscreen)}
-            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-800 text-xs font-semibold text-slate-300 transition"
-            title={isFullscreen ? 'Exit Fullscreen (Esc)' : 'Maximize to full window'}
-            aria-label={isFullscreen ? 'Exit Fullscreen' : 'Fullscreen'}
-          >
-            {isFullscreen ? (
-              <>
-                <Minimize2 className="h-3.5 w-3.5 text-amber-400" />
-                <span className="hidden sm:inline">Exit Fullscreen</span>
-              </>
-            ) : (
-              <>
-                <Maximize2 className="h-3.5 w-3.5 text-emerald-400" />
-                <span className="hidden sm:inline">Fullscreen</span>
-              </>
-            )}
-          </button>
 
           {/* Progress Pill */}
           <div className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-slate-900 border border-slate-800 text-xs">
@@ -927,9 +883,7 @@ export const LpuAcademicGraph: React.FC<LpuAcademicGraphProps> = ({ fitScreen = 
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
         className={`w-full relative flex justify-center items-center select-none overflow-hidden transition-all duration-200 ${
-          isFullscreen
-            ? 'h-[calc(100vh-56px)]'
-            : fitScreen
+          fitScreen
             ? 'flex-1 min-h-[380px] h-full'
             : 'h-[72vh] min-h-[500px] max-h-[850px]'
         } ${isDragging ? 'cursor-grabbing' : 'cursor-grab'}`}

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { Compass, Code2, GitFork, GraduationCap, Maximize2, Minimize2 } from 'lucide-react';
+import { Compass, Code2, GitFork, GraduationCap } from 'lucide-react';
 import { DSA_ROADMAP, CPP_PATH } from '../data/learningPaths';
 import { RoadmapView } from '../components/roadmap/RoadmapView';
 import { DsaDependencyGraph } from '../components/roadmap/DsaDependencyGraph';
@@ -10,7 +10,6 @@ import { useUserStore } from '../store/userStore';
 export const RoadmapPage: React.FC = () => {
   const { pathId } = useParams<{ pathId: string }>();
   const { activePortal } = useUserStore();
-  const [isFitScreen, setIsFitScreen] = useState(true);
 
   // Intra-portal sub-view state
   const [subView, setSubView] = useState<'flowchart' | 'list'>('flowchart');
@@ -26,13 +25,7 @@ export const RoadmapPage: React.FC = () => {
   const isGlobal = activePortal === 'global';
 
   return (
-    <div
-      className={
-        isFitScreen
-          ? 'h-[calc(100vh-56px)] flex flex-col p-3 sm:p-4 max-w-[1700px] mx-auto w-full overflow-hidden'
-          : 'max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6'
-      }
-    >
+    <div className="h-[calc(100vh-56px)] flex flex-col p-3 sm:p-4 max-w-[1700px] mx-auto w-full overflow-hidden">
       {/* Intra-Portal Navigation Bar & View Options */}
       <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-800 pb-3 shrink-0">
         <div className="flex flex-wrap items-center gap-2">
@@ -105,21 +98,9 @@ export const RoadmapPage: React.FC = () => {
           )}
         </div>
 
-        {/* View Controls: Single Screen Fit toggle */}
+        {/* Helper Indicator */}
         <div className="flex items-center gap-2.5">
-          <button
-            onClick={() => setIsFitScreen(!isFitScreen)}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold border transition ${
-              isFitScreen
-                ? 'bg-emerald-500/15 border-emerald-500/40 text-emerald-300'
-                : 'bg-slate-900 border-slate-800 text-slate-400 hover:text-white'
-            }`}
-            title={isFitScreen ? 'Switch to Standard Scroll View' : 'Fit Entire Flowchart on One Screen'}
-          >
-            {isFitScreen ? <Minimize2 className="h-3.5 w-3.5" /> : <Maximize2 className="h-3.5 w-3.5" />}
-            <span>{isFitScreen ? 'Single Screen Fit' : 'Full Page View'}</span>
-          </button>
-          <span className="text-xs text-slate-400 hidden xl:inline">
+          <span className="text-xs text-slate-400 hidden sm:inline">
             {subView === 'flowchart'
               ? 'Click node for problems & visualizer'
               : 'Prerequisite-aware progression'}
@@ -130,7 +111,7 @@ export const RoadmapPage: React.FC = () => {
       {/* Render Active View based on activePortal and subView */}
       {isGlobal ? (
         subView === 'flowchart' ? (
-          <div className={`flex flex-col ${isFitScreen ? 'flex-1 min-h-0' : 'space-y-4'}`}>
+          <div className="flex flex-col flex-1 min-h-0">
             <div className="p-2.5 sm:p-3 mb-2 rounded-xl bg-slate-900/60 border border-slate-800 text-xs text-slate-300 flex items-center justify-between shrink-0">
               <div className="flex items-center gap-2">
                 <span className="flex h-2 w-2 rounded-full bg-indigo-400 shrink-0" />
@@ -141,18 +122,18 @@ export const RoadmapPage: React.FC = () => {
               <span className="text-slate-500 text-[11px] hidden md:inline ml-3 shrink-0">18 Nodes &bull; Language Agnostic</span>
             </div>
 
-            <div className={isFitScreen ? 'flex-1 min-h-0 flex flex-col' : ''}>
-              <DsaDependencyGraph fitScreen={isFitScreen} />
+            <div className="flex-1 min-h-0 flex flex-col">
+              <DsaDependencyGraph fitScreen={true} />
             </div>
           </div>
         ) : (
-          <div className={isFitScreen ? 'flex-1 min-h-0 overflow-y-auto pr-1' : ''}>
+          <div className="flex-1 min-h-0 overflow-y-auto pr-1">
             <RoadmapView roadmap={DSA_ROADMAP} />
           </div>
         )
       ) : (
         subView === 'flowchart' ? (
-          <div className={`flex flex-col ${isFitScreen ? 'flex-1 min-h-0' : 'space-y-4'}`}>
+          <div className="flex flex-col flex-1 min-h-0">
             <div className="p-2.5 sm:p-3 mb-2 rounded-xl bg-slate-900/60 border border-emerald-900/40 text-xs text-slate-300 flex items-center justify-between shrink-0">
               <div className="flex items-center gap-2">
                 <span className="flex h-2 w-2 rounded-full bg-emerald-400 shrink-0" />
@@ -163,12 +144,12 @@ export const RoadmapPage: React.FC = () => {
               <span className="text-emerald-400 font-mono text-[11px] hidden md:inline ml-3 shrink-0">CSE205 &bull; CSE202 Syllabi</span>
             </div>
 
-            <div className={isFitScreen ? 'flex-1 min-h-0 flex flex-col' : ''}>
-              <LpuAcademicGraph fitScreen={isFitScreen} />
+            <div className="flex-1 min-h-0 flex flex-col">
+              <LpuAcademicGraph fitScreen={true} />
             </div>
           </div>
         ) : (
-          <div className={isFitScreen ? 'flex-1 min-h-0 overflow-y-auto pr-1' : ''}>
+          <div className="flex-1 min-h-0 overflow-y-auto pr-1">
             <RoadmapView roadmap={CPP_PATH} />
           </div>
         )
