@@ -578,7 +578,7 @@ export const AdminPage: React.FC = () => {
                           {Object.keys(std.assignedTestSubmissions || {}).length} Submitted
                         </div>
                         <div className="text-[10px] text-slate-400">
-                          {Object.keys(std.quizScores).length} quizzes taken
+                          {std.totalSolved} solved
                         </div>
                       </td>
 
@@ -642,7 +642,7 @@ export const AdminPage: React.FC = () => {
                   rows={2}
                   value={testDescription}
                   onChange={(e) => setTestDescription(e.target.value)}
-                  placeholder="e.g. Mandatory 60-min continuous evaluation exam for CA-2."
+                  placeholder="e.g. Mandatory 60-min continuous evaluation test for Unit 3 Linked Lists."
                   className="w-full rounded-xl bg-slate-950 border border-slate-800 px-3.5 py-2 text-xs text-slate-200 placeholder:text-slate-600 focus:outline-none focus:border-purple-500"
                 />
               </div>
@@ -1013,8 +1013,8 @@ export const AdminPage: React.FC = () => {
                 <div className="text-[10px] text-slate-400 mt-0.5">Lessons Completed</div>
               </div>
               <div className="p-3 rounded-xl bg-slate-950 border border-slate-800 text-center">
-                <div className="text-xl font-bold text-white">{Object.keys(selectedStudent.quizScores).length}</div>
-                <div className="text-[10px] text-slate-400 mt-0.5">Quizzes Taken</div>
+                <div className="text-xl font-bold text-white">{Object.keys(selectedStudent.assignedTestSubmissions || {}).length}</div>
+                <div className="text-[10px] text-slate-400 mt-0.5">Tests Submitted</div>
               </div>
             </div>
 

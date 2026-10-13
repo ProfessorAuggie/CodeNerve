@@ -20,7 +20,6 @@ interface TopicDrawerProps {
   title: string;
   description: string;
   category?: string;
-  examScope?: string;
   unitCode?: string;
   prerequisites?: string[];
   visualizerId?: string;
@@ -38,7 +37,6 @@ export const TopicDrawer: React.FC<TopicDrawerProps> = ({
   title,
   description,
   category,
-  examScope,
   unitCode,
   prerequisites,
   visualizerId,
@@ -88,11 +86,6 @@ export const TopicDrawer: React.FC<TopicDrawerProps> = ({
                   {unitCode && (
                     <span className="text-xs font-bold text-emerald-400 uppercase tracking-wider">
                       {unitCode}
-                    </span>
-                  )}
-                  {examScope && (
-                    <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">
-                      {examScope}
                     </span>
                   )}
                   {category && (

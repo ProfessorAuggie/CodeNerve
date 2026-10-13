@@ -39,7 +39,7 @@ export const Footer: React.FC = () => {
           <ul className="space-y-2 text-xs">
             <li><Link to="/university" className="hover:text-brand-300 transition">LPU B.Tech CSE Syllabus</Link></li>
             <li><a href="https://algonerve.vercel.app" target="_blank" rel="noopener noreferrer" className="hover:text-brand-300 transition flex items-center gap-1.5">AlgoNerve Visualizer <Sparkles className="h-3 w-3 text-brand-400" /></a></li>
-            <li><Link to="/quizzes" className="hover:text-brand-300 transition">Knowledge Verification Quizzes</Link></li>
+            <li><Link to="/syllabus" className="hover:text-brand-300 transition">Official Syllabus Checklist</Link></li>
             <li><Link to="/documentation" className="hover:text-brand-300 transition">Algorithm Documentation</Link></li>
           </ul>
         </div>

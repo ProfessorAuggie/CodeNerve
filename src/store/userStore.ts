@@ -168,7 +168,7 @@ const INITIAL_STUDENTS: StudentRecord[] = [
     batch: 'LPU B.Tech CSE Section K22-A',
     joinedAt: '2026-08-25T16:00:00Z',
     status: 'online',
-    currentActivity: 'Solving: CSE205 Circular Queue Using Arrays (ETE Exam Pattern)',
+    currentActivity: 'Solving: CSE205 Circular Queue Using Arrays (Unit 3)',
     lastActive: '5m ago',
     solvedProblemIds: ['p-lpu-205-07', 'p-lpu-205-08', 'p-cpp-operator-overloading-1'],
     totalSolved: 36,
@@ -182,8 +182,8 @@ const INITIAL_STUDENTS: StudentRecord[] = [
 const INITIAL_ASSIGNED_TESTS: AssignedTest[] = [
   {
     id: 'test-midterm-01',
-    title: 'CSE205 Data Structures Midterm Readiness Evaluation',
-    description: 'Mandatory CA/MTE test covering Array ADTs, Linked Lists, and Stack/Queue real-world practical implementations in C++.',
+    title: 'CSE205 Data Structures Practical Readiness Evaluation',
+    description: 'Mandatory practical evaluation test covering Array ADTs, Linked Lists, and Stack/Queue real-world practical implementations in C++.',
     targetTrack: 'lpu',
     targetBatch: 'LPU B.Tech CSE (CSE202/205)',
     subjectCode: 'CSE205',

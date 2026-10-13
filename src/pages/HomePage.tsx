@@ -202,7 +202,7 @@ export const HomePage: React.FC = () => {
                       LPU B.Tech CSE Curriculum (C++)
                     </h3>
                     <p className="text-sm text-slate-300 mt-2 leading-relaxed">
-                      Custom tailored for Lovely Professional University students and professors. Dedicated pure C++ implementation mapped unit-by-unit with prerequisites to ace CA-1, CA-2, Midterm, and Endterm examinations.
+                      Custom tailored for Lovely Professional University students and professors. Dedicated pure C++ implementation mapped unit-by-unit with prerequisites across official CSE202 and CSE205 syllabi.
                     </p>
                   </div>
 
@@ -221,7 +221,7 @@ export const HomePage: React.FC = () => {
                     </li>
                     <li className="flex items-center gap-2">
                       <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
-                      <span><strong>Exam Prep & CA Banks:</strong> Curated CA/MTE questions, test cases & faculty portal</span>
+                      <span><strong>Dedicated Syllabus & Topics:</strong> Official 114-topic curriculum checklist, lab experiments & problem sets</span>
                     </li>
                   </ul>
                 </div>

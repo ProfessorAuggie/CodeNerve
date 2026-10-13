@@ -16,13 +16,23 @@ export interface University {
   shortName: string;
 }
 
+export interface PracticalExperiment {
+  title: string;
+  description: string;
+}
+
 export interface Subject {
   id: string;
   code: string;
   name: string;
   universityId: string;
   semester: number;
+  credits?: { lecture: number; tutorial: number; practical: number; total: number };
   description: string;
+  courseOutcomes?: string[];
+  textbooks?: string[];
+  references?: string[];
+  practicals?: PracticalExperiment[];
   units: Unit[];
 }
 
@@ -41,6 +51,7 @@ export interface Topic {
   description: string;
   prerequisites: string[];
   order: number;
+  subtopics?: string[];
   lessonId?: string;
   visualizerId?: string;
   problemIds: string[];

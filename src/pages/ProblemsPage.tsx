@@ -145,7 +145,7 @@ export const ProblemsPage: React.FC = () => {
             </h1>
             <p className="text-xs text-slate-400 hidden sm:block">
               {isLpu
-                ? 'University-aligned questions for CSE202 (C++ OOP) and CSE205 (Data Structures) with CA-1, CA-2, Midterm & Endterm scopes.'
+                ? 'University-aligned questions for CSE202 (C++ OOP) and CSE205 (Data Structures) structured unit-by-unit with curriculum topic prerequisites.'
                 : '182 canonical, language-agnostic DSA problems (LeetCode, GFG & DSA 130) with AlgoNerve visualizers and tracking.'}
             </p>
           </div>

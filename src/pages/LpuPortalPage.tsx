@@ -24,7 +24,7 @@ import { LpuAcademicGraph } from '../components/roadmap/LpuAcademicGraph';
 import type { Problem } from '../types';
 
 export const LpuPortalPage: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<'flowchart' | 'syllabus' | 'exams' | 'assignments'>('flowchart');
+  const [activeTab, setActiveTab] = useState<'syllabus' | 'flowchart' | 'assignments'>('syllabus');
   const [selectedSubjectId, setSelectedSubjectId] = useState<string>('cse205');
   const [expandedUnits, setExpandedUnits] = useState<Record<string, boolean>>({
     'cse205-u1': true,
@@ -41,42 +41,6 @@ export const LpuPortalPage: React.FC = () => {
       [unitId]: !prev[unitId],
     }));
   };
-
-  // Exam Preparation Modules
-  const lpuExams = [
-    {
-      id: 'ca1-prep',
-      title: 'Continuous Assessment 1 (CA-1) Review',
-      subject: 'CSE205 Data Structures & Algorithms',
-      topics: 'Arrays, Big-O Complexity, Bubble & Selection Sort',
-      problemCount: 8,
-      recommendedProblems: ['p-lpu-array-traversal-1', 'p-lpu-array-insert-1', 'p-lpu-bubble-sort-1', 'p-lpu-linear-search-1'],
-    },
-    {
-      id: 'midterm-prep',
-      title: 'Mid-Term Examination Essential Problem Set',
-      subject: 'CSE205 & CSE202 Core Foundations',
-      topics: 'Linked Lists, Stacks, Queues, Binary Search, C++ Pointers & Classes',
-      problemCount: 14,
-      recommendedProblems: ['p-lpu-ll-reverse-1', 'p-lpu-stack-valid-parens-1', 'p-lpu-queue-1', 'p-cpp-constructors-1', 'p-cpp-pointers-1'],
-    },
-    {
-      id: 'ca2-prep',
-      title: 'Continuous Assessment 2 (CA-2) Review',
-      subject: 'CSE202 Object Oriented Programming',
-      topics: 'Operator Overloading, Inheritance, Virtual Functions & Polymorphism',
-      problemCount: 10,
-      recommendedProblems: ['p-cpp-operator-overload-1', 'p-cpp-inheritance-1', 'p-cpp-polymorphism-1', 'p-cpp-virtual-destructor-1'],
-    },
-    {
-      id: 'endterm-prep',
-      title: 'End-Term Comprehensive Exam Bank',
-      subject: 'All Units (CSE202 + CSE205)',
-      topics: 'Trees, BST, Heaps, Graphs (Dijkstra, BFS, DFS), STL & Templates',
-      problemCount: 20,
-      recommendedProblems: ['p-lpu-tree-traversal-1', 'p-lpu-bst-insert-1', 'p-lpu-heap-kth-1', 'p-lpu-bfs-1', 'p-lpu-dijkstra-1', 'p-cpp-templates-1'],
-    },
-  ];
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 space-y-5">
@@ -96,17 +60,17 @@ export const LpuPortalPage: React.FC = () => {
             </h1>
 
             <p className="text-xs sm:text-sm text-slate-300 max-w-2xl leading-relaxed">
-              University-aligned study portal with structured syllabi for <strong className="text-white">CSE202</strong> (Object Oriented Programming) and <strong className="text-white">CSE205</strong> (Data Structures & Algorithms), complete with topic prerequisites, exam sets, and faculty assignments.
+              University-aligned study portal with structured syllabi for <strong className="text-white">CSE202</strong> (Object Oriented Programming) and <strong className="text-white">CSE205</strong> (Data Structures & Algorithms), complete with topic prerequisites, 114 curriculum checklist items, and faculty assignments.
             </p>
           </div>
 
           <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2.5 shrink-0">
             <Link
-              to="/quizzes"
-              className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-500 text-xs font-semibold text-white shadow-lg shadow-brand-500/25 transition"
+              to="/syllabus"
+              className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-xs font-semibold text-white shadow-lg shadow-emerald-500/25 transition"
             >
-              <Award className="h-4 w-4" />
-              <span>Take CA Practice Quiz</span>
+              <BookOpen className="h-4 w-4" />
+              <span>Dedicated Syllabus Page</span>
             </Link>
           </div>
         </div>
@@ -118,12 +82,12 @@ export const LpuPortalPage: React.FC = () => {
             <div className="text-xs text-slate-400">Total Syllabus Units</div>
           </div>
           <div>
-            <div className="text-xl font-bold text-emerald-400">38 Topics</div>
-            <div className="text-xs text-slate-400">With Prerequisites Listed</div>
+            <div className="text-xl font-bold text-emerald-400">114 Topics</div>
+            <div className="text-xs text-slate-400">Official Syllabus Checklist</div>
           </div>
           <div>
-            <div className="text-xl font-bold text-brand-400">4 Exam Hubs</div>
-            <div className="text-xs text-slate-400">CA-1, CA-2, Midterm & Endterm</div>
+            <div className="text-xl font-bold text-brand-400">82 Problems</div>
+            <div className="text-xs text-slate-400">Curated C++ Problem Bank</div>
           </div>
           <div>
             <div className="text-xl font-bold text-purple-400">{customProblemSets.length} Active</div>
@@ -135,42 +99,30 @@ export const LpuPortalPage: React.FC = () => {
       {/* Main Section Navigation Tabs */}
       <div className="flex flex-wrap items-center gap-2.5 border-b border-slate-800 pb-2.5">
         <button
-          onClick={() => setActiveTab('flowchart')}
-          className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold transition ${
-            activeTab === 'flowchart'
-              ? 'bg-emerald-600 text-white shadow-lg shadow-emerald-500/25'
-              : 'bg-slate-900 border border-slate-800 text-slate-400 hover:text-white'
-          }`}
-        >
-          <Compass className="h-4 w-4" />
-          <span>Interactive Prerequisite Flowchart</span>
-          <span className="text-[10px] font-bold px-1.5 py-0.2 rounded-full bg-emerald-400/20 text-emerald-300">
-            Hover Trace
-          </span>
-        </button>
-
-        <button
           onClick={() => setActiveTab('syllabus')}
-          className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold transition ${
+          className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold transition ${
             activeTab === 'syllabus'
-              ? 'bg-brand-600 text-white shadow-lg shadow-brand-500/20'
+              ? 'bg-emerald-600 text-white shadow-lg shadow-emerald-500/25'
               : 'bg-slate-900 border border-slate-800 text-slate-400 hover:text-white'
           }`}
         >
           <BookOpen className="h-4 w-4" />
           <span>Curriculum Syllabi (CSE202 / CSE205)</span>
+          <span className="text-[10px] font-bold px-1.5 py-0.2 rounded-full bg-emerald-400/20 text-emerald-300">
+            114 Topics
+          </span>
         </button>
 
         <button
-          onClick={() => setActiveTab('exams')}
+          onClick={() => setActiveTab('flowchart')}
           className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold transition ${
-            activeTab === 'exams'
+            activeTab === 'flowchart'
               ? 'bg-brand-600 text-white shadow-lg shadow-brand-500/20'
               : 'bg-slate-900 border border-slate-800 text-slate-400 hover:text-white'
           }`}
         >
-          <Calendar className="h-4 w-4" />
-          <span>CA & University Exam Banks</span>
+          <Compass className="h-4 w-4" />
+          <span>Interactive Prerequisite Flowchart</span>
         </button>
 
         <button
@@ -385,68 +337,6 @@ export const LpuPortalPage: React.FC = () => {
         </div>
       )}
 
-      {/* TAB 2: CA & UNIVERSITY EXAM BANKS */}
-      {activeTab === 'exams' && (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {lpuExams.map((exam) => (
-            <div
-              key={exam.id}
-              className="p-6 rounded-2xl border border-slate-800 bg-slate-900/60 shadow-lg space-y-4"
-            >
-              <div className="flex items-start justify-between">
-                <div>
-                  <span className="text-xs font-semibold uppercase tracking-wider text-amber-400">
-                    LPU Exam Prep
-                  </span>
-                  <h3 className="text-base font-bold text-white mt-0.5">{exam.title}</h3>
-                  <div className="text-xs text-slate-400 mt-1">{exam.subject}</div>
-                </div>
-                <span className="px-2.5 py-1 rounded-full bg-slate-800 text-xs font-semibold text-slate-300">
-                  {exam.problemCount} Qs
-                </span>
-              </div>
-
-              <div className="p-3 rounded-xl bg-slate-950/60 border border-slate-800 text-xs text-slate-300">
-                <strong className="text-slate-200">Syllabus Scope:</strong> {exam.topics}
-              </div>
-
-              <div className="space-y-2 pt-1">
-                <span className="text-[11px] font-semibold uppercase text-slate-400">
-                  Essential Problems for this Exam:
-                </span>
-                <div className="space-y-1.5">
-                  {exam.recommendedProblems.map((pId) => {
-                    const prob = PROBLEMS.find((p) => p.id === pId);
-                    if (!prob) return null;
-                    const isSolved = problemProgress[prob.id]?.status === 'SOLVED';
-
-                    return (
-                      <div
-                        key={prob.id}
-                        onClick={() => setSelectedProblem(prob)}
-                        className="flex items-center justify-between p-2.5 rounded-lg bg-slate-950/40 border border-slate-800 hover:border-slate-700 cursor-pointer transition text-xs"
-                      >
-                        <div className="flex items-center gap-2">
-                          <CheckCircle2
-                            className={`h-4 w-4 ${isSolved ? 'text-emerald-400' : 'text-slate-600'}`}
-                          />
-                          <span className={isSolved ? 'line-through text-slate-500' : 'text-white'}>
-                            {prob.title}
-                          </span>
-                        </div>
-                        <span className="text-[10px] uppercase font-bold text-slate-400">
-                          {prob.difficulty}
-                        </span>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
-
       {/* TAB 3: FACULTY & CLASS ASSIGNMENTS */}
       {activeTab === 'assignments' && (
         <div className="space-y-6">
@@ -458,10 +348,10 @@ export const LpuPortalPage: React.FC = () => {
               </p>
             </div>
             <Link
-              to="/quizzes"
+              to="/syllabus"
               className="px-4 py-2 rounded-xl text-xs font-semibold bg-emerald-600 hover:bg-emerald-500 text-white shadow-lg shadow-emerald-500/20 transition"
             >
-              Practice Quizzes & Tests ↗
+              Explore Topic Checklist ↗
             </Link>
           </div>
 

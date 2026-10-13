@@ -201,11 +201,11 @@ export const TrackSelectionModal: React.FC<TrackSelectionModalProps> = ({
                 </li>
                 <li className="flex items-start gap-2">
                   <Check className="h-4 w-4 text-emerald-400 shrink-0 mt-0.5" />
-                  <span>Exam preparation sets: CA-1, Midterm Exam, CA-2, and Endterm Bank</span>
+                  <span>Comprehensive Topic Checklist: all units from official CSE202 & CSE205 syllabi</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <Check className="h-4 w-4 text-emerald-400 shrink-0 mt-0.5" />
-                  <span>Academic assignment review and C++ code-trace quizzes</span>
+                  <span>Interactive academic prerequisite flowchart & problem tracking</span>
                 </li>
               </ul>
             </div>

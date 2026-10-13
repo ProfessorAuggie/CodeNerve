@@ -11,7 +11,7 @@ const RoadmapPage = React.lazy(() => import('./pages/RoadmapPage').then((m) => (
 const ProblemsPage = React.lazy(() => import('./pages/ProblemsPage').then((m) => ({ default: m.ProblemsPage })));
 const LpuPortalPage = React.lazy(() => import('./pages/LpuPortalPage').then((m) => ({ default: m.LpuPortalPage })));
 const LessonPage = React.lazy(() => import('./pages/LessonPage').then((m) => ({ default: m.LessonPage })));
-const QuizPage = React.lazy(() => import('./pages/QuizPage').then((m) => ({ default: m.QuizPage })));
+const SyllabusPage = React.lazy(() => import('./pages/SyllabusPage').then((m) => ({ default: m.SyllabusPage })));
 const DashboardPage = React.lazy(() => import('./pages/DashboardPage').then((m) => ({ default: m.DashboardPage })));
 const AdminPage = React.lazy(() => import('./pages/AdminPage').then((m) => ({ default: m.AdminPage })));
 const TeacherPage = React.lazy(() => import('./pages/TeacherPage').then((m) => ({ default: m.TeacherPage })));
@@ -65,6 +65,9 @@ export const App: React.FC = () => {
               {/* Problem Catalogue */}
               <Route path="/problems" element={<ProblemsPage />} />
 
+              {/* Dedicated Academic Syllabus & Topic Checklist */}
+              <Route path="/syllabus" element={<SyllabusPage />} />
+
               {/* Academic LPU University Portal */}
               <Route path="/university" element={<LpuPortalPage />} />
               <Route path="/lpu" element={<LpuPortalPage />} />
@@ -72,8 +75,8 @@ export const App: React.FC = () => {
               {/* Interactive Lesson Views */}
               <Route path="/lesson/:lessonId" element={<LessonPage />} />
 
-              {/* Assessment Quizzes */}
-              <Route path="/quizzes" element={<QuizPage />} />
+              {/* Legacy Quizzes Redirect */}
+              <Route path="/quizzes" element={<SyllabusPage />} />
 
               {/* Student Analytics & Dashboard */}
               <Route path="/dashboard" element={<DashboardPage />} />

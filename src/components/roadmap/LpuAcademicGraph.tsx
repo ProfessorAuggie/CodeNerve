@@ -20,7 +20,6 @@ interface LpuNodeData {
   category: 'foundation' | 'core' | 'advanced';
   x: number;
   y: number;
-  examScope: 'CA-1' | 'MTE' | 'CA-2' | 'ETE';
   prerequisites: string[];
   description: string;
   visualizerId?: string;
@@ -45,7 +44,6 @@ export const CSE205_NODES: LpuNodeData[] = [
     category: 'foundation',
     x: 440,
     y: 40,
-    examScope: 'CA-1',
     prerequisites: ['Basic C++ programming', 'Loop constructs & memory addresses'],
     description: 'Contiguous 1D/2D memory addressing, element shifting, Big-O asymptotic analysis.',
     problemIds: ['p-lpu-array-traversal-1', 'p-lpu-array-insert-1', 'p-lpu-kadane-1', 'p-lpu-rotate-image-1'],
@@ -60,7 +58,6 @@ export const CSE205_NODES: LpuNodeData[] = [
     category: 'foundation',
     x: 250,
     y: 140,
-    examScope: 'CA-1',
     prerequisites: ['Arrays & Big-O Foundations'],
     description: 'Sequential comparison vs logarithmic interval halving on ordered ranges.',
     visualizerId: 'binary-search',
@@ -74,7 +71,6 @@ export const CSE205_NODES: LpuNodeData[] = [
     category: 'foundation',
     x: 630,
     y: 140,
-    examScope: 'CA-1',
     prerequisites: ['Arrays & Big-O Foundations'],
     description: 'Quadratic sorting paradigms, bubble passes, insertion shifts, and selection minima.',
     visualizerId: 'bubble-sort',
@@ -90,7 +86,6 @@ export const CSE205_NODES: LpuNodeData[] = [
     category: 'core',
     x: 710,
     y: 240,
-    examScope: 'CA-1',
     prerequisites: ['Bubble, Insert & Select Sort', 'Divide and conquer recursion'],
     description: 'Divide and conquer partitioning, recursive stack unwinding, and guaranteed O(n log n) merges.',
     visualizerId: 'merge-sort',
@@ -104,7 +99,6 @@ export const CSE205_NODES: LpuNodeData[] = [
     category: 'core',
     x: 250,
     y: 240,
-    examScope: 'MTE',
     prerequisites: ['Arrays & Big-O Foundations', 'Pointers and dynamic memory (new/delete)'],
     description: 'Non-contiguous node allocation, next/prev pointer rewiring, insertion and deletion.',
     visualizerId: 'singly-linked-list',
@@ -120,7 +114,6 @@ export const CSE205_NODES: LpuNodeData[] = [
     category: 'core',
     x: 440,
     y: 340,
-    examScope: 'MTE',
     prerequisites: ['Singly & Doubly Linked Lists', 'Arrays & Big-O Foundations'],
     description: 'LIFO stack semantics, expression evaluation (Infix to Postfix), and FIFO circular queues.',
     visualizerId: 'stack-operations',
@@ -136,7 +129,6 @@ export const CSE205_NODES: LpuNodeData[] = [
     category: 'core',
     x: 440,
     y: 440,
-    examScope: 'ETE',
     prerequisites: ['Stacks & Circular Queues', 'Divide and conquer recursion'],
     description: 'Hierarchical node branching, in-order/pre-order/post-order, BST search invariant.',
     visualizerId: 'bst-insert',
@@ -150,7 +142,6 @@ export const CSE205_NODES: LpuNodeData[] = [
     category: 'advanced',
     x: 220,
     y: 540,
-    examScope: 'ETE',
     prerequisites: ['Binary Trees & BST Traversals'],
     description: 'Self-balancing binary search trees using LL, RR, LR, and RL rotation balance factors.',
     visualizerId: 'avl-balancing',
@@ -164,7 +155,6 @@ export const CSE205_NODES: LpuNodeData[] = [
     category: 'advanced',
     x: 660,
     y: 540,
-    examScope: 'ETE',
     prerequisites: ['Binary Trees & BST Traversals', 'Arrays & Big-O Foundations'],
     description: 'Complete binary tree layout in flat arrays, sift-up/sift-down heapify, HeapSort.',
     visualizerId: 'heap-sort',
@@ -180,7 +170,6 @@ export const CSE205_NODES: LpuNodeData[] = [
     category: 'advanced',
     x: 330,
     y: 650,
-    examScope: 'ETE',
     prerequisites: ['Stacks & Circular Queues', 'Binary Trees & BST Traversals'],
     description: 'Adjacency list representations, queue-driven BFS, recursive stack DFS, cycle detection.',
     visualizerId: 'bfs',
@@ -194,7 +183,6 @@ export const CSE205_NODES: LpuNodeData[] = [
     category: 'advanced',
     x: 550,
     y: 650,
-    examScope: 'ETE',
     prerequisites: ['Graph Traversals (BFS & DFS)', 'Binary Heaps & Priority Queues'],
     description: 'Minimum spanning tree discovery using greedy edge selection and Disjoint Set Union (DSU).',
     visualizerId: 'prim',
@@ -208,7 +196,6 @@ export const CSE205_NODES: LpuNodeData[] = [
     category: 'core',
     x: 440,
     y: 750,
-    examScope: 'ETE',
     prerequisites: ['Arrays & Big-O Foundations', 'Singly & Doubly Linked Lists'],
     description: 'Hash functions, open addressing linear probing, chaining, load factor amortized O(1).',
     problemIds: ['p-lpu-hash-chaining-1'],
@@ -250,7 +237,6 @@ export const CSE202_NODES: LpuNodeData[] = [
     category: 'foundation',
     x: 440,
     y: 40,
-    examScope: 'CA-1',
     prerequisites: ['Introductory computer science concepts', 'Basic computational logic'],
     description: 'Primitive types, std::cin/cout, namespaces, call-by-reference vs call-by-value.',
     problemIds: ['p-cpp-io-1', 'p-cpp-references-1', 'p-cpp-stringstream-1', 'p-cpp-call-by-reference-1'],
@@ -263,7 +249,6 @@ export const CSE202_NODES: LpuNodeData[] = [
     category: 'foundation',
     x: 280,
     y: 140,
-    examScope: 'CA-1',
     prerequisites: ['C++ Syntax, I/O & Functions'],
     description: 'Pointer arithmetic, new/delete heap allocation, memory leaks and nullptr safeguards.',
     problemIds: ['p-cpp-pointers-1', 'p-cpp-dynamic-arr-1', 'p-cpp-matrix-dynamic-2d-1', 'p-cpp-unique-ptr-1'],
@@ -276,7 +261,6 @@ export const CSE202_NODES: LpuNodeData[] = [
     category: 'foundation',
     x: 600,
     y: 140,
-    examScope: 'CA-1',
     prerequisites: ['C++ Syntax, I/O & Functions'],
     description: 'Compile-time function resolution, default arguments, inline performance trade-offs.',
     problemIds: ['p-cpp-func-overload-1', 'p-cpp-constructor-overload-1'],
@@ -291,7 +275,6 @@ export const CSE202_NODES: LpuNodeData[] = [
     category: 'core',
     x: 440,
     y: 240,
-    examScope: 'MTE',
     prerequisites: ['Pointers & Dynamic Memory', 'Function Overloading & Inline'],
     description: 'Access specifiers (public/private/protected), this pointer, member function definition.',
     problemIds: ['p-cpp-classes-1', 'p-cpp-encapsulation-1', 'p-cpp-structs-1', 'p-cpp-const-member-functions-1', 'p-cpp-static-counter-1'],
@@ -304,7 +287,6 @@ export const CSE202_NODES: LpuNodeData[] = [
     category: 'core',
     x: 260,
     y: 340,
-    examScope: 'MTE',
     prerequisites: ['Classes, Objects & Encapsulation'],
     description: 'Default, parameterized, copy constructor, deep vs shallow copy, and destructor lifecycles.',
     problemIds: ['p-cpp-constructors-1', 'p-cpp-destructors-1', 'p-cpp-copy-constructor-deep-1', 'p-cpp-constructor-overload-1'],
@@ -317,7 +299,6 @@ export const CSE202_NODES: LpuNodeData[] = [
     category: 'core',
     x: 620,
     y: 340,
-    examScope: 'MTE',
     prerequisites: ['Classes, Objects & Encapsulation'],
     description: 'Overloading +, -, <<, >> operators, friend functions, and symmetric binary operands.',
     problemIds: ['p-cpp-operator-overload-1', 'p-cpp-friend-1', 'p-cpp-stream-overloading-1', 'p-cpp-subscript-operator-1'],
@@ -332,7 +313,6 @@ export const CSE202_NODES: LpuNodeData[] = [
     category: 'core',
     x: 440,
     y: 440,
-    examScope: 'CA-2',
     prerequisites: ['Constructors, Destructors & Copy', 'Operator Overloading & Friends'],
     description: 'Single, multiple, hierarchical, and virtual base classes to resolve diamond problem.',
     problemIds: ['p-cpp-inheritance-1', 'p-cpp-diamond-problem-1', 'p-cpp-multiple-inheritance-order-1', 'p-cpp-hierarchical-inheritance-1'],
@@ -345,7 +325,6 @@ export const CSE202_NODES: LpuNodeData[] = [
     category: 'advanced',
     x: 260,
     y: 540,
-    examScope: 'CA-2',
     prerequisites: ['Inheritance & Access Control'],
     description: 'Virtual tables (vptr/vtable), late dynamic binding, virtual destructors.',
     problemIds: ['p-cpp-polymorphism-1', 'p-cpp-dynamic-cast-rtti-1'],
@@ -358,7 +337,6 @@ export const CSE202_NODES: LpuNodeData[] = [
     category: 'core',
     x: 620,
     y: 540,
-    examScope: 'CA-2',
     prerequisites: ['Inheritance & Access Control'],
     description: 'Abstract base classes, pure virtual (= 0), interface contracts for polymorphic subsystems.',
     problemIds: ['p-cpp-abstract-class-1', 'p-cpp-virtual-destructor-1', 'p-cpp-pure-virtual-interface-1'],
@@ -373,7 +351,6 @@ export const CSE202_NODES: LpuNodeData[] = [
     category: 'core',
     x: 440,
     y: 640,
-    examScope: 'ETE',
     prerequisites: ['Virtual Functions & Runtime Poly', 'Pure Virtual & Interfaces'],
     description: 'Generic programming, template specialization, typename and class parameters.',
     problemIds: ['p-cpp-templates-1', 'p-cpp-fn-template-max-1', 'p-cpp-class-templates-multi-1'],
@@ -386,7 +363,6 @@ export const CSE202_NODES: LpuNodeData[] = [
     category: 'advanced',
     x: 220,
     y: 740,
-    examScope: 'ETE',
     prerequisites: ['Function & Class Templates'],
     description: 'vector, list, map, set, iterators, std::sort, std::find, and lambda predicates.',
     problemIds: ['p-cpp-stl-vector-1', 'p-cpp-stl-map-1', 'p-cpp-stl-unordered-map-1', 'p-cpp-stl-priority-queue-1', 'p-cpp-stl-algorithms-lambda-1'],
@@ -399,7 +375,6 @@ export const CSE202_NODES: LpuNodeData[] = [
     category: 'advanced',
     x: 660,
     y: 740,
-    examScope: 'ETE',
     prerequisites: ['Function & Class Templates', 'C++ Syntax, I/O & Functions'],
     description: 'ifstream, ofstream, fstream, binary file reading/writing, and error state flags.',
     problemIds: ['p-cpp-filestreams-1', 'p-cpp-file-stream-operations-1', 'p-cpp-exceptions-1', 'p-cpp-custom-exception-1'],
@@ -1010,9 +985,9 @@ export const LpuAcademicGraph: React.FC<LpuAcademicGraphProps> = ({ fitScreen = 
                       {node.unitCode}
                     </span>
                     <span
-                      className={`text-[9px] font-bold px-1.5 py-0.2 rounded border ${examColors[node.examScope]}`}
+                      className="text-[9px] font-semibold px-1.5 py-0.2 rounded bg-slate-800/90 text-slate-300 border border-slate-700/60 uppercase tracking-wider"
                     >
-                      {node.examScope}
+                      {node.category}
                     </span>
                   </div>
 
@@ -1047,7 +1022,6 @@ export const LpuAcademicGraph: React.FC<LpuAcademicGraphProps> = ({ fitScreen = 
           description={selectedNode.description}
           category={`${selectedSubject.toUpperCase()} Curriculum`}
           unitCode={selectedNode.unitCode}
-          examScope={selectedNode.examScope}
           prerequisites={selectedNode.prerequisites}
           visualizerId={selectedNode.visualizerId}
           problems={nodeProblemsMap[selectedNode.id] || []}

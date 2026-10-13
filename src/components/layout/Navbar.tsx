@@ -36,21 +36,18 @@ export const Navbar: React.FC = () => {
     return location.pathname.startsWith(path);
   };
 
-  // Nav links dynamically adapted for Global vs LPU portals
   const globalNavLinks = [
     { name: 'DSA Roadmap', path: '/roadmap', icon: GitFork, badge: 'Generic' },
     { name: 'Problems', path: '/problems', icon: Terminal },
     { name: 'Visualizer', path: 'https://algonerve.vercel.app', icon: Sparkles, badge: 'AlgoNerve', isExternal: true },
-    { name: 'Quizzes', path: '/quizzes', icon: BookOpen },
     { name: 'Dashboard', path: '/dashboard', icon: CheckCircle2 },
   ];
 
   const lpuNavLinks = [
-    { name: 'LPU Syllabus', path: '/lpu', icon: GraduationCap, badge: 'CSE' },
-    { name: 'Academic Roadmap', path: '/roadmap', icon: GitFork, badge: 'CSE202/205' },
+    { name: 'LPU Syllabus', path: '/syllabus', icon: GraduationCap, badge: 'CSE202/205' },
+    { name: 'Academic Roadmap', path: '/roadmap', icon: GitFork, badge: 'Flowchart' },
     { name: 'Problems Bank', path: '/problems', icon: Terminal },
     { name: 'Visualizer', path: 'https://algonerve.vercel.app', icon: Sparkles, badge: 'AlgoNerve', isExternal: true },
-    { name: 'Exam Quizzes', path: '/quizzes', icon: BookOpen },
     { name: 'Dashboard', path: '/dashboard', icon: CheckCircle2 },
   ];
 
