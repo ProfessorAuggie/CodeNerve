@@ -7,14 +7,13 @@ import {
   GraduationCap, 
   CheckCircle2, 
   ArrowRight, 
-  ExternalLink,
-  SlidersHorizontal
+  ExternalLink
 } from 'lucide-react';
 import { PROBLEMS } from '../data/problems';
 import { useUserStore } from '../store/userStore';
 
 export const HomePage: React.FC = () => {
-  const { chooseTrack, openTrackModal } = useUserStore();
+  const { setActivePortal } = useUserStore();
 
   const popularAlgos = [
     { id: 'bubble-sort', name: 'Bubble Sort', category: 'Sorting', icon: '📊' },
@@ -35,9 +34,9 @@ export const HomePage: React.FC = () => {
         <div className="max-w-5xl mx-auto text-center space-y-6 px-4">
           <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-900 border border-slate-800 text-xs text-brand-300 shadow-md">
             <span className="flex h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
-            <span className="font-semibold">Dual-Track Learning Architecture</span>
+            <span className="font-semibold">Dual-Track Architecture</span>
             <span className="text-slate-600">|</span>
-            <span className="text-slate-400">Language-Agnostic DSA + LPU C++ Portal</span>
+            <span className="text-slate-400">Switch Portals in Top Navbar</span>
           </div>
 
           <h1 className="text-4xl sm:text-6xl font-extrabold tracking-tight text-white leading-tight">
@@ -48,25 +47,28 @@ export const HomePage: React.FC = () => {
           </h1>
 
           <p className="text-base sm:text-lg text-slate-300 max-w-2xl mx-auto leading-relaxed">
-            Choose between the <strong>language-agnostic Global DSA roadmap</strong> (solve in Python, Java, C++, JS, Go) and the <strong>official LPU Computer Science curriculum</strong> (CSE202 OOP & CSE205 DSA in C++).
+            Choose between the <strong>language-agnostic Global DSA roadmap</strong> (solve in Python, Java, C++, JS, Go) and the <strong>official LPU Computer Science curriculum</strong> (CSE202 OOP & CSE205 DSA in C++). Switch anytime via the navbar.
           </p>
 
           {/* Action CTAs */}
-          <div className="flex flex-wrap items-center justify-center gap-4 pt-2">
-            <button
-              onClick={openTrackModal}
-              className="flex items-center gap-2 px-6 py-3.5 rounded-xl bg-gradient-to-r from-brand-600 to-indigo-600 hover:from-brand-500 hover:to-indigo-500 text-white font-semibold text-sm shadow-xl shadow-brand-500/25 transition group cursor-pointer"
-            >
-              <SlidersHorizontal className="h-4 w-4 text-brand-200" />
-              <span>Select Learning Track</span>
-              <span className="text-[10px] uppercase font-bold px-1.5 py-0.5 rounded bg-white/20 text-white">2 Options</span>
-            </button>
+          <div className="flex flex-wrap items-center justify-center gap-3.5 pt-2">
             <Link
-              to="/roadmap/dsa-roadmap"
-              className="flex items-center gap-2 px-6 py-3.5 rounded-xl bg-gradient-to-r from-brand-600 to-indigo-600 hover:from-brand-500 hover:to-indigo-500 text-white font-semibold text-sm shadow-xl shadow-brand-500/25 transition group"
+              to="/roadmap"
+              onClick={() => setActivePortal('global')}
+              className="flex items-center gap-2 px-5 py-3 rounded-xl bg-gradient-to-r from-brand-600 to-indigo-600 hover:from-brand-500 hover:to-indigo-500 text-white font-semibold text-sm shadow-xl shadow-brand-500/25 transition group cursor-pointer"
             >
               <Compass className="h-4 w-4" />
-              <span>Explore DSA Roadmap</span>
+              <span>🌐 Global DSA Track</span>
+              <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" />
+            </Link>
+
+            <Link
+              to="/lpu"
+              onClick={() => setActivePortal('lpu')}
+              className="flex items-center gap-2 px-5 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-sm shadow-xl shadow-emerald-500/25 transition group cursor-pointer"
+            >
+              <GraduationCap className="h-4 w-4" />
+              <span>🎓 LPU Academic Portal</span>
               <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" />
             </Link>
 
@@ -74,18 +76,18 @@ export const HomePage: React.FC = () => {
               href="https://algonerve.vercel.app"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-2 px-6 py-3.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-200 border border-slate-700 font-semibold text-sm transition"
+              className="flex items-center gap-2 px-4 py-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-200 border border-slate-700 font-semibold text-sm transition"
             >
               <Sparkles className="h-4 w-4 text-brand-400" />
-              <span>Open AlgoNerve Visualizer ↗</span>
+              <span>AlgoNerve Visualizer ↗</span>
             </a>
 
             <Link
               to="/problems"
-              className="flex items-center gap-2 px-5 py-3.5 rounded-xl bg-slate-900/60 hover:bg-slate-800/80 text-slate-300 border border-slate-800 text-sm font-medium transition"
+              className="flex items-center gap-2 px-4 py-3 rounded-xl bg-slate-900/60 hover:bg-slate-800/80 text-slate-300 border border-slate-800 text-sm font-medium transition"
             >
               <Terminal className="h-4 w-4 text-emerald-400" />
-              <span>Problem Catalogue</span>
+              <span>Problems</span>
             </Link>
           </div>
 
@@ -167,7 +169,7 @@ export const HomePage: React.FC = () => {
                 <div className="pt-8 flex flex-wrap items-center gap-3">
                   <Link
                     to="/roadmap"
-                    onClick={() => chooseTrack('global')}
+                    onClick={() => setActivePortal('global')}
                     className="flex-1 min-w-[160px] flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-brand-600 hover:bg-brand-500 text-white font-bold text-xs shadow-lg shadow-brand-600/30 transition group/btn"
                   >
                     <span>Launch DSA Tree</span>
@@ -175,6 +177,7 @@ export const HomePage: React.FC = () => {
                   </Link>
                   <Link
                     to="/problems"
+                    onClick={() => setActivePortal('global')}
                     className="flex items-center justify-center px-4 py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold border border-slate-700 transition"
                   >
                     <span>Problem List</span>
@@ -226,7 +229,7 @@ export const HomePage: React.FC = () => {
                 <div className="pt-8 flex flex-wrap items-center gap-3">
                   <Link
                     to="/lpu"
-                    onClick={() => chooseTrack('lpu')}
+                    onClick={() => setActivePortal('lpu')}
                     className="flex-1 min-w-[160px] flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs shadow-lg shadow-emerald-600/30 transition group/btn"
                   >
                     <span>Enter LPU Academic Portal</span>

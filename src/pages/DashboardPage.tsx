@@ -24,48 +24,58 @@ export const DashboardPage: React.FC = () => {
     bookmarks, 
     customProblemSets, 
     deleteCustomProblemSet, 
-    resetProgress 
+    resetProgress,
+    activePortal
   } = useUserStore();
 
   const [selectedProblem, setSelectedProblem] = useState<Problem | null>(null);
   const [confirmReset, setConfirmReset] = useState(false);
 
-  // Solved counts
-  const solvedProblems = Object.values(problemProgress).filter((p) => p.status === 'SOLVED');
-  const revisionProblems = Object.values(problemProgress).filter((p) => p.status === 'REVISION_NEEDED');
+  // Active portal filtered problems (zero overlap)
+  const portalProblems = PROBLEMS.filter((p) => (p.track || 'global') === activePortal);
+  const portalProblemIds = new Set(portalProblems.map((p) => p.id));
 
-  const totalCount = PROBLEMS.length;
+  // Solved counts within active portal
+  const solvedProblems = Object.values(problemProgress).filter(
+    (p) => portalProblemIds.has(p.problemId) && p.status === 'SOLVED'
+  );
+  const revisionProblems = Object.values(problemProgress).filter(
+    (p) => portalProblemIds.has(p.problemId) && p.status === 'REVISION_NEEDED'
+  );
+
+  const totalCount = portalProblems.length;
   const solvedCount = solvedProblems.length;
-  const overallPercent = Math.round((solvedCount / totalCount) * 100);
+  const overallPercent = totalCount > 0 ? Math.round((solvedCount / totalCount) * 100) : 0;
 
-  // Difficulty counts
-  const easyTotal = PROBLEMS.filter((p) => p.difficulty === 'easy').length;
-  const medTotal = PROBLEMS.filter((p) => p.difficulty === 'medium').length;
-  const hardTotal = PROBLEMS.filter((p) => p.difficulty === 'hard').length;
+  // Difficulty counts within active portal
+  const easyTotal = portalProblems.filter((p) => p.difficulty === 'easy').length;
+  const medTotal = portalProblems.filter((p) => p.difficulty === 'medium').length;
+  const hardTotal = portalProblems.filter((p) => p.difficulty === 'hard').length;
 
   const easySolved = solvedProblems.filter((p) => {
-    const prob = PROBLEMS.find((item) => item.id === p.problemId);
+    const prob = portalProblems.find((item) => item.id === p.problemId);
     return prob?.difficulty === 'easy';
   }).length;
 
   const medSolved = solvedProblems.filter((p) => {
-    const prob = PROBLEMS.find((item) => item.id === p.problemId);
+    const prob = portalProblems.find((item) => item.id === p.problemId);
     return prob?.difficulty === 'medium';
   }).length;
 
   const hardSolved = solvedProblems.filter((p) => {
-    const prob = PROBLEMS.find((item) => item.id === p.problemId);
+    const prob = portalProblems.find((item) => item.id === p.problemId);
     return prob?.difficulty === 'hard';
   }).length;
 
-  // Bookmarked problem objects
+  // Bookmarked problem objects within active portal
   const bookmarkedItems = bookmarks
-    .map((id) => PROBLEMS.find((p) => p.id === id))
+    .filter((id) => portalProblemIds.has(id))
+    .map((id) => portalProblems.find((p) => p.id === id))
     .filter((p): p is Problem => !!p);
 
-  // Revision problem objects
+  // Revision problem objects within active portal
   const revisionItems = revisionProblems
-    .map((p) => PROBLEMS.find((item) => item.id === p.problemId))
+    .map((p) => portalProblems.find((item) => item.id === p.problemId))
     .filter((p): p is Problem => !!p);
 
   return (

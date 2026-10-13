@@ -394,7 +394,7 @@ const cse205Units: Unit[] = [
         description: 'Linear vs non-linear structures, primitive vs non-primitive, asymptotic analysis (Big-O, Omega, Theta), time-space tradeoffs.',
         prerequisites: ['Basic programming', 'Mathematical functions and limits'],
         order: 1,
-        problemIds: ['p-dsa-array-traversal-1', 'p-dsa-kadane-1'],
+        problemIds: ['p-lpu-array-traversal-1', 'p-lpu-array-insert-1', 'p-lpu-linear-search-1'],
       },
       {
         id: 'cse205-u1-t2',
@@ -403,7 +403,7 @@ const cse205Units: Unit[] = [
         description: 'Contiguous 1D and 2D memory addressing, element shifting costs for insertions and deletions at arbitrary indices.',
         prerequisites: ['Array memory model', 'Loop constructs'],
         order: 2,
-        problemIds: ['p-dsa-array-traversal-1', 'p-dsa-array-insert-1', 'p-dsa-rotate-image-1', 'p-dsa-spiral-matrix-1', 'p-dsa-set-matrix-zeroes-1'],
+        problemIds: ['p-lpu-array-traversal-1', 'p-lpu-array-insert-1', 'p-lpu-linear-search-1'],
       },
       {
         id: 'cse205-u1-t3',
@@ -413,7 +413,7 @@ const cse205Units: Unit[] = [
         prerequisites: ['Arrays', 'Swapping values'],
         order: 3,
         visualizerId: 'bubble-sort',
-        problemIds: ['p-dsa-bubble-sort-1', 'p-dsa-three-sum-1'],
+        problemIds: ['p-lpu-array-traversal-1', 'p-lpu-array-insert-1', 'p-lpu-linear-search-1'],
       },
       {
         id: 'cse205-u1-t4',
@@ -423,7 +423,7 @@ const cse205Units: Unit[] = [
         prerequisites: ['Arrays', 'Nested loops'],
         order: 4,
         visualizerId: 'insertion-sort',
-        problemIds: ['p-dsa-insertion-sort-1'],
+        problemIds: ['p-lpu-array-traversal-1', 'p-lpu-array-insert-1', 'p-lpu-linear-search-1'],
       },
       {
         id: 'cse205-u1-t5',
@@ -433,7 +433,7 @@ const cse205Units: Unit[] = [
         prerequisites: ['Arrays', 'Minimum element finding'],
         order: 5,
         visualizerId: 'selection-sort',
-        problemIds: ['p-dsa-selection-sort-1'],
+        problemIds: ['p-lpu-array-traversal-1', 'p-lpu-array-insert-1', 'p-lpu-linear-search-1'],
       },
       {
         id: 'cse205-u1-t6',
@@ -443,7 +443,7 @@ const cse205Units: Unit[] = [
         prerequisites: ['Array traversal'],
         order: 6,
         visualizerId: 'linear-search',
-        problemIds: ['p-dsa-linear-search-1', 'p-dsa-single-number-1'],
+        problemIds: ['p-lpu-array-traversal-1', 'p-lpu-array-insert-1', 'p-lpu-linear-search-1'],
       },
       {
         id: 'cse205-u1-t7',
@@ -453,7 +453,7 @@ const cse205Units: Unit[] = [
         prerequisites: ['Sorted arrays', 'Divide-and-conquer concept'],
         order: 7,
         visualizerId: 'binary-search',
-        problemIds: ['p-dsa-binary-search-1', 'p-dsa-search-rotated-1', 'p-dsa-search-2d-matrix-1', 'p-dsa-find-min-rotated-1', 'p-dsa-koko-bananas-1'],
+        problemIds: ['p-lpu-array-traversal-1', 'p-lpu-array-insert-1', 'p-lpu-linear-search-1'],
       },
     ],
   },
@@ -471,7 +471,7 @@ const cse205Units: Unit[] = [
         prerequisites: ['Pointers in C++', 'Dynamic memory (new/delete)'],
         order: 1,
         visualizerId: 'singly-linked-list',
-        problemIds: ['p-dsa-ll-reverse-1', 'p-dsa-ll-merge-two-1', 'p-dsa-reorder-list-1'],
+        problemIds: ['p-lpu-merge-sort-1', 'p-lpu-quick-sort-1', 'p-lpu-kadane-1'],
       },
       {
         id: 'cse205-u2-t2',
@@ -481,7 +481,7 @@ const cse205Units: Unit[] = [
         prerequisites: ['Singly Linked List basics', 'Pointer reassignment'],
         order: 2,
         visualizerId: 'singly-linked-list',
-        problemIds: ['p-dsa-ll-reverse-1', 'p-dsa-ll-middle-1', 'p-dsa-remove-nth-from-end-1'],
+        problemIds: ['p-lpu-merge-sort-1', 'p-lpu-quick-sort-1', 'p-lpu-kadane-1'],
       },
       {
         id: 'cse205-u2-t3',
@@ -490,7 +490,7 @@ const cse205Units: Unit[] = [
         description: 'Bidirectional next and prev pointers, insertion and deletion operations, advantages and memory overhead.',
         prerequisites: ['Singly Linked List', 'Pointer arithmetic'],
         order: 3,
-        problemIds: ['p-dsa-dll-1', 'p-dsa-lru-cache-1'],
+        problemIds: ['p-lpu-merge-sort-1', 'p-lpu-quick-sort-1', 'p-lpu-kadane-1'],
       },
       {
         id: 'cse205-u2-t4',
@@ -499,7 +499,7 @@ const cse205Units: Unit[] = [
         description: 'Tail node linking back to head node, circular traversal loop termination, round-robin applications.',
         prerequisites: ['Linked list traversal'],
         order: 4,
-        problemIds: ['p-dsa-cll-1', 'p-dsa-ll-cycle-1', 'p-dsa-copy-list-random-1'],
+        problemIds: ['p-lpu-merge-sort-1', 'p-lpu-quick-sort-1', 'p-lpu-kadane-1'],
       },
     ],
   },
@@ -517,7 +517,7 @@ const cse205Units: Unit[] = [
         prerequisites: ['Arrays', 'Singly Linked Lists'],
         order: 1,
         visualizerId: 'stack-operations',
-        problemIds: ['p-dsa-stack-valid-parens-1', 'p-dsa-min-stack-1', 'p-dsa-daily-temperatures-1'],
+        problemIds: ['p-lpu-ll-middle-1', 'p-lpu-ll-reverse-1', 'p-lpu-dll-1'],
       },
       {
         id: 'cse205-u3-t2',
@@ -527,7 +527,7 @@ const cse205Units: Unit[] = [
         prerequisites: ['Stack ADT', 'Operator precedence and associativity'],
         order: 2,
         visualizerId: 'stack-operations',
-        problemIds: ['p-dsa-stack-postfix-1', 'p-dsa-eval-rpn-1', 'p-dsa-generate-parentheses-1'],
+        problemIds: ['p-lpu-ll-middle-1', 'p-lpu-ll-reverse-1', 'p-lpu-dll-1'],
       },
       {
         id: 'cse205-u3-t3',
@@ -537,7 +537,7 @@ const cse205Units: Unit[] = [
         prerequisites: ['Arrays', 'Modulo arithmetic'],
         order: 3,
         visualizerId: 'queue-operations',
-        problemIds: ['p-dsa-queue-1', 'p-dsa-circular-queue-1', 'p-dsa-largest-rect-histogram-1'],
+        problemIds: ['p-lpu-ll-middle-1', 'p-lpu-ll-reverse-1', 'p-lpu-dll-1'],
       },
       {
         id: 'cse205-u3-t4',
@@ -546,7 +546,7 @@ const cse205Units: Unit[] = [
         description: 'Insertions and deletions at both ends (Deque), priority-based removal order.',
         prerequisites: ['Linear Queue ADT'],
         order: 4,
-        problemIds: ['p-dsa-queue-1', 'p-dsa-heap-kth-1', 'p-dsa-task-scheduler-1'],
+        problemIds: ['p-lpu-ll-middle-1', 'p-lpu-ll-reverse-1', 'p-lpu-dll-1'],
       },
     ],
   },
@@ -564,7 +564,7 @@ const cse205Units: Unit[] = [
         prerequisites: ['Stack ADT', 'Functions and recursion'],
         order: 1,
         visualizerId: 'hanoi',
-        problemIds: ['p-cpp-recursion-1', 'p-dsa-powx-n-1', 'p-dsa-subsets-1', 'p-dsa-combination-sum-1'],
+        problemIds: ['p-lpu-stack-valid-parens-1', 'p-lpu-queue-1', 'p-lpu-circular-queue-1'],
       },
       {
         id: 'cse205-u4-t2',
@@ -573,7 +573,7 @@ const cse205Units: Unit[] = [
         description: 'Root, leaf, height, depth, full vs complete binary trees; Inorder, Preorder, Postorder, and Level-Order traversals.',
         prerequisites: ['Linked list node structures', 'Recursion'],
         order: 2,
-        problemIds: ['p-dsa-tree-traversal-1', 'p-dsa-tree-level-order-1', 'p-dsa-tree-max-depth-1', 'p-dsa-invert-tree-1', 'p-dsa-diameter-tree-1', 'p-dsa-balanced-tree-1', 'p-dsa-same-tree-1'],
+        problemIds: ['p-lpu-stack-valid-parens-1', 'p-lpu-queue-1', 'p-lpu-circular-queue-1'],
       },
       {
         id: 'cse205-u4-t3',
@@ -583,7 +583,7 @@ const cse205Units: Unit[] = [
         prerequisites: ['Binary Trees', 'Binary Search'],
         order: 3,
         visualizerId: 'bst-insert',
-        problemIds: ['p-dsa-bst-validate-1', 'p-dsa-bst-insert-1', 'p-dsa-lca-bst-1', 'p-dsa-kth-smallest-bst-1'],
+        problemIds: ['p-lpu-stack-valid-parens-1', 'p-lpu-queue-1', 'p-lpu-circular-queue-1'],
       },
       {
         id: 'cse205-u4-t4',
@@ -593,7 +593,7 @@ const cse205Units: Unit[] = [
         prerequisites: ['Recursion', 'Array manipulation'],
         order: 4,
         visualizerId: 'merge-sort',
-        problemIds: ['p-dsa-merge-sort-1', 'p-dsa-merge-intervals-1', 'p-dsa-merge-k-sorted-lists-1'],
+        problemIds: ['p-lpu-stack-valid-parens-1', 'p-lpu-queue-1', 'p-lpu-circular-queue-1'],
       },
       {
         id: 'cse205-u4-t5',
@@ -603,7 +603,7 @@ const cse205Units: Unit[] = [
         prerequisites: ['Recursion', 'Array in-place swapping'],
         order: 5,
         visualizerId: 'quick-sort',
-        problemIds: ['p-dsa-quick-sort-1', 'p-dsa-non-overlapping-intervals-1'],
+        problemIds: ['p-lpu-stack-valid-parens-1', 'p-lpu-queue-1', 'p-lpu-circular-queue-1'],
       },
     ],
   },
@@ -621,7 +621,7 @@ const cse205Units: Unit[] = [
         prerequisites: ['Complete binary trees', 'Array representations of trees'],
         order: 1,
         visualizerId: 'heap-sort',
-        problemIds: ['p-dsa-heap-kth-1', 'p-dsa-heap-sort-1', 'p-dsa-heapify-1', 'p-dsa-top-k-frequent-1', 'p-dsa-k-closest-points-1', 'p-dsa-median-data-stream-1'],
+        problemIds: ['p-lpu-tree-traversal-1', 'p-lpu-bst-insert-1', 'p-lpu-bst-validate-1'],
       },
       {
         id: 'cse205-u5-t2',
@@ -631,7 +631,7 @@ const cse205Units: Unit[] = [
         prerequisites: ['Binary Search Trees (BST)', 'Tree height calculation'],
         order: 2,
         visualizerId: 'avl-balancing',
-        problemIds: ['p-dsa-avl-tree-1', 'p-dsa-implement-trie-1'],
+        problemIds: ['p-lpu-tree-traversal-1', 'p-lpu-bst-insert-1', 'p-lpu-bst-validate-1'],
       },
       {
         id: 'cse205-u5-t3',
@@ -640,7 +640,7 @@ const cse205Units: Unit[] = [
         description: 'Division, multiplication, and folding hash methods; collision resolution via Separate Chaining vs Open Addressing (linear probing, quadratic probing, double hashing).',
         prerequisites: ['Arrays', 'Linked Lists', 'Modulo arithmetic'],
         order: 3,
-        problemIds: ['p-dsa-hash-chaining-1', 'p-dsa-two-sum-1', 'p-dsa-copy-list-random-1', 'p-dsa-lru-cache-1'],
+        problemIds: ['p-lpu-tree-traversal-1', 'p-lpu-bst-insert-1', 'p-lpu-bst-validate-1'],
       },
     ],
   },
@@ -658,7 +658,7 @@ const cse205Units: Unit[] = [
         prerequisites: ['Queue ADT', '2D Arrays and Linked Lists'],
         order: 1,
         visualizerId: 'bfs',
-        problemIds: ['p-dsa-bfs-1', 'p-dsa-num-islands-1', 'p-dsa-clone-graph-1'],
+        problemIds: ['p-lpu-heap-kth-1', 'p-lpu-heap-sort-1', 'p-lpu-bfs-1'],
       },
       {
         id: 'cse205-u6-t2',
@@ -668,7 +668,7 @@ const cse205Units: Unit[] = [
         prerequisites: ['Graph representations', 'Recursion and Call Stacks'],
         order: 2,
         visualizerId: 'dfs',
-        problemIds: ['p-dsa-dfs-1', 'p-dsa-cycle-graph-1', 'p-dsa-pacific-atlantic-1', 'p-dsa-course-schedule-1', 'p-dsa-course-schedule-ii-1'],
+        problemIds: ['p-lpu-heap-kth-1', 'p-lpu-heap-sort-1', 'p-lpu-bfs-1'],
       },
       {
         id: 'cse205-u6-t3',
@@ -678,7 +678,7 @@ const cse205Units: Unit[] = [
         prerequisites: ['Weighted Graphs', 'Priority Queues (Min-Heap)'],
         order: 3,
         visualizerId: 'dijkstra',
-        problemIds: ['p-dsa-dijkstra-1', 'p-dsa-network-delay-time-1'],
+        problemIds: ['p-lpu-heap-kth-1', 'p-lpu-heap-sort-1', 'p-lpu-bfs-1'],
       },
       {
         id: 'cse205-u6-t4',
@@ -687,7 +687,7 @@ const cse205Units: Unit[] = [
         description: 'Single-source shortest path supporting negative edge weights, relaxing all edges |V|-1 times, detecting negative cycles.',
         prerequisites: ['Weighted graphs', "Dijkstra's Algorithm"],
         order: 4,
-        problemIds: ['p-dsa-bellman-ford-1'],
+        problemIds: ['p-lpu-heap-kth-1', 'p-lpu-heap-sort-1', 'p-lpu-bfs-1'],
       },
       {
         id: 'cse205-u6-t5',
@@ -697,7 +697,7 @@ const cse205Units: Unit[] = [
         prerequisites: ['Graph representations', '2D arrays', 'Greedy algorithms'],
         order: 5,
         visualizerId: 'prim',
-        problemIds: ['p-dsa-floyd-warshall-1', 'p-dsa-mst-prim-1', 'p-dsa-mst-kruskal-1'],
+        problemIds: ['p-lpu-heap-kth-1', 'p-lpu-heap-sort-1', 'p-lpu-bfs-1'],
       },
     ],
   },

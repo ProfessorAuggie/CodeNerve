@@ -61,7 +61,7 @@ export const useUserStore = create<UserState>()(
   persist(
     (set) => ({
       user: defaultUser,
-      hasChosenTrack: false,
+      hasChosenTrack: true,
       showTrackModal: false,
       problemProgress: {
         'p-dsa-array-traversal-1': {

@@ -21,11 +21,15 @@ export const Navbar: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const { user, setRole, problemProgress, activePortal, setActivePortal, openTrackModal } = useUserStore();
+  const { user, setRole, problemProgress, activePortal, setActivePortal } = useUserStore();
 
-  const totalProblems = PROBLEMS.length;
-  const solvedCount = Object.values(problemProgress).filter((p) => p.status === 'SOLVED').length;
-  const progressPercent = Math.round((solvedCount / totalProblems) * 100);
+  const portalProblems = PROBLEMS.filter((p) => (p.track || 'global') === activePortal);
+  const portalProblemIds = new Set(portalProblems.map((p) => p.id));
+  const totalProblems = portalProblems.length;
+  const solvedCount = Object.values(problemProgress).filter(
+    (p) => portalProblemIds.has(p.problemId) && p.status === 'SOLVED'
+  ).length;
+  const progressPercent = totalProblems > 0 ? Math.round((solvedCount / totalProblems) * 100) : 0;
 
   const isActive = (path: string) => {
     if (path === '/') return location.pathname === '/';
@@ -42,8 +46,8 @@ export const Navbar: React.FC = () => {
   ];
 
   const lpuNavLinks = [
-    { name: 'LPU Syllabus', path: '/lpu', icon: GraduationCap, badge: 'C++ CSE' },
-    { name: 'C++ Roadmaps', path: '/roadmap/cpp-path', icon: Code2, badge: 'C++' },
+    { name: 'LPU Syllabus', path: '/lpu', icon: GraduationCap, badge: 'CSE' },
+    { name: 'Academic Roadmap', path: '/roadmap', icon: GitFork, badge: 'CSE202/205' },
     { name: 'Problems Bank', path: '/problems', icon: Terminal },
     { name: 'Faculty Portal', path: '/teacher', icon: ShieldCheck, badge: 'Teacher' },
     { name: 'Visualizer', path: 'https://algonerve.vercel.app', icon: Sparkles, badge: 'AlgoNerve', isExternal: true },
@@ -57,7 +61,7 @@ export const Navbar: React.FC = () => {
     <header className="sticky top-0 z-50 w-full border-b border-slate-800/80 bg-slate-950/90 backdrop-blur-md">
       <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-3 sm:px-5 lg:px-8">
         {/* Brand Logo & Portal Switcher */}
-        <div className="flex items-center gap-3 sm:gap-4">
+        <div className="flex items-center gap-2.5 sm:gap-4">
           <Link to="/" className="group flex items-center gap-2">
             <div className="flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center rounded-xl bg-gradient-to-tr from-brand-600 via-indigo-500 to-purple-500 text-white shadow-md shadow-brand-500/25 transition group-hover:scale-105 group-hover:shadow-brand-500/40">
               <Code2 className="h-4 w-4 sm:h-4.5 sm:w-4.5" />
@@ -67,24 +71,24 @@ export const Navbar: React.FC = () => {
                 Code<span className="text-brand-400">Nerve</span>
               </span>
               <span className="hidden sm:inline-block ml-1.5 text-[9px] font-semibold uppercase tracking-wider px-1.5 py-0.2 rounded bg-brand-500/10 text-brand-300 border border-brand-500/20">
-                {activePortal === 'lpu' ? 'LPU C++' : 'Global DSA'}
+                {activePortal === 'lpu' ? 'LPU Portal' : 'Global DSA'}
               </span>
             </div>
           </Link>
 
           {/* Dual Platform Switcher: Global Public (Generic) vs LPU University (C++) */}
-          <div className="hidden md:flex items-center rounded-xl border border-slate-800 bg-slate-900/90 p-0.5 text-xs shadow-inner">
+          <div className="flex items-center rounded-xl border border-slate-800 bg-slate-900/95 p-0.5 text-xs shadow-inner">
             <button
               onClick={() => {
                 setActivePortal('global');
-                if (location.pathname === '/lpu') navigate('/roadmap');
+                if (location.pathname === '/lpu' || location.pathname === '/teacher') navigate('/roadmap');
               }}
-              className={`flex items-center gap-1 px-2.5 py-1 rounded-lg font-bold transition text-xs ${
+              className={`flex items-center gap-1 px-2 sm:px-2.5 py-1 rounded-lg font-bold transition text-[11px] sm:text-xs ${
                 activePortal === 'global'
-                  ? 'bg-brand-600 text-white shadow-sm'
+                  ? 'bg-brand-600 text-white shadow-sm shadow-brand-500/30'
                   : 'text-slate-400 hover:text-slate-200'
               }`}
-              title="Generic Public Coding Track (Any Language: Python, Java, C++, JS, Go)"
+              title="Generic Public Coding Track (Language Agnostic: Python, Java, C++, JS, Go)"
             >
               <Globe className="h-3 w-3" />
               <span>Global DSA</span>
@@ -95,26 +99,17 @@ export const Navbar: React.FC = () => {
                 setActivePortal('lpu');
                 navigate('/lpu');
               }}
-              className={`flex items-center gap-1 px-2.5 py-1 rounded-lg font-bold transition text-xs ${
+              className={`flex items-center gap-1 px-2 sm:px-2.5 py-1 rounded-lg font-bold transition text-[11px] sm:text-xs ${
                 activePortal === 'lpu'
-                  ? 'bg-emerald-600 text-white shadow-sm'
+                  ? 'bg-emerald-600 text-white shadow-sm shadow-emerald-500/30'
                   : 'text-slate-400 hover:text-slate-200'
               }`}
-              title="Lovely Professional University C++ Curriculum (CSE202 / CSE205)"
+              title="Lovely Professional University Academic Portal (CSE202 / CSE205)"
             >
               <GraduationCap className="h-3 w-3" />
               <span>LPU Portal</span>
             </button>
           </div>
-
-          <button
-            onClick={openTrackModal}
-            className="hidden xl:flex items-center gap-1 px-2 py-1 rounded-lg border border-slate-800 bg-slate-900/80 hover:bg-slate-850 hover:border-slate-700 text-slate-300 text-xs font-semibold transition"
-            title="Choose or switch between Global DSA and LPU Portal"
-          >
-            <Sparkles className="h-3 w-3 text-brand-400" />
-            <span>Switch</span>
-          </button>
         </div>
 
           {/* Desktop Nav Items */}

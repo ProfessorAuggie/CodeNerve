@@ -50,7 +50,7 @@ export const LpuPortalPage: React.FC = () => {
       subject: 'CSE205 Data Structures & Algorithms',
       topics: 'Arrays, Big-O Complexity, Bubble & Selection Sort',
       problemCount: 8,
-      recommendedProblems: ['p-dsa-array-traversal-1', 'p-dsa-array-insert-1', 'p-dsa-bubble-sort-1', 'p-dsa-linear-search-1'],
+      recommendedProblems: ['p-lpu-array-traversal-1', 'p-lpu-array-insert-1', 'p-lpu-bubble-sort-1', 'p-lpu-linear-search-1'],
     },
     {
       id: 'midterm-prep',
@@ -58,7 +58,7 @@ export const LpuPortalPage: React.FC = () => {
       subject: 'CSE205 & CSE202 Core Foundations',
       topics: 'Linked Lists, Stacks, Queues, Binary Search, C++ Pointers & Classes',
       problemCount: 14,
-      recommendedProblems: ['p-dsa-ll-reverse-1', 'p-dsa-stack-valid-parens-1', 'p-dsa-queue-1', 'p-cpp-constructors-1', 'p-cpp-pointers-1'],
+      recommendedProblems: ['p-lpu-ll-reverse-1', 'p-lpu-stack-valid-parens-1', 'p-lpu-queue-1', 'p-cpp-constructors-1', 'p-cpp-pointers-1'],
     },
     {
       id: 'ca2-prep',
@@ -74,7 +74,7 @@ export const LpuPortalPage: React.FC = () => {
       subject: 'All Units (CSE202 + CSE205)',
       topics: 'Trees, BST, Heaps, Graphs (Dijkstra, BFS, DFS), STL & Templates',
       problemCount: 20,
-      recommendedProblems: ['p-dsa-tree-traversal-1', 'p-dsa-bst-insert-1', 'p-dsa-heap-kth-1', 'p-dsa-bfs-1', 'p-dsa-dijkstra-1', 'p-cpp-templates-1'],
+      recommendedProblems: ['p-lpu-tree-traversal-1', 'p-lpu-bst-insert-1', 'p-lpu-heap-kth-1', 'p-lpu-bfs-1', 'p-lpu-dijkstra-1', 'p-cpp-templates-1'],
     },
   ];
 
@@ -102,16 +102,8 @@ export const LpuPortalPage: React.FC = () => {
 
           <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2.5 shrink-0">
             <Link
-              to="/roadmap"
-              className="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-xs font-semibold text-slate-200 border border-slate-700 transition"
-            >
-              <Compass className="h-4 w-4 text-brand-400" />
-              <span>Switch to Global Track</span>
-            </Link>
-
-            <Link
               to="/quizzes"
-              className="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-brand-600 hover:bg-brand-500 text-xs font-semibold text-white shadow-lg shadow-brand-500/25 transition"
+              className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-500 text-xs font-semibold text-white shadow-lg shadow-brand-500/25 transition"
             >
               <Award className="h-4 w-4" />
               <span>Take CA Practice Quiz</span>

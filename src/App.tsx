@@ -2,7 +2,6 @@ import React, { useEffect, Suspense } from 'react';
 import { Routes, Route, useParams } from 'react-router-dom';
 import { Navbar } from './components/layout/Navbar';
 import { Footer } from './components/layout/Footer';
-import { TrackSelectionModal } from './components/layout/TrackSelectionModal';
 import { ErrorBoundary } from './components/common/ErrorBoundary';
 import { RouteLoadingFallback } from './components/common/RouteLoadingFallback';
 
@@ -47,11 +46,8 @@ const AlgoNerveRedirect: React.FC = () => {
 export const App: React.FC = () => {
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans selection:bg-brand-500/30 selection:text-brand-200">
-      {/* Top Navbar */}
+      {/* Top Navbar with Single-Source-of-Truth Portal Switcher */}
       <Navbar />
-
-      {/* Global Track Selection Modal (First-time visitor prompt & switcher) */}
-      <TrackSelectionModal />
 
       {/* Main Content Area */}
       <main className="flex-1">

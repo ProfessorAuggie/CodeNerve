@@ -14,7 +14,7 @@ import { ProblemModal } from '../components/problems/ProblemModal';
 import { useUserStore } from '../store/userStore';
 
 export const ProblemsPage: React.FC = () => {
-  const { problemProgress, bookmarks } = useUserStore();
+  const { problemProgress, bookmarks, activePortal } = useUserStore();
   const [isFitScreen, setIsFitScreen] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedPlatform, setSelectedPlatform] = useState<string>('all');
@@ -24,16 +24,23 @@ export const ProblemsPage: React.FC = () => {
   const [showOnlyBookmarked, setShowOnlyBookmarked] = useState(false);
   const [selectedProblem, setSelectedProblem] = useState<Problem | null>(null);
 
-  // Extract all unique topic tags
+  const isLpu = activePortal === 'lpu';
+
+  // 1. Strictly separate problem universe by active portal (NO OVERLAPPING)
+  const portalProblems = useMemo(() => {
+    return PROBLEMS.filter((p) => (p.track || 'global') === activePortal);
+  }, [activePortal]);
+
+  // 2. Extract all unique topic tags for the active portal
   const allTags = useMemo(() => {
     const set = new Set<string>();
-    PROBLEMS.forEach((p) => p.topicTags.forEach((t) => set.add(t)));
+    portalProblems.forEach((p) => p.topicTags.forEach((t) => set.add(t)));
     return Array.from(set).sort();
-  }, []);
+  }, [portalProblems]);
 
-  // Filter problems
+  // 3. Filter problems within active portal
   const filteredProblems = useMemo(() => {
-    return PROBLEMS.filter((p) => {
+    return portalProblems.filter((p) => {
       // Search query
       if (searchQuery.trim()) {
         const q = searchQuery.toLowerCase();
@@ -73,6 +80,7 @@ export const ProblemsPage: React.FC = () => {
       return true;
     });
   }, [
+    portalProblems,
     searchQuery,
     selectedPlatform,
     selectedDifficulty,
@@ -83,10 +91,11 @@ export const ProblemsPage: React.FC = () => {
     bookmarks,
   ]);
 
-  // Overall counts
-  const totalCount = PROBLEMS.length;
-  const solvedCount = Object.values(problemProgress).filter((p) => p.status === 'SOLVED').length;
-  const revisionCount = Object.values(problemProgress).filter((p) => p.status === 'REVISION_NEEDED').length;
+  // Overall counts for active portal
+  const totalCount = portalProblems.length;
+  const portalProblemIds = useMemo(() => new Set(portalProblems.map((p) => p.id)), [portalProblems]);
+  const solvedCount = Object.entries(problemProgress).filter(([id, p]) => portalProblemIds.has(id) && p.status === 'SOLVED').length;
+  const revisionCount = Object.entries(problemProgress).filter(([id, p]) => portalProblemIds.has(id) && p.status === 'REVISION_NEEDED').length;
 
   const resetFilters = () => {
     setSearchQuery('');
@@ -116,18 +125,28 @@ export const ProblemsPage: React.FC = () => {
       {/* Page Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 shrink-0">
         <div className="flex items-center gap-3">
-          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 shrink-0">
+          <div className={`flex h-9 w-9 items-center justify-center rounded-xl border shrink-0 ${
+            isLpu 
+              ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' 
+              : 'bg-brand-500/10 text-brand-400 border-brand-500/20'
+          }`}>
             <Terminal className="h-4 w-4" />
           </div>
           <div>
             <h1 className="text-lg sm:text-xl font-extrabold text-white tracking-tight flex items-center gap-2">
-              <span>Curated Problem Library</span>
-              <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-slate-800 text-slate-300 border border-slate-700">
-                {totalCount} problems
+              <span>{isLpu ? 'LPU Academic Question Bank' : 'Global DSA Problem Catalogue'}</span>
+              <span className={`text-xs font-semibold px-2 py-0.5 rounded-full border ${
+                isLpu 
+                  ? 'bg-emerald-950/60 text-emerald-300 border-emerald-800/40' 
+                  : 'bg-slate-800 text-slate-300 border-slate-700'
+              }`}>
+                {totalCount} problems ({isLpu ? 'LPU Track' : 'Global Track'})
               </span>
             </h1>
             <p className="text-xs text-slate-400 hidden sm:block">
-              165 canonical problems across LeetCode, GFG, & HackerRank with AlgoNerve visualizers and tracking.
+              {isLpu
+                ? 'University-aligned questions for CSE202 (C++ OOP) and CSE205 (Data Structures) with CA-1, CA-2, Midterm & Endterm scopes.'
+                : '182 canonical, language-agnostic DSA problems (LeetCode, GFG & DSA 130) with AlgoNerve visualizers and tracking.'}
             </p>
           </div>
         </div>

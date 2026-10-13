@@ -50,7 +50,7 @@ export const CSE205_NODES: LpuNodeData[] = [
     examScope: 'CA-1',
     prerequisites: ['Basic C++ programming', 'Loop constructs & memory addresses'],
     description: 'Contiguous 1D/2D memory addressing, element shifting, Big-O asymptotic analysis.',
-    problemIds: ['p-dsa-array-traversal-1', 'p-dsa-array-insert-1', 'p-dsa-kadane-1', 'p-dsa-rotate-image-1', 'p-dsa-spiral-matrix-1'],
+    problemIds: ['p-lpu-array-traversal-1', 'p-lpu-array-insert-1', 'p-lpu-kadane-1', 'p-lpu-rotate-image-1'],
   },
 
   // Level 1: Searching & Basic Sorting
@@ -66,7 +66,7 @@ export const CSE205_NODES: LpuNodeData[] = [
     prerequisites: ['Arrays & Big-O Foundations'],
     description: 'Sequential comparison vs logarithmic interval halving on ordered ranges.',
     visualizerId: 'binary-search',
-    problemIds: ['p-dsa-linear-search-1', 'p-dsa-binary-search-1', 'p-dsa-search-rotated-1', 'p-dsa-search-2d-matrix-1', 'p-dsa-find-min-rotated-1'],
+    problemIds: ['p-lpu-linear-search-1', 'p-lpu-binary-search-1'],
   },
   {
     id: 'cse205-sorting',
@@ -80,7 +80,7 @@ export const CSE205_NODES: LpuNodeData[] = [
     prerequisites: ['Arrays & Big-O Foundations'],
     description: 'Quadratic sorting paradigms, bubble passes, insertion shifts, and selection minima.',
     visualizerId: 'bubble-sort',
-    problemIds: ['p-dsa-bubble-sort-1', 'p-dsa-insertion-sort-1', 'p-dsa-selection-sort-1', 'p-dsa-three-sum-1'],
+    problemIds: ['p-lpu-bubble-sort-1', 'p-lpu-insertion-sort-1', 'p-lpu-selection-sort-1'],
   },
 
   // Level 2: Advanced Sorting & Linked Lists
@@ -96,7 +96,7 @@ export const CSE205_NODES: LpuNodeData[] = [
     prerequisites: ['Bubble, Insert & Select Sort', 'Divide and conquer recursion'],
     description: 'Divide and conquer partitioning, recursive stack unwinding, and guaranteed O(n log n) merges.',
     visualizerId: 'merge-sort',
-    problemIds: ['p-dsa-merge-sort-1', 'p-dsa-quick-sort-1', 'p-dsa-merge-intervals-1'],
+    problemIds: ['p-lpu-merge-sort-1', 'p-lpu-quick-sort-1'],
   },
   {
     id: 'cse205-linked-lists',
@@ -110,7 +110,7 @@ export const CSE205_NODES: LpuNodeData[] = [
     prerequisites: ['Arrays & Big-O Foundations', 'Pointers and dynamic memory (new/delete)'],
     description: 'Non-contiguous node allocation, next/prev pointer rewiring, insertion and deletion.',
     visualizerId: 'singly-linked-list',
-    problemIds: ['p-dsa-ll-middle-1', 'p-dsa-ll-reverse-1', 'p-dsa-dll-1', 'p-dsa-ll-cycle-1', 'p-dsa-reorder-list-1', 'p-dsa-remove-nth-from-end-1'],
+    problemIds: ['p-lpu-ll-middle-1', 'p-lpu-ll-reverse-1', 'p-lpu-dll-1', 'p-lpu-ll-cycle-1', 'p-lpu-cll-1'],
   },
 
   // Level 3: Linear Abstract Data Types
@@ -126,7 +126,7 @@ export const CSE205_NODES: LpuNodeData[] = [
     prerequisites: ['Singly & Doubly Linked Lists', 'Arrays & Big-O Foundations'],
     description: 'LIFO stack semantics, expression evaluation (Infix to Postfix), and FIFO circular queues.',
     visualizerId: 'stack-operations',
-    problemIds: ['p-dsa-stack-valid-parens-1', 'p-dsa-queue-1', 'p-dsa-circular-queue-1', 'p-dsa-min-stack-1', 'p-dsa-daily-temperatures-1', 'p-dsa-eval-rpn-1'],
+    problemIds: ['p-lpu-stack-valid-parens-1', 'p-lpu-queue-1', 'p-lpu-circular-queue-1', 'p-lpu-min-stack-1', 'p-lpu-stack-postfix-1'],
   },
 
   // Level 4: Non-Linear Trees
@@ -142,7 +142,7 @@ export const CSE205_NODES: LpuNodeData[] = [
     prerequisites: ['Stacks & Circular Queues', 'Divide and conquer recursion'],
     description: 'Hierarchical node branching, in-order/pre-order/post-order, BST search invariant.',
     visualizerId: 'bst-insert',
-    problemIds: ['p-dsa-tree-traversal-1', 'p-dsa-bst-insert-1', 'p-dsa-invert-tree-1', 'p-dsa-diameter-tree-1', 'p-dsa-lca-bst-1', 'p-dsa-kth-smallest-bst-1'],
+    problemIds: ['p-lpu-tree-traversal-1', 'p-lpu-bst-insert-1', 'p-lpu-bst-validate-1', 'p-lpu-tree-level-order-1', 'p-lpu-lca-bst-1'],
   },
   {
     id: 'cse205-avl',
@@ -156,7 +156,7 @@ export const CSE205_NODES: LpuNodeData[] = [
     prerequisites: ['Binary Trees & BST Traversals'],
     description: 'Self-balancing binary search trees using LL, RR, LR, and RL rotation balance factors.',
     visualizerId: 'avl-balancing',
-    problemIds: ['p-dsa-avl-tree-1'],
+    problemIds: ['p-lpu-avl-tree-1'],
   },
   {
     id: 'cse205-heaps',
@@ -170,7 +170,7 @@ export const CSE205_NODES: LpuNodeData[] = [
     prerequisites: ['Binary Trees & BST Traversals', 'Arrays & Big-O Foundations'],
     description: 'Complete binary tree layout in flat arrays, sift-up/sift-down heapify, HeapSort.',
     visualizerId: 'heap-sort',
-    problemIds: ['p-dsa-heap-kth-1', 'p-dsa-heapify-1', 'p-dsa-heap-sort-1', 'p-dsa-top-k-frequent-1', 'p-dsa-task-scheduler-1'],
+    problemIds: ['p-lpu-heap-kth-1', 'p-lpu-heap-sort-1'],
   },
 
   // Level 5: Graphs & Hashing
@@ -186,7 +186,7 @@ export const CSE205_NODES: LpuNodeData[] = [
     prerequisites: ['Stacks & Circular Queues', 'Binary Trees & BST Traversals'],
     description: 'Adjacency list representations, queue-driven BFS, recursive stack DFS, cycle detection.',
     visualizerId: 'bfs',
-    problemIds: ['p-dsa-bfs-1', 'p-dsa-dfs-1', 'p-dsa-cycle-graph-1', 'p-dsa-num-islands-1', 'p-dsa-course-schedule-1'],
+    problemIds: ['p-lpu-bfs-1', 'p-lpu-dfs-1'],
   },
   {
     id: 'cse205-spanning-trees',
@@ -200,7 +200,7 @@ export const CSE205_NODES: LpuNodeData[] = [
     prerequisites: ['Graph Traversals (BFS & DFS)', 'Binary Heaps & Priority Queues'],
     description: 'Minimum spanning tree discovery using greedy edge selection and Disjoint Set Union (DSU).',
     visualizerId: 'prim',
-    problemIds: ['p-dsa-mst-prim-1', 'p-dsa-mst-kruskal-1', 'p-dsa-dijkstra-1', 'p-dsa-network-delay-time-1'],
+    problemIds: ['p-lpu-mst-kruskal-1', 'p-lpu-dijkstra-1'],
   },
   {
     id: 'cse205-hashing',
@@ -213,7 +213,7 @@ export const CSE205_NODES: LpuNodeData[] = [
     examScope: 'ETE',
     prerequisites: ['Arrays & Big-O Foundations', 'Singly & Doubly Linked Lists'],
     description: 'Hash functions, open addressing linear probing, chaining, load factor amortized O(1).',
-    problemIds: ['p-dsa-hash-chaining-1', 'p-dsa-two-sum-1', 'p-dsa-copy-list-random-1', 'p-dsa-lru-cache-1'],
+    problemIds: ['p-lpu-hash-chaining-1'],
   },
 ];
 

@@ -80,6 +80,7 @@ export interface Problem {
   externalUrl: string;
   difficulty: Difficulty;
   topicTags: string[];
+  track?: 'global' | 'lpu';
   problemType?: string;
   estimatedTime?: number; // minutes
   prerequisites: string[];
