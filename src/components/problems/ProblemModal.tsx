@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
 import { 
   X, 
   ExternalLink, 
@@ -11,12 +10,11 @@ import {
   Hourglass, 
   RotateCcw, 
   FileText, 
-  ShieldAlert,
-  ArrowRight
+  ShieldAlert
 } from 'lucide-react';
 import type { Problem, ProblemStatus } from '../../types';
 import { useUserStore } from '../../store/userStore';
-import { getDifficultyColor, getStatusBadge } from '../../lib/utils';
+import { getDifficultyColor } from '../../lib/utils';
 import { APP_CONFIG, type PlatformKey } from '../../lib/config';
 import { VISUALIZER_MAPPINGS, getAlgoNerveUrl } from '../../data/visualizers';
 
@@ -25,9 +23,12 @@ interface ProblemModalProps {
   onClose: () => void;
 }
 
-export const ProblemModal: React.FC<ProblemModalProps> = ({ problem, onClose }) => {
-  if (!problem) return null;
+interface ProblemModalInnerProps {
+  problem: Problem;
+  onClose: () => void;
+}
 
+const ProblemModalInner: React.FC<ProblemModalInnerProps> = ({ problem, onClose }) => {
   const { problemProgress, updateProblemStatus, bookmarks, toggleBookmark } = useUserStore();
   const currentProgress = problemProgress[problem.id];
   const currentStatus: ProblemStatus = currentProgress?.status || 'NOT_STARTED';
@@ -276,4 +277,9 @@ export const ProblemModal: React.FC<ProblemModalProps> = ({ problem, onClose }) 
       </div>
     </div>
   );
+};
+
+export const ProblemModal: React.FC<ProblemModalProps> = ({ problem, onClose }) => {
+  if (!problem) return null;
+  return <ProblemModalInner key={problem.id} problem={problem} onClose={onClose} />;
 };

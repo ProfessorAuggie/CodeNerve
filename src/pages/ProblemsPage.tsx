@@ -1,17 +1,12 @@
 import React, { useState, useMemo } from 'react';
 import { 
   Search, 
-  Filter, 
   Terminal, 
-  Sparkles, 
-  CheckCircle2, 
-  RotateCcw, 
-  Hourglass, 
-  X,
-  Bookmark
+  X, 
+  Bookmark 
 } from 'lucide-react';
 import { PROBLEMS } from '../data/problems';
-import type { Problem, Difficulty, ProblemStatus } from '../types';
+import type { Problem, ProblemStatus } from '../types';
 import { ProblemTable } from '../components/problems/ProblemTable';
 import { ProblemModal } from '../components/problems/ProblemModal';
 import { useUserStore } from '../store/userStore';

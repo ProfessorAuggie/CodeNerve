@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Code2, ExternalLink, Heart, Sparkles, BookOpen } from 'lucide-react';
+import { Code2, Sparkles } from 'lucide-react';
 import { APP_CONFIG } from '../../lib/config';
 
 export const Footer: React.FC = () => {

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { Compass, Code2, GitFork, GraduationCap } from 'lucide-react';
 import { DSA_ROADMAP, CPP_PATH } from '../data/learningPaths';
 import { RoadmapView } from '../components/roadmap/RoadmapView';

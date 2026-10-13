@@ -8,9 +8,7 @@ import {
   Sparkles, 
   Search, 
   ShieldAlert, 
-  ArrowRight,
-  BookOpen,
-  Filter,
+  BookOpen, 
   FileText
 } from 'lucide-react';
 import type { Problem, ProblemStatus } from '../../types';

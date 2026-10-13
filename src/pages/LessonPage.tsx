@@ -6,16 +6,13 @@ import {
   Terminal, 
   CheckCircle2, 
   ArrowLeft, 
-  Clock, 
-  Layers,
-  ArrowRight,
-  ExternalLink,
-  AlertCircle,
-  Compass,
-  Construction,
+  ExternalLink, 
+  AlertCircle, 
+  Compass, 
+  Construction, 
   GraduationCap
 } from 'lucide-react';
-import { LESSONS, getLessonById } from '../data/lessons';
+import { getLessonById } from '../data/lessons';
 import { PROBLEMS } from '../data/problems';
 import { SUBJECTS } from '../data/syllabus';
 import { getAlgoNerveUrl } from '../data/visualizers';

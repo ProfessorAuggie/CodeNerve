@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { 
   Code2, 
-  Compass, 
   BookOpen, 
   Terminal, 
   Sparkles, 
@@ -11,11 +10,9 @@ import {
   User, 
   ShieldCheck, 
   Menu, 
-  X,
-  ExternalLink,
-  Globe,
-  GitFork,
-  Calendar
+  X, 
+  Globe, 
+  GitFork 
 } from 'lucide-react';
 import { useUserStore } from '../../store/userStore';
 import { PROBLEMS } from '../../data/problems';

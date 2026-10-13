@@ -1,20 +1,20 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, Suspense } from 'react';
 import { Routes, Route, useParams } from 'react-router-dom';
 import { Navbar } from './components/layout/Navbar';
 import { Footer } from './components/layout/Footer';
 import { TrackSelectionModal } from './components/layout/TrackSelectionModal';
 import { ErrorBoundary } from './components/common/ErrorBoundary';
+import { RouteLoadingFallback } from './components/common/RouteLoadingFallback';
 
-// CodeNerve core pages
-import { HomePage } from './pages/HomePage';
-import { RoadmapPage } from './pages/RoadmapPage';
-import { ProblemsPage } from './pages/ProblemsPage';
-import { UniversityPage } from './pages/UniversityPage';
-import { LessonPage } from './pages/LessonPage';
-import { QuizPage } from './pages/QuizPage';
-import { DashboardPage } from './pages/DashboardPage';
-import { TeacherPage } from './pages/TeacherPage';
-import { LpuPortalPage } from './pages/LpuPortalPage';
+// CodeNerve route-level code splitting
+const HomePage = React.lazy(() => import('./pages/HomePage').then((m) => ({ default: m.HomePage })));
+const RoadmapPage = React.lazy(() => import('./pages/RoadmapPage').then((m) => ({ default: m.RoadmapPage })));
+const ProblemsPage = React.lazy(() => import('./pages/ProblemsPage').then((m) => ({ default: m.ProblemsPage })));
+const LpuPortalPage = React.lazy(() => import('./pages/LpuPortalPage').then((m) => ({ default: m.LpuPortalPage })));
+const LessonPage = React.lazy(() => import('./pages/LessonPage').then((m) => ({ default: m.LessonPage })));
+const QuizPage = React.lazy(() => import('./pages/QuizPage').then((m) => ({ default: m.QuizPage })));
+const DashboardPage = React.lazy(() => import('./pages/DashboardPage').then((m) => ({ default: m.DashboardPage })));
+const TeacherPage = React.lazy(() => import('./pages/TeacherPage').then((m) => ({ default: m.TeacherPage })));
 
 // External AlgoNerve Redirect component
 const AlgoNerveRedirect: React.FC = () => {
@@ -56,41 +56,43 @@ export const App: React.FC = () => {
       {/* Main Content Area */}
       <main className="flex-1">
         <ErrorBoundary sectionName="Page View">
-          <Routes>
-            {/* Main Landing Page */}
-            <Route path="/" element={<HomePage />} />
+          <Suspense fallback={<RouteLoadingFallback />}>
+            <Routes>
+              {/* Main Landing Page */}
+              <Route path="/" element={<HomePage />} />
 
-            {/* Roadmaps */}
-            <Route path="/roadmap" element={<RoadmapPage />} />
-            <Route path="/roadmap/:pathId" element={<RoadmapPage />} />
+              {/* Roadmaps */}
+              <Route path="/roadmap" element={<RoadmapPage />} />
+              <Route path="/roadmap/:pathId" element={<RoadmapPage />} />
 
-            {/* Problem Catalogue */}
-            <Route path="/problems" element={<ProblemsPage />} />
+              {/* Problem Catalogue */}
+              <Route path="/problems" element={<ProblemsPage />} />
 
-            {/* Academic LPU University Portal */}
-            <Route path="/university" element={<LpuPortalPage />} />
-            <Route path="/lpu" element={<LpuPortalPage />} />
+              {/* Academic LPU University Portal */}
+              <Route path="/university" element={<LpuPortalPage />} />
+              <Route path="/lpu" element={<LpuPortalPage />} />
 
-            {/* Interactive Lesson Views */}
-            <Route path="/lesson/:lessonId" element={<LessonPage />} />
+              {/* Interactive Lesson Views */}
+              <Route path="/lesson/:lessonId" element={<LessonPage />} />
 
-            {/* Assessment Quizzes */}
-            <Route path="/quizzes" element={<QuizPage />} />
+              {/* Assessment Quizzes */}
+              <Route path="/quizzes" element={<QuizPage />} />
 
-            {/* Student Analytics & Dashboard */}
-            <Route path="/dashboard" element={<DashboardPage />} />
+              {/* Student Analytics & Dashboard */}
+              <Route path="/dashboard" element={<DashboardPage />} />
 
-            {/* Teacher Assignment Portal */}
-            <Route path="/teacher" element={<TeacherPage />} />
+              {/* Teacher Assignment Portal */}
+              <Route path="/teacher" element={<TeacherPage />} />
 
-            {/* AlgoNerve Redirect Routes */}
-            <Route path="/visualize" element={<AlgoNerveRedirect />} />
-            <Route path="/visualize/:id" element={<AlgoNerveRedirect />} />
-            <Route path="/documentation" element={<AlgoNerveRedirect />} />
+              {/* AlgoNerve Redirect Routes */}
+              <Route path="/visualize" element={<AlgoNerveRedirect />} />
+              <Route path="/visualize/:id" element={<AlgoNerveRedirect />} />
+              <Route path="/documentation" element={<AlgoNerveRedirect />} />
 
-            {/* Catch-all redirect to Home */}
-            <Route path="*" element={<HomePage />} />
-          </Routes>
+              {/* Catch-all redirect to Home */}
+              <Route path="*" element={<HomePage />} />
+            </Routes>
+          </Suspense>
         </ErrorBoundary>
       </main>
 

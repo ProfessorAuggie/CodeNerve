@@ -1,28 +1,20 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { 
-  Code2, 
   Compass, 
   Sparkles, 
   Terminal, 
   GraduationCap, 
   CheckCircle2, 
   ArrowRight, 
-  BookOpen, 
-  ShieldCheck, 
-  Zap, 
-  Layers,
   ExternalLink,
-  Globe,
   SlidersHorizontal
 } from 'lucide-react';
-import { APP_CONFIG } from '../lib/config';
 import { PROBLEMS } from '../data/problems';
-import { SUBJECTS } from '../data/syllabus';
 import { useUserStore } from '../store/userStore';
 
 export const HomePage: React.FC = () => {
-  const { chooseTrack, openTrackModal, activePortal } = useUserStore();
+  const { chooseTrack, openTrackModal } = useUserStore();
 
   const popularAlgos = [
     { id: 'bubble-sort', name: 'Bubble Sort', category: 'Sorting', icon: '📊' },

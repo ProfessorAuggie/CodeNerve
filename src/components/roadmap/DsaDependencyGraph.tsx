@@ -1,22 +1,14 @@
 import React, { useState, useMemo, useRef, useEffect, useCallback } from 'react';
 import { 
-  Sparkles, 
-  ExternalLink, 
-  CheckCircle2, 
   ZoomIn, 
   ZoomOut, 
-  RotateCcw, 
   Maximize2, 
-  Minimize2,
-  Scan,
+  Minimize2, 
+  Scan, 
   Shuffle, 
-  BookOpen, 
-  Layers, 
-  Compass,
   Move
 } from 'lucide-react';
 import { PROBLEMS } from '../../data/problems';
-import { getAlgoNerveUrl } from '../../data/visualizers';
 import { useUserStore } from '../../store/userStore';
 import type { Problem, ProblemStatus } from '../../types';
 import { ProblemModal } from '../problems/ProblemModal';

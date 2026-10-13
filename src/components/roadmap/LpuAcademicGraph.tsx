@@ -1,17 +1,12 @@
 import React, { useState, useMemo, useRef, useEffect, useCallback } from 'react';
 import { 
   GraduationCap, 
-  Sparkles, 
   ZoomIn, 
   ZoomOut, 
-  RotateCcw,
   Maximize2,
   Minimize2,
   Scan,
-  Shuffle, 
-  ShieldAlert,
-  Layers,
-  BookOpen
+  Shuffle 
 } from 'lucide-react';
 import { PROBLEMS } from '../../data/problems';
 import { useUserStore } from '../../store/userStore';

@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
 import { 
   ChevronDown, 
   ChevronUp, 
@@ -8,10 +7,7 @@ import {
   RotateCcw, 
   ExternalLink, 
   Sparkles, 
-  ArrowRight,
-  Lock,
-  Compass,
-  Layers
+  Compass
 } from 'lucide-react';
 import type { LearningPath, LearningPathGroup, Problem } from '../../types';
 import { useUserStore } from '../../store/userStore';
@@ -112,7 +108,7 @@ export const RoadmapView: React.FC<RoadmapViewProps> = ({ roadmap }) => {
 
       {/* Visual Roadmap Flow Graph / Cards */}
       <div className="space-y-4">
-        {roadmap.groups.map((group, index) => {
+        {roadmap.groups.map((group) => {
           const isExpanded = !!expandedGroups[group.id];
           const problemItems = group.items.filter((it) => it.type === 'problem');
           const groupProblemIds = problemItems.map((it) => it.referenceId);

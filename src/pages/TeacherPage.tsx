@@ -3,11 +3,7 @@ import {
   ShieldCheck, 
   Plus, 
   Trash2, 
-  CheckCircle2, 
-  Terminal, 
-  Search, 
-  Layers,
-  ArrowRight
+  Search 
 } from 'lucide-react';
 import { useUserStore } from '../store/userStore';
 import { PROBLEMS } from '../data/problems';

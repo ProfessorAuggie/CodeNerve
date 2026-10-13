@@ -7,9 +7,8 @@ import {
   ArrowRight, 
   Check, 
   Sparkles, 
-  X,
-  Compass,
-  BookOpen
+  X, 
+  Compass 
 } from 'lucide-react';
 import { useUserStore } from '../../store/userStore';
 

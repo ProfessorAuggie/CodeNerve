@@ -42,10 +42,30 @@ export function validateReferences(): ValidationResult {
 
   const validProblemIds = new Set(problemIdCounts.keys());
 
-  // 2. Check Problem URLs
+  // 2. Check Problem URLs, Platforms, and Domain Consistency
+  const validPlatforms = new Set(['leetcode', 'geeksforgeeks', 'codechef', 'codeforces', 'hackerrank', 'hackerearth']);
+  const validDifficulties = new Set(['easy', 'medium', 'hard']);
+
   for (const prob of PROBLEMS) {
     if (!prob.externalUrl || !prob.externalUrl.startsWith('https://')) {
       errors.push(`Problem "${prob.id}" (${prob.title}) has invalid or missing externalUrl: "${prob.externalUrl}".`);
+    }
+
+    if (!validPlatforms.has(prob.platform)) {
+      errors.push(`Problem "${prob.id}" has unsupported platform: "${prob.platform}".`);
+    }
+
+    if (!validDifficulties.has(prob.difficulty)) {
+      errors.push(`Problem "${prob.id}" has invalid difficulty: "${prob.difficulty}".`);
+    }
+
+    // Platform domain consistency validation
+    if (prob.platform === 'leetcode' && !prob.externalUrl.includes('leetcode.com')) {
+      errors.push(`Problem "${prob.id}" platform is "leetcode" but URL does not match domain: "${prob.externalUrl}".`);
+    } else if (prob.platform === 'geeksforgeeks' && !prob.externalUrl.includes('geeksforgeeks.org')) {
+      errors.push(`Problem "${prob.id}" platform is "geeksforgeeks" but URL does not match domain: "${prob.externalUrl}".`);
+    } else if (prob.platform === 'hackerrank' && !prob.externalUrl.includes('hackerrank.com')) {
+      errors.push(`Problem "${prob.id}" platform is "hackerrank" but URL does not match domain: "${prob.externalUrl}".`);
     }
   }
 

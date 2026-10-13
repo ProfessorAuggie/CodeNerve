@@ -2,18 +2,14 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { 
   CheckCircle2, 
-  Hourglass, 
   RotateCcw, 
   Bookmark, 
-  Award, 
   User, 
   ShieldCheck, 
   ExternalLink, 
   Plus, 
   Trash2, 
-  RefreshCw,
-  Compass,
-  Sparkles
+  RefreshCw
 } from 'lucide-react';
 import { useUserStore } from '../store/userStore';
 import { PROBLEMS } from '../data/problems';
@@ -36,7 +32,6 @@ export const DashboardPage: React.FC = () => {
 
   // Solved counts
   const solvedProblems = Object.values(problemProgress).filter((p) => p.status === 'SOLVED');
-  const attemptedProblems = Object.values(problemProgress).filter((p) => p.status === 'ATTEMPTED');
   const revisionProblems = Object.values(problemProgress).filter((p) => p.status === 'REVISION_NEEDED');
 
   const totalCount = PROBLEMS.length;

@@ -6,7 +6,6 @@ import {
   ArrowRight, 
   RotateCcw, 
   Award, 
-  HelpCircle,
   Clock
 } from 'lucide-react';
 import { QUIZZES, getQuizById } from '../data/quizzes';

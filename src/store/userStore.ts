@@ -59,7 +59,7 @@ const defaultUser: UserProfile = {
 
 export const useUserStore = create<UserState>()(
   persist(
-    (set, get) => ({
+    (set) => ({
       user: defaultUser,
       hasChosenTrack: false,
       showTrackModal: false,

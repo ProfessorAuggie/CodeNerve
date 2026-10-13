@@ -8,14 +8,12 @@ import {
   CheckCircle2, 
   ChevronDown, 
   ChevronUp, 
-  ExternalLink,
-  Code2,
-  Award,
-  Layers,
-  Calendar,
-  Users,
-  Compass,
-  FileText
+  ExternalLink, 
+  Code2, 
+  Award, 
+  Calendar, 
+  Users, 
+  Compass 
 } from 'lucide-react';
 import { SUBJECTS, getSubjectById } from '../data/syllabus';
 import { VISUALIZER_MAPPINGS, getAlgoNerveUrl } from '../data/visualizers';

@@ -1,5 +1,4 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { 
   CheckCircle2, 
   Hourglass, 
@@ -7,12 +6,11 @@ import {
   ExternalLink, 
   Sparkles, 
   Bookmark, 
-  BookmarkCheck,
-  ChevronRight
+  BookmarkCheck
 } from 'lucide-react';
 import type { Problem, ProblemStatus } from '../../types';
 import { useUserStore } from '../../store/userStore';
-import { getDifficultyColor, getStatusBadge } from '../../lib/utils';
+import { getDifficultyColor } from '../../lib/utils';
 import { APP_CONFIG, type PlatformKey } from '../../lib/config';
 import { VISUALIZER_MAPPINGS, getAlgoNerveUrl } from '../../data/visualizers';
 
