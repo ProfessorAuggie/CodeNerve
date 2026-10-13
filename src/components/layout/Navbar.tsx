@@ -36,7 +36,7 @@ export const Navbar: React.FC = () => {
     { name: 'C++ Path', path: '/roadmap/cpp-path', icon: Code2 },
     { name: 'Problems', path: '/problems', icon: Terminal },
     { name: 'University Syllabus', path: '/university', icon: GraduationCap },
-    { name: 'Visualizer', path: '/visualize', icon: Sparkles, badge: 'AlgoNerve' },
+    { name: 'Visualizer', path: 'https://algonerve.vercel.app', icon: Sparkles, badge: 'AlgoNerve', isExternal: true },
     { name: 'Quizzes', path: '/quizzes', icon: BookOpen },
     { name: 'Dashboard', path: '/dashboard', icon: CheckCircle2 },
   ];
@@ -63,8 +63,27 @@ export const Navbar: React.FC = () => {
           {/* Desktop Nav Items */}
           <nav className="hidden lg:flex items-center gap-1">
             {navLinks.map((link) => {
-              const active = isActive(link.path);
+              const active = !link.isExternal && isActive(link.path);
               const Icon = link.icon;
+              if (link.isExternal) {
+                return (
+                  <a
+                    key={link.path}
+                    href={link.path}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="relative flex items-center gap-1.5 px-3 py-2 text-sm font-medium rounded-lg text-slate-300 hover:text-white hover:bg-slate-900/60 transition-colors"
+                  >
+                    <Icon className="h-4 w-4 text-brand-400" />
+                    <span>{link.name}</span>
+                    {link.badge && (
+                      <span className="ml-1 text-[10px] font-semibold px-1.5 py-0.2 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
+                        {link.badge}
+                      </span>
+                    )}
+                  </a>
+                );
+              }
               return (
                 <Link
                   key={link.path}
@@ -154,8 +173,30 @@ export const Navbar: React.FC = () => {
       {mobileMenuOpen && (
         <div className="lg:hidden border-b border-slate-800 bg-slate-950 px-4 py-4 space-y-2">
           {navLinks.map((link) => {
-            const active = isActive(link.path);
+            const active = !link.isExternal && isActive(link.path);
             const Icon = link.icon;
+            if (link.isExternal) {
+              return (
+                <a
+                  key={link.path}
+                  href={link.path}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex items-center justify-between px-3 py-2.5 text-sm font-medium rounded-lg text-slate-300 hover:bg-slate-900 hover:text-white"
+                >
+                  <div className="flex items-center gap-2.5">
+                    <Icon className="h-4 w-4 text-brand-400" />
+                    <span>{link.name}</span>
+                  </div>
+                  {link.badge && (
+                    <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300">
+                      {link.badge}
+                    </span>
+                  )}
+                </a>
+              );
+            }
             return (
               <Link
                 key={link.path}

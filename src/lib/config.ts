@@ -12,7 +12,9 @@ export const APP_CONFIG = {
   algonerve: {
     name: 'AlgoNerve',
     description: 'Interactive Algorithm Visualizer',
-    basePath: '/visualize',
+    url: 'https://algonerve.vercel.app',
+    getAlgoUrl: (algoId?: string) =>
+      algoId ? `https://algonerve.vercel.app/visualize/${algoId}` : 'https://algonerve.vercel.app',
   },
 
   // External coding platforms

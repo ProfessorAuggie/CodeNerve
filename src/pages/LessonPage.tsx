@@ -8,10 +8,12 @@ import {
   ArrowLeft, 
   Clock, 
   Layers,
-  ArrowRight
+  ArrowRight,
+  ExternalLink
 } from 'lucide-react';
 import { LESSONS, getLessonById } from '../data/lessons';
 import { PROBLEMS } from '../data/problems';
+import { getAlgoNerveUrl } from '../data/visualizers';
 import { useUserStore } from '../store/userStore';
 
 export const LessonPage: React.FC = () => {
@@ -112,13 +114,15 @@ export const LessonPage: React.FC = () => {
               Step through execution with real-time stack traces, pointers, and visual arrays.
             </p>
           </div>
-          <Link
-            to={`/visualize/${lesson.relatedVisualizerId}`}
+          <a
+            href={getAlgoNerveUrl(lesson.relatedVisualizerId)}
+            target="_blank"
+            rel="noopener noreferrer"
             className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-500 text-white font-bold text-xs shadow-lg shadow-brand-500/25 transition shrink-0"
           >
-            <span>Launch Visualizer</span>
-            <ArrowRight className="h-4 w-4" />
-          </Link>
+            <span>Launch in AlgoNerve</span>
+            <ExternalLink className="h-4 w-4" />
+          </a>
         </div>
       )}
 

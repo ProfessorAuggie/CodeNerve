@@ -46,7 +46,7 @@ export const DSA_ROADMAP: LearningPath = {
         { id: 'dsa-g3-i4', type: 'lesson', referenceId: 'cse205-u1-t7', order: 4, isRequired: true },
         { id: 'dsa-g3-i5', type: 'visualization', referenceId: 'binary-search', order: 5, isRequired: false },
         { id: 'dsa-g3-i6', type: 'problem', referenceId: 'p-dsa-binary-search-1', order: 6, isRequired: true },
-        { id: 'dsa-g3-i7', type: 'problem', referenceId: 'p-dsa-binary-search-2', order: 7, isRequired: false },
+        { id: 'dsa-g3-i7', type: 'problem', referenceId: 'p-dsa-search-rotated-1', order: 7, isRequired: false },
       ],
     },
     {
@@ -160,7 +160,7 @@ export const DSA_ROADMAP: LearningPath = {
       items: [
         { id: 'dsa-g10-i1', type: 'lesson', referenceId: 'cse205-u5-t2', order: 1, isRequired: true },
         { id: 'dsa-g10-i2', type: 'lesson', referenceId: 'cse205-u5-t3', order: 2, isRequired: true },
-        { id: 'dsa-g10-i3', type: 'problem', referenceId: 'p-dsa-hash-two-sum-1', order: 3, isRequired: true },
+        { id: 'dsa-g10-i3', type: 'problem', referenceId: 'p-dsa-two-sum-1', order: 3, isRequired: true },
       ],
     },
     {
@@ -286,6 +286,7 @@ export const CPP_PATH: LearningPath = {
       id: 'cpp-g10', title: 'Exception Handling', description: 'try, catch, throw mechanisms and best practices.', order: 10, icon: '🛡️', prerequisites: ['cpp-g9'],
       items: [
         { id: 'cpp-g10-i1', type: 'lesson', referenceId: 'cse202-u6-t1', order: 1, isRequired: true },
+        { id: 'cpp-g10-i2', type: 'problem', referenceId: 'p-cpp-exceptions-1', order: 2, isRequired: true },
       ],
     },
     {
@@ -299,7 +300,7 @@ export const CPP_PATH: LearningPath = {
       id: 'cpp-g12', title: 'STL', description: 'Containers, algorithms, and iterators from the Standard Template Library.', order: 12, icon: '📚', prerequisites: ['cpp-g11'],
       items: [
         { id: 'cpp-g12-i1', type: 'lesson', referenceId: 'cse202-u6-t3', order: 1, isRequired: true },
-        { id: 'cpp-g12-i2', type: 'problem', referenceId: 'p-cpp-stl-1', order: 2, isRequired: true },
+        { id: 'cpp-g12-i2', type: 'problem', referenceId: 'p-cpp-stl-vector-1', order: 2, isRequired: true },
       ],
     },
   ],

@@ -63,3 +63,8 @@ export function getVisualizerByAlgorithmId(algoId: string): VisualizerMapping | 
 export function getAllVisualizers(): VisualizerMapping[] {
   return VISUALIZER_MAPPINGS;
 }
+
+export function getAlgoNerveUrl(algorithmId?: string): string {
+  if (!algorithmId) return 'https://algonerve.vercel.app';
+  return `https://algonerve.vercel.app/visualize/${algorithmId}`;
+}

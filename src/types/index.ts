@@ -39,6 +39,7 @@ export interface Topic {
   title: string;
   unitId: string;
   description: string;
+  prerequisites: string[];
   order: number;
   lessonId?: string;
   visualizerId?: string;

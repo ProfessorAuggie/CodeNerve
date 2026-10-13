@@ -38,7 +38,7 @@ export const Footer: React.FC = () => {
           <h4 className="text-xs font-semibold uppercase tracking-wider text-slate-200 mb-3">Academic & Visualizer</h4>
           <ul className="space-y-2 text-xs">
             <li><Link to="/university" className="hover:text-brand-300 transition">LPU B.Tech CSE Syllabus</Link></li>
-            <li><Link to="/visualize" className="hover:text-brand-300 transition flex items-center gap-1.5">AlgoNerve Visualizer <Sparkles className="h-3 w-3 text-brand-400" /></Link></li>
+            <li><a href="https://algonerve.vercel.app" target="_blank" rel="noopener noreferrer" className="hover:text-brand-300 transition flex items-center gap-1.5">AlgoNerve Visualizer <Sparkles className="h-3 w-3 text-brand-400" /></a></li>
             <li><Link to="/quizzes" className="hover:text-brand-300 transition">Knowledge Verification Quizzes</Link></li>
             <li><Link to="/documentation" className="hover:text-brand-300 transition">Algorithm Documentation</Link></li>
           </ul>
@@ -62,7 +62,7 @@ export const Footer: React.FC = () => {
         <div className="flex items-center gap-4">
           <Link to="/" className="hover:text-slate-300">Home</Link>
           <Link to="/problems" className="hover:text-slate-300">Problems</Link>
-          <Link to="/visualize" className="hover:text-slate-300">AlgoNerve</Link>
+          <a href="https://algonerve.vercel.app" target="_blank" rel="noopener noreferrer" className="hover:text-slate-300">AlgoNerve</a>
         </div>
       </div>
     </footer>

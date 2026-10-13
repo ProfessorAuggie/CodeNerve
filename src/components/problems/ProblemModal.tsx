@@ -18,7 +18,7 @@ import type { Problem, ProblemStatus } from '../../types';
 import { useUserStore } from '../../store/userStore';
 import { getDifficultyColor, getStatusBadge } from '../../lib/utils';
 import { APP_CONFIG, type PlatformKey } from '../../lib/config';
-import { VISUALIZER_MAPPINGS } from '../../data/visualizers';
+import { VISUALIZER_MAPPINGS, getAlgoNerveUrl } from '../../data/visualizers';
 
 interface ProblemModalProps {
   problem: Problem | null;
@@ -152,13 +152,15 @@ export const ProblemModal: React.FC<ProblemModalProps> = ({ problem, onClose }) 
                   <p className="text-xs text-slate-400">{matchedVisualizer.description}</p>
                 </div>
               </div>
-              <Link
-                to={`/visualize/${matchedVisualizer.algorithmId}`}
+              <a
+                href={getAlgoNerveUrl(matchedVisualizer.algorithmId)}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-semibold rounded-lg bg-brand-600 hover:bg-brand-500 text-white shadow-lg shadow-brand-500/20 transition shrink-0"
               >
-                <span>Visualize</span>
-                <ArrowRight className="h-3.5 w-3.5" />
-              </Link>
+                <span>Visualize in AlgoNerve</span>
+                <ExternalLink className="h-3.5 w-3.5" />
+              </a>
             </div>
           )}
 

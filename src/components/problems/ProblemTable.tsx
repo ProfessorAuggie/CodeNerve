@@ -14,7 +14,7 @@ import type { Problem, ProblemStatus } from '../../types';
 import { useUserStore } from '../../store/userStore';
 import { getDifficultyColor, getStatusBadge } from '../../lib/utils';
 import { APP_CONFIG, type PlatformKey } from '../../lib/config';
-import { VISUALIZER_MAPPINGS } from '../../data/visualizers';
+import { VISUALIZER_MAPPINGS, getAlgoNerveUrl } from '../../data/visualizers';
 
 interface ProblemTableProps {
   problems: Problem[];
@@ -152,14 +152,16 @@ export const ProblemTable: React.FC<ProblemTableProps> = ({ problems, onSelectPr
                 {/* AlgoNerve Visualizer Link */}
                 <td className="py-3.5 px-3 text-center" onClick={(e) => e.stopPropagation()}>
                   {matchedVisualizer ? (
-                    <Link
-                      to={`/visualize/${matchedVisualizer.algorithmId}`}
+                    <a
+                      href={getAlgoNerveUrl(matchedVisualizer.algorithmId)}
+                      target="_blank"
+                      rel="noopener noreferrer"
                       className="inline-flex items-center gap-1 px-2 py-1 rounded-md text-xs font-semibold bg-brand-500/10 text-brand-300 border border-brand-500/30 hover:bg-brand-500/20 transition"
-                      title={`Open ${matchedVisualizer.label} on AlgoNerve`}
+                      title={`Open ${matchedVisualizer.label} in AlgoNerve (new tab)`}
                     >
                       <Sparkles className="h-3 w-3 text-brand-400" />
                       <span>Visual</span>
-                    </Link>
+                    </a>
                   ) : (
                     <span className="text-slate-600 text-xs">—</span>
                   )}

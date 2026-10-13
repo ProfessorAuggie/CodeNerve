@@ -65,13 +65,15 @@ export const HomePage: React.FC = () => {
               <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" />
             </Link>
 
-            <Link
-              to="/visualize"
+            <a
+              href="https://algonerve.vercel.app"
+              target="_blank"
+              rel="noopener noreferrer"
               className="flex items-center gap-2 px-6 py-3.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-200 border border-slate-700 font-semibold text-sm transition"
             >
               <Sparkles className="h-4 w-4 text-brand-400" />
-              <span>Open AlgoNerve Visualizer</span>
-            </Link>
+              <span>Open AlgoNerve Visualizer ↗</span>
+            </a>
 
             <Link
               to="/problems"
@@ -115,20 +117,24 @@ export const HomePage: React.FC = () => {
               Watch Algorithms Step Through in Real-Time
             </h2>
           </div>
-          <Link
-            to="/visualize"
+          <a
+            href="https://algonerve.vercel.app"
+            target="_blank"
+            rel="noopener noreferrer"
             className="text-xs font-semibold text-brand-400 hover:text-brand-300 flex items-center gap-1"
           >
-            <span>Browse all algorithms</span>
+            <span>Browse all algorithms on AlgoNerve ↗</span>
             <ArrowRight className="h-3.5 w-3.5" />
-          </Link>
+          </a>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {popularAlgos.map((algo) => (
-            <Link
+            <a
               key={algo.id}
-              to={`/visualize/${algo.id}`}
+              href={`https://algonerve.vercel.app/visualize/${algo.id}`}
+              target="_blank"
+              rel="noopener noreferrer"
               className="group p-5 rounded-2xl border border-slate-800 bg-slate-900/60 hover:bg-slate-850 hover:border-brand-500/40 transition-all duration-200 flex items-center justify-between"
             >
               <div className="flex items-center gap-3.5">
@@ -143,9 +149,9 @@ export const HomePage: React.FC = () => {
                 </div>
               </div>
               <div className="h-8 w-8 rounded-lg bg-slate-800/80 flex items-center justify-center text-slate-400 group-hover:text-white group-hover:bg-brand-600 transition">
-                <ArrowRight className="h-4 w-4" />
+                <ExternalLink className="h-4 w-4" />
               </div>
-            </Link>
+            </a>
           ))}
         </div>
       </section>

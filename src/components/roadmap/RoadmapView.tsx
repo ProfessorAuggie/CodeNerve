@@ -16,7 +16,7 @@ import {
 import type { LearningPath, LearningPathGroup, Problem } from '../../types';
 import { useUserStore } from '../../store/userStore';
 import { PROBLEMS } from '../../data/problems';
-import { VISUALIZER_MAPPINGS } from '../../data/visualizers';
+import { VISUALIZER_MAPPINGS, getAlgoNerveUrl } from '../../data/visualizers';
 import { getDifficultyColor } from '../../lib/utils';
 import { ProblemModal } from '../problems/ProblemModal';
 
@@ -272,14 +272,16 @@ export const RoadmapView: React.FC<RoadmapViewProps> = ({ roadmap }) => {
 
                             <div className="flex items-center gap-2 shrink-0 self-end sm:self-auto" onClick={(e) => e.stopPropagation()}>
                               {matchedVisualizer && (
-                                <Link
-                                  to={`/visualize/${matchedVisualizer.algorithmId}`}
+                                <a
+                                  href={getAlgoNerveUrl(matchedVisualizer.algorithmId)}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
                                   className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-semibold rounded-lg bg-brand-500/10 text-brand-300 border border-brand-500/30 hover:bg-brand-500/20 transition"
-                                  title="Visualize Algorithm on AlgoNerve"
+                                  title="Visualize Algorithm on AlgoNerve (new tab)"
                                 >
                                   <Sparkles className="h-3.5 w-3.5 text-brand-400" />
                                   <span>Visualizer</span>
-                                </Link>
+                                </a>
                               )}
 
                               <a

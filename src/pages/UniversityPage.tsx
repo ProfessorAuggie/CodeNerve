@@ -12,7 +12,7 @@ import {
   Code2
 } from 'lucide-react';
 import { SUBJECTS, getSubjectById } from '../data/syllabus';
-import { VISUALIZER_MAPPINGS } from '../data/visualizers';
+import { VISUALIZER_MAPPINGS, getAlgoNerveUrl } from '../data/visualizers';
 import { PROBLEMS } from '../data/problems';
 import { useUserStore } from '../store/userStore';
 import { ProblemModal } from '../components/problems/ProblemModal';
@@ -167,19 +167,38 @@ export const UniversityPage: React.FC = () => {
                             <p className="text-xs text-slate-400 mt-0.5 max-w-2xl leading-relaxed">
                               {topic.description}
                             </p>
+                            {topic.prerequisites && topic.prerequisites.length > 0 && (
+                              <div className="flex flex-wrap items-center gap-1.5 mt-2">
+                                <span className="text-[10px] font-semibold uppercase tracking-wider text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/20">
+                                  Prerequisites:
+                                </span>
+                                {topic.prerequisites.map((prereq, pIdx) => (
+                                  <span
+                                    key={pIdx}
+                                    className="text-[11px] px-2 py-0.5 rounded bg-slate-900 text-slate-300 border border-slate-800"
+                                  >
+                                    {prereq}
+                                  </span>
+                                ))}
+                              </div>
+                            )}
                           </div>
                         </div>
 
                         {/* Action Buttons: Visualizer, Lesson, Problems */}
                         <div className="flex items-center gap-2 shrink-0 self-end md:self-auto">
                           {matchedVis && (
-                            <Link
-                              to={`/visualize/${matchedVis.algorithmId}`}
+                            <a
+                              href={getAlgoNerveUrl(matchedVis.algorithmId)}
+                              target="_blank"
+                              rel="noopener noreferrer"
                               className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg bg-brand-500/10 text-brand-300 border border-brand-500/30 hover:bg-brand-500/20 transition"
+                              title={`Open ${matchedVis.label} on AlgoNerve (new tab)`}
                             >
                               <Sparkles className="h-3.5 w-3.5 text-brand-400" />
                               <span>{matchedVis.label}</span>
-                            </Link>
+                              <ExternalLink className="h-3 w-3" />
+                            </a>
                           )}
 
                           {topicProblems.map((prob) => {
