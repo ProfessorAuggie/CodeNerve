@@ -6,7 +6,8 @@
 @tailwind utilities;
 
 /* ───── CSS Custom Properties: Dark Theme (default) ───── */
-:root {
+:root,
+.dark {
   --surface-0: #0a0b0f;
   --surface-1: #111318;
   --surface-2: #1a1d24;
@@ -23,15 +24,15 @@
 
 /* ───── Light Theme ───── */
 .light {
-  --surface-0: #ffffff;
-  --surface-1: #f8f9fb;
-  --surface-2: #f0f1f5;
-  --surface-3: #e8eaf0;
-  --border-color: #d4d7de;
-  --border-subtle: #e8eaf0;
-  --text-primary: #111318;
-  --text-secondary: #555d6e;
-  --text-muted: #8890a0;
+  --surface-0: #f8fafc;
+  --surface-1: #ffffff;
+  --surface-2: #f1f5f9;
+  --surface-3: #e2e8f0;
+  --border-color: #cbd5e1;
+  --border-subtle: #e2e8f0;
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --text-muted: #64748b;
   --glow-brand: rgba(79, 107, 235, 0.08);
   --glow-emerald: rgba(16, 185, 129, 0.06);
   color-scheme: light;
@@ -117,31 +118,31 @@ body {
   }
 
   .badge-easy {
-    @apply badge bg-emerald-500/15 text-emerald-400 border border-emerald-500/20;
+    @apply badge bg-emerald-50 text-emerald-700 border border-emerald-200 dark:bg-emerald-500/15 dark:text-emerald-400 dark:border-emerald-500/20;
   }
 
   .badge-medium {
-    @apply badge bg-amber-500/15 text-amber-400 border border-amber-500/20;
+    @apply badge bg-amber-50 text-amber-700 border border-amber-200 dark:bg-amber-500/15 dark:text-amber-400 dark:border-amber-500/20;
   }
 
   .badge-hard {
-    @apply badge bg-rose-500/15 text-rose-400 border border-rose-500/20;
+    @apply badge bg-rose-50 text-rose-700 border border-rose-200 dark:bg-rose-500/15 dark:text-rose-400 dark:border-rose-500/20;
   }
 
   .badge-platform {
-    @apply badge bg-surface-3 text-text-secondary border border-border;
+    @apply badge bg-slate-100 text-slate-700 border-slate-200 dark:bg-surface-3 dark:text-text-secondary dark:border-border;
   }
 
   .status-solved {
-    @apply text-emerald-400;
+    @apply text-emerald-600 dark:text-emerald-400;
   }
 
   .status-attempted {
-    @apply text-amber-400;
+    @apply text-amber-600 dark:text-amber-400;
   }
 
   .status-revision {
-    @apply text-rose-400;
+    @apply text-rose-600 dark:text-rose-400;
   }
 
   .section-title {

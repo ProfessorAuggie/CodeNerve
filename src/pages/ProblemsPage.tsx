@@ -125,25 +125,25 @@ export const ProblemsPage: React.FC = () => {
       {/* Page Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 shrink-0">
         <div className="flex items-center gap-3">
-          <div className={`flex h-9 w-9 items-center justify-center rounded-xl border shrink-0 ${
+          <div className={`flex h-10 w-10 items-center justify-center rounded-xl border shrink-0 ${
             isLpu 
-              ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' 
-              : 'bg-brand-500/10 text-brand-400 border-brand-500/20'
+              ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20' 
+              : 'bg-brand-500/10 text-brand-600 dark:text-brand-400 border-brand-500/20'
           }`}>
-            <Terminal className="h-4 w-4" />
+            <Terminal className="h-5 w-5" />
           </div>
           <div>
-            <h1 className="text-lg sm:text-xl font-extrabold text-white tracking-tight flex items-center gap-2">
+            <h1 className="text-lg sm:text-xl font-extrabold text-slate-900 dark:text-white tracking-tight flex items-center gap-2">
               <span>{isLpu ? 'LPU Academic Question Bank' : 'Global DSA Problem Catalogue'}</span>
               <span className={`text-xs font-semibold px-2 py-0.5 rounded-full border ${
                 isLpu 
-                  ? 'bg-emerald-950/60 text-emerald-300 border-emerald-800/40' 
-                  : 'bg-slate-800 text-slate-300 border-slate-700'
+                  ? 'bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800/40' 
+                  : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700'
               }`}>
                 {totalCount} problems ({isLpu ? 'LPU Track' : 'Global Track'})
               </span>
             </h1>
-            <p className="text-xs text-slate-400 hidden sm:block">
+            <p className="text-xs text-slate-600 dark:text-slate-400 hidden sm:block">
               {isLpu
                 ? 'University-aligned questions for CSE202 (C++ OOP) and CSE205 (Data Structures) structured unit-by-unit with curriculum topic prerequisites.'
                 : '182 canonical, language-agnostic DSA problems (LeetCode, GFG & DSA 130) with AlgoNerve visualizers and tracking.'}
@@ -153,13 +153,13 @@ export const ProblemsPage: React.FC = () => {
 
         {/* Quick Stats & Viewport Toggle */}
         <div className="flex items-center gap-2 text-xs shrink-0 self-end sm:self-auto">
-          <div className="px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-800 text-slate-300">
-            Total: <span className="font-bold text-white">{totalCount}</span>
+          <div className="px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300">
+            Total: <span className="font-bold text-slate-900 dark:text-white">{totalCount}</span>
           </div>
-          <div className="px-2.5 py-1 rounded-lg bg-emerald-950/40 border border-emerald-800/40 text-emerald-300">
+          <div className="px-2.5 py-1 rounded-lg bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800/40 text-emerald-700 dark:text-emerald-300">
             Solved: <span className="font-bold">{solvedCount}</span>
           </div>
-          <div className="px-2.5 py-1 rounded-lg bg-purple-950/40 border border-purple-800/40 text-purple-300">
+          <div className="px-2.5 py-1 rounded-lg bg-purple-50 dark:bg-purple-950/40 border border-purple-200 dark:border-purple-800/40 text-purple-700 dark:text-purple-300">
             Revise: <span className="font-bold">{revisionCount}</span>
           </div>
 
@@ -167,8 +167,8 @@ export const ProblemsPage: React.FC = () => {
             onClick={() => setIsFitScreen(!isFitScreen)}
             className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg font-semibold border transition ${
               isFitScreen
-                ? 'bg-emerald-500/15 border-emerald-500/40 text-emerald-300'
-                : 'bg-slate-900 border-slate-800 text-slate-400 hover:text-white'
+                ? 'bg-emerald-500/15 border-emerald-500/40 text-emerald-700 dark:text-emerald-300'
+                : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
             }`}
             title={isFitScreen ? 'Switch to Standard Scroll View' : 'Fit Entire Catalogue on One Screen'}
           >
@@ -179,7 +179,7 @@ export const ProblemsPage: React.FC = () => {
       </div>
 
       {/* Filter and Search Bar */}
-      <div className="p-2.5 sm:p-3 rounded-xl border border-slate-800 bg-slate-900/60 shadow-lg backdrop-blur-sm space-y-2 shrink-0">
+      <div className="p-2.5 sm:p-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/60 shadow-sm dark:shadow-lg backdrop-blur-sm space-y-2 shrink-0 transition-colors">
         <div className="flex flex-col sm:flex-row items-center gap-2">
           {/* Search Input */}
           <div className="relative w-full sm:flex-1">
@@ -189,12 +189,12 @@ export const ProblemsPage: React.FC = () => {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search problems by name, tag, or platform..."
-              className="w-full pl-9 pr-4 py-1.5 text-xs rounded-lg bg-slate-950 border border-slate-800 text-slate-200 placeholder:text-slate-500 focus:outline-none focus:border-brand-500"
+              className="w-full pl-9 pr-4 py-1.5 text-xs rounded-lg bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-slate-900 dark:text-slate-200 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:border-brand-500"
             />
             {searchQuery && (
               <button
                 onClick={() => setSearchQuery('')}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-white"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-700 dark:hover:text-white"
               >
                 <X className="h-3 w-3" />
               </button>
@@ -205,7 +205,7 @@ export const ProblemsPage: React.FC = () => {
           <select
             value={selectedDifficulty}
             onChange={(e) => setSelectedDifficulty(e.target.value)}
-            className="w-full sm:w-auto px-2.5 py-1.5 text-xs rounded-lg bg-slate-950 border border-slate-800 text-slate-200 focus:outline-none focus:border-brand-500"
+            className="w-full sm:w-auto px-2.5 py-1.5 text-xs rounded-lg bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-200 focus:outline-none focus:border-brand-500"
           >
             <option value="all">All Difficulties</option>
             <option value="easy">Easy</option>
@@ -217,7 +217,7 @@ export const ProblemsPage: React.FC = () => {
           <select
             value={selectedPlatform}
             onChange={(e) => setSelectedPlatform(e.target.value)}
-            className="w-full sm:w-auto px-2.5 py-1.5 text-xs rounded-lg bg-slate-950 border border-slate-800 text-slate-200 focus:outline-none focus:border-brand-500"
+            className="w-full sm:w-auto px-2.5 py-1.5 text-xs rounded-lg bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-200 focus:outline-none focus:border-brand-500"
           >
             <option value="all">All Platforms</option>
             <option value="leetcode">LeetCode</option>
@@ -229,7 +229,7 @@ export const ProblemsPage: React.FC = () => {
           <select
             value={selectedStatus}
             onChange={(e) => setSelectedStatus(e.target.value)}
-            className="w-full sm:w-auto px-2.5 py-1.5 text-xs rounded-lg bg-slate-950 border border-slate-800 text-slate-200 focus:outline-none focus:border-brand-500"
+            className="w-full sm:w-auto px-2.5 py-1.5 text-xs rounded-lg bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-200 focus:outline-none focus:border-brand-500"
           >
             <option value="all">All Statuses</option>
             <option value="SOLVED">Solved</option>
@@ -243,8 +243,8 @@ export const ProblemsPage: React.FC = () => {
             onClick={() => setShowOnlyBookmarked(!showOnlyBookmarked)}
             className={`flex items-center gap-1.5 px-2.5 py-1.5 text-xs rounded-lg border transition ${
               showOnlyBookmarked
-                ? 'bg-amber-500/20 border-amber-500/50 text-amber-300 font-medium'
-                : 'bg-slate-950 border-slate-800 text-slate-400 hover:text-white'
+                ? 'bg-amber-500/20 border-amber-500/50 text-amber-700 dark:text-amber-300 font-medium'
+                : 'bg-slate-50 dark:bg-slate-950 border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
             }`}
           >
             <Bookmark className="h-3.5 w-3.5" />
@@ -255,7 +255,7 @@ export const ProblemsPage: React.FC = () => {
           {hasActiveFilters && (
             <button
               onClick={resetFilters}
-              className="text-xs text-brand-400 hover:text-brand-300 px-2 py-1 shrink-0"
+              className="text-xs text-brand-600 dark:text-brand-400 hover:text-brand-500 px-2 py-1 shrink-0 font-medium"
             >
               Reset
             </button>
@@ -264,13 +264,13 @@ export const ProblemsPage: React.FC = () => {
 
         {/* Quick Tag Pills */}
         <div className="flex items-center gap-1.5 overflow-x-auto pt-0.5 pb-0.5 text-[11px] scrollbar-none">
-          <span className="text-slate-500 text-xs shrink-0 mr-1">Tags:</span>
+          <span className="text-slate-500 dark:text-slate-500 text-xs shrink-0 mr-1">Tags:</span>
           <button
             onClick={() => setSelectedTag('all')}
             className={`px-2 py-0.5 rounded text-[11px] shrink-0 transition ${
               selectedTag === 'all'
                 ? 'bg-brand-600 text-white font-medium'
-                : 'bg-slate-800 text-slate-400 hover:text-slate-200'
+                : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
             }`}
           >
             All
@@ -282,7 +282,7 @@ export const ProblemsPage: React.FC = () => {
               className={`px-2 py-0.5 rounded text-[11px] shrink-0 transition ${
                 selectedTag === tag
                   ? 'bg-brand-600 text-white font-medium'
-                  : 'bg-slate-800 text-slate-400 hover:text-slate-200'
+                  : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
               }`}
             >
               #{tag}

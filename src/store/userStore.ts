@@ -28,6 +28,7 @@ interface UserState {
   quizScores: Record<string, { score: number; total: number; date: string }>;
   customProblemSets: CustomProblemSet[];
   
+  theme: 'dark' | 'light' | 'system';
   activePortal: 'global' | 'lpu';
   hasChosenTrack: boolean;
   showTrackModal: boolean;
@@ -38,6 +39,8 @@ interface UserState {
   isAdminAuthenticated: boolean;
   
   // Actions
+  setTheme: (theme: 'dark' | 'light' | 'system') => void;
+  toggleTheme: () => void;
   setActivePortal: (portal: 'global' | 'lpu') => void;
   chooseTrack: (track: 'global' | 'lpu') => void;
   openTrackModal: () => void;
@@ -274,7 +277,32 @@ export const useUserStore = create<UserState>()(
         },
       ],
 
+      theme: 'dark',
       activePortal: 'global',
+
+      setTheme: (theme) => {
+        set({ theme });
+        if (typeof document !== 'undefined') {
+          const isDark =
+            theme === 'dark' ||
+            (theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+          document.documentElement.classList.toggle('dark', isDark);
+          document.documentElement.classList.toggle('light', !isDark);
+          document.documentElement.style.colorScheme = isDark ? 'dark' : 'light';
+        }
+      },
+
+      toggleTheme: () => {
+        set((state) => {
+          const next = state.theme === 'dark' ? 'light' : 'dark';
+          if (typeof document !== 'undefined') {
+            document.documentElement.classList.toggle('dark', next === 'dark');
+            document.documentElement.classList.toggle('light', next === 'light');
+            document.documentElement.style.colorScheme = next;
+          }
+          return { theme: next };
+        });
+      },
 
       setActivePortal: (portal) => set({ activePortal: portal }),
 

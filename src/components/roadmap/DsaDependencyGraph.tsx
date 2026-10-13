@@ -533,19 +533,19 @@ export const DsaDependencyGraph: React.FC<DsaDependencyGraphProps> = ({ fitScree
   };
 
   return (
-    <div className={`relative w-full bg-[#0c0e14] overflow-hidden transition-all duration-200 flex flex-col ${
+    <div className={`relative w-full bg-slate-50 dark:bg-[#0c0e14] overflow-hidden transition-all duration-200 flex flex-col ${
       fitScreen
-        ? 'flex-1 min-h-0 h-full rounded-2xl border border-slate-800 shadow-2xl'
-        : 'rounded-2xl border border-slate-800 shadow-2xl'
+        ? 'flex-1 min-h-0 h-full rounded-2xl border border-slate-200 dark:border-slate-800 shadow-2xl'
+        : 'rounded-2xl border border-slate-200 dark:border-slate-800 shadow-2xl'
     }`}>
       {/* Top Controls & Stats Header Bar */}
-      <div className="flex flex-wrap items-center justify-between gap-2.5 px-3 py-2 sm:px-4 sm:py-2.5 border-b border-slate-800 bg-slate-950/80 backdrop-blur-md z-20 relative shrink-0">
+      <div className="flex flex-wrap items-center justify-between gap-2 px-3 py-2 sm:px-4 sm:py-2.5 border-b border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-950/80 backdrop-blur-md z-20 relative shrink-0 transition-colors">
         <div className="flex flex-wrap items-center gap-2">
           {/* Zoom & Screen Fit Controls */}
-          <div className="flex items-center gap-1 bg-slate-900 p-0.5 rounded-xl border border-slate-800">
+          <div className="flex items-center gap-1 bg-slate-100 dark:bg-slate-900 p-0.5 rounded-xl border border-slate-200 dark:border-slate-800">
             <button
               onClick={() => setZoomLevel((z) => Math.min(1.6, Number((z + 0.1).toFixed(2))))}
-              className="p-1 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition"
+              className="p-1 rounded-lg text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200 dark:hover:bg-slate-800 transition"
               title="Zoom In (+)"
               aria-label="Zoom In"
             >
@@ -553,7 +553,7 @@ export const DsaDependencyGraph: React.FC<DsaDependencyGraphProps> = ({ fitScree
             </button>
             <button
               onClick={() => setZoomLevel((z) => Math.max(0.35, Number((z - 0.1).toFixed(2))))}
-              className="p-1 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition"
+              className="p-1 rounded-lg text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200 dark:hover:bg-slate-800 transition"
               title="Zoom Out (-)"
               aria-label="Zoom Out"
             >
@@ -561,16 +561,16 @@ export const DsaDependencyGraph: React.FC<DsaDependencyGraphProps> = ({ fitScree
             </button>
             <button
               onClick={fitToScreen}
-              className="flex items-center gap-1 px-2 py-0.5 rounded-lg text-slate-300 hover:text-white bg-slate-800/60 hover:bg-slate-800 transition text-[11px] font-semibold"
+              className="flex items-center gap-1 px-2 py-0.5 rounded-lg text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white bg-slate-200 dark:bg-slate-800/60 hover:bg-slate-300 dark:hover:bg-slate-800 transition text-[11px] font-semibold"
               title="Fit entire roadmap into current window"
               aria-label="Fit to window"
             >
-              <Scan className="h-3 w-3 text-brand-400" />
+              <Scan className="h-3 w-3 text-brand-600 dark:text-brand-400" />
               <span>Fit</span>
             </button>
             <button
               onClick={handleReset}
-              className="px-1.5 py-0.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition text-[11px] font-semibold"
+              className="px-1.5 py-0.5 rounded-lg text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200 dark:hover:bg-slate-800 transition text-[11px] font-semibold"
               title="Reset Zoom to 100%"
               aria-label="Reset zoom"
             >
@@ -588,59 +588,61 @@ export const DsaDependencyGraph: React.FC<DsaDependencyGraphProps> = ({ fitScree
         <div className="flex items-center gap-2">
           <button
             onClick={handlePickRandomProblem}
-            className="flex items-center gap-1 px-2.5 py-1 rounded-xl bg-slate-900 hover:bg-slate-800 text-xs font-semibold text-slate-200 border border-slate-800 shadow-sm transition"
+            className="flex items-center gap-1 px-2.5 py-1 rounded-xl bg-slate-100 dark:bg-slate-900 hover:bg-slate-200 dark:hover:bg-slate-800 text-xs font-semibold text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-800 shadow-sm transition"
             title="Pick a random problem to solve"
           >
-            <Shuffle className="h-3 w-3 text-brand-400" />
+            <Shuffle className="h-3 w-3 text-brand-600 dark:text-brand-400" />
             <span className="hidden xs:inline">Shuffle</span>
           </button>
 
-          <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-slate-900 border border-slate-800 text-xs">
-            <span className="text-slate-400 hidden sm:inline">Solved:</span>
-            <span className="font-extrabold text-white">
+          <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs">
+            <span className="text-slate-500 dark:text-slate-400 hidden sm:inline">Solved:</span>
+            <span className="font-extrabold text-slate-900 dark:text-white">
               {totalRoadmapStats.solved}/{totalRoadmapStats.total}
             </span>
-            <span className="text-emerald-400 font-bold text-[11px]">
+            <span className="text-emerald-600 dark:text-emerald-400 font-bold text-[11px]">
               ({totalRoadmapStats.percent}%)
             </span>
           </div>
         </div>
       </div>
 
-      {/* Floating Prerequisite Trace-Back Breadcrumb HUD */}
+      {/* Prerequisite Trace-Back Breadcrumb Banner (In Normal Layout Flow - Never Overlaps Controls) */}
       {hoveredPrereqTrace && (
-        <div className="absolute top-16 left-1/2 -translate-x-1/2 z-30 flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-950/95 border border-sky-500/50 backdrop-blur-md shadow-2xl shadow-sky-500/20 animate-in fade-in zoom-in-95 duration-150 max-w-[90%]">
-          <div className="flex items-center gap-1 text-xs font-bold text-sky-400 shrink-0">
-            <span className="flex h-1.5 w-1.5 rounded-full bg-sky-400 animate-ping" />
-            <span>Prerequisites:</span>
+        <div className="w-full flex items-center justify-between gap-2 px-3 py-1.5 sm:px-4 border-b border-sky-300 dark:border-sky-500/30 bg-sky-50 dark:bg-sky-950/70 text-xs backdrop-blur-sm z-20 shrink-0 animate-in fade-in duration-150 overflow-x-auto scrollbar-none transition-colors">
+          <div className="flex items-center gap-2 min-w-0">
+            <div className="flex items-center gap-1 font-bold text-sky-700 dark:text-sky-400 shrink-0">
+              <span className="flex h-1.5 w-1.5 rounded-full bg-sky-500 animate-ping" />
+              <span>Prerequisites:</span>
+            </div>
+
+            <div className="flex items-center gap-1 overflow-x-auto scrollbar-none py-0.5">
+              {hoveredPrereqTrace.sortedAncestors.map((anc, idx) => {
+                const isTarget = anc.id === hoveredPrereqTrace.targetId;
+                return (
+                  <React.Fragment key={anc.id}>
+                    {idx > 0 && <span className="text-sky-500 dark:text-sky-400 font-bold text-xs">➔</span>}
+                    <span
+                      className={`px-2 py-0.5 rounded-md text-[11px] font-semibold whitespace-nowrap transition ${
+                        isTarget
+                          ? 'bg-brand-600 text-white shadow-sm ring-1 ring-brand-400'
+                          : 'bg-white dark:bg-sky-950/80 text-sky-700 dark:text-sky-300 border border-sky-200 dark:border-sky-500/40 shadow-xs'
+                      }`}
+                    >
+                      {anc.title}
+                    </span>
+                  </React.Fragment>
+                );
+              })}
+            </div>
           </div>
 
-          <div className="flex items-center gap-1 text-xs overflow-x-auto max-w-md sm:max-w-lg scrollbar-none py-0.5">
-            {hoveredPrereqTrace.sortedAncestors.map((anc, idx) => {
-              const isTarget = anc.id === hoveredPrereqTrace.targetId;
-              return (
-                <React.Fragment key={anc.id}>
-                  {idx > 0 && <span className="text-sky-400 font-bold text-xs">➔</span>}
-                  <span
-                    className={`px-1.5 py-0.2 rounded text-[10px] font-semibold whitespace-nowrap transition ${
-                      isTarget
-                        ? 'bg-brand-600 text-white shadow-sm ring-1 ring-brand-400'
-                        : 'bg-sky-950/70 text-sky-300 border border-sky-500/40'
-                    }`}
-                  >
-                    {anc.title}
-                  </span>
-                </React.Fragment>
-              );
-            })}
-          </div>
-
-          <span className="text-[10px] text-slate-400 font-medium shrink-0 pl-1">
+          <span className="text-[10px] text-slate-500 dark:text-slate-400 font-medium shrink-0 pl-1">
             {hoveredPrereqTrace.sortedAncestors.length - 1 === 0 ? (
-              <span className="text-emerald-400 font-semibold">🌟 Starting Root</span>
+              <span className="text-emerald-600 dark:text-emerald-400 font-semibold">🌟 Starting Root</span>
             ) : (
               <span>
-                ({hoveredPrereqTrace.sortedAncestors.length - 1} req)
+                ({hoveredPrereqTrace.sortedAncestors.length - 1} required)
               </span>
             )}
           </span>
@@ -656,14 +658,13 @@ export const DsaDependencyGraph: React.FC<DsaDependencyGraphProps> = ({ fitScree
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
-        className={`w-full relative flex justify-center items-center select-none overflow-hidden transition-all duration-200 ${
+        className={`w-full relative flex justify-center items-center select-none overflow-hidden transition-colors duration-200 bg-slate-100/80 dark:bg-[#0a0d14] ${
           fitScreen
             ? 'flex-1 min-h-[380px] h-full'
             : 'h-[72vh] min-h-[500px] max-h-[850px]'
         } ${isDragging ? 'cursor-grabbing' : 'cursor-grab'}`}
         style={{
-          backgroundColor: '#0a0d14',
-          backgroundImage: 'radial-gradient(circle, #252b3d 1.5px, transparent 1.5px)',
+          backgroundImage: 'radial-gradient(circle, var(--grid-dot-color, rgba(148, 163, 184, 0.4)) 1.5px, transparent 1.5px)',
           backgroundSize: '24px 24px',
           touchAction: 'none',
         }}
@@ -707,20 +708,20 @@ export const DsaDependencyGraph: React.FC<DsaDependencyGraphProps> = ({ fitScree
                   fill="none"
                   stroke={
                     isPrereqEdge
-                      ? '#38bdf8'
+                      ? '#0284c7'
                       : isDimmed
-                      ? '#161d2e'
+                      ? '#cbd5e1'
                       : isSelectedEdge
                       ? '#6366f1'
                       : edge.isDotted
-                      ? '#4e73df'
-                      : '#333e5c'
+                      ? '#818cf8'
+                      : '#94a3b8'
                   }
                   strokeWidth={isPrereqEdge ? 3.5 : isDimmed ? 1.5 : isSelectedEdge ? 2.5 : 2}
                   strokeDasharray={edge.isDotted ? '4,4' : undefined}
                   filter={isPrereqEdge ? 'url(#dsa-neon-glow)' : undefined}
-                  opacity={isDimmed ? 0.15 : 1}
-                  className="transition-all duration-200"
+                  opacity={isDimmed ? 0.2 : 1}
+                  className="transition-all duration-200 dark:stroke-[color] dark:[&:not([filter])]:stroke-slate-700"
                 />
               );
             })}
@@ -759,44 +760,44 @@ export const DsaDependencyGraph: React.FC<DsaDependencyGraphProps> = ({ fitScree
               >
                 {/* Absolute Badge for Target or Prerequisite */}
                 {isHovered ? (
-                  <span className="absolute -top-3 left-1/2 -translate-x-1/2 text-[9px] uppercase tracking-wider font-extrabold px-2 py-0.5 rounded-full bg-brand-500 text-white shadow-md shadow-brand-500/30 whitespace-nowrap z-50 pointer-events-none">
+                  <span className="absolute -top-3 left-1/2 -translate-x-1/2 text-[9px] uppercase tracking-wider font-extrabold px-2 py-0.5 rounded-full bg-brand-600 text-white shadow-md shadow-brand-500/30 whitespace-nowrap z-50 pointer-events-none">
                     Target
                   </span>
                 ) : isAncestor ? (
-                  <span className="absolute -top-3 left-1/2 -translate-x-1/2 text-[9px] uppercase tracking-wider font-bold px-2 py-0.5 rounded-full bg-sky-500/20 text-sky-300 border border-sky-400/40 whitespace-nowrap z-50 pointer-events-none">
+                  <span className="absolute -top-3 left-1/2 -translate-x-1/2 text-[9px] uppercase tracking-wider font-bold px-2 py-0.5 rounded-full bg-sky-100 dark:bg-sky-500/20 text-sky-700 dark:text-sky-300 border border-sky-300 dark:border-sky-400/40 whitespace-nowrap z-50 pointer-events-none">
                     Prereq
                   </span>
                 ) : null}
 
                 {/* Node Pill Card */}
                 <div
-                  className={`w-full py-2.5 px-2.5 rounded-xl border text-center transition-all duration-200 shadow-xl ${
+                  className={`w-full py-2.5 px-2.5 rounded-xl border text-center transition-all duration-200 shadow-md ${
                     isHovered
-                      ? 'bg-[#252f52] border-brand-400 ring-2 ring-brand-400/80 shadow-brand-500/40'
+                      ? 'bg-brand-50 border-brand-500 ring-2 ring-brand-400 text-brand-900 shadow-brand-500/20 dark:bg-[#252f52] dark:border-brand-400 dark:ring-brand-400/80 dark:shadow-brand-500/40 dark:text-white'
                       : isAncestor
-                      ? 'bg-[#15233b] border-sky-400 ring-1 ring-sky-400/60 shadow-sky-500/25'
+                      ? 'bg-sky-50 border-sky-400 ring-1 ring-sky-400/60 text-sky-900 shadow-sky-500/15 dark:bg-[#15233b] dark:border-sky-400 dark:text-white'
                       : isSelected
-                      ? 'bg-[#252f52] border-brand-400 shadow-brand-500/30'
+                      ? 'bg-brand-50 border-brand-500 text-brand-900 dark:bg-[#252f52] dark:border-brand-400 dark:text-white'
                       : isAllSolved
-                      ? 'bg-[#152e25] border-emerald-500/50 hover:border-emerald-400'
-                      : 'bg-[#1a2035] border-[#313c5e] hover:bg-[#202742] hover:border-slate-500'
+                      ? 'bg-emerald-50 border-emerald-400 text-emerald-950 dark:bg-[#152e25] dark:border-emerald-500/50 dark:text-white'
+                      : 'bg-white border-slate-200 text-slate-800 hover:border-brand-400 hover:shadow-lg dark:bg-[#1a2035] dark:border-[#313c5e] dark:text-white dark:hover:bg-[#202742] dark:hover:border-slate-500'
                   }`}
                 >
-                  <span className="text-[11.5px] font-bold text-white tracking-tight leading-snug block text-center break-words">
+                  <span className="text-[11.5px] font-bold tracking-tight leading-snug block text-center break-words">
                     {node.title}
                   </span>
 
                   {/* Underline Progress Bar */}
-                  <div className="mt-2 h-1 w-full rounded-full bg-[#121626] overflow-hidden">
+                  <div className="mt-2 h-1 w-full rounded-full bg-slate-200 dark:bg-[#121626] overflow-hidden">
                     <div
                       className={`h-full transition-all duration-300 ${
                         isAllSolved
-                          ? 'bg-emerald-400'
+                          ? 'bg-emerald-500'
                           : isHovered || isSelected
-                          ? 'bg-brand-400'
+                          ? 'bg-brand-500'
                           : isAncestor
-                          ? 'bg-sky-400'
-                          : 'bg-indigo-400/80'
+                          ? 'bg-sky-500'
+                          : 'bg-indigo-500 dark:bg-indigo-400/80'
                       }`}
                       style={{ width: `${Math.max(15, stats.percent)}%` }}
                     />
@@ -804,7 +805,7 @@ export const DsaDependencyGraph: React.FC<DsaDependencyGraphProps> = ({ fitScree
                 </div>
 
                 {/* Micro Solved Counter */}
-                <span className="text-[10px] text-slate-400 font-mono mt-1 opacity-80 group-hover:opacity-100">
+                <span className="text-[10px] text-slate-500 dark:text-slate-400 font-mono mt-1 opacity-80 group-hover:opacity-100">
                   {stats.solved}/{stats.total}
                 </span>
               </div>

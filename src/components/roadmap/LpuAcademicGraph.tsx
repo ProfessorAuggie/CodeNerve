@@ -692,37 +692,37 @@ export const LpuAcademicGraph: React.FC<LpuAcademicGraphProps> = ({ fitScreen = 
   };
 
   return (
-    <div className={`relative w-full bg-[#090c14] overflow-hidden transition-all duration-200 flex flex-col ${
+    <div className={`relative w-full bg-slate-50 dark:bg-[#090c14] overflow-hidden transition-all duration-200 flex flex-col ${
       fitScreen
-        ? 'flex-1 min-h-0 h-full rounded-2xl border border-indigo-900/40 shadow-2xl'
-        : 'rounded-2xl border border-indigo-900/40 shadow-2xl'
+        ? 'flex-1 min-h-0 h-full rounded-2xl border border-slate-200 dark:border-indigo-900/40 shadow-2xl'
+        : 'rounded-2xl border border-slate-200 dark:border-indigo-900/40 shadow-2xl'
     }`}>
       {/* Subject Header & Switcher */}
-      <div className="flex flex-wrap items-center justify-between gap-2.5 px-3 py-2 sm:px-4 sm:py-2.5 border-b border-slate-800 bg-slate-950/80 backdrop-blur-md z-20 relative shrink-0">
+      <div className="flex flex-wrap items-center justify-between gap-2 px-3 py-2 sm:px-4 sm:py-2.5 border-b border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-950/80 backdrop-blur-md z-20 relative shrink-0 transition-colors">
         <div className="flex items-center gap-2.5">
-          <div className="h-8 w-8 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 font-bold shrink-0">
+          <div className="h-8 w-8 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-600 dark:text-emerald-400 font-bold shrink-0">
             <GraduationCap className="h-4 w-4" />
           </div>
           <div>
-            <h3 className="text-xs sm:text-sm font-bold text-white flex items-center gap-1.5">
+            <h3 className="text-xs sm:text-sm font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
               <span>Academic Curriculum Flowchart</span>
-              <span className="text-[9px] font-semibold uppercase px-1.5 py-0.2 rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">
+              <span className="text-[9px] font-semibold uppercase px-1.5 py-0.2 rounded-full bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 border border-emerald-500/30">
                 Interactive Graph
               </span>
             </h3>
-            <p className="text-[11px] text-slate-400 hidden xs:block">
+            <p className="text-[11px] text-slate-500 dark:text-slate-400 hidden xs:block">
               Drag to pan &bull; Scroll to zoom &bull; Click node to open study drawer
             </p>
           </div>
         </div>
 
         {/* Top Controls: Course Selector & Overall Progress */}
-        <div className="flex flex-wrap items-center gap-2 sm:gap-2.5">
+        <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
           {/* Zoom & Fit Bar */}
-          <div className="flex items-center gap-1 bg-slate-900 p-1 rounded-xl border border-slate-800 text-xs">
+          <div className="flex items-center gap-1 bg-slate-100 dark:bg-slate-900 p-0.5 rounded-xl border border-slate-200 dark:border-slate-800 text-xs">
             <button
               onClick={() => setZoomLevel((z) => Math.min(1.6, Number((z + 0.1).toFixed(2))))}
-              className="p-1 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition"
+              className="p-1 rounded-lg text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200 dark:hover:bg-slate-800 transition"
               title="Zoom In (+)"
               aria-label="Zoom In"
             >
@@ -730,7 +730,7 @@ export const LpuAcademicGraph: React.FC<LpuAcademicGraphProps> = ({ fitScreen = 
             </button>
             <button
               onClick={() => setZoomLevel((z) => Math.max(0.35, Number((z - 0.1).toFixed(2))))}
-              className="p-1 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition"
+              className="p-1 rounded-lg text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200 dark:hover:bg-slate-800 transition"
               title="Zoom Out (-)"
               aria-label="Zoom Out"
             >
@@ -738,30 +738,30 @@ export const LpuAcademicGraph: React.FC<LpuAcademicGraphProps> = ({ fitScreen = 
             </button>
             <button
               onClick={fitToScreen}
-              className="flex items-center gap-1 px-1.5 py-1 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition text-[11px] font-semibold"
+              className="flex items-center gap-1 px-1.5 py-0.5 rounded-lg text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white bg-slate-200 dark:bg-slate-800/60 hover:bg-slate-300 dark:hover:bg-slate-800 transition text-[11px] font-semibold"
               title="Fit entire curriculum into current window"
               aria-label="Fit to window"
             >
-              <Scan className="h-3 w-3 text-emerald-400" />
+              <Scan className="h-3 w-3 text-emerald-600 dark:text-emerald-400" />
               <span>Fit</span>
             </button>
             <button
               onClick={resetView}
-              className="px-1.5 py-1 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition text-[11px] font-semibold"
+              className="px-1.5 py-0.5 rounded-lg text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200 dark:hover:bg-slate-800 transition text-[11px] font-semibold"
               title="Reset Zoom View"
               aria-label="Reset zoom"
             >
-              Reset ({Math.round(zoomLevel * 100)}%)
+              100%
             </button>
           </div>
 
           {/* Progress Pill */}
-          <div className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-slate-900 border border-slate-800 text-xs">
-            <span className="text-slate-400 font-medium hidden sm:inline">Solved:</span>
-            <span className="font-mono font-bold text-emerald-400">
+          <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs">
+            <span className="text-slate-500 dark:text-slate-400 font-medium hidden sm:inline">Solved:</span>
+            <span className="font-mono font-bold text-emerald-600 dark:text-emerald-400">
               {subjectStats.solved}/{subjectStats.total}
             </span>
-            <span className="text-[10px] px-1 py-0.2 rounded bg-emerald-500/15 text-emerald-300 font-semibold">
+            <span className="text-[10px] px-1 py-0.2 rounded bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 font-semibold">
               {subjectStats.percent}%
             </span>
           </div>
@@ -769,25 +769,25 @@ export const LpuAcademicGraph: React.FC<LpuAcademicGraphProps> = ({ fitScreen = 
           {/* Random Problem Shuffle */}
           <button
             onClick={pickRandomProblem}
-            className="flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-850 border border-slate-800 hover:border-slate-700 text-slate-200 text-xs font-semibold transition"
+            className="flex items-center gap-1 px-2.5 py-1 rounded-xl bg-slate-100 dark:bg-slate-900 hover:bg-slate-200 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-200 text-xs font-semibold transition"
             title="Pick a random problem from this curriculum"
           >
-            <Shuffle className="h-3.5 w-3.5 text-emerald-400" />
-            <span className="hidden md:inline">Pick Random</span>
+            <Shuffle className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />
+            <span className="hidden md:inline">Shuffle</span>
           </button>
 
           {/* Subject Course Tabs */}
-          <div className="flex items-center rounded-xl border border-slate-800 bg-slate-900 p-1 text-xs">
+          <div className="flex items-center rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-900 p-0.5 text-xs">
             <button
               onClick={() => {
                 setSelectedSubject('cse205');
                 setSelectedNodeId('cse205-arrays');
                 setHoveredNodeId(null);
               }}
-              className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg font-bold transition ${
+              className={`flex items-center gap-1 px-2.5 py-1 rounded-lg font-bold transition ${
                 selectedSubject === 'cse205'
                   ? 'bg-emerald-600 text-white shadow-sm'
-                  : 'text-slate-400 hover:text-slate-200'
+                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
               }`}
             >
               <span>🌲 CSE205</span>
@@ -798,10 +798,10 @@ export const LpuAcademicGraph: React.FC<LpuAcademicGraphProps> = ({ fitScreen = 
                 setSelectedNodeId('cse202-basics');
                 setHoveredNodeId(null);
               }}
-              className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg font-bold transition ${
+              className={`flex items-center gap-1 px-2.5 py-1 rounded-lg font-bold transition ${
                 selectedSubject === 'cse202'
                   ? 'bg-brand-600 text-white shadow-sm'
-                  : 'text-slate-400 hover:text-slate-200'
+                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
               }`}
             >
               <span>⚡ CSE202</span>
@@ -810,37 +810,39 @@ export const LpuAcademicGraph: React.FC<LpuAcademicGraphProps> = ({ fitScreen = 
         </div>
       </div>
 
-      {/* Floating Prerequisite Breadcrumb Trace HUD */}
+      {/* Prerequisite Breadcrumb Banner (In Normal Layout Flow - Never Overlaps Controls) */}
       {hoveredPrereqTrace && (
-        <div className="absolute top-20 left-1/2 -translate-x-1/2 z-30 flex items-center gap-2.5 px-4 py-2 rounded-xl bg-slate-950/95 border border-emerald-500/50 backdrop-blur-md shadow-2xl shadow-emerald-500/20 animate-in fade-in zoom-in-95 duration-150 max-w-[90%]">
-          <div className="flex items-center gap-1.5 text-xs font-bold text-emerald-400 shrink-0">
-            <span className="flex h-2 w-2 rounded-full bg-emerald-400 animate-ping" />
-            <span>Academic Prerequisites:</span>
+        <div className="w-full flex items-center justify-between gap-2 px-3 py-1.5 sm:px-4 border-b border-emerald-300 dark:border-emerald-500/30 bg-emerald-50 dark:bg-emerald-950/70 text-xs backdrop-blur-sm z-20 shrink-0 animate-in fade-in duration-150 overflow-x-auto scrollbar-none transition-colors">
+          <div className="flex items-center gap-2 min-w-0">
+            <div className="flex items-center gap-1.5 font-bold text-emerald-700 dark:text-emerald-400 shrink-0">
+              <span className="flex h-1.5 w-1.5 rounded-full bg-emerald-500 animate-ping" />
+              <span>Academic Prerequisites:</span>
+            </div>
+
+            <div className="flex items-center gap-1.5 overflow-x-auto scrollbar-none py-0.5">
+              {hoveredPrereqTrace.sortedAncestors.map((anc, idx) => {
+                const isTarget = anc.id === hoveredPrereqTrace.targetId;
+                return (
+                  <React.Fragment key={anc.id}>
+                    {idx > 0 && <span className="text-emerald-500 dark:text-emerald-400 font-bold text-xs">➔</span>}
+                    <span
+                      className={`px-2 py-0.5 rounded-md text-[11px] font-semibold whitespace-nowrap transition ${
+                        isTarget
+                          ? 'bg-emerald-600 text-white shadow-sm ring-1 ring-emerald-300'
+                          : 'bg-white dark:bg-emerald-950/80 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-500/40 shadow-xs'
+                      }`}
+                    >
+                      {anc.unitCode}: {anc.title}
+                    </span>
+                  </React.Fragment>
+                );
+              })}
+            </div>
           </div>
 
-          <div className="flex items-center gap-1.5 text-xs overflow-x-auto max-w-md sm:max-w-lg scrollbar-none py-0.5">
-            {hoveredPrereqTrace.sortedAncestors.map((anc, idx) => {
-              const isTarget = anc.id === hoveredPrereqTrace.targetId;
-              return (
-                <React.Fragment key={anc.id}>
-                  {idx > 0 && <span className="text-emerald-400 font-bold text-xs">➔</span>}
-                  <span
-                    className={`px-2 py-0.5 rounded-md text-[11px] font-semibold whitespace-nowrap transition ${
-                      isTarget
-                        ? 'bg-emerald-600 text-white shadow-sm ring-1 ring-emerald-300'
-                        : 'bg-emerald-950/70 text-emerald-300 border border-emerald-500/40'
-                    }`}
-                  >
-                    {anc.unitCode}: {anc.title}
-                  </span>
-                </React.Fragment>
-              );
-            })}
-          </div>
-
-          <span className="text-[10px] text-slate-400 font-medium shrink-0 pl-1">
+          <span className="text-[10px] text-slate-500 dark:text-slate-400 font-medium shrink-0 pl-1">
             {hoveredPrereqTrace.sortedAncestors.length - 1 === 0 ? (
-              <span className="text-emerald-300 font-semibold">🌟 Foundational Unit</span>
+              <span className="text-emerald-600 dark:text-emerald-300 font-semibold">🌟 Foundational Unit</span>
             ) : (
               <span>({hoveredPrereqTrace.sortedAncestors.length - 1} required)</span>
             )}
@@ -857,14 +859,13 @@ export const LpuAcademicGraph: React.FC<LpuAcademicGraphProps> = ({ fitScreen = 
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
-        className={`w-full relative flex justify-center items-center select-none overflow-hidden transition-all duration-200 ${
+        className={`w-full relative flex justify-center items-center select-none overflow-hidden transition-colors duration-200 bg-slate-100/80 dark:bg-[#0a0d14] ${
           fitScreen
             ? 'flex-1 min-h-[380px] h-full'
             : 'h-[72vh] min-h-[500px] max-h-[850px]'
         } ${isDragging ? 'cursor-grabbing' : 'cursor-grab'}`}
         style={{
-          backgroundColor: '#0a0d14',
-          backgroundImage: 'radial-gradient(circle, #252b3d 1.5px, transparent 1.5px)',
+          backgroundImage: 'radial-gradient(circle, var(--grid-dot-color, rgba(148, 163, 184, 0.4)) 1.5px, transparent 1.5px)',
           backgroundSize: '24px 24px',
           touchAction: 'none',
         }}
@@ -908,20 +909,20 @@ export const LpuAcademicGraph: React.FC<LpuAcademicGraphProps> = ({ fitScreen = 
                   fill="none"
                   stroke={
                     isPrereqEdge
-                      ? '#34d399'
+                      ? '#059669'
                       : isDimmed
-                      ? '#161d2e'
+                      ? '#cbd5e1'
                       : isSelectedEdge
                       ? '#10b981'
                       : edge.isDotted
-                      ? '#3b82f6'
-                      : '#313d5a'
+                      ? '#60a5fa'
+                      : '#94a3b8'
                   }
                   strokeWidth={isPrereqEdge ? 3.5 : isDimmed ? 1.5 : isSelectedEdge ? 2.5 : 2}
                   strokeDasharray={edge.isDotted ? '4,4' : undefined}
                   filter={isPrereqEdge ? 'url(#lpu-neon-glow)' : undefined}
-                  opacity={isDimmed ? 0.15 : 1}
-                  className="transition-all duration-200"
+                  opacity={isDimmed ? 0.2 : 1}
+                  className="transition-all duration-200 dark:stroke-[color] dark:[&:not([filter])]:stroke-slate-700"
                 />
               );
             })}
@@ -959,52 +960,52 @@ export const LpuAcademicGraph: React.FC<LpuAcademicGraphProps> = ({ fitScreen = 
               >
                 {/* Absolute Status Indicator */}
                 {isHovered ? (
-                  <span className="absolute -top-3 left-1/2 -translate-x-1/2 text-[9px] uppercase tracking-wider font-extrabold px-2 py-0.5 rounded-full bg-emerald-500 text-white shadow-md shadow-emerald-500/30 whitespace-nowrap z-50 pointer-events-none">
+                  <span className="absolute -top-3 left-1/2 -translate-x-1/2 text-[9px] uppercase tracking-wider font-extrabold px-2 py-0.5 rounded-full bg-emerald-600 text-white shadow-md shadow-emerald-500/30 whitespace-nowrap z-50 pointer-events-none">
                     Target Unit
                   </span>
                 ) : isAncestor ? (
-                  <span className="absolute -top-3 left-1/2 -translate-x-1/2 text-[9px] uppercase tracking-wider font-bold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-400/40 whitespace-nowrap z-50 pointer-events-none">
+                  <span className="absolute -top-3 left-1/2 -translate-x-1/2 text-[9px] uppercase tracking-wider font-bold px-2 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-500/20 text-emerald-800 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-400/40 whitespace-nowrap z-50 pointer-events-none">
                     Prereq
                   </span>
                 ) : null}
 
                 {/* Node Card */}
                 <div
-                  className={`w-full py-2.5 px-3 rounded-xl border text-center transition-all duration-200 shadow-xl ${
+                  className={`w-full py-2.5 px-3 rounded-xl border text-center transition-all duration-200 shadow-md ${
                     isHovered
-                      ? 'bg-[#153428] border-emerald-400 ring-2 ring-emerald-400/80 shadow-emerald-500/40'
+                      ? 'bg-emerald-50 border-emerald-500 ring-2 ring-emerald-400 text-emerald-950 shadow-emerald-500/20 dark:bg-[#153428] dark:border-emerald-400 dark:ring-emerald-400/80 dark:shadow-emerald-500/40 dark:text-white'
                       : isAncestor
-                      ? 'bg-[#102920] border-emerald-500 ring-1 ring-emerald-400/60 shadow-emerald-500/25'
+                      ? 'bg-emerald-50/80 border-emerald-400 ring-1 ring-emerald-400/60 text-emerald-900 shadow-emerald-500/15 dark:bg-[#102920] dark:border-emerald-500 dark:text-white'
                       : isSelected
-                      ? 'bg-[#17253b] border-indigo-400 shadow-indigo-500/30'
-                      : 'bg-[#141a2c] border-[#2d3754] hover:bg-[#1a233a] hover:border-slate-500'
+                      ? 'bg-indigo-50 border-indigo-500 text-indigo-950 dark:bg-[#17253b] dark:border-indigo-400 dark:text-white'
+                      : 'bg-white border-slate-200 text-slate-800 hover:border-emerald-400 hover:shadow-lg dark:bg-[#141a2c] dark:border-[#2d3754] dark:text-white dark:hover:bg-[#1a233a] dark:hover:border-slate-500'
                   }`}
                 >
                   <div className="flex items-center justify-between mb-1.5">
-                    <span className="text-[10px] font-bold text-slate-400">
+                    <span className="text-[10px] font-bold text-slate-500 dark:text-slate-400">
                       {node.unitCode}
                     </span>
                     <span
-                      className="text-[9px] font-semibold px-1.5 py-0.2 rounded bg-slate-800/90 text-slate-300 border border-slate-700/60 uppercase tracking-wider"
+                      className="text-[9px] font-semibold px-1.5 py-0.2 rounded bg-slate-100 dark:bg-slate-800/90 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700/60 uppercase tracking-wider"
                     >
                       {node.category}
                     </span>
                   </div>
 
-                  <span className="text-[11.5px] font-bold text-white tracking-tight leading-snug block text-center break-words line-clamp-2">
+                  <span className="text-[11.5px] font-bold tracking-tight leading-snug block text-center break-words line-clamp-2">
                     {node.title}
                   </span>
 
                   {/* Progress bar */}
-                  <div className="mt-2 h-1 w-full rounded-full bg-[#0e121e] overflow-hidden">
+                  <div className="mt-2 h-1 w-full rounded-full bg-slate-200 dark:bg-[#0e121e] overflow-hidden">
                     <div
-                      className="h-full bg-emerald-400 transition-all duration-300"
+                      className="h-full bg-emerald-500 transition-all duration-300"
                       style={{ width: `${Math.max(15, stats.percent)}%` }}
                     />
                   </div>
                 </div>
 
-                <span className="text-[10px] text-slate-400 font-mono mt-1 opacity-80 group-hover:opacity-100">
+                <span className="text-[10px] text-slate-500 dark:text-slate-400 font-mono mt-1 opacity-80 group-hover:opacity-100">
                   {stats.solved}/{stats.total} Solved
                 </span>
               </div>

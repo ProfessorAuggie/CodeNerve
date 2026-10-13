@@ -2,7 +2,6 @@ import React, { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { 
   GraduationCap, 
-  BookOpen, 
   Sparkles, 
   Terminal, 
   CheckCircle2, 
@@ -11,7 +10,6 @@ import {
   ExternalLink, 
   Code2, 
   Search, 
-  Filter, 
   Compass, 
   FileText, 
   Layers, 
@@ -23,7 +21,6 @@ import {
   SUBJECTS, 
   getSubjectById, 
   LPU_CHECKLIST_DATA,
-  ChecklistItem 
 } from '../data/syllabus';
 import { VISUALIZER_MAPPINGS, getAlgoNerveUrl } from '../data/visualizers';
 import { PROBLEMS } from '../data/problems';
@@ -76,7 +73,7 @@ export const SyllabusPage: React.FC = () => {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
       {/* University Header Hero */}
-      <div className="rounded-2xl border border-indigo-900/50 bg-gradient-to-r from-[#0a0e22] via-[#0f1738] to-[#0c0f1d] p-5 sm:p-7 shadow-2xl relative overflow-hidden">
+      <div className="rounded-2xl border border-emerald-500/30 bg-gradient-to-r from-emerald-950/30 via-slate-900 to-slate-950 p-5 sm:p-7 shadow-xl relative overflow-hidden text-white">
         <div className="absolute top-0 right-0 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
 
         <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
@@ -86,7 +83,7 @@ export const SyllabusPage: React.FC = () => {
               <span>Official Academic Syllabus &bull; LPU School of Computer Science & Engineering</span>
             </div>
 
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight flex items-center gap-3">
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight flex flex-wrap items-center gap-3">
               <span>Dedicated Syllabus & Topic Checklist</span>
               <span className="text-xs uppercase font-bold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">
                 100% Curriculum Aligned
@@ -140,9 +137,9 @@ export const SyllabusPage: React.FC = () => {
       </div>
 
       {/* Main Subject Switcher & View Mode Toolbar */}
-      <div className="flex flex-wrap items-center justify-between gap-4 p-4 rounded-2xl bg-slate-900/80 border border-slate-800 backdrop-blur-md">
+      <div className="flex flex-wrap items-center justify-between gap-4 p-4 rounded-2xl bg-white dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 shadow-sm backdrop-blur-md">
         {/* Subject Switcher Buttons */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 flex-wrap">
           {SUBJECTS.map((sub) => (
             <button
               key={sub.id}
@@ -152,13 +149,13 @@ export const SyllabusPage: React.FC = () => {
               }}
               className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold transition ${
                 selectedSubjectId === sub.id
-                  ? 'bg-emerald-600 text-white shadow-lg shadow-emerald-500/25 ring-1 ring-emerald-400'
-                  : 'bg-slate-950 border border-slate-800 text-slate-400 hover:text-white hover:bg-slate-850'
+                  ? 'bg-emerald-600 text-white shadow-md shadow-emerald-500/25 ring-1 ring-emerald-400'
+                  : 'bg-slate-100 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200 dark:hover:bg-slate-850'
               }`}
             >
               <Code2 className="h-4 w-4" />
               <span>{sub.code}: {sub.name}</span>
-              <span className="text-[10px] font-mono px-1.5 py-0.2 rounded bg-black/30 text-emerald-200">
+              <span className="text-[10px] font-mono px-1.5 py-0.2 rounded bg-black/20 text-emerald-200">
                 Sem {sub.semester}
               </span>
             </button>
@@ -166,13 +163,13 @@ export const SyllabusPage: React.FC = () => {
         </div>
 
         {/* View Mode Toggle: Units Accordion vs Full Checklist Table */}
-        <div className="flex items-center bg-slate-950 p-1 rounded-xl border border-slate-800 text-xs">
+        <div className="flex items-center bg-slate-100 dark:bg-slate-950 p-1 rounded-xl border border-slate-200 dark:border-slate-800 text-xs">
           <button
             onClick={() => setViewMode('units')}
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-semibold transition ${
               viewMode === 'units'
                 ? 'bg-brand-600 text-white shadow-sm'
-                : 'text-slate-400 hover:text-white'
+                : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
             }`}
           >
             <Layers className="h-3.5 w-3.5" />
@@ -183,7 +180,7 @@ export const SyllabusPage: React.FC = () => {
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-semibold transition ${
               viewMode === 'checklist'
                 ? 'bg-brand-600 text-white shadow-sm'
-                : 'text-slate-400 hover:text-white'
+                : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
             }`}
           >
             <ListChecks className="h-3.5 w-3.5" />
@@ -198,15 +195,15 @@ export const SyllabusPage: React.FC = () => {
           {/* Course Details Collapsible Grid: Outcomes, Textbooks, Practicals */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
             {/* Course Outcomes */}
-            <div className="p-5 rounded-2xl bg-slate-900/60 border border-slate-800 space-y-3">
-              <div className="flex items-center gap-2 text-white font-bold text-sm">
-                <Award className="h-4 w-4 text-emerald-400" />
+            <div className="p-5 rounded-2xl bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 shadow-sm space-y-3">
+              <div className="flex items-center gap-2 text-slate-900 dark:text-white font-bold text-sm">
+                <Award className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
                 <span>Course Outcomes (CO1 - CO6)</span>
               </div>
-              <ul className="space-y-2 text-xs text-slate-300 divide-y divide-slate-800/60">
+              <ul className="space-y-2 text-xs text-slate-600 dark:text-slate-300 divide-y divide-slate-100 dark:divide-slate-800/60">
                 {currentSubject.courseOutcomes?.map((co, idx) => (
                   <li key={idx} className="pt-2 first:pt-0 leading-relaxed flex items-start gap-2">
-                    <span className="flex h-1.5 w-1.5 rounded-full bg-emerald-400 mt-1.5 shrink-0" />
+                    <span className="flex h-1.5 w-1.5 rounded-full bg-emerald-500 mt-1.5 shrink-0" />
                     <span>{co}</span>
                   </li>
                 ))}
@@ -214,25 +211,25 @@ export const SyllabusPage: React.FC = () => {
             </div>
 
             {/* Textbooks & References */}
-            <div className="p-5 rounded-2xl bg-slate-900/60 border border-slate-800 space-y-3">
-              <div className="flex items-center gap-2 text-white font-bold text-sm">
-                <BookMarked className="h-4 w-4 text-brand-400" />
+            <div className="p-5 rounded-2xl bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 shadow-sm space-y-3">
+              <div className="flex items-center gap-2 text-slate-900 dark:text-white font-bold text-sm">
+                <BookMarked className="h-4 w-4 text-brand-600 dark:text-brand-400" />
                 <span>Textbooks & References</span>
               </div>
               <div className="space-y-3 text-xs">
                 <div>
-                  <div className="text-[11px] font-bold uppercase text-brand-400 mb-1.5">Prescribed Textbook:</div>
+                  <div className="text-[11px] font-bold uppercase text-brand-600 dark:text-brand-400 mb-1.5">Prescribed Textbook:</div>
                   {currentSubject.textbooks?.map((tb, idx) => (
-                    <div key={idx} className="p-2.5 rounded-lg bg-slate-950/60 border border-slate-800/80 text-slate-200">
+                    <div key={idx} className="p-2.5 rounded-lg bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800/80 text-slate-700 dark:text-slate-200">
                       📖 {tb}
                     </div>
                   ))}
                 </div>
                 <div>
-                  <div className="text-[11px] font-bold uppercase text-slate-400 mb-1.5">Reference Books:</div>
+                  <div className="text-[11px] font-bold uppercase text-slate-500 dark:text-slate-400 mb-1.5">Reference Books:</div>
                   <div className="space-y-1.5">
                     {currentSubject.references?.map((ref, idx) => (
-                      <div key={idx} className="p-2 rounded-lg bg-slate-950/40 border border-slate-800/60 text-slate-300">
+                      <div key={idx} className="p-2 rounded-lg bg-slate-50 dark:bg-slate-950/40 border border-slate-200 dark:border-slate-800/60 text-slate-600 dark:text-slate-300">
                         📚 {ref}
                       </div>
                     ))}
@@ -241,133 +238,122 @@ export const SyllabusPage: React.FC = () => {
               </div>
             </div>
 
-            {/* Lab Experiments & Practicals */}
-            <div className="p-5 rounded-2xl bg-slate-900/60 border border-slate-800 space-y-3">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2 text-white font-bold text-sm">
-                  <Terminal className="h-4 w-4 text-purple-400" />
-                  <span>Lab Practicals & Experiments</span>
-                </div>
-                <span className="text-[10px] px-2 py-0.5 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/30">
-                  {currentSubject.practicals?.length} Labs
-                </span>
+            {/* Practical Experiments */}
+            <div className="p-5 rounded-2xl bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 shadow-sm space-y-3">
+              <div className="flex items-center gap-2 text-slate-900 dark:text-white font-bold text-sm">
+                <Code2 className="h-4 w-4 text-indigo-600 dark:text-indigo-400" />
+                <span>Lab / Practical Experiments ({currentSubject.practicals?.length || 0})</span>
               </div>
-              <div className="space-y-2 max-h-72 overflow-y-auto pr-1 scrollbar-thin scrollbar-thumb-slate-800">
-                {currentSubject.practicals?.map((prac, idx) => (
-                  <div key={idx} className="p-2.5 rounded-xl bg-slate-950/60 border border-slate-800/80 text-xs">
-                    <strong className="text-white block font-semibold">{prac.title}</strong>
-                    <p className="text-slate-400 text-[11px] mt-0.5 leading-relaxed">{prac.description}</p>
+              <div className="max-h-56 overflow-y-auto space-y-1.5 pr-1 text-xs">
+                {currentSubject.practicals?.map((exp, idx) => (
+                  <div key={idx} className="p-2 rounded-lg bg-slate-50 dark:bg-slate-950/40 border border-slate-200 dark:border-slate-800/60 text-slate-600 dark:text-slate-300 flex items-start gap-2">
+                    <span className="font-mono font-bold text-emerald-600 dark:text-emerald-400 shrink-0">#{idx + 1}</span>
+                    <span className="leading-snug">{typeof exp === 'string' ? exp : exp.title}</span>
                   </div>
                 ))}
               </div>
             </div>
           </div>
 
-          {/* Unit-by-Unit Topics Breakdown */}
+          {/* Unit-by-Unit Accordion */}
           <div className="space-y-4">
-            <h2 className="text-lg font-bold text-white flex items-center gap-2">
-              <BookOpen className="h-5 w-5 text-emerald-400" />
-              <span>Unit-wise Topic Coverage & Subtopic Breakdown</span>
-            </h2>
-
             {currentSubject.units.map((unit) => {
               const isExpanded = !!expandedUnits[unit.id];
-              const unitTopicsCompleted = unit.topics.filter((t) =>
-                completedLessons.includes(t.id)
-              ).length;
-
               return (
                 <div
                   key={unit.id}
-                  className="rounded-2xl border border-slate-800 bg-slate-900/60 shadow-md overflow-hidden transition hover:border-slate-700/80"
+                  className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/60 shadow-sm overflow-hidden transition-all"
                 >
                   {/* Unit Header */}
-                  <div
+                  <button
+                    type="button"
                     onClick={() => toggleUnit(unit.id)}
-                    className="p-5 flex items-center justify-between cursor-pointer select-none bg-slate-900/90 hover:bg-slate-850 transition"
+                    className="w-full p-4 sm:p-5 flex items-center justify-between gap-4 text-left hover:bg-slate-50 dark:hover:bg-slate-800/40 transition"
                   >
                     <div className="flex items-center gap-3.5">
-                      <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-emerald-500/10 text-emerald-400 font-bold text-sm border border-emerald-500/30">
+                      <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-extrabold text-sm border border-emerald-500/20 shrink-0">
                         U{unit.number}
                       </div>
                       <div>
-                        <span className="text-xs font-semibold text-emerald-400 uppercase tracking-wider">
-                          Unit {unit.number} &bull; {currentSubject.code}
-                        </span>
-                        <h3 className="text-base font-bold text-white tracking-tight">
-                          {unit.title}
+                        <h3 className="text-base font-bold text-slate-900 dark:text-white">
+                          Unit {unit.number}: {unit.title}
                         </h3>
+                        <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                          {unit.topics.length} Primary Topics &bull; Includes theory, prerequisites, and coding implementations
+                        </p>
                       </div>
                     </div>
 
-                    <div className="flex items-center gap-4">
-                      <div className="text-right text-xs">
-                        <span className="text-slate-400">Mastered: </span>
-                        <span className="font-semibold text-white">
-                          {unitTopicsCompleted}/{unit.topics.length} Topics
-                        </span>
-                      </div>
-                      <div className="p-1 rounded-lg bg-slate-800 text-slate-400">
-                        {isExpanded ? <ChevronUp className="h-5 w-5" /> : <ChevronDown className="h-5 w-5" />}
-                      </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
+                        {unit.topics.length} Topics
+                      </span>
+                      {isExpanded ? (
+                        <ChevronUp className="h-4 w-4 text-slate-400" />
+                      ) : (
+                        <ChevronDown className="h-4 w-4 text-slate-400" />
+                      )}
                     </div>
-                  </div>
+                  </button>
 
-                  {/* Topics List with Subtopics */}
+                  {/* Unit Topics Content */}
                   {isExpanded && (
-                    <div className="border-t border-slate-800 divide-y divide-slate-800/60 bg-slate-950/40">
+                    <div className="px-4 pb-5 pt-1 sm:px-6 divide-y divide-slate-100 dark:divide-slate-800/60 border-t border-slate-100 dark:border-slate-800/80">
                       {unit.topics.map((topic) => {
                         const isCompleted = completedLessons.includes(topic.id);
                         const matchedVis = VISUALIZER_MAPPINGS.find((v) =>
-                          topic.visualizerId
-                            ? v.algorithmId === topic.visualizerId || v.id === topic.visualizerId
-                            : v.topicIds.includes(topic.id)
+                          v.id.includes(topic.id) || topic.id.includes(v.id)
                         );
-                        const topicProblems = topic.problemIds
-                          .map((id) => PROBLEMS.find((p) => p.id === id))
-                          .filter((p): p is Problem => !!p);
+                        const topicProblems = PROBLEMS.filter((p) =>
+                          p.topicTags.includes(topic.id) || (p.track === 'lpu' && p.topicTags.some((t) => topic.id.includes(t)))
+                        ).slice(0, 3);
 
                         return (
                           <div
                             key={topic.id}
-                            className="p-4 sm:p-5 flex flex-col lg:flex-row lg:items-start justify-between gap-5 hover:bg-slate-900/30 transition"
+                            className="py-4 first:pt-3 last:pb-1 flex flex-col lg:flex-row lg:items-start justify-between gap-4"
                           >
-                            <div className="flex items-start gap-3.5 flex-1">
+                            <div className="flex items-start gap-3.5 flex-1 min-w-0">
                               <button
-                                onClick={() => markLessonComplete(topic.id, !isCompleted)}
-                                className={`mt-0.5 h-5 w-5 rounded-md flex items-center justify-center border transition shrink-0 ${
+                                type="button"
+                                onClick={() => markLessonComplete(topic.id)}
+                                className={`mt-0.5 min-w-[28px] min-h-[28px] rounded-lg border flex items-center justify-center shrink-0 transition ${
                                   isCompleted
-                                    ? 'bg-emerald-500/20 border-emerald-500 text-emerald-400'
-                                    : 'border-slate-700 bg-slate-800 text-slate-500 hover:border-slate-500'
+                                    ? 'bg-emerald-500/20 border-emerald-500 text-emerald-600 dark:text-emerald-400'
+                                    : 'border-slate-300 dark:border-slate-700 hover:border-slate-500 text-slate-400'
                                 }`}
-                                title={isCompleted ? 'Mark uncompleted' : 'Mark completed'}
+                                title={isCompleted ? 'Mark as Incomplete' : 'Mark as Complete'}
                               >
-                                {isCompleted && <CheckCircle2 className="h-3.5 w-3.5" />}
+                                {isCompleted ? (
+                                  <CheckCircle2 className="h-4 w-4" />
+                                ) : (
+                                  <div className="h-2 w-2 rounded-full bg-slate-300 dark:bg-slate-700" />
+                                )}
                               </button>
 
-                              <div className="space-y-2 flex-1">
+                              <div className="space-y-1.5 flex-1 min-w-0">
                                 <h4
                                   className={`text-sm sm:text-base font-bold ${
-                                    isCompleted ? 'text-slate-400 line-through' : 'text-white'
+                                    isCompleted ? 'text-slate-400 line-through' : 'text-slate-900 dark:text-white'
                                   }`}
                                 >
                                   {topic.title}
                                 </h4>
 
-                                <p className="text-xs text-slate-300 leading-relaxed max-w-3xl">
+                                <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed max-w-3xl">
                                   {topic.description}
                                 </p>
 
                                 {/* Prerequisites Chips */}
                                 {topic.prerequisites && topic.prerequisites.length > 0 && (
                                   <div className="flex flex-wrap items-center gap-1.5 pt-1">
-                                    <span className="text-[10px] font-semibold uppercase tracking-wider text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/20">
+                                    <span className="text-[10px] font-semibold uppercase tracking-wider text-amber-700 dark:text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/20">
                                       Prerequisites:
                                     </span>
                                     {topic.prerequisites.map((prereq, pIdx) => (
                                       <span
                                         key={pIdx}
-                                        className="text-[11px] px-2 py-0.5 rounded bg-slate-900 text-slate-300 border border-slate-800"
+                                        className="text-[11px] px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-900 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-800"
                                       >
                                         {prereq}
                                       </span>
@@ -377,15 +363,15 @@ export const SyllabusPage: React.FC = () => {
 
                                 {/* Subtopics Checklist Box */}
                                 {topic.subtopics && topic.subtopics.length > 0 && (
-                                  <div className="mt-2.5 p-3 rounded-xl bg-slate-900/70 border border-slate-800/90 space-y-1.5">
-                                    <div className="text-[11px] font-bold text-slate-400 flex items-center gap-1.5 uppercase tracking-wider">
-                                      <FileText className="h-3 w-3 text-emerald-400" />
+                                  <div className="mt-2.5 p-3 rounded-xl bg-slate-50 dark:bg-slate-900/70 border border-slate-200 dark:border-slate-800/90 space-y-1.5">
+                                    <div className="text-[11px] font-bold text-slate-600 dark:text-slate-400 flex items-center gap-1.5 uppercase tracking-wider">
+                                      <FileText className="h-3 w-3 text-emerald-600 dark:text-emerald-400" />
                                       <span>Official Syllabus Subtopics ({topic.subtopics.length}):</span>
                                     </div>
-                                    <ul className="grid grid-cols-1 sm:grid-cols-2 gap-1.5 text-xs text-slate-300 pt-1">
+                                    <ul className="grid grid-cols-1 sm:grid-cols-2 gap-1.5 text-xs text-slate-600 dark:text-slate-300 pt-1">
                                       {topic.subtopics.map((st, sIdx) => (
                                         <li key={sIdx} className="flex items-start gap-1.5">
-                                          <span className="text-emerald-400 text-xs mt-0.5">&bull;</span>
+                                          <span className="text-emerald-500 text-xs mt-0.5">&bull;</span>
                                           <span className="text-[11.5px] leading-snug">{st}</span>
                                         </li>
                                       ))}
@@ -402,10 +388,10 @@ export const SyllabusPage: React.FC = () => {
                                   href={getAlgoNerveUrl(matchedVis.algorithmId)}
                                   target="_blank"
                                   rel="noopener noreferrer"
-                                  className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-xl bg-emerald-500/10 text-emerald-300 border border-emerald-500/30 hover:bg-emerald-500/20 transition shadow-sm"
+                                  className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-xl bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 border border-emerald-500/30 hover:bg-emerald-500/20 transition shadow-sm"
                                   title={`Open ${matchedVis.label} on AlgoNerve`}
                                 >
-                                  <Sparkles className="h-3.5 w-3.5 text-emerald-400" />
+                                  <Sparkles className="h-3.5 w-3.5 text-emerald-500 dark:text-emerald-400" />
                                   <span>{matchedVis.label}</span>
                                   <ExternalLink className="h-3 w-3" />
                                 </a>
@@ -419,8 +405,8 @@ export const SyllabusPage: React.FC = () => {
                                     onClick={() => setSelectedProblem(prob)}
                                     className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-xl border transition ${
                                       isSolved
-                                        ? 'bg-emerald-950/40 border-emerald-700/50 text-emerald-300'
-                                        : 'bg-slate-850 border-slate-700 text-slate-200 hover:text-white hover:border-slate-600'
+                                        ? 'bg-emerald-50 dark:bg-emerald-950/40 border-emerald-300 dark:border-emerald-700/50 text-emerald-700 dark:text-emerald-300'
+                                        : 'bg-slate-100 dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 hover:text-slate-900 dark:hover:text-white'
                                     }`}
                                   >
                                     <Terminal className="h-3.5 w-3.5" />
@@ -445,29 +431,29 @@ export const SyllabusPage: React.FC = () => {
       {viewMode === 'checklist' && (
         <div className="space-y-4">
           {/* Filter Bar */}
-          <div className="flex flex-wrap items-center justify-between gap-3 p-4 rounded-2xl bg-slate-900/60 border border-slate-800">
+          <div className="flex flex-wrap items-center justify-between gap-3 p-4 rounded-2xl bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 shadow-sm">
             <div className="flex items-center gap-3 flex-1 max-w-md">
               <div className="relative w-full">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500" />
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
                 <input
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Search subtopics, units, or topic groups..."
-                  className="w-full pl-9 pr-4 py-2 rounded-xl bg-slate-950 border border-slate-800 text-xs text-white placeholder:text-slate-500 focus:outline-none focus:border-emerald-500"
+                  className="w-full pl-9 pr-4 py-2 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-xs text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:border-emerald-500"
                 />
               </div>
             </div>
 
             {/* Unit Filter Buttons */}
             <div className="flex items-center gap-1.5 flex-wrap text-xs">
-              <span className="text-slate-400 font-semibold pr-1">Unit:</span>
+              <span className="text-slate-500 dark:text-slate-400 font-semibold pr-1">Unit:</span>
               <button
                 onClick={() => setSelectedUnitFilter('all')}
                 className={`px-2.5 py-1 rounded-lg font-bold transition text-xs ${
                   selectedUnitFilter === 'all'
                     ? 'bg-emerald-600 text-white'
-                    : 'bg-slate-800 text-slate-400 hover:text-white'
+                    : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
                 }`}
               >
                 All (1–6)
@@ -479,7 +465,7 @@ export const SyllabusPage: React.FC = () => {
                   className={`px-2.5 py-1 rounded-lg font-semibold transition text-xs ${
                     selectedUnitFilter === num
                       ? 'bg-emerald-600 text-white font-bold'
-                      : 'bg-slate-800 text-slate-400 hover:text-white'
+                      : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
                   }`}
                 >
                   Unit {num}
@@ -489,10 +475,10 @@ export const SyllabusPage: React.FC = () => {
           </div>
 
           {/* Checklist Table */}
-          <div className="rounded-2xl border border-slate-800 bg-slate-900/60 overflow-hidden shadow-xl">
+          <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/60 overflow-hidden shadow-sm dark:shadow-xl">
             <div className="overflow-x-auto">
-              <table className="w-full text-left text-xs text-slate-300">
-                <thead className="bg-slate-950 text-slate-400 uppercase tracking-wider text-[11px] border-b border-slate-800">
+              <table className="w-full text-left text-xs text-slate-600 dark:text-slate-300">
+                <thead className="bg-slate-100 dark:bg-slate-950 text-slate-600 dark:text-slate-400 uppercase tracking-wider text-[11px] border-b border-slate-200 dark:border-slate-800 font-semibold">
                   <tr>
                     <th className="py-3 px-4 w-12 text-center">S.No</th>
                     <th className="py-3 px-4 w-24">Unit</th>
@@ -500,26 +486,26 @@ export const SyllabusPage: React.FC = () => {
                     <th className="py-3 px-4">Subtopic / Syllabus Concept</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-800/60">
+                <tbody className="divide-y divide-slate-100 dark:divide-slate-800/60">
                   {subjectChecklist.length === 0 ? (
                     <tr>
-                      <td colSpan={4} className="py-12 text-center text-slate-500 text-sm">
+                      <td colSpan={4} className="py-12 text-center text-slate-400 dark:text-slate-500 text-sm">
                         No checklist topics found matching your search.
                       </td>
                     </tr>
                   ) : (
                     subjectChecklist.map((item, idx) => (
-                      <tr key={idx} className="hover:bg-slate-850/60 transition">
+                      <tr key={idx} className="hover:bg-slate-50 dark:hover:bg-slate-850/60 transition">
                         <td className="py-3 px-4 font-mono font-bold text-slate-400 text-center">
                           {item.sno || idx + 1}
                         </td>
-                        <td className="py-3 px-4 font-bold text-emerald-400 whitespace-nowrap">
+                        <td className="py-3 px-4 font-bold text-emerald-600 dark:text-emerald-400 whitespace-nowrap">
                           Unit {item.unitNumber}
                         </td>
-                        <td className="py-3 px-4 font-semibold text-white">
+                        <td className="py-3 px-4 font-semibold text-slate-900 dark:text-white">
                           {item.topicGroup}
                         </td>
-                        <td className="py-3 px-4 text-slate-200 font-medium leading-relaxed">
+                        <td className="py-3 px-4 text-slate-700 dark:text-slate-200 font-medium leading-relaxed">
                           {item.subtopic}
                         </td>
                       </tr>

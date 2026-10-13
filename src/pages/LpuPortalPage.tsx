@@ -10,8 +10,6 @@ import {
   ChevronUp, 
   ExternalLink, 
   Code2, 
-  Award, 
-  Calendar, 
   Users, 
   Compass 
 } from 'lucide-react';
@@ -45,12 +43,12 @@ export const LpuPortalPage: React.FC = () => {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 space-y-5">
       {/* University Hero Header */}
-      <div className="rounded-2xl border border-indigo-900/50 bg-gradient-to-r from-[#0d1226] via-[#121936] to-[#0c0f1d] p-5 sm:p-6 shadow-2xl relative overflow-hidden">
+      <div className="rounded-2xl border border-emerald-500/30 bg-gradient-to-r from-emerald-950/40 via-slate-900 to-slate-950 p-5 sm:p-6 shadow-xl relative overflow-hidden text-white">
         <div className="absolute top-0 right-0 w-96 h-96 bg-brand-500/10 rounded-full blur-3xl pointer-events-none" />
 
         <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-5">
           <div className="space-y-2">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">
               <GraduationCap className="h-4 w-4" />
               <span>Lovely Professional University &bull; School of Computer Science & Engineering</span>
             </div>
@@ -97,18 +95,18 @@ export const LpuPortalPage: React.FC = () => {
       </div>
 
       {/* Main Section Navigation Tabs */}
-      <div className="flex flex-wrap items-center gap-2.5 border-b border-slate-800 pb-2.5">
+      <div className="flex flex-wrap items-center gap-2 border-b border-slate-200 dark:border-slate-800 pb-2.5">
         <button
           onClick={() => setActiveTab('syllabus')}
           className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold transition ${
             activeTab === 'syllabus'
-              ? 'bg-emerald-600 text-white shadow-lg shadow-emerald-500/25'
-              : 'bg-slate-900 border border-slate-800 text-slate-400 hover:text-white'
+              ? 'bg-emerald-600 text-white shadow-md shadow-emerald-500/25'
+              : 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
           }`}
         >
           <BookOpen className="h-4 w-4" />
           <span>Curriculum Syllabi (CSE202 / CSE205)</span>
-          <span className="text-[10px] font-bold px-1.5 py-0.2 rounded-full bg-emerald-400/20 text-emerald-300">
+          <span className="text-[10px] font-bold px-1.5 py-0.2 rounded-full bg-emerald-100 dark:bg-emerald-400/20 text-emerald-700 dark:text-emerald-300">
             114 Topics
           </span>
         </button>
@@ -117,8 +115,8 @@ export const LpuPortalPage: React.FC = () => {
           onClick={() => setActiveTab('flowchart')}
           className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold transition ${
             activeTab === 'flowchart'
-              ? 'bg-brand-600 text-white shadow-lg shadow-brand-500/20'
-              : 'bg-slate-900 border border-slate-800 text-slate-400 hover:text-white'
+              ? 'bg-brand-600 text-white shadow-md shadow-brand-500/20'
+              : 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
           }`}
         >
           <Compass className="h-4 w-4" />
@@ -129,8 +127,8 @@ export const LpuPortalPage: React.FC = () => {
           onClick={() => setActiveTab('assignments')}
           className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold transition ${
             activeTab === 'assignments'
-              ? 'bg-brand-600 text-white shadow-lg shadow-brand-500/20'
-              : 'bg-slate-900 border border-slate-800 text-slate-400 hover:text-white'
+              ? 'bg-brand-600 text-white shadow-md shadow-brand-500/20'
+              : 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
           }`}
         >
           <Users className="h-4 w-4" />
@@ -141,14 +139,14 @@ export const LpuPortalPage: React.FC = () => {
       {/* TAB 0: INTERACTIVE PREREQUISITE FLOWCHART */}
       {activeTab === 'flowchart' && (
         <div className="space-y-3">
-          <div className="p-3 rounded-xl bg-slate-900/60 border border-emerald-900/40 text-xs text-slate-300 flex items-center justify-between">
+          <div className="p-3 rounded-xl bg-white dark:bg-slate-900/60 border border-emerald-500/30 text-xs text-slate-600 dark:text-slate-300 flex items-center justify-between shadow-sm">
             <div className="flex items-center gap-2">
-              <span className="flex h-2 w-2 rounded-full bg-emerald-400" />
+              <span className="flex h-2 w-2 rounded-full bg-emerald-500" />
               <span>
                 <strong>LPU Academic Prerequisite Dependency Engine:</strong> Hover over any unit or topic to trace back the exact prerequisite foundations required by LPU examiners before that concept.
               </span>
             </div>
-            <span className="text-emerald-400 font-mono text-[11px] hidden md:inline">
+            <span className="text-emerald-600 dark:text-emerald-400 font-mono text-[11px] hidden md:inline font-semibold">
               CSE205 &bull; CSE202 Syllabus
             </span>
           </div>
@@ -161,8 +159,8 @@ export const LpuPortalPage: React.FC = () => {
       {activeTab === 'syllabus' && (
         <div className="space-y-6">
           {/* Subject Switcher */}
-          <div className="flex flex-wrap items-center justify-between gap-4 p-4 rounded-2xl bg-slate-900/60 border border-slate-800">
-            <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center justify-between gap-4 p-4 rounded-2xl bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 shadow-sm">
+            <div className="flex items-center gap-2 flex-wrap">
               {SUBJECTS.map((sub) => (
                 <button
                   key={sub.id}
@@ -170,7 +168,7 @@ export const LpuPortalPage: React.FC = () => {
                   className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition ${
                     selectedSubjectId === sub.id
                       ? 'bg-brand-600 text-white shadow-md'
-                      : 'bg-slate-800 text-slate-400 hover:text-white'
+                      : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
                   }`}
                 >
                   <Code2 className="h-4 w-4" />
@@ -179,7 +177,7 @@ export const LpuPortalPage: React.FC = () => {
               ))}
             </div>
 
-            <span className="text-xs text-slate-400">
+            <span className="text-xs text-slate-500 dark:text-slate-400 font-medium">
               Semester {currentSubject.semester} &bull; LPU CSE Department
             </span>
           </div>
@@ -188,100 +186,102 @@ export const LpuPortalPage: React.FC = () => {
           <div className="space-y-4">
             {currentSubject.units.map((unit) => {
               const isExpanded = !!expandedUnits[unit.id];
-              const unitCompletedCount = unit.topics.filter((t) =>
-                completedLessons.includes(t.id)
-              ).length;
 
               return (
                 <div
                   key={unit.id}
-                  className="rounded-2xl border border-slate-800 bg-slate-900/60 shadow-md overflow-hidden transition hover:border-slate-700/80"
+                  className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/60 shadow-sm overflow-hidden transition hover:border-slate-300 dark:hover:border-slate-700/80"
                 >
                   {/* Unit Header */}
-                  <div
+                  <button
+                    type="button"
                     onClick={() => toggleUnit(unit.id)}
-                    className="p-5 flex items-center justify-between cursor-pointer select-none bg-slate-900/90 hover:bg-slate-850 transition"
+                    className="w-full p-4 sm:p-5 flex items-center justify-between gap-4 text-left hover:bg-slate-50 dark:hover:bg-slate-800/40 transition"
                   >
                     <div className="flex items-center gap-3.5">
-                      <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-slate-800 text-brand-400 font-bold text-sm border border-slate-700/60">
+                      <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-extrabold text-sm border border-emerald-500/20 shrink-0">
                         U{unit.number}
                       </div>
                       <div>
-                        <span className="text-xs font-semibold text-brand-400 uppercase tracking-wider">
-                          Unit {unit.number}
-                        </span>
-                        <h3 className="text-base font-bold text-white tracking-tight">
-                          {unit.title}
+                        <h3 className="text-base font-bold text-slate-900 dark:text-white">
+                          Unit {unit.number}: {unit.title}
                         </h3>
+                        <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                          {unit.topics.length} Primary Topics &bull; Includes theory, prerequisites, and coding implementations
+                        </p>
                       </div>
                     </div>
 
-                    <div className="flex items-center gap-4">
-                      <div className="text-right text-xs">
-                        <span className="text-slate-400">Mastered: </span>
-                        <span className="font-semibold text-white">
-                          {unitCompletedCount}/{unit.topics.length}
-                        </span>
-                      </div>
-                      <div className="p-1 rounded-lg bg-slate-800 text-slate-400">
-                        {isExpanded ? <ChevronUp className="h-5 w-5" /> : <ChevronDown className="h-5 w-5" />}
-                      </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
+                        {unit.topics.length} Topics
+                      </span>
+                      {isExpanded ? (
+                        <ChevronUp className="h-4 w-4 text-slate-400" />
+                      ) : (
+                        <ChevronDown className="h-4 w-4 text-slate-400" />
+                      )}
                     </div>
-                  </div>
+                  </button>
 
-                  {/* Topics Breakdown */}
+                  {/* Unit Topics Content */}
                   {isExpanded && (
-                    <div className="border-t border-slate-800 divide-y divide-slate-800/60 bg-slate-950/40">
+                    <div className="px-4 pb-5 pt-1 sm:px-6 divide-y divide-slate-100 dark:divide-slate-800/60 border-t border-slate-100 dark:border-slate-800/80">
                       {unit.topics.map((topic) => {
                         const isCompleted = completedLessons.includes(topic.id);
                         const matchedVis = VISUALIZER_MAPPINGS.find((v) =>
-                          topic.visualizerId
-                            ? v.algorithmId === topic.visualizerId || v.id === topic.visualizerId
-                            : v.topicIds.includes(topic.id)
+                          v.id.includes(topic.id) || topic.id.includes(v.id)
                         );
-                        const topicProblems = topic.problemIds
-                          .map((id) => PROBLEMS.find((p) => p.id === id))
-                          .filter((p): p is Problem => !!p);
+                        const topicProblems = PROBLEMS.filter((p) =>
+                          p.topicTags.includes(topic.id) || (p.track === 'lpu' && p.topicTags.some((t) => topic.id.includes(t)))
+                        ).slice(0, 3);
 
                         return (
                           <div
                             key={topic.id}
-                            className="p-4 flex flex-col md:flex-row md:items-center justify-between gap-4 hover:bg-slate-900/40 transition"
+                            className="py-4 first:pt-3 last:pb-1 flex flex-col lg:flex-row lg:items-start justify-between gap-4"
                           >
-                            <div className="flex items-start gap-3">
+                            <div className="flex items-start gap-3.5 flex-1 min-w-0">
                               <button
-                                onClick={() => markLessonComplete(topic.id, !isCompleted)}
-                                className={`mt-0.5 h-5 w-5 rounded-md flex items-center justify-center border transition shrink-0 ${
+                                type="button"
+                                onClick={() => markLessonComplete(topic.id)}
+                                className={`mt-0.5 min-w-[28px] min-h-[28px] rounded-lg border flex items-center justify-center shrink-0 transition ${
                                   isCompleted
-                                    ? 'bg-emerald-500/20 border-emerald-500 text-emerald-400'
-                                    : 'border-slate-700 bg-slate-800 text-slate-500 hover:border-slate-500'
+                                    ? 'bg-emerald-500/20 border-emerald-500 text-emerald-600 dark:text-emerald-400'
+                                    : 'border-slate-300 dark:border-slate-700 hover:border-slate-500 text-slate-400'
                                 }`}
-                                title={isCompleted ? 'Mark uncompleted' : 'Mark completed'}
+                                title={isCompleted ? 'Mark as Incomplete' : 'Mark as Complete'}
                               >
-                                {isCompleted && <CheckCircle2 className="h-3.5 w-3.5" />}
+                                {isCompleted ? (
+                                  <CheckCircle2 className="h-4 w-4" />
+                                ) : (
+                                  <div className="h-2 w-2 rounded-full bg-slate-300 dark:bg-slate-700" />
+                                )}
                               </button>
-                              <div>
+
+                              <div className="space-y-1.5 flex-1 min-w-0">
                                 <h4
-                                  className={`text-sm font-semibold ${
-                                    isCompleted ? 'text-slate-400 line-through' : 'text-white'
+                                  className={`text-sm sm:text-base font-bold ${
+                                    isCompleted ? 'text-slate-400 line-through' : 'text-slate-900 dark:text-white'
                                   }`}
                                 >
                                   {topic.title}
                                 </h4>
-                                <p className="text-xs text-slate-400 mt-0.5 max-w-2xl leading-relaxed">
+
+                                <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed max-w-3xl">
                                   {topic.description}
                                 </p>
 
-                                {/* Prerequisites Display */}
+                                {/* Prerequisites Chips */}
                                 {topic.prerequisites && topic.prerequisites.length > 0 && (
-                                  <div className="flex flex-wrap items-center gap-1.5 mt-2">
-                                    <span className="text-[10px] font-semibold uppercase tracking-wider text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/20">
+                                  <div className="flex flex-wrap items-center gap-1.5 pt-1">
+                                    <span className="text-[10px] font-semibold uppercase tracking-wider text-amber-700 dark:text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/20">
                                       Prerequisites:
                                     </span>
                                     {topic.prerequisites.map((prereq, pIdx) => (
                                       <span
                                         key={pIdx}
-                                        className="text-[11px] px-2 py-0.5 rounded bg-slate-900 text-slate-300 border border-slate-800"
+                                        className="text-[11px] px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-900 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-800"
                                       >
                                         {prereq}
                                       </span>
@@ -291,17 +291,17 @@ export const LpuPortalPage: React.FC = () => {
                               </div>
                             </div>
 
-                            {/* Action Buttons: Visualizer, Lesson, Problems */}
-                            <div className="flex items-center gap-2 shrink-0 self-end md:self-auto">
+                            {/* Action Buttons: Visualizer & Problem Badges */}
+                            <div className="flex flex-wrap items-center gap-2 shrink-0 self-start lg:self-center">
                               {matchedVis && (
                                 <a
                                   href={getAlgoNerveUrl(matchedVis.algorithmId)}
                                   target="_blank"
                                   rel="noopener noreferrer"
-                                  className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg bg-brand-500/10 text-brand-300 border border-brand-500/30 hover:bg-brand-500/20 transition"
+                                  className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg bg-brand-500/10 text-brand-600 dark:text-brand-300 border border-brand-500/30 hover:bg-brand-500/20 transition"
                                   title={`Open ${matchedVis.label} on AlgoNerve (new tab)`}
                                 >
-                                  <Sparkles className="h-3.5 w-3.5 text-brand-400" />
+                                  <Sparkles className="h-3.5 w-3.5 text-brand-500 dark:text-brand-400" />
                                   <span>{matchedVis.label}</span>
                                   <ExternalLink className="h-3 w-3" />
                                 </a>
@@ -315,8 +315,8 @@ export const LpuPortalPage: React.FC = () => {
                                     onClick={() => setSelectedProblem(prob)}
                                     className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg border transition ${
                                       isSolved
-                                        ? 'bg-emerald-950/40 border-emerald-700/50 text-emerald-300'
-                                        : 'bg-slate-800 border-slate-700 text-slate-300 hover:text-white'
+                                        ? 'bg-emerald-50 dark:bg-emerald-950/40 border-emerald-300 dark:border-emerald-700/50 text-emerald-700 dark:text-emerald-300'
+                                        : 'bg-slate-100 dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white'
                                     }`}
                                   >
                                     <Terminal className="h-3.5 w-3.5" />
@@ -340,16 +340,16 @@ export const LpuPortalPage: React.FC = () => {
       {/* TAB 3: FACULTY & CLASS ASSIGNMENTS */}
       {activeTab === 'assignments' && (
         <div className="space-y-6">
-          <div className="flex items-center justify-between p-5 rounded-2xl bg-purple-950/20 border border-purple-800/40">
+          <div className="flex items-center justify-between p-5 rounded-2xl bg-purple-50 dark:bg-purple-950/20 border border-purple-200 dark:border-purple-800/40 shadow-sm">
             <div>
-              <h3 className="text-base font-bold text-white">Course Faculty Assignments</h3>
-              <p className="text-xs text-slate-400 mt-0.5">
+              <h3 className="text-base font-bold text-slate-900 dark:text-white">Course Faculty Assignments</h3>
+              <p className="text-xs text-slate-600 dark:text-slate-400 mt-0.5">
                 Instructor-curated problem sets for lab practicals, homework submissions, and section cohorts.
               </p>
             </div>
             <Link
               to="/syllabus"
-              className="px-4 py-2 rounded-xl text-xs font-semibold bg-emerald-600 hover:bg-emerald-500 text-white shadow-lg shadow-emerald-500/20 transition"
+              className="px-4 py-2 rounded-xl text-xs font-semibold bg-emerald-600 hover:bg-emerald-500 text-white shadow-md shadow-emerald-500/20 transition"
             >
               Explore Topic Checklist ↗
             </Link>
@@ -359,14 +359,14 @@ export const LpuPortalPage: React.FC = () => {
             {customProblemSets.map((set) => (
               <div
                 key={set.id}
-                className="p-5 rounded-2xl border border-slate-800 bg-slate-900/60 space-y-3"
+                className="p-5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/60 shadow-sm space-y-3"
               >
                 <div className="flex items-start justify-between">
                   <div>
-                    <h4 className="text-sm font-bold text-white">{set.title}</h4>
-                    <p className="text-xs text-slate-400 mt-0.5">{set.description}</p>
+                    <h4 className="text-sm font-bold text-slate-900 dark:text-white">{set.title}</h4>
+                    <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">{set.description}</p>
                   </div>
-                  <span className="text-xs px-2.5 py-0.5 rounded-full bg-purple-500/10 text-purple-300 border border-purple-500/30">
+                  <span className="text-xs px-2.5 py-0.5 rounded-full bg-purple-100 dark:bg-purple-500/10 text-purple-700 dark:text-purple-300 border border-purple-200 dark:border-purple-500/30">
                     {set.problemIds.length} Problems
                   </span>
                 </div>
@@ -381,9 +381,9 @@ export const LpuPortalPage: React.FC = () => {
                       <div
                         key={prob.id}
                         onClick={() => setSelectedProblem(prob)}
-                        className="flex items-center justify-between p-2 rounded-lg bg-slate-950/60 border border-slate-800 hover:border-slate-700 cursor-pointer text-xs"
+                        className="flex items-center justify-between p-2 rounded-lg bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 cursor-pointer text-xs transition"
                       >
-                        <span className={isSolved ? 'line-through text-slate-500' : 'text-white'}>
+                        <span className={isSolved ? 'line-through text-slate-400 dark:text-slate-500' : 'text-slate-900 dark:text-white font-medium'}>
                           {prob.title}
                         </span>
                         <span className="text-[10px] text-slate-500">{prob.difficulty}</span>
@@ -398,10 +398,12 @@ export const LpuPortalPage: React.FC = () => {
       )}
 
       {/* Problem Modal */}
-      <ProblemModal
-        problem={selectedProblem}
-        onClose={() => setSelectedProblem(null)}
-      />
+      {selectedProblem && (
+        <ProblemModal
+          problem={selectedProblem}
+          onClose={() => setSelectedProblem(null)}
+        />
+      )}
     </div>
   );
 };
