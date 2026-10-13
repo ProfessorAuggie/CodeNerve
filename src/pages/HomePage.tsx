@@ -40,7 +40,7 @@ export const HomePage: React.FC = () => {
             <span className="flex h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
             <span className="font-semibold">Next-Gen Computer Science Education</span>
             <span className="text-slate-600">|</span>
-            <span className="text-slate-400">NeetCode + AlgoNerve</span>
+            <span className="text-slate-400">AlgoNerve + University Track</span>
           </div>
 
           <h1 className="text-4xl sm:text-6xl font-extrabold tracking-tight text-white leading-tight">
@@ -113,7 +113,7 @@ export const HomePage: React.FC = () => {
                 Two Dedicated Ecosystems, One Platform
               </h2>
               <p className="text-sm text-slate-400">
-                Choose between the universal NeetCode-style interview prep tree or the official LPU University academic curriculum.
+                Choose between the universal DSA dependency flowchart or the official LPU University academic curriculum.
               </p>
             </div>
 
@@ -132,17 +132,17 @@ export const HomePage: React.FC = () => {
 
                   <div>
                     <h3 className="text-2xl font-bold text-white group-hover:text-brand-300 transition">
-                      NeetCode Branching Roadmap
+                      DSA Dependency Roadmap
                     </h3>
                     <p className="text-sm text-slate-300 mt-2 leading-relaxed">
-                      Interactive 18-topic hierarchical flowchart with dotted matrix canvas and bezier curve branches. Methodically master Blind 75 / NeetCode 150 patterns from Arrays & Hashing to 2-D Dynamic Programming.
+                      Interactive 18-topic hierarchical flowchart with dotted matrix canvas and bezier curve branches. Methodically master core interview patterns from Arrays & Hashing to 2-D Dynamic Programming.
                     </p>
                   </div>
 
                   <ul className="space-y-2.5 text-xs text-slate-300 pt-2">
                     <li className="flex items-center gap-2">
                       <span className="h-1.5 w-1.5 rounded-full bg-brand-400" />
-                      <span><strong>NeetCode Flowchart:</strong> Visual dependency graph matching the iconic roadmap</span>
+                      <span><strong>Branching Flowchart:</strong> Visual dependency graph with interactive prerequisite hover trace-back</span>
                     </li>
                     <li className="flex items-center gap-2">
                       <span className="h-1.5 w-1.5 rounded-full bg-brand-400" />
@@ -164,7 +164,7 @@ export const HomePage: React.FC = () => {
                     to="/roadmap"
                     className="flex-1 min-w-[160px] flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-brand-600 hover:bg-brand-500 text-white font-bold text-xs shadow-lg shadow-brand-600/30 transition group/btn"
                   >
-                    <span>Launch NeetCode Tree</span>
+                    <span>Launch DSA Tree</span>
                     <ArrowRight className="h-3.5 w-3.5 transition group-btn/hover:translate-x-1" />
                   </Link>
                   <Link

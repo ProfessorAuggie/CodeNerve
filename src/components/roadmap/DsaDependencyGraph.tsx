@@ -38,15 +38,15 @@ interface EdgeData {
   isDotted?: boolean;
 }
 
-// ───── NeetCode Interactive Graph Coordinates ─────
-// Precise node coordinates matching the branching flowchart
+// ───── Core DSA Interactive Dependency Flowchart Coordinates ─────
+// Precise node coordinates designed with non-overlapping margins
 const GRAPH_NODES: NodeData[] = [
   // Level 0
   {
     id: 'arrays-hashing',
     title: 'Arrays & Hashing',
-    x: 480,
-    y: 40,
+    x: 442,
+    y: 35,
     topicTags: ['arrays', 'hashing', 'traversal'],
     description: 'Core arrays, hash sets, hash maps, and linear frequency tracking.',
   },
@@ -55,16 +55,16 @@ const GRAPH_NODES: NodeData[] = [
   {
     id: 'two-pointers',
     title: 'Two Pointers',
-    x: 400,
-    y: 130,
+    x: 330,
+    y: 125,
     topicTags: ['arrays', 'two-pointers'],
     description: 'Inward and outward pointer traversal paradigms on linear collections.',
   },
   {
     id: 'stack',
     title: 'Stack',
-    x: 560,
-    y: 130,
+    x: 554,
+    y: 125,
     visualizerId: 'stack-operations',
     topicTags: ['stack', 'monotonic-stack'],
     description: 'LIFO execution stack, expression evaluation, and monotonic stacks.',
@@ -74,8 +74,8 @@ const GRAPH_NODES: NodeData[] = [
   {
     id: 'binary-search',
     title: 'Binary Search',
-    x: 270,
-    y: 220,
+    x: 170,
+    y: 215,
     visualizerId: 'binary-search',
     topicTags: ['searching', 'binary-search'],
     description: 'Divide-and-conquer on sorted ranges and search-on-answer spaces.',
@@ -83,16 +83,16 @@ const GRAPH_NODES: NodeData[] = [
   {
     id: 'sliding-window',
     title: 'Sliding Window',
-    x: 420,
-    y: 220,
+    x: 370,
+    y: 215,
     topicTags: ['arrays', 'two-pointers'],
     description: 'Dynamic subarray and substring window expansion and contraction.',
   },
   {
     id: 'linked-list',
     title: 'Linked List',
-    x: 580,
-    y: 220,
+    x: 570,
+    y: 215,
     visualizerId: 'singly-linked-list',
     topicTags: ['linked-list', 'pointers'],
     description: 'Singly, doubly, and circular node structures with pointer rewiring.',
@@ -102,7 +102,7 @@ const GRAPH_NODES: NodeData[] = [
   {
     id: 'trees',
     title: 'Trees',
-    x: 420,
+    x: 430,
     y: 310,
     visualizerId: 'bst-insert',
     topicTags: ['trees', 'bst', 'traversal'],
@@ -113,16 +113,16 @@ const GRAPH_NODES: NodeData[] = [
   {
     id: 'tries',
     title: 'Tries',
-    x: 290,
-    y: 400,
+    x: 190,
+    y: 405,
     topicTags: ['trees', 'strings'],
     description: 'Prefix trees for efficient dictionary retrieval and autocomplete.',
   },
   {
     id: 'heap-priority-queue',
     title: 'Heap / Priority Queue',
-    x: 380,
-    y: 470,
+    x: 355,
+    y: 485,
     visualizerId: 'heap-sort',
     topicTags: ['heaps', 'priority-queue', 'heap-sort'],
     description: 'Min/Max heaps, priority queues, and top-K frequent patterns.',
@@ -130,8 +130,8 @@ const GRAPH_NODES: NodeData[] = [
   {
     id: 'backtracking',
     title: 'Backtracking',
-    x: 540,
-    y: 400,
+    x: 575,
+    y: 405,
     visualizerId: 'n-queens',
     topicTags: ['recursion', 'backtracking'],
     description: 'Systematic state space tree exploration with pruning.',
@@ -141,24 +141,24 @@ const GRAPH_NODES: NodeData[] = [
   {
     id: 'intervals',
     title: 'Intervals',
-    x: 170,
-    y: 560,
+    x: 90,
+    y: 580,
     topicTags: ['arrays', 'sorting'],
     description: 'Merging, inserting, and detecting overlapping time intervals.',
   },
   {
     id: 'greedy',
     title: 'Greedy',
-    x: 300,
-    y: 590,
+    x: 265,
+    y: 585,
     topicTags: ['greedy', 'arrays'],
     description: 'Making locally optimal choices to achieve global optimization.',
   },
   {
     id: 'advanced-graphs',
     title: 'Advanced Graphs',
-    x: 430,
-    y: 580,
+    x: 440,
+    y: 585,
     visualizerId: 'dijkstra',
     topicTags: ['graphs', 'dijkstra', 'bellman-ford'],
     description: 'Shortest path algorithms: Dijkstra, Bellman-Ford, and Prim/Kruskal MST.',
@@ -166,8 +166,8 @@ const GRAPH_NODES: NodeData[] = [
   {
     id: 'graphs',
     title: 'Graphs',
-    x: 540,
-    y: 490,
+    x: 580,
+    y: 495,
     visualizerId: 'bfs',
     topicTags: ['graphs', 'bfs', 'dfs'],
     description: 'Adjacency structures, BFS layer traversal, and DFS cycle detection.',
@@ -175,8 +175,8 @@ const GRAPH_NODES: NodeData[] = [
   {
     id: '1d-dp',
     title: '1-D Dynamic Programming',
-    x: 690,
-    y: 490,
+    x: 760,
+    y: 495,
     visualizerId: 'fibonacci-dp',
     topicTags: ['dynamic-programming'],
     description: 'Optimal substructure and memoization on linear state arrays.',
@@ -186,7 +186,7 @@ const GRAPH_NODES: NodeData[] = [
   {
     id: '2d-dp',
     title: '2-D Dynamic Programming',
-    x: 600,
+    x: 615,
     y: 610,
     visualizerId: 'lcs',
     topicTags: ['dynamic-programming'],
@@ -195,7 +195,7 @@ const GRAPH_NODES: NodeData[] = [
   {
     id: 'bit-manipulation',
     title: 'Bit Manipulation',
-    x: 770,
+    x: 795,
     y: 610,
     topicTags: ['bit-manipulation', 'math'],
     description: 'Bitwise AND, OR, XOR, shifts, two\'s complement, and mask tracking.',
@@ -205,14 +205,14 @@ const GRAPH_NODES: NodeData[] = [
   {
     id: 'math-geometry',
     title: 'Math & Geometry',
-    x: 710,
-    y: 700,
+    x: 705,
+    y: 705,
     topicTags: ['math', 'geometry'],
     description: 'GCD, modular arithmetic, matrix rotations, and computational geometry.',
   },
 ];
 
-// Connecting branches matching the screenshot
+// Connecting branches matching the dependency architecture
 const GRAPH_EDGES: EdgeData[] = [
   // Arrays & Hashing -> Two Pointers & Stack
   { from: 'arrays-hashing', to: 'two-pointers', isDotted: true },
@@ -255,7 +255,7 @@ const GRAPH_EDGES: EdgeData[] = [
   { from: 'bit-manipulation', to: 'math-geometry', isDotted: false },
 ];
 
-export const NeetCodeGraph: React.FC = () => {
+export const DsaDependencyGraph: React.FC = () => {
   const { problemProgress, updateProblemStatus } = useUserStore();
   const [selectedNode, setSelectedNode] = useState<NodeData | null>(GRAPH_NODES[0]);
   const [hoveredNodeId, setHoveredNodeId] = useState<string | null>(null);
@@ -321,8 +321,8 @@ export const NeetCodeGraph: React.FC = () => {
     const node = GRAPH_NODES.find((n) => n.id === id);
     if (!node) return { x: 0, y: 0 };
     return {
-      x: node.x + 65, // half of node card width (130/2)
-      y: node.y + 20, // half of node card height (40/2)
+      x: node.x + 78, // half of node card width (156/2)
+      y: node.y + 24, // half of node card height (48/2)
     };
   };
 
@@ -361,9 +361,9 @@ export const NeetCodeGraph: React.FC = () => {
         </button>
       </div>
 
-      {/* Floating Prerequisite Trace-Back Breadcrumb HUD */}
+      {/* Floating Prerequisite Trace-Back Breadcrumb HUD with safe clearance */}
       {hoveredPrereqTrace && (
-        <div className="absolute top-4 left-1/2 -translate-x-1/2 z-30 flex items-center gap-2.5 px-4 py-2 rounded-xl bg-slate-950/95 border border-sky-500/50 backdrop-blur-md shadow-2xl shadow-sky-500/15 animate-in fade-in zoom-in-95 duration-150">
+        <div className="absolute top-16 left-1/2 -translate-x-1/2 z-30 flex items-center gap-2.5 px-4 py-2 rounded-xl bg-slate-950/95 border border-sky-500/50 backdrop-blur-md shadow-2xl shadow-sky-500/20 animate-in fade-in zoom-in-95 duration-150 max-w-[90%]">
           <div className="flex items-center gap-1.5 text-xs font-bold text-sky-400 shrink-0">
             <span className="flex h-2 w-2 rounded-full bg-sky-400 animate-ping" />
             <span>Prerequisites:</span>
@@ -413,7 +413,7 @@ export const NeetCodeGraph: React.FC = () => {
 
       {/* Main Flowchart Canvas Area */}
       <div 
-        className="w-full overflow-x-auto overflow-y-auto py-14 px-6 min-h-[750px] relative flex justify-center items-start select-none"
+        className="w-full overflow-x-auto overflow-y-auto pt-24 pb-14 px-6 min-h-[780px] relative flex justify-center items-start select-none"
         style={{
           backgroundColor: '#0a0d14',
           backgroundImage: 'radial-gradient(circle, #252b3d 1.5px, transparent 1.5px)',
@@ -424,8 +424,8 @@ export const NeetCodeGraph: React.FC = () => {
         <div 
           className="relative transition-transform duration-200 origin-top"
           style={{ 
-            width: '980px', 
-            height: '780px',
+            width: '1000px', 
+            height: '790px',
             transform: `scale(${zoomLevel})`,
           }}
         >
@@ -503,23 +503,23 @@ export const NeetCodeGraph: React.FC = () => {
                 style={{
                   left: `${node.x}px`,
                   top: `${node.y}px`,
-                  width: '140px',
+                  width: '156px',
                 }}
               >
-                {/* Micro Badge for Prerequisites or Target on hover */}
+                {/* Absolute Badge for Target or Prerequisite */}
                 {isHovered ? (
-                  <span className="text-[9px] uppercase tracking-wider font-extrabold px-1.5 py-0.2 rounded-full bg-brand-500 text-white shadow-md shadow-brand-500/30 mb-0.5 animate-bounce">
+                  <span className="absolute -top-3 left-1/2 -translate-x-1/2 text-[9px] uppercase tracking-wider font-extrabold px-2 py-0.5 rounded-full bg-brand-500 text-white shadow-md shadow-brand-500/30 whitespace-nowrap z-50 pointer-events-none">
                     Target
                   </span>
                 ) : isAncestor ? (
-                  <span className="text-[9px] uppercase tracking-wider font-bold px-1.5 py-0.2 rounded-full bg-sky-500/20 text-sky-300 border border-sky-400/40 mb-0.5">
+                  <span className="absolute -top-3 left-1/2 -translate-x-1/2 text-[9px] uppercase tracking-wider font-bold px-2 py-0.5 rounded-full bg-sky-500/20 text-sky-300 border border-sky-400/40 whitespace-nowrap z-50 pointer-events-none">
                     Prereq
                   </span>
                 ) : null}
 
                 {/* Node Pill Card */}
                 <div
-                  className={`w-full py-2.5 px-3 rounded-xl border text-center transition-all duration-200 shadow-xl ${
+                  className={`w-full py-2.5 px-2.5 rounded-xl border text-center transition-all duration-200 shadow-xl ${
                     isHovered
                       ? 'bg-[#252f52] border-brand-400 ring-2 ring-brand-400/80 shadow-brand-500/40'
                       : isAncestor
@@ -531,12 +531,12 @@ export const NeetCodeGraph: React.FC = () => {
                       : 'bg-[#1a2035] border-[#313c5e] hover:bg-[#202742] hover:border-slate-500'
                   }`}
                 >
-                  <span className="text-xs font-bold text-white tracking-tight leading-tight block truncate">
+                  <span className="text-[11.5px] font-bold text-white tracking-tight leading-snug block text-center break-words">
                     {node.title}
                   </span>
 
-                  {/* Underline Progress Bar matching NeetCode aesthetic */}
-                  <div className="mt-1.5 h-1 w-full rounded-full bg-[#121626] overflow-hidden">
+                  {/* Underline Progress Bar */}
+                  <div className="mt-2 h-1 w-full rounded-full bg-[#121626] overflow-hidden">
                     <div
                       className={`h-full transition-all duration-300 ${
                         isAllSolved
@@ -553,7 +553,7 @@ export const NeetCodeGraph: React.FC = () => {
                 </div>
 
                 {/* Micro Solved Counter */}
-                <span className="text-[10px] text-slate-400 font-mono mt-0.5 opacity-80 group-hover:opacity-100">
+                <span className="text-[10px] text-slate-400 font-mono mt-1 opacity-80 group-hover:opacity-100">
                   {stats.solved}/{stats.total}
                 </span>
               </div>

@@ -50,7 +50,7 @@ const CSE205_NODES: LpuNodeData[] = [
     unitCode: 'Unit 1',
     title: 'Arrays & Big-O Foundations',
     category: 'foundation',
-    x: 480,
+    x: 440,
     y: 40,
     examScope: 'CA-1',
     prerequisites: ['Basic C++ programming', 'Loop constructs & memory addresses'],
@@ -65,8 +65,8 @@ const CSE205_NODES: LpuNodeData[] = [
     unitCode: 'Unit 1',
     title: 'Linear & Binary Search',
     category: 'foundation',
-    x: 320,
-    y: 135,
+    x: 250,
+    y: 140,
     examScope: 'CA-1',
     prerequisites: ['Arrays & Big-O Foundations'],
     description: 'Sequential comparison vs logarithmic interval halving on ordered ranges.',
@@ -79,8 +79,8 @@ const CSE205_NODES: LpuNodeData[] = [
     unitCode: 'Unit 1',
     title: 'Bubble, Insert & Select Sort',
     category: 'foundation',
-    x: 620,
-    y: 135,
+    x: 630,
+    y: 140,
     examScope: 'CA-1',
     prerequisites: ['Arrays & Big-O Foundations'],
     description: 'Quadratic sorting paradigms, bubble passes, insertion shifts, and selection minima.',
@@ -95,8 +95,8 @@ const CSE205_NODES: LpuNodeData[] = [
     unitCode: 'Unit 2',
     title: 'Quick & Merge Sort',
     category: 'core',
-    x: 680,
-    y: 235,
+    x: 710,
+    y: 240,
     examScope: 'CA-1',
     prerequisites: ['Bubble, Insert & Select Sort', 'Divide and conquer recursion'],
     description: 'Divide and conquer partitioning, recursive stack unwinding, and guaranteed O(n log n) merges.',
@@ -109,8 +109,8 @@ const CSE205_NODES: LpuNodeData[] = [
     unitCode: 'Unit 3',
     title: 'Singly & Doubly Linked Lists',
     category: 'core',
-    x: 320,
-    y: 235,
+    x: 250,
+    y: 240,
     examScope: 'MTE',
     prerequisites: ['Arrays & Big-O Foundations', 'Pointers and dynamic memory (new/delete)'],
     description: 'Non-contiguous node allocation, next/prev pointer rewiring, insertion and deletion.',
@@ -125,8 +125,8 @@ const CSE205_NODES: LpuNodeData[] = [
     unitCode: 'Unit 4',
     title: 'Stacks & Circular Queues',
     category: 'core',
-    x: 480,
-    y: 335,
+    x: 440,
+    y: 340,
     examScope: 'MTE',
     prerequisites: ['Singly & Doubly Linked Lists', 'Arrays & Big-O Foundations'],
     description: 'LIFO stack semantics, expression evaluation (Infix to Postfix), and FIFO circular queues.',
@@ -141,8 +141,8 @@ const CSE205_NODES: LpuNodeData[] = [
     unitCode: 'Unit 5',
     title: 'Binary Trees & BST Traversals',
     category: 'core',
-    x: 420,
-    y: 435,
+    x: 440,
+    y: 440,
     examScope: 'ETE',
     prerequisites: ['Stacks & Circular Queues', 'Divide and conquer recursion'],
     description: 'Hierarchical node branching, in-order/pre-order/post-order, BST search invariant.',
@@ -155,8 +155,8 @@ const CSE205_NODES: LpuNodeData[] = [
     unitCode: 'Unit 5',
     title: 'AVL Balanced Trees',
     category: 'advanced',
-    x: 240,
-    y: 535,
+    x: 220,
+    y: 540,
     examScope: 'ETE',
     prerequisites: ['Binary Trees & BST Traversals'],
     description: 'Self-balancing height property, balance factor, single (LL/RR) and double (LR/RL) rotations.',
@@ -169,8 +169,8 @@ const CSE205_NODES: LpuNodeData[] = [
     unitCode: 'Unit 5',
     title: 'Heaps & Priority Queues',
     category: 'advanced',
-    x: 580,
-    y: 535,
+    x: 650,
+    y: 540,
     examScope: 'ETE',
     prerequisites: ['Binary Trees & BST Traversals', 'Arrays & Big-O Foundations'],
     description: 'Complete binary tree array mapping, heapify, max-heap/min-heap, and priority scheduling.',
@@ -185,8 +185,8 @@ const CSE205_NODES: LpuNodeData[] = [
     unitCode: 'Unit 6',
     title: 'Graph Traversals (BFS & DFS)',
     category: 'advanced',
-    x: 420,
-    y: 635,
+    x: 380,
+    y: 640,
     examScope: 'ETE',
     prerequisites: ['Binary Trees & BST Traversals', 'Stacks & Circular Queues'],
     description: 'Adjacency matrix & list, queue-based BFS layer exploration, and stack-based DFS paths.',
@@ -199,8 +199,8 @@ const CSE205_NODES: LpuNodeData[] = [
     unitCode: 'Unit 6',
     title: 'Shortest Path & MST (Dijkstra, Prim)',
     category: 'advanced',
-    x: 500,
-    y: 735,
+    x: 560,
+    y: 740,
     examScope: 'ETE',
     prerequisites: ['Graph Traversals (BFS & DFS)', 'Heaps & Priority Queues'],
     description: 'Greedy shortest paths via Dijkstra, minimum spanning trees via Prim and Kruskal algorithms.',
@@ -246,7 +246,7 @@ const CSE202_NODES: LpuNodeData[] = [
     unitCode: 'Unit 1',
     title: 'C++ Syntax, I/O & Functions',
     category: 'foundation',
-    x: 480,
+    x: 440,
     y: 40,
     examScope: 'CA-1',
     prerequisites: ['Basic programming fundamentals'],
@@ -261,8 +261,8 @@ const CSE202_NODES: LpuNodeData[] = [
     unitCode: 'Unit 2',
     title: 'Pointers & Dynamic Memory',
     category: 'foundation',
-    x: 340,
-    y: 135,
+    x: 250,
+    y: 140,
     examScope: 'CA-1',
     prerequisites: ['C++ Syntax, I/O & Functions'],
     description: 'Pointer arithmetic, void pointers, references, heap allocation with new and delete.',
@@ -274,8 +274,8 @@ const CSE202_NODES: LpuNodeData[] = [
     unitCode: 'Unit 1',
     title: 'Function Overloading & Scope (::)',
     category: 'foundation',
-    x: 620,
-    y: 135,
+    x: 630,
+    y: 140,
     examScope: 'CA-1',
     prerequisites: ['C++ Syntax, I/O & Functions'],
     description: 'Compile-time overload resolution, default arguments, and scope resolution operator.',
@@ -289,8 +289,8 @@ const CSE202_NODES: LpuNodeData[] = [
     unitCode: 'Unit 3',
     title: 'Classes & Encapsulation',
     category: 'core',
-    x: 480,
-    y: 235,
+    x: 440,
+    y: 240,
     examScope: 'MTE',
     prerequisites: ['C++ Syntax, I/O & Functions', 'Pointers & Dynamic Memory'],
     description: 'Data hiding, private/public access, member functions, and static class members.',
@@ -304,8 +304,8 @@ const CSE202_NODES: LpuNodeData[] = [
     unitCode: 'Unit 3',
     title: 'Constructors & Destructors',
     category: 'core',
-    x: 340,
-    y: 335,
+    x: 260,
+    y: 340,
     examScope: 'MTE',
     prerequisites: ['Classes & Encapsulation'],
     description: 'Default, parameterized, copy constructors, initializer lists, and RAII cleanup.',
@@ -318,7 +318,7 @@ const CSE202_NODES: LpuNodeData[] = [
     title: 'Operator Overloading & Friends',
     category: 'core',
     x: 620,
-    y: 335,
+    y: 340,
     examScope: 'CA-2',
     prerequisites: ['Classes & Encapsulation', 'Function Overloading & Scope (::)'],
     description: 'Unary and binary operator overloading, friend function access, stream operators (<<, >>).',
@@ -332,8 +332,8 @@ const CSE202_NODES: LpuNodeData[] = [
     unitCode: 'Unit 4',
     title: 'Inheritance & Access Specifiers',
     category: 'core',
-    x: 480,
-    y: 435,
+    x: 440,
+    y: 440,
     examScope: 'CA-2',
     prerequisites: ['Constructors & Destructors', 'Classes & Encapsulation'],
     description: 'Single, multiple, multilevel inheritance, protected members, and constructor chaining.',
@@ -347,8 +347,8 @@ const CSE202_NODES: LpuNodeData[] = [
     unitCode: 'Unit 5',
     title: 'Virtual Functions & Polymorphism',
     category: 'advanced',
-    x: 360,
-    y: 535,
+    x: 260,
+    y: 540,
     examScope: 'ETE',
     prerequisites: ['Inheritance & Access Specifiers', 'Pointers & Dynamic Memory'],
     description: 'Dynamic dispatch, vtable/vptr mechanism, runtime polymorphism, and virtual destructors.',
@@ -360,8 +360,8 @@ const CSE202_NODES: LpuNodeData[] = [
     unitCode: 'Unit 5',
     title: 'Pure Virtual & Abstract Classes',
     category: 'advanced',
-    x: 600,
-    y: 535,
+    x: 620,
+    y: 540,
     examScope: 'ETE',
     prerequisites: ['Inheritance & Access Specifiers'],
     description: 'Pure virtual functions (= 0), interface contracts, and concrete derived implementations.',
@@ -375,8 +375,8 @@ const CSE202_NODES: LpuNodeData[] = [
     unitCode: 'Unit 6',
     title: 'Function & Class Templates',
     category: 'advanced',
-    x: 420,
-    y: 635,
+    x: 440,
+    y: 640,
     examScope: 'ETE',
     prerequisites: ['Virtual Functions & Polymorphism', 'Pure Virtual & Abstract Classes'],
     description: 'Generic programming, template type parameters, and specialized implementations.',
@@ -388,8 +388,8 @@ const CSE202_NODES: LpuNodeData[] = [
     unitCode: 'Unit 6',
     title: 'STL Containers & Iterators',
     category: 'advanced',
-    x: 580,
-    y: 635,
+    x: 640,
+    y: 640,
     examScope: 'ETE',
     prerequisites: ['Function & Class Templates'],
     description: 'Vector, list, map, set, iterators, and <algorithm> standard utilities.',
@@ -401,8 +401,8 @@ const CSE202_NODES: LpuNodeData[] = [
     unitCode: 'Unit 6',
     title: 'File I/O Streams & Serialization',
     category: 'advanced',
-    x: 500,
-    y: 735,
+    x: 480,
+    y: 740,
     examScope: 'ETE',
     prerequisites: ['Function & Class Templates', 'C++ Syntax, I/O & Functions'],
     description: 'ifstream, ofstream, fstream, binary file reading/writing, and error state flags.',
@@ -497,8 +497,8 @@ export const LpuAcademicGraph: React.FC = () => {
     const node = currentNodes.find((n) => n.id === id);
     if (!node) return { x: 0, y: 0 };
     return {
-      x: node.x + 80, // half of node card width (160/2)
-      y: node.y + 24, // half of node card height (48/2)
+      x: node.x + 86, // half of node card width (172/2)
+      y: node.y + 26, // half of node card height (52/2)
     };
   };
 
@@ -565,9 +565,9 @@ export const LpuAcademicGraph: React.FC = () => {
         </div>
       </div>
 
-      {/* Floating Prerequisite Breadcrumb Trace HUD */}
+      {/* Floating Prerequisite Breadcrumb Trace HUD with safe clearance */}
       {hoveredPrereqTrace && (
-        <div className="absolute top-20 left-1/2 -translate-x-1/2 z-30 flex items-center gap-2.5 px-4 py-2 rounded-xl bg-slate-950/95 border border-emerald-500/50 backdrop-blur-md shadow-2xl shadow-emerald-500/15 animate-in fade-in zoom-in-95 duration-150">
+        <div className="absolute top-20 left-1/2 -translate-x-1/2 z-30 flex items-center gap-2.5 px-4 py-2 rounded-xl bg-slate-950/95 border border-emerald-500/50 backdrop-blur-md shadow-2xl shadow-emerald-500/20 animate-in fade-in zoom-in-95 duration-150 max-w-[90%]">
           <div className="flex items-center gap-1.5 text-xs font-bold text-emerald-400 shrink-0">
             <span className="flex h-2 w-2 rounded-full bg-emerald-400 animate-ping" />
             <span>LPU Prerequisites:</span>
@@ -605,7 +605,7 @@ export const LpuAcademicGraph: React.FC = () => {
 
       {/* Canvas Area */}
       <div
-        className="w-full overflow-x-auto overflow-y-auto py-16 px-6 min-h-[780px] relative flex justify-center items-start select-none"
+        className="w-full overflow-x-auto overflow-y-auto pt-24 pb-14 px-6 min-h-[800px] relative flex justify-center items-start select-none"
         style={{
           backgroundColor: '#0a0d14',
           backgroundImage: 'radial-gradient(circle, #252b3d 1.5px, transparent 1.5px)',
@@ -640,8 +640,8 @@ export const LpuAcademicGraph: React.FC = () => {
         <div
           className="relative transition-transform duration-200 origin-top"
           style={{
-            width: '980px',
-            height: '820px',
+            width: '1000px',
+            height: '840px',
             transform: `scale(${zoomLevel})`,
           }}
         >
@@ -724,16 +724,16 @@ export const LpuAcademicGraph: React.FC = () => {
                 style={{
                   left: `${node.x}px`,
                   top: `${node.y}px`,
-                  width: '160px',
+                  width: '172px',
                 }}
               >
-                {/* Status Indicator */}
+                {/* Absolute Status Indicator to prevent layout jump */}
                 {isHovered ? (
-                  <span className="text-[9px] uppercase tracking-wider font-extrabold px-1.5 py-0.2 rounded-full bg-emerald-500 text-white shadow-md shadow-emerald-500/30 mb-0.5 animate-bounce">
+                  <span className="absolute -top-3 left-1/2 -translate-x-1/2 text-[9px] uppercase tracking-wider font-extrabold px-2 py-0.5 rounded-full bg-emerald-500 text-white shadow-md shadow-emerald-500/30 whitespace-nowrap z-50 pointer-events-none">
                     Target Unit
                   </span>
                 ) : isAncestor ? (
-                  <span className="text-[9px] uppercase tracking-wider font-bold px-1.5 py-0.2 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-400/40 mb-0.5">
+                  <span className="absolute -top-3 left-1/2 -translate-x-1/2 text-[9px] uppercase tracking-wider font-bold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-400/40 whitespace-nowrap z-50 pointer-events-none">
                     Prereq
                   </span>
                 ) : null}
@@ -750,18 +750,18 @@ export const LpuAcademicGraph: React.FC = () => {
                       : 'bg-[#141a2c] border-[#2d3754] hover:bg-[#1a233a] hover:border-slate-500'
                   }`}
                 >
-                  <div className="flex items-center justify-between mb-1">
+                  <div className="flex items-center justify-between mb-1.5">
                     <span className="text-[10px] font-bold text-slate-400">
                       {node.unitCode}
                     </span>
                     <span
-                      className={`text-[9px] font-bold px-1 rounded border ${examColors[node.examScope]}`}
+                      className={`text-[9px] font-bold px-1.5 py-0.2 rounded border ${examColors[node.examScope]}`}
                     >
                       {node.examScope}
                     </span>
                   </div>
 
-                  <span className="text-xs font-bold text-white tracking-tight leading-tight block truncate">
+                  <span className="text-[11.5px] font-bold text-white tracking-tight leading-snug block text-center break-words line-clamp-2">
                     {node.title}
                   </span>
 
@@ -774,7 +774,7 @@ export const LpuAcademicGraph: React.FC = () => {
                   </div>
                 </div>
 
-                <span className="text-[10px] text-slate-400 font-mono mt-0.5 opacity-80 group-hover:opacity-100">
+                <span className="text-[10px] text-slate-400 font-mono mt-1 opacity-80 group-hover:opacity-100">
                   {stats.solved}/{stats.total} Solved
                 </span>
               </div>

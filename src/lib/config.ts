@@ -3,8 +3,7 @@
 
 export const APP_CONFIG = {
   name: 'CodeNerve',
-  tagline: 'Master DSA, C++ & University Syllabus — Powered by AlgoNerve',
-  description: 'A structured NeetCode-inspired coding education platform with interactive algorithm visualizations, curated problem catalog, university syllabus roadmaps, and progress tracking.',
+  description: 'A structured computer science education platform with interactive algorithm visualizations, curated problem catalogue, university syllabus roadmaps, and progress tracking.',
   version: '1.0.0',
   author: 'Vaibhav Kushwaha',
   

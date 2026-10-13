@@ -17,7 +17,7 @@ export const Footer: React.FC = () => {
             </span>
           </div>
           <p className="text-xs text-slate-400 leading-relaxed">
-            The NeetCode-inspired coding education platform integrated with AlgoNerve algorithm visualizer, curated external coding problems, and university syllabi.
+            The comprehensive computer science education platform integrated with AlgoNerve algorithm visualizer, curated coding problems, and university syllabi.
           </p>
           <div className="text-xs text-slate-500">
             Engineered by <span className="text-slate-300 font-medium">{APP_CONFIG.author}</span>

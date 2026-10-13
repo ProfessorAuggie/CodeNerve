@@ -3,7 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import { Compass, Code2, GitFork, GraduationCap } from 'lucide-react';
 import { DSA_ROADMAP, CPP_PATH } from '../data/learningPaths';
 import { RoadmapView } from '../components/roadmap/RoadmapView';
-import { NeetCodeGraph } from '../components/roadmap/NeetCodeGraph';
+import { DsaDependencyGraph } from '../components/roadmap/DsaDependencyGraph';
 import { LpuAcademicGraph } from '../components/roadmap/LpuAcademicGraph';
 
 export const RoadmapPage: React.FC = () => {
@@ -12,7 +12,7 @@ export const RoadmapPage: React.FC = () => {
     if (pathId === 'cpp-path') return 'cpp-units';
     if (pathId === 'dsa-roadmap') return 'dsa-units';
     if (pathId === 'lpu') return 'lpu-tree';
-    return 'tree'; // Default view is the NeetCode interactive branch tree!
+    return 'tree'; // Default view is the interactive branch tree
   });
 
   const currentRoadmap = activeView === 'cpp-units' ? CPP_PATH : DSA_ROADMAP;
@@ -22,7 +22,7 @@ export const RoadmapPage: React.FC = () => {
       {/* Switcher Navigation Tabs */}
       <div className="flex flex-wrap items-center justify-between gap-4 border-b border-slate-800 pb-4">
         <div className="flex flex-wrap items-center gap-2">
-          {/* NeetCode Interactive Branching Flowchart */}
+          {/* Interactive DSA Branching Flowchart */}
           <button
             onClick={() => setActiveView('tree')}
             className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold transition ${
@@ -32,7 +32,7 @@ export const RoadmapPage: React.FC = () => {
             }`}
           >
             <GitFork className="h-4 w-4" />
-            <span>NeetCode Branching Flowchart</span>
+            <span>DSA Branching Flowchart</span>
             <span className="text-[10px] uppercase font-bold px-1.5 py-0.2 rounded bg-indigo-500/30 text-indigo-200">
               Hover Trace
             </span>
@@ -95,13 +95,13 @@ export const RoadmapPage: React.FC = () => {
             <div className="flex items-center gap-2">
               <span className="flex h-2 w-2 rounded-full bg-emerald-400" />
               <span>
-                <strong>NeetCode Branching Roadmap:</strong> Follow the prerequisite paths from Arrays & Hashing down to 2-D DP and Geometry. Hover on any node to trace prerequisites; click to reveal practice problems.
+                <strong>DSA Branching Roadmap:</strong> Follow the prerequisite paths from Arrays & Hashing down to 2-D DP and Geometry. Hover on any node to trace prerequisites; click to reveal practice problems.
               </span>
             </div>
             <span className="text-slate-500 text-[11px] hidden md:inline">18 Interconnected Nodes &bull; Hover Trace</span>
           </div>
 
-          <NeetCodeGraph />
+          <DsaDependencyGraph />
         </div>
       ) : activeView === 'lpu-tree' ? (
         <div className="space-y-4">

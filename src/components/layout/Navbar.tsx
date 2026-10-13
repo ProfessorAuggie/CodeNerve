@@ -37,7 +37,7 @@ export const Navbar: React.FC = () => {
 
   // Nav links dynamically adapted for Global vs LPU portals
   const globalNavLinks = [
-    { name: 'NeetCode Roadmap', path: '/roadmap', icon: GitFork, badge: 'Tree' },
+    { name: 'DSA Roadmap', path: '/roadmap', icon: GitFork, badge: 'Tree' },
     { name: 'C++ Path', path: '/roadmap/cpp-path', icon: Code2 },
     { name: 'Problems', path: '/problems', icon: Terminal },
     { name: 'Visualizer', path: 'https://algonerve.vercel.app', icon: Sparkles, badge: 'AlgoNerve', isExternal: true },
@@ -70,7 +70,7 @@ export const Navbar: React.FC = () => {
                 Code<span className="text-brand-400">Nerve</span>
               </span>
               <span className="hidden sm:inline-block ml-2 text-[10px] font-semibold uppercase tracking-wider px-1.5 py-0.5 rounded bg-brand-500/10 text-brand-300 border border-brand-500/20">
-                NeetCode + LPU
+                Global + LPU
               </span>
             </div>
           </Link>
@@ -234,7 +234,7 @@ export const Navbar: React.FC = () => {
                 activePortal === 'global' ? 'bg-brand-600 text-white' : 'text-slate-400'
               }`}
             >
-              🌐 Global NeetCode Track
+              🌐 Global DSA Track
             </button>
             <button
               onClick={() => {
