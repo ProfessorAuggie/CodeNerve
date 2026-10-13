@@ -12,13 +12,18 @@ import {
   ShieldCheck, 
   Zap, 
   Layers,
-  ExternalLink
+  ExternalLink,
+  Globe,
+  SlidersHorizontal
 } from 'lucide-react';
 import { APP_CONFIG } from '../lib/config';
 import { PROBLEMS } from '../data/problems';
 import { SUBJECTS } from '../data/syllabus';
+import { useUserStore } from '../store/userStore';
 
 export const HomePage: React.FC = () => {
+  const { chooseTrack, openTrackModal, activePortal } = useUserStore();
+
   const popularAlgos = [
     { id: 'bubble-sort', name: 'Bubble Sort', category: 'Sorting', icon: '📊' },
     { id: 'binary-search', name: 'Binary Search', category: 'Searching', icon: '🔍' },
@@ -38,24 +43,32 @@ export const HomePage: React.FC = () => {
         <div className="max-w-5xl mx-auto text-center space-y-6 px-4">
           <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-900 border border-slate-800 text-xs text-brand-300 shadow-md">
             <span className="flex h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
-            <span className="font-semibold">Next-Gen Computer Science Education</span>
+            <span className="font-semibold">Dual-Track Learning Architecture</span>
             <span className="text-slate-600">|</span>
-            <span className="text-slate-400">AlgoNerve + University Track</span>
+            <span className="text-slate-400">Language-Agnostic DSA + LPU C++ Portal</span>
           </div>
 
           <h1 className="text-4xl sm:text-6xl font-extrabold tracking-tight text-white leading-tight">
-            Master Data Structures & C++ <br />
+            Master Data Structures & Algorithms <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-400 via-indigo-300 to-purple-400">
-              With Interactive Visualizations
+              Generic DSA & Dedicated LPU C++
             </span>
           </h1>
 
           <p className="text-base sm:text-lg text-slate-300 max-w-2xl mx-auto leading-relaxed">
-            The premier learning platform uniting structured syllabus-aligned roadmaps, an interactive 160+ algorithm visualizer engine, and curated problems from top coding portals.
+            Choose between the <strong>language-agnostic Global DSA roadmap</strong> (solve in Python, Java, C++, JS, Go) and the <strong>official LPU Computer Science curriculum</strong> (CSE202 OOP & CSE205 DSA in C++).
           </p>
 
           {/* Action CTAs */}
           <div className="flex flex-wrap items-center justify-center gap-4 pt-2">
+            <button
+              onClick={openTrackModal}
+              className="flex items-center gap-2 px-6 py-3.5 rounded-xl bg-gradient-to-r from-brand-600 to-indigo-600 hover:from-brand-500 hover:to-indigo-500 text-white font-semibold text-sm shadow-xl shadow-brand-500/25 transition group cursor-pointer"
+            >
+              <SlidersHorizontal className="h-4 w-4 text-brand-200" />
+              <span>Select Learning Track</span>
+              <span className="text-[10px] uppercase font-bold px-1.5 py-0.5 rounded bg-white/20 text-white">2 Options</span>
+            </button>
             <Link
               to="/roadmap/dsa-roadmap"
               className="flex items-center gap-2 px-6 py-3.5 rounded-xl bg-gradient-to-r from-brand-600 to-indigo-600 hover:from-brand-500 hover:to-indigo-500 text-white font-semibold text-sm shadow-xl shadow-brand-500/25 transition group"
@@ -125,21 +138,25 @@ export const HomePage: React.FC = () => {
                 <div className="space-y-5">
                   <div className="flex items-center justify-between">
                     <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-500/10 border border-brand-500/30 text-xs font-bold text-brand-300">
-                      <span>🌐 Generic Public / Global DSA</span>
+                      <span>🌐 Global DSA Track (Language Agnostic)</span>
                     </div>
-                    <span className="text-xs text-slate-400 font-medium">For Everyone</span>
+                    <span className="text-xs text-brand-400 font-medium">Python • Java • C++ • JS • Go</span>
                   </div>
 
                   <div>
                     <h3 className="text-2xl font-bold text-white group-hover:text-brand-300 transition">
-                      DSA Dependency Roadmap
+                      Global DSA Dependency Roadmap
                     </h3>
                     <p className="text-sm text-slate-300 mt-2 leading-relaxed">
-                      Interactive 18-topic hierarchical flowchart with dotted matrix canvas and bezier curve branches. Methodically master core interview patterns from Arrays & Hashing to 2-D Dynamic Programming.
+                      Interactive 18-topic hierarchical flowchart with dotted matrix canvas and bezier curve branches. Solve problems and build deep algorithmic intuition in any programming language (Python, Java, C++, JavaScript, Go, etc.).
                     </p>
                   </div>
 
                   <ul className="space-y-2.5 text-xs text-slate-300 pt-2">
+                    <li className="flex items-center gap-2">
+                      <span className="h-1.5 w-1.5 rounded-full bg-brand-400" />
+                      <span><strong>Language Agnostic:</strong> Focus on core logic, time/space trade-offs, and interview patterns in any language</span>
+                    </li>
                     <li className="flex items-center gap-2">
                       <span className="h-1.5 w-1.5 rounded-full bg-brand-400" />
                       <span><strong>Branching Flowchart:</strong> Visual dependency graph with interactive prerequisite hover trace-back</span>
@@ -152,16 +169,13 @@ export const HomePage: React.FC = () => {
                       <span className="h-1.5 w-1.5 rounded-full bg-brand-400" />
                       <span><strong>AlgoNerve Visualizer:</strong> Step-by-step algorithmic simulations in a new tab</span>
                     </li>
-                    <li className="flex items-center gap-2">
-                      <span className="h-1.5 w-1.5 rounded-full bg-brand-400" />
-                      <span><strong>Full C++ Roadmap:</strong> Modern C++20 syntax, STL, memory, and OOP</span>
-                    </li>
                   </ul>
                 </div>
 
                 <div className="pt-8 flex flex-wrap items-center gap-3">
                   <Link
                     to="/roadmap"
+                    onClick={() => chooseTrack('global')}
                     className="flex-1 min-w-[160px] flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-brand-600 hover:bg-brand-500 text-white font-bold text-xs shadow-lg shadow-brand-600/30 transition group/btn"
                   >
                     <span>Launch DSA Tree</span>
@@ -183,36 +197,36 @@ export const HomePage: React.FC = () => {
                 <div className="space-y-5">
                   <div className="flex items-center justify-between">
                     <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-xs font-bold text-emerald-300">
-                      <span>🎓 LPU Student & Faculty Portal</span>
+                      <span>🎓 LPU Academic Portal (C++ Curriculum)</span>
                     </div>
-                    <span className="text-xs text-emerald-400 font-semibold">CSE Official</span>
+                    <span className="text-xs text-emerald-400 font-semibold">Dedicated C++ Syllabus</span>
                   </div>
 
                   <div>
                     <h3 className="text-2xl font-bold text-white group-hover:text-emerald-300 transition">
-                      LPU B.Tech CSE Curriculum
+                      LPU B.Tech CSE Curriculum (C++)
                     </h3>
                     <p className="text-sm text-slate-300 mt-2 leading-relaxed">
-                      Custom tailored for Lovely Professional University students and professors. Mapped unit-by-unit with prerequisites to ace CA-1, CA-2, Midterm, and Endterm examinations.
+                      Custom tailored for Lovely Professional University students and professors. Dedicated pure C++ implementation mapped unit-by-unit with prerequisites to ace CA-1, CA-2, Midterm, and Endterm examinations.
                     </p>
                   </div>
 
                   <ul className="space-y-2.5 text-xs text-slate-300 pt-2">
                     <li className="flex items-center gap-2">
                       <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
-                      <span><strong>CSE202 (C++ OOP):</strong> Units 1–6 (Classes, Constructors, Polymorphism, Files)</span>
+                      <span><strong>Dedicated C++ Focus:</strong> Pointers, heap memory (new/delete), classes, operator overloading & STL</span>
                     </li>
                     <li className="flex items-center gap-2">
                       <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
-                      <span><strong>CSE205 (Data Structures):</strong> Units 1–6 (Arrays, Stacks, Queues, Trees, Graphs)</span>
+                      <span><strong>CSE202 (C++ OOP):</strong> Units 1–6 (Classes, Constructors, Polymorphism, Templates, Files)</span>
                     </li>
                     <li className="flex items-center gap-2">
                       <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
-                      <span><strong>Topic Prerequisites:</strong> Clearly listed knowledge requirements for each topic</span>
+                      <span><strong>CSE205 (Data Structures in C++):</strong> Units 1–6 (Arrays, Stacks, Queues, Trees, Graphs)</span>
                     </li>
                     <li className="flex items-center gap-2">
                       <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
-                      <span><strong>Exam Prep Hubs & Faculty Portal:</strong> Curated CA/MTE questions & teacher assignments</span>
+                      <span><strong>Exam Prep & CA Banks:</strong> Curated CA/MTE questions, test cases & faculty portal</span>
                     </li>
                   </ul>
                 </div>
@@ -220,6 +234,7 @@ export const HomePage: React.FC = () => {
                 <div className="pt-8 flex flex-wrap items-center gap-3">
                   <Link
                     to="/lpu"
+                    onClick={() => chooseTrack('lpu')}
                     className="flex-1 min-w-[160px] flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs shadow-lg shadow-emerald-600/30 transition group/btn"
                   >
                     <span>Enter LPU Academic Portal</span>

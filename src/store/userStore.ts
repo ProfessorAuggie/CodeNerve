@@ -29,9 +29,14 @@ interface UserState {
   customProblemSets: CustomProblemSet[];
   
   activePortal: 'global' | 'lpu';
+  hasChosenTrack: boolean;
+  showTrackModal: boolean;
   
   // Actions
   setActivePortal: (portal: 'global' | 'lpu') => void;
+  chooseTrack: (track: 'global' | 'lpu') => void;
+  openTrackModal: () => void;
+  closeTrackModal: () => void;
   setUser: (user: Partial<UserProfile>) => void;
   setRole: (role: UserRole) => void;
   updateProblemStatus: (problemId: string, status: ProblemStatus, notes?: string, submissionUrl?: string) => void;
@@ -56,6 +61,8 @@ export const useUserStore = create<UserState>()(
   persist(
     (set, get) => ({
       user: defaultUser,
+      hasChosenTrack: false,
+      showTrackModal: false,
       problemProgress: {
         'p-dsa-array-traversal-1': {
           problemId: 'p-dsa-array-traversal-1',
@@ -76,14 +83,14 @@ export const useUserStore = create<UserState>()(
           lastUpdated: new Date().toISOString(),
           notes: 'Beware of integer overflow with mid = low + (high - low) / 2.',
         },
-        'p-dsa-linked-list-reverse-1': {
-          problemId: 'p-dsa-linked-list-reverse-1',
+        'p-dsa-ll-reverse-1': {
+          problemId: 'p-dsa-ll-reverse-1',
           status: 'REVISION_NEEDED',
           lastUpdated: new Date().toISOString(),
           notes: 'Practice 3-pointer iterative vs recursive approach before midterms!',
         },
       },
-      bookmarks: ['p-dsa-linked-list-reverse-1', 'p-dsa-dijkstra-1', 'p-cpp-constructors-1'],
+      bookmarks: ['p-dsa-ll-reverse-1', 'p-dsa-dijkstra-1', 'p-cpp-constructors-1'],
       completedLessons: ['cse205-u1-t1', 'cse202-u1-t1'],
       quizScores: {
         'quiz-cpp-oop-basics': { score: 4, total: 5, date: new Date().toISOString() },
@@ -93,7 +100,7 @@ export const useUserStore = create<UserState>()(
           id: 'set-midterm-prep',
           title: 'CSE205 Midterm Essential DSA',
           description: 'Top array, linked list and sorting problems for end-term exams.',
-          problemIds: ['p-dsa-array-traversal-1', 'p-dsa-bubble-sort-1', 'p-dsa-linked-list-reverse-1', 'p-dsa-binary-search-1'],
+          problemIds: ['p-dsa-array-traversal-1', 'p-dsa-bubble-sort-1', 'p-dsa-ll-reverse-1', 'p-dsa-binary-search-1'],
           createdAt: new Date().toISOString(),
         },
       ],
@@ -101,6 +108,12 @@ export const useUserStore = create<UserState>()(
       activePortal: 'global',
 
       setActivePortal: (portal) => set({ activePortal: portal }),
+
+      chooseTrack: (track) => set({ activePortal: track, hasChosenTrack: true, showTrackModal: false }),
+
+      openTrackModal: () => set({ showTrackModal: true }),
+
+      closeTrackModal: () => set({ showTrackModal: false }),
 
       setUser: (updates) =>
         set((state) => ({ user: { ...state.user, ...updates } })),

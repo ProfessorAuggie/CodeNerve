@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { Routes, Route, useParams } from 'react-router-dom';
 import { Navbar } from './components/layout/Navbar';
 import { Footer } from './components/layout/Footer';
+import { TrackSelectionModal } from './components/layout/TrackSelectionModal';
 
 // CodeNerve core pages
 import { HomePage } from './pages/HomePage';
@@ -47,6 +48,9 @@ export const App: React.FC = () => {
     <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans selection:bg-brand-500/30 selection:text-brand-200">
       {/* Top Navbar */}
       <Navbar />
+
+      {/* Global Track Selection Modal (First-time visitor prompt & switcher) */}
+      <TrackSelectionModal />
 
       {/* Main Content Area */}
       <main className="flex-1">

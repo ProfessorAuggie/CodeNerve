@@ -24,7 +24,7 @@ export const Navbar: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const { user, setRole, problemProgress, activePortal, setActivePortal } = useUserStore();
+  const { user, setRole, problemProgress, activePortal, setActivePortal, openTrackModal } = useUserStore();
 
   const totalProblems = PROBLEMS.length;
   const solvedCount = Object.values(problemProgress).filter((p) => p.status === 'SOLVED').length;
@@ -37,8 +37,7 @@ export const Navbar: React.FC = () => {
 
   // Nav links dynamically adapted for Global vs LPU portals
   const globalNavLinks = [
-    { name: 'DSA Roadmap', path: '/roadmap', icon: GitFork, badge: 'Tree' },
-    { name: 'C++ Path', path: '/roadmap/cpp-path', icon: Code2 },
+    { name: 'DSA Roadmap', path: '/roadmap', icon: GitFork, badge: 'Generic' },
     { name: 'Problems', path: '/problems', icon: Terminal },
     { name: 'Visualizer', path: 'https://algonerve.vercel.app', icon: Sparkles, badge: 'AlgoNerve', isExternal: true },
     { name: 'Quizzes', path: '/quizzes', icon: BookOpen },
@@ -46,7 +45,8 @@ export const Navbar: React.FC = () => {
   ];
 
   const lpuNavLinks = [
-    { name: 'LPU Syllabus', path: '/lpu', icon: GraduationCap, badge: 'CSE202/205' },
+    { name: 'LPU Syllabus', path: '/lpu', icon: GraduationCap, badge: 'C++ CSE' },
+    { name: 'C++ Roadmaps', path: '/roadmap/cpp-path', icon: Code2, badge: 'C++' },
     { name: 'Problems Bank', path: '/problems', icon: Terminal },
     { name: 'Faculty Portal', path: '/teacher', icon: ShieldCheck, badge: 'Teacher' },
     { name: 'Visualizer', path: 'https://algonerve.vercel.app', icon: Sparkles, badge: 'AlgoNerve', isExternal: true },
@@ -60,7 +60,7 @@ export const Navbar: React.FC = () => {
     <header className="sticky top-0 z-50 w-full border-b border-slate-800/80 bg-slate-950/90 backdrop-blur-md">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         {/* Brand Logo & Portal Switcher */}
-        <div className="flex items-center gap-6">
+        <div className="flex items-center gap-4 sm:gap-6">
           <Link to="/" className="group flex items-center gap-2.5">
             <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-tr from-brand-600 via-indigo-500 to-purple-500 text-white shadow-lg shadow-brand-500/25 transition group-hover:scale-105 group-hover:shadow-brand-500/40">
               <Code2 className="h-5 w-5" />
@@ -70,12 +70,12 @@ export const Navbar: React.FC = () => {
                 Code<span className="text-brand-400">Nerve</span>
               </span>
               <span className="hidden sm:inline-block ml-2 text-[10px] font-semibold uppercase tracking-wider px-1.5 py-0.5 rounded bg-brand-500/10 text-brand-300 border border-brand-500/20">
-                Global + LPU
+                {activePortal === 'lpu' ? 'LPU C++ Portal' : 'Global DSA Track'}
               </span>
             </div>
           </Link>
 
-          {/* Dual Platform Switcher: Global Public vs LPU University */}
+          {/* Dual Platform Switcher: Global Public (Generic) vs LPU University (C++) */}
           <div className="hidden md:flex items-center rounded-xl border border-slate-800 bg-slate-900/90 p-1 text-xs shadow-inner">
             <button
               onClick={() => {
@@ -87,10 +87,13 @@ export const Navbar: React.FC = () => {
                   ? 'bg-brand-600 text-white shadow-sm'
                   : 'text-slate-400 hover:text-slate-200'
               }`}
-              title="Generic Public Coding & Interview Track"
+              title="Generic Public Coding Track (Any Language: Python, Java, C++, JS, Go)"
             >
               <Globe className="h-3.5 w-3.5" />
               <span>Global DSA</span>
+              <span className="text-[9px] px-1 py-0.2 rounded bg-brand-500/20 text-brand-300 font-semibold hidden lg:inline">
+                Any Language
+              </span>
             </button>
 
             <button
@@ -103,12 +106,25 @@ export const Navbar: React.FC = () => {
                   ? 'bg-emerald-600 text-white shadow-sm'
                   : 'text-slate-400 hover:text-slate-200'
               }`}
-              title="Lovely Professional University Academic Portal"
+              title="Lovely Professional University C++ Curriculum (CSE202 / CSE205)"
             >
               <GraduationCap className="h-3.5 w-3.5" />
               <span>LPU Portal</span>
+              <span className="text-[9px] px-1 py-0.2 rounded bg-emerald-500/20 text-emerald-300 font-semibold hidden lg:inline">
+                C++
+              </span>
             </button>
           </div>
+
+          <button
+            onClick={openTrackModal}
+            className="hidden lg:flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl border border-slate-800 bg-slate-900/80 hover:bg-slate-850 hover:border-slate-700 text-slate-300 text-xs font-semibold transition"
+            title="Choose or switch between Global DSA and LPU Portal"
+          >
+            <Sparkles className="h-3.5 w-3.5 text-brand-400" />
+            <span>Switch Track</span>
+          </button>
+        </div>
 
           {/* Desktop Nav Items */}
           <nav className="hidden xl:flex items-center gap-1">
@@ -158,7 +174,6 @@ export const Navbar: React.FC = () => {
               );
             })}
           </nav>
-        </div>
 
         {/* Right Section: Progress pill & Role Toggle */}
         <div className="flex items-center gap-3">

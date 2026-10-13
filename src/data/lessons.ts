@@ -217,7 +217,7 @@ ListNode* reverseList(ListNode* head) {
     ],
     complexity: { time: 'O(n)', space: 'O(1)' },
     relatedVisualizerId: 'singly-linked-list',
-    relatedProblemIds: ['p-dsa-linked-list-reverse-1'],
+    relatedProblemIds: ['p-dsa-ll-reverse-1'],
     topicIds: ['cse205-u2-t1', 'cse205-u2-t2'],
   },
   {

@@ -32,9 +32,9 @@ export const RoadmapPage: React.FC = () => {
             }`}
           >
             <GitFork className="h-4 w-4" />
-            <span>DSA Branching Flowchart</span>
+            <span>Global DSA Flowchart</span>
             <span className="text-[10px] uppercase font-bold px-1.5 py-0.2 rounded bg-indigo-500/30 text-indigo-200">
-              Hover Trace
+              Generic
             </span>
           </button>
 
@@ -95,10 +95,10 @@ export const RoadmapPage: React.FC = () => {
             <div className="flex items-center gap-2">
               <span className="flex h-2 w-2 rounded-full bg-emerald-400" />
               <span>
-                <strong>DSA Branching Roadmap:</strong> Follow the prerequisite paths from Arrays & Hashing down to 2-D DP and Geometry. Hover on any node to trace prerequisites; click to reveal practice problems.
+                <strong>Global DSA Roadmap (Language-Agnostic):</strong> Follow prerequisite paths from Arrays & Hashing down to 2-D DP. Solve problems and analyze complexity in any language (Python, Java, C++, JS, Go). Hover on any node to trace prerequisites; click to reveal practice problems & AlgoNerve simulations.
               </span>
             </div>
-            <span className="text-slate-500 text-[11px] hidden md:inline">18 Interconnected Nodes &bull; Hover Trace</span>
+            <span className="text-slate-500 text-[11px] hidden md:inline">18 Nodes &bull; Language Agnostic</span>
           </div>
 
           <DsaDependencyGraph />

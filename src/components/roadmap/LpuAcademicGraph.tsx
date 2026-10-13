@@ -115,7 +115,7 @@ const CSE205_NODES: LpuNodeData[] = [
     prerequisites: ['Arrays & Big-O Foundations', 'Pointers and dynamic memory (new/delete)'],
     description: 'Non-contiguous node allocation, next/prev pointer rewiring, insertion and deletion.',
     visualizerId: 'singly-linked-list',
-    problemIds: ['p-dsa-ll-insert-1', 'p-dsa-ll-reverse-1', 'p-dsa-dll-1'],
+    problemIds: ['p-dsa-ll-middle-1', 'p-dsa-ll-reverse-1', 'p-dsa-dll-1'],
   },
 
   // Level 3: Linear Abstract Data Types
@@ -131,7 +131,7 @@ const CSE205_NODES: LpuNodeData[] = [
     prerequisites: ['Singly & Doubly Linked Lists', 'Arrays & Big-O Foundations'],
     description: 'LIFO stack semantics, expression evaluation (Infix to Postfix), and FIFO circular queues.',
     visualizerId: 'stack-operations',
-    problemIds: ['p-dsa-stack-valid-parens-1', 'p-dsa-queue-1', 'p-dsa-circ-queue-1'],
+    problemIds: ['p-dsa-stack-valid-parens-1', 'p-dsa-queue-1', 'p-dsa-circular-queue-1'],
   },
 
   // Level 4: Non-Linear Trees
@@ -160,8 +160,8 @@ const CSE205_NODES: LpuNodeData[] = [
     examScope: 'ETE',
     prerequisites: ['Binary Trees & BST Traversals'],
     description: 'Self-balancing binary search trees using LL, RR, LR, and RL rotation balance factors.',
-    visualizerId: 'avl-tree',
-    problemIds: ['p-dsa-avl-balance-1'],
+    visualizerId: 'avl-balancing',
+    problemIds: ['p-dsa-avl-tree-1'],
   },
   {
     id: 'cse205-heaps',
@@ -175,7 +175,7 @@ const CSE205_NODES: LpuNodeData[] = [
     prerequisites: ['Binary Trees & BST Traversals', 'Arrays & Big-O Foundations'],
     description: 'Complete binary tree layout in flat arrays, sift-up/sift-down heapify, HeapSort.',
     visualizerId: 'heap-sort',
-    problemIds: ['p-dsa-kth-largest-1', 'p-dsa-heapify-1'],
+    problemIds: ['p-dsa-heap-kth-1', 'p-dsa-heap-sort-1'],
   },
 
   // Level 5: Graphs & Hashing
@@ -190,7 +190,7 @@ const CSE205_NODES: LpuNodeData[] = [
     examScope: 'ETE',
     prerequisites: ['Stacks & Circular Queues', 'Binary Trees & BST Traversals'],
     description: 'Adjacency list representations, queue-driven BFS, recursive stack DFS, cycle detection.',
-    visualizerId: 'bfs-graph',
+    visualizerId: 'bfs',
     problemIds: ['p-dsa-bfs-1', 'p-dsa-dfs-1'],
   },
   {
@@ -205,7 +205,7 @@ const CSE205_NODES: LpuNodeData[] = [
     prerequisites: ['Graph Traversals (BFS & DFS)', 'Binary Heaps & Priority Queues'],
     description: 'Minimum spanning tree discovery using greedy edge selection and Disjoint Set Union (DSU).',
     visualizerId: 'dijkstra',
-    problemIds: ['p-dsa-mst-kruskal-1', 'p-dsa-mst-prim-1'],
+    problemIds: ['p-dsa-dijkstra-1', 'p-dsa-mst-prim-1'],
   },
   {
     id: 'cse205-hashing',
@@ -218,7 +218,7 @@ const CSE205_NODES: LpuNodeData[] = [
     examScope: 'ETE',
     prerequisites: ['Arrays & Big-O Foundations', 'Singly & Doubly Linked Lists'],
     description: 'Hash functions, open addressing linear probing, chaining, load factor amortized O(1).',
-    problemIds: ['p-dsa-hash-table-1'],
+    problemIds: ['p-dsa-hash-chaining-1', 'p-dsa-two-sum-1'],
   },
 ];
 
@@ -260,7 +260,7 @@ const CSE202_NODES: LpuNodeData[] = [
     examScope: 'CA-1',
     prerequisites: ['Introductory computer science concepts', 'Basic computational logic'],
     description: 'Primitive types, std::cin/cout, namespaces, call-by-reference vs call-by-value.',
-    problemIds: ['p-cpp-io-1', 'p-cpp-func-ref-1'],
+    problemIds: ['p-cpp-io-1', 'p-cpp-references-1'],
   },
   {
     id: 'cse202-pointers',
@@ -273,7 +273,7 @@ const CSE202_NODES: LpuNodeData[] = [
     examScope: 'CA-1',
     prerequisites: ['C++ Syntax, I/O & Functions'],
     description: 'Pointer arithmetic, new/delete heap allocation, memory leaks and nullptr safeguards.',
-    problemIds: ['p-cpp-pointers-1', 'p-cpp-dynamic-arr-1'],
+    problemIds: ['p-cpp-pointers-1', 'p-cpp-this-pointer-1'],
   },
   {
     id: 'cse202-overloading',
@@ -286,7 +286,7 @@ const CSE202_NODES: LpuNodeData[] = [
     examScope: 'CA-1',
     prerequisites: ['C++ Syntax, I/O & Functions'],
     description: 'Compile-time function resolution, default arguments, inline performance trade-offs.',
-    problemIds: ['p-cpp-fn-overload-1'],
+    problemIds: ['p-cpp-func-overload-1'],
   },
 
   // Unit 2
@@ -301,7 +301,7 @@ const CSE202_NODES: LpuNodeData[] = [
     examScope: 'MTE',
     prerequisites: ['Pointers & Dynamic Memory', 'Function Overloading & Inline'],
     description: 'Access specifiers (public/private/protected), this pointer, member function definition.',
-    problemIds: ['p-cpp-class-student-1', 'p-cpp-encapsulation-1'],
+    problemIds: ['p-cpp-classes-1', 'p-cpp-structs-1'],
   },
   {
     id: 'cse202-constructors',
@@ -314,7 +314,7 @@ const CSE202_NODES: LpuNodeData[] = [
     examScope: 'MTE',
     prerequisites: ['Classes, Objects & Encapsulation'],
     description: 'Default, parameterized, copy constructor, deep vs shallow copy, and destructor lifecycles.',
-    problemIds: ['p-cpp-copy-constructor-1', 'p-cpp-destructor-order-1'],
+    problemIds: ['p-cpp-constructors-1', 'p-cpp-destructors-1'],
   },
   {
     id: 'cse202-operator-overload',
@@ -327,7 +327,7 @@ const CSE202_NODES: LpuNodeData[] = [
     examScope: 'MTE',
     prerequisites: ['Classes, Objects & Encapsulation'],
     description: 'Overloading +, -, <<, >> operators, friend functions, and symmetric binary operands.',
-    problemIds: ['p-cpp-op-complex-1', 'p-cpp-friend-class-1'],
+    problemIds: ['p-cpp-operator-overload-1', 'p-cpp-friend-1'],
   },
 
   // Unit 4
@@ -342,7 +342,7 @@ const CSE202_NODES: LpuNodeData[] = [
     examScope: 'CA-2',
     prerequisites: ['Constructors, Destructors & Copy', 'Operator Overloading & Friends'],
     description: 'Single, multiple, hierarchical, and virtual base classes to resolve diamond problem.',
-    problemIds: ['p-cpp-single-inherit-1', 'p-cpp-virtual-base-diamond-1'],
+    problemIds: ['p-cpp-inheritance-1', 'p-cpp-diamond-problem-1'],
   },
   {
     id: 'cse202-polymorphism',
@@ -355,7 +355,7 @@ const CSE202_NODES: LpuNodeData[] = [
     examScope: 'CA-2',
     prerequisites: ['Inheritance & Access Control'],
     description: 'Virtual tables (vptr/vtable), late dynamic binding, virtual destructors.',
-    problemIds: ['p-cpp-virtual-vtable-1'],
+    problemIds: ['p-cpp-polymorphism-1'],
   },
   {
     id: 'cse202-abstract',
@@ -368,7 +368,7 @@ const CSE202_NODES: LpuNodeData[] = [
     examScope: 'CA-2',
     prerequisites: ['Inheritance & Access Control'],
     description: 'Abstract base classes, pure virtual (= 0), interface contracts for polymorphic subsystems.',
-    problemIds: ['p-cpp-pure-virtual-shape-1'],
+    problemIds: ['p-cpp-abstract-class-1', 'p-cpp-virtual-destructor-1'],
   },
 
   // Unit 5 & 6
@@ -383,7 +383,7 @@ const CSE202_NODES: LpuNodeData[] = [
     examScope: 'ETE',
     prerequisites: ['Virtual Functions & Runtime Poly', 'Pure Virtual & Interfaces'],
     description: 'Generic programming, template specialization, typename and class parameters.',
-    problemIds: ['p-cpp-template-stack-1', 'p-cpp-fn-template-max-1'],
+    problemIds: ['p-cpp-templates-1', 'p-cpp-exceptions-1'],
   },
   {
     id: 'cse202-stl',
@@ -409,7 +409,7 @@ const CSE202_NODES: LpuNodeData[] = [
     examScope: 'ETE',
     prerequisites: ['Function & Class Templates', 'C++ Syntax, I/O & Functions'],
     description: 'ifstream, ofstream, fstream, binary file reading/writing, and error state flags.',
-    problemIds: ['p-cpp-io-1'],
+    problemIds: ['p-cpp-filestreams-1'],
   },
 ];
 
