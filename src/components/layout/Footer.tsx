@@ -63,6 +63,8 @@ export const Footer: React.FC = () => {
           <Link to="/" className="hover:text-slate-300">Home</Link>
           <Link to="/problems" className="hover:text-slate-300">Problems</Link>
           <a href="https://algonerve.vercel.app" target="_blank" rel="noopener noreferrer" className="hover:text-slate-300">AlgoNerve</a>
+          <span className="text-slate-800">•</span>
+          <Link to="/admin" className="text-slate-600 hover:text-purple-400 transition text-[11px]">Faculty & Admin</Link>
         </div>
       </div>
     </footer>

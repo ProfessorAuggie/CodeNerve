@@ -13,6 +13,7 @@ const LpuPortalPage = React.lazy(() => import('./pages/LpuPortalPage').then((m) 
 const LessonPage = React.lazy(() => import('./pages/LessonPage').then((m) => ({ default: m.LessonPage })));
 const QuizPage = React.lazy(() => import('./pages/QuizPage').then((m) => ({ default: m.QuizPage })));
 const DashboardPage = React.lazy(() => import('./pages/DashboardPage').then((m) => ({ default: m.DashboardPage })));
+const AdminPage = React.lazy(() => import('./pages/AdminPage').then((m) => ({ default: m.AdminPage })));
 const TeacherPage = React.lazy(() => import('./pages/TeacherPage').then((m) => ({ default: m.TeacherPage })));
 
 // External AlgoNerve Redirect component
@@ -77,7 +78,8 @@ export const App: React.FC = () => {
               {/* Student Analytics & Dashboard */}
               <Route path="/dashboard" element={<DashboardPage />} />
 
-              {/* Teacher Assignment Portal */}
+              {/* Restricted Faculty & Admin Command Center */}
+              <Route path="/admin" element={<AdminPage />} />
               <Route path="/teacher" element={<TeacherPage />} />
 
               {/* AlgoNerve Redirect Routes */}

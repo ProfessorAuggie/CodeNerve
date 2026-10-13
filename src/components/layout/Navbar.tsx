@@ -21,7 +21,7 @@ export const Navbar: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const { user, setRole, problemProgress, activePortal, setActivePortal } = useUserStore();
+  const { user, problemProgress, activePortal, setActivePortal, isAdminAuthenticated } = useUserStore();
 
   const portalProblems = PROBLEMS.filter((p) => (p.track || 'global') === activePortal);
   const portalProblemIds = new Set(portalProblems.map((p) => p.id));
@@ -49,7 +49,6 @@ export const Navbar: React.FC = () => {
     { name: 'LPU Syllabus', path: '/lpu', icon: GraduationCap, badge: 'CSE' },
     { name: 'Academic Roadmap', path: '/roadmap', icon: GitFork, badge: 'CSE202/205' },
     { name: 'Problems Bank', path: '/problems', icon: Terminal },
-    { name: 'Faculty Portal', path: '/teacher', icon: ShieldCheck, badge: 'Teacher' },
     { name: 'Visualizer', path: 'https://algonerve.vercel.app', icon: Sparkles, badge: 'AlgoNerve', isExternal: true },
     { name: 'Exam Quizzes', path: '/quizzes', icon: BookOpen },
     { name: 'Dashboard', path: '/dashboard', icon: CheckCircle2 },
@@ -177,33 +176,31 @@ export const Navbar: React.FC = () => {
             <span className="text-[10px] font-medium text-slate-400">{progressPercent}%</span>
           </Link>
 
-          {/* Role Mode Switcher */}
-          <div className="flex items-center rounded-lg border border-slate-800 bg-slate-900/80 p-0.5 text-xs">
-            <button
-              onClick={() => setRole('student')}
-              className={`flex items-center gap-1 rounded-md px-2 py-0.5 font-medium text-xs transition ${
-                user.role === 'student'
-                  ? 'bg-brand-600 text-white shadow-sm'
-                  : 'text-slate-400 hover:text-slate-200'
-              }`}
-              title="Student Mode"
-            >
-              <User className="h-3 w-3" />
-              <span className="hidden md:inline">Student</span>
-            </button>
-            <button
-              onClick={() => setRole('teacher')}
-              className={`flex items-center gap-1 rounded-md px-2 py-0.5 font-medium text-xs transition ${
-                user.role === 'teacher'
-                  ? 'bg-purple-600 text-white shadow-sm'
-                  : 'text-slate-400 hover:text-slate-200'
-              }`}
-              title="Teacher Mode"
-            >
-              <ShieldCheck className="h-3 w-3" />
-              <span className="hidden md:inline">Faculty</span>
-            </button>
-          </div>
+          {/* Student Profile Link */}
+          <Link
+            to="/dashboard"
+            className="flex items-center gap-1.5 rounded-lg border border-slate-800 bg-slate-900/80 px-2.5 py-1 text-xs text-slate-300 hover:text-white hover:border-slate-700 transition"
+            title="Student Learning Profile & Dashboard"
+          >
+            <div className="flex h-5 w-5 items-center justify-center rounded-full bg-brand-600/30 text-brand-300 text-[10px] font-bold">
+              {user.name[0]}
+            </div>
+            <span className="hidden md:inline font-medium">{user.name.split(' ')[0]}</span>
+          </Link>
+
+          {/* Discreet Faculty / Admin Access Link */}
+          <Link
+            to="/admin"
+            className={`flex items-center gap-1 rounded-lg border px-2 py-1 text-xs font-medium transition ${
+              isAdminAuthenticated
+                ? 'bg-purple-950/40 border-purple-800/60 text-purple-300 hover:bg-purple-900/50'
+                : 'border-slate-800 bg-slate-900/50 text-slate-400 hover:text-slate-200 hover:bg-slate-800'
+            }`}
+            title="Faculty & Instructor Admin Portal (Restricted)"
+          >
+            <ShieldCheck className={`h-3.5 w-3.5 ${isAdminAuthenticated ? 'text-purple-400' : 'text-slate-400'}`} />
+            <span className="hidden xl:inline">{isAdminAuthenticated ? 'Admin' : 'Faculty'}</span>
+          </Link>
 
           {/* Mobile hamburger menu toggle */}
           <button

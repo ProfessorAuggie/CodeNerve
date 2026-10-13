@@ -458,10 +458,10 @@ export const LpuPortalPage: React.FC = () => {
               </p>
             </div>
             <Link
-              to="/teacher"
-              className="px-4 py-2 rounded-xl text-xs font-semibold bg-purple-600 hover:bg-purple-500 text-white shadow-lg shadow-purple-500/20 transition"
+              to="/quizzes"
+              className="px-4 py-2 rounded-xl text-xs font-semibold bg-emerald-600 hover:bg-emerald-500 text-white shadow-lg shadow-emerald-500/20 transition"
             >
-              Faculty Assignment Portal ↗
+              Practice Quizzes & Tests ↗
             </Link>
           </div>
 

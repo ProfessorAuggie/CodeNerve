@@ -19,7 +19,6 @@ import type { Problem } from '../types';
 export const DashboardPage: React.FC = () => {
   const { 
     user, 
-    setRole, 
     problemProgress, 
     bookmarks, 
     customProblemSets, 
@@ -91,12 +90,8 @@ export const DashboardPage: React.FC = () => {
               <h1 className="text-xl sm:text-2xl font-bold text-white tracking-tight">
                 {user.name}
               </h1>
-              <span className={`text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full border ${
-                user.role === 'teacher'
-                  ? 'bg-purple-500/10 text-purple-300 border-purple-500/30'
-                  : 'bg-brand-500/10 text-brand-300 border-brand-500/30'
-              }`}>
-                {user.role} mode
+              <span className="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full border bg-brand-500/10 text-brand-300 border-brand-500/30">
+                Student Account
               </span>
             </div>
             <p className="text-xs text-slate-400 mt-0.5">
@@ -105,15 +100,8 @@ export const DashboardPage: React.FC = () => {
           </div>
         </div>
 
-        {/* Role toggle and reset controls */}
+        {/* Reset controls */}
         <div className="flex items-center gap-3">
-          <button
-            onClick={() => setRole(user.role === 'student' ? 'teacher' : 'student')}
-            className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-medium bg-slate-800 text-slate-300 hover:text-white hover:bg-slate-700 transition border border-slate-700"
-          >
-            {user.role === 'student' ? <ShieldCheck className="h-3.5 w-3.5 text-purple-400" /> : <User className="h-3.5 w-3.5 text-brand-400" />}
-            <span>Switch to {user.role === 'student' ? 'Teacher' : 'Student'}</span>
-          </button>
 
           <button
             onClick={() => setConfirmReset(!confirmReset)}
@@ -325,16 +313,9 @@ export const DashboardPage: React.FC = () => {
       <div className="p-6 rounded-2xl border border-slate-800 bg-slate-900/60 shadow-lg space-y-4">
         <div className="flex items-center justify-between">
           <div>
-            <h3 className="text-base font-bold text-white">Teacher & Custom Problem Sets</h3>
+            <h3 className="text-base font-bold text-white">Assigned Course Tests & Problem Bundles</h3>
             <p className="text-xs text-slate-400">Curated assignments and topic bundles</p>
           </div>
-          <Link
-            to="/teacher"
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold bg-purple-600 hover:bg-purple-500 text-white shadow-lg shadow-purple-500/20 transition"
-          >
-            <Plus className="h-3.5 w-3.5" />
-            <span>Manage Problem Sets</span>
-          </Link>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

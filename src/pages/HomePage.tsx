@@ -236,10 +236,11 @@ export const HomePage: React.FC = () => {
                     <ArrowRight className="h-3.5 w-3.5 transition group-btn/hover:translate-x-1" />
                   </Link>
                   <Link
-                    to="/teacher"
+                    to="/problems"
+                    onClick={() => setActivePortal('lpu')}
                     className="flex items-center justify-center px-4 py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold border border-slate-700 transition"
                   >
-                    <span>Faculty Suite</span>
+                    <span>LPU Question Bank</span>
                   </Link>
                 </div>
               </div>

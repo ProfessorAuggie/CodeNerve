@@ -162,3 +162,41 @@ export interface VisualizerMapping {
   label: string;
   description: string;
 }
+
+// ───── Admin & Student Monitoring Types ─────
+
+export interface StudentRecord {
+  id: string;
+  name: string;
+  email: string;
+  registrationNumber: string;
+  avatar?: string;
+  track: 'global' | 'lpu';
+  batch: string; // e.g. "LPU B.Tech CSE (CSE205)", "Global DSA Cohort"
+  joinedAt: string;
+  status: 'online' | 'idle' | 'offline';
+  currentActivity: string; // e.g. "Solving: Two Sum (Hash Map)", "Attempting: CSE205 Midterm Test"
+  lastActive: string;
+  solvedProblemIds: string[];
+  totalSolved: number;
+  completedLessons: string[];
+  quizScores: Record<string, { score: number; total: number; date: string }>;
+  assignedTestSubmissions?: Record<string, { score: number; total: number; submittedAt: string }>;
+}
+
+export interface AssignedTest {
+  id: string;
+  title: string;
+  description: string;
+  targetTrack: 'all' | 'global' | 'lpu';
+  targetBatch: string;
+  subjectCode?: string;
+  problemIds: string[];
+  durationMinutes: number;
+  totalMarks: number;
+  dueDate: string;
+  createdAt: string;
+  createdBy: string;
+  submissionsCount: number;
+  totalAssignedCount: number;
+}
