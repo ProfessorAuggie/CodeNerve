@@ -80,10 +80,10 @@ export const TopicDrawer: React.FC<TopicDrawerProps> = ({
       />
 
       {/* Slide-Over Panel */}
-      <div className="fixed inset-y-0 right-0 max-w-full flex pl-6 sm:pl-10">
-        <div className="w-screen max-w-md sm:max-w-xl bg-slate-950 border-l border-slate-800/90 shadow-2xl flex flex-col animate-in slide-in-from-right duration-300">
+      <div className="fixed inset-y-0 right-0 max-w-full flex pl-0 sm:pl-10">
+        <div className="w-screen max-w-full sm:max-w-xl bg-slate-950 border-l border-slate-800/90 shadow-2xl flex flex-col h-full animate-in slide-in-from-right duration-300">
           {/* Header */}
-          <div className="p-6 border-b border-slate-800 bg-slate-900/60 backdrop-blur-md">
+          <div className="p-4 sm:p-6 border-b border-slate-800 bg-slate-900/60 backdrop-blur-md">
             <div className="flex items-start justify-between gap-4">
               <div className="space-y-1.5 flex-1">
                 <div className="flex items-center gap-2 flex-wrap">
@@ -249,7 +249,7 @@ export const TopicDrawer: React.FC<TopicDrawerProps> = ({
                           href={problem.externalUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="text-xs font-bold text-white hover:text-brand-300 transition truncate flex items-center gap-1.5"
+                          className="text-xs font-bold text-white hover:text-brand-300 transition flex items-center gap-1.5 break-words"
                           title="Open problem on external platform"
                         >
                           <span className={isSolved ? 'line-through text-slate-400' : ''}>

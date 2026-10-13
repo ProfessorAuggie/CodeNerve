@@ -1,11 +1,14 @@
-import React, { useState, useMemo, useRef } from 'react';
+import React, { useState, useMemo, useRef, useEffect, useCallback } from 'react';
 import { 
   GraduationCap, 
   Sparkles, 
   ZoomIn, 
   ZoomOut, 
   RotateCcw,
-  Shuffle,
+  Maximize2,
+  Minimize2,
+  Scan,
+  Shuffle, 
   ShieldAlert,
   Layers,
   BookOpen
@@ -440,6 +443,7 @@ export const LpuAcademicGraph: React.FC = () => {
   const [hoveredNodeId, setHoveredNodeId] = useState<string | null>(null);
   const [selectedProblem, setSelectedProblem] = useState<Problem | null>(null);
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [isFullscreen, setIsFullscreen] = useState(false);
 
   // Pan & Zoom Engine
   const [zoomLevel, setZoomLevel] = useState<number>(1);
@@ -449,6 +453,54 @@ export const LpuAcademicGraph: React.FC = () => {
   const [hasMoved, setHasMoved] = useState<boolean>(false);
   const lastTouchDistance = useRef<number | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+
+  // Fit to screen calculator for all window sizes
+  const fitToScreen = useCallback(() => {
+    if (!containerRef.current) return;
+    const { clientWidth, clientHeight } = containerRef.current;
+    if (clientWidth <= 0 || clientHeight <= 0) return;
+
+    const graphWidth = 1000;
+    const graphHeight = 840;
+    const paddingX = clientWidth < 640 ? 20 : 48;
+    const paddingY = clientHeight < 640 ? 30 : 60;
+
+    const scaleX = (clientWidth - paddingX) / graphWidth;
+    const scaleY = (clientHeight - paddingY) / graphHeight;
+    const optimalZoom = Math.min(1.25, Math.max(0.35, Math.min(scaleX, scaleY)));
+
+    setZoomLevel(Number(optimalZoom.toFixed(2)));
+    setPan({ x: 0, y: 0 });
+  }, []);
+
+  // Auto-fit on mount and window resize
+  useEffect(() => {
+    fitToScreen();
+    const handleResize = () => {
+      fitToScreen();
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [fitToScreen]);
+
+  // Fullscreen escape key handler
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && isFullscreen) {
+        setIsFullscreen(false);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isFullscreen]);
+
+  // Refit when toggling fullscreen
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      fitToScreen();
+    }, 60);
+    return () => clearTimeout(timer);
+  }, [isFullscreen, fitToScreen]);
 
   const { problemProgress, updateProblemStatus, bookmarks, toggleBookmark } = useUserStore();
 
@@ -616,8 +668,8 @@ export const LpuAcademicGraph: React.FC = () => {
   // Wheel zoom
   const handleWheel = (e: React.WheelEvent) => {
     e.preventDefault();
-    const zoomDelta = e.deltaY > 0 ? -0.08 : 0.08;
-    setZoomLevel((z) => Math.min(1.6, Math.max(0.65, Number((z + zoomDelta).toFixed(2)))));
+    const zoomDelta = e.deltaY < 0 ? 0.08 : -0.08;
+    setZoomLevel((z) => Math.min(1.6, Math.max(0.35, Number((z + zoomDelta).toFixed(2)))));
   };
 
   // Reset view to center
@@ -656,9 +708,13 @@ export const LpuAcademicGraph: React.FC = () => {
   };
 
   return (
-    <div className="relative w-full rounded-2xl border border-indigo-900/40 bg-[#090c14] overflow-hidden shadow-2xl space-y-0">
+    <div className={`relative w-full bg-[#090c14] overflow-hidden transition-all duration-200 space-y-0 ${
+      isFullscreen 
+        ? 'fixed inset-0 z-50 rounded-none w-screen h-screen' 
+        : 'rounded-2xl border border-indigo-900/40 shadow-2xl'
+    }`}>
       {/* Subject Header & Switcher */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 border-b border-slate-800 bg-slate-950/80 backdrop-blur-md">
+      <div className="flex flex-wrap items-center justify-between gap-3 p-3 sm:p-4 border-b border-slate-800 bg-slate-950/80 backdrop-blur-md z-20 relative">
         <div className="flex items-center gap-3">
           <div className="h-10 w-10 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 font-bold shrink-0">
             <GraduationCap className="h-5 w-5" />
@@ -670,21 +726,78 @@ export const LpuAcademicGraph: React.FC = () => {
                 Interactive Graph
               </span>
             </h3>
-            <p className="text-xs text-slate-400">
-              Drag to pan &bull; Scroll to zoom &bull; Click any node to open the study drawer
+            <p className="text-xs text-slate-400 hidden xs:block">
+              Drag to pan &bull; Scroll to zoom &bull; Click node to open study drawer
             </p>
           </div>
         </div>
 
         {/* Top Controls: Course Selector & Overall Progress */}
-        <div className="flex flex-wrap items-center gap-2.5">
+        <div className="flex flex-wrap items-center gap-2 sm:gap-2.5">
+          {/* Zoom & Fit Bar */}
+          <div className="flex items-center gap-1 bg-slate-900 p-1 rounded-xl border border-slate-800 text-xs">
+            <button
+              onClick={() => setZoomLevel((z) => Math.min(1.6, Number((z + 0.1).toFixed(2))))}
+              className="p-1 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition"
+              title="Zoom In (+)"
+              aria-label="Zoom In"
+            >
+              <ZoomIn className="h-3.5 w-3.5" />
+            </button>
+            <button
+              onClick={() => setZoomLevel((z) => Math.max(0.35, Number((z - 0.1).toFixed(2))))}
+              className="p-1 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition"
+              title="Zoom Out (-)"
+              aria-label="Zoom Out"
+            >
+              <ZoomOut className="h-3.5 w-3.5" />
+            </button>
+            <button
+              onClick={fitToScreen}
+              className="flex items-center gap-1 px-1.5 py-1 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition text-[11px] font-semibold"
+              title="Fit entire curriculum into current window"
+              aria-label="Fit to window"
+            >
+              <Scan className="h-3 w-3 text-emerald-400" />
+              <span>Fit</span>
+            </button>
+            <button
+              onClick={resetView}
+              className="px-1.5 py-1 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition text-[11px] font-semibold"
+              title="Reset Zoom View"
+              aria-label="Reset zoom"
+            >
+              Reset ({Math.round(zoomLevel * 100)}%)
+            </button>
+          </div>
+
+          {/* Fullscreen Toggle */}
+          <button
+            onClick={() => setIsFullscreen(!isFullscreen)}
+            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-800 text-xs font-semibold text-slate-300 transition"
+            title={isFullscreen ? 'Exit Fullscreen (Esc)' : 'Maximize to full window'}
+            aria-label={isFullscreen ? 'Exit Fullscreen' : 'Fullscreen'}
+          >
+            {isFullscreen ? (
+              <>
+                <Minimize2 className="h-3.5 w-3.5 text-amber-400" />
+                <span className="hidden sm:inline">Exit Fullscreen</span>
+              </>
+            ) : (
+              <>
+                <Maximize2 className="h-3.5 w-3.5 text-emerald-400" />
+                <span className="hidden sm:inline">Fullscreen</span>
+              </>
+            )}
+          </button>
+
           {/* Progress Pill */}
-          <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-900 border border-slate-800 text-xs">
-            <span className="text-slate-400 font-medium">Solved:</span>
+          <div className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-slate-900 border border-slate-800 text-xs">
+            <span className="text-slate-400 font-medium hidden sm:inline">Solved:</span>
             <span className="font-mono font-bold text-emerald-400">
               {subjectStats.solved}/{subjectStats.total}
             </span>
-            <span className="text-[10px] px-1.5 py-0.5 rounded bg-emerald-500/15 text-emerald-300 font-semibold">
+            <span className="text-[10px] px-1 py-0.2 rounded bg-emerald-500/15 text-emerald-300 font-semibold">
               {subjectStats.percent}%
             </span>
           </div>
@@ -692,11 +805,11 @@ export const LpuAcademicGraph: React.FC = () => {
           {/* Random Problem Shuffle */}
           <button
             onClick={pickRandomProblem}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-850 border border-slate-800 hover:border-slate-700 text-slate-200 text-xs font-semibold transition"
+            className="flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-850 border border-slate-800 hover:border-slate-700 text-slate-200 text-xs font-semibold transition"
             title="Pick a random problem from this curriculum"
           >
             <Shuffle className="h-3.5 w-3.5 text-emerald-400" />
-            <span className="hidden sm:inline">Pick Random</span>
+            <span className="hidden md:inline">Pick Random</span>
           </button>
 
           {/* Subject Course Tabs */}
@@ -707,7 +820,7 @@ export const LpuAcademicGraph: React.FC = () => {
                 setSelectedNodeId('cse205-arrays');
                 setHoveredNodeId(null);
               }}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-bold transition ${
+              className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg font-bold transition ${
                 selectedSubject === 'cse205'
                   ? 'bg-emerald-600 text-white shadow-sm'
                   : 'text-slate-400 hover:text-slate-200'
@@ -721,7 +834,7 @@ export const LpuAcademicGraph: React.FC = () => {
                 setSelectedNodeId('cse202-basics');
                 setHoveredNodeId(null);
               }}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-bold transition ${
+              className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg font-bold transition ${
                 selectedSubject === 'cse202'
                   ? 'bg-brand-600 text-white shadow-sm'
                   : 'text-slate-400 hover:text-slate-200'
@@ -771,35 +884,6 @@ export const LpuAcademicGraph: React.FC = () => {
         </div>
       )}
 
-      {/* Zoom and Navigation Control Bar */}
-      <div className="absolute top-20 left-4 z-20 flex items-center gap-1 bg-slate-950/90 backdrop-blur-md p-1.5 rounded-xl border border-slate-800 shadow-xl">
-        <button
-          onClick={() => setZoomLevel((z) => Math.min(1.6, Number((z + 0.15).toFixed(2))))}
-          className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition"
-          title="Zoom In (+)"
-          aria-label="Zoom In"
-        >
-          <ZoomIn className="h-4 w-4" />
-        </button>
-        <button
-          onClick={() => setZoomLevel((z) => Math.max(0.65, Number((z - 0.15).toFixed(2))))}
-          className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition"
-          title="Zoom Out (-)"
-          aria-label="Zoom Out"
-        >
-          <ZoomOut className="h-4 w-4" />
-        </button>
-        <button
-          onClick={resetView}
-          className="flex items-center gap-1 px-2 py-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition text-xs font-semibold"
-          title="Reset Canvas View"
-          aria-label="Reset View"
-        >
-          <RotateCcw className="h-3 w-3" />
-          <span>{Math.round(zoomLevel * 100)}%</span>
-        </button>
-      </div>
-
       {/* Interactive Pan-and-Zoom Canvas Container */}
       <div
         ref={containerRef}
@@ -810,9 +894,11 @@ export const LpuAcademicGraph: React.FC = () => {
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
         onWheel={handleWheel}
-        className={`w-full pt-20 pb-16 px-6 min-h-[720px] sm:min-h-[820px] relative flex justify-center items-center select-none overflow-hidden ${
-          isDragging ? 'cursor-grabbing' : 'cursor-grab'
-        }`}
+        className={`w-full relative flex justify-center items-center select-none overflow-hidden transition-all duration-200 ${
+          isFullscreen
+            ? 'h-[calc(100vh-68px)]'
+            : 'h-[72vh] min-h-[500px] max-h-[850px]'
+        } ${isDragging ? 'cursor-grabbing' : 'cursor-grab'}`}
         style={{
           backgroundColor: '#0a0d14',
           backgroundImage: 'radial-gradient(circle, #252b3d 1.5px, transparent 1.5px)',

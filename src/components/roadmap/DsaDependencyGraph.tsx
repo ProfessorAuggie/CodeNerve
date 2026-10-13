@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useRef, useEffect } from 'react';
+import React, { useState, useMemo, useRef, useEffect, useCallback } from 'react';
 import { 
   Sparkles, 
   ExternalLink, 
@@ -7,6 +7,8 @@ import {
   ZoomOut, 
   RotateCcw, 
   Maximize2, 
+  Minimize2,
+  Scan,
   Shuffle, 
   BookOpen, 
   Layers, 
@@ -276,6 +278,7 @@ export const DsaDependencyGraph: React.FC = () => {
   const [hoveredNodeId, setHoveredNodeId] = useState<string | null>(null);
   const [selectedProblem, setSelectedProblem] = useState<Problem | null>(null);
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [isFullscreen, setIsFullscreen] = useState(false);
 
   // Pan & Zoom state
   const [pan, setPan] = useState({ x: 0, y: 0 });
@@ -284,6 +287,54 @@ export const DsaDependencyGraph: React.FC = () => {
   const dragStartRef = useRef({ x: 0, y: 0, panX: 0, panY: 0 });
   const touchStartRef = useRef<{ x: number; y: number; dist?: number }>({ x: 0, y: 0 });
   const containerRef = useRef<HTMLDivElement>(null);
+
+  // Fit to screen calculator for all window sizes
+  const fitToScreen = useCallback(() => {
+    if (!containerRef.current) return;
+    const { clientWidth, clientHeight } = containerRef.current;
+    if (clientWidth <= 0 || clientHeight <= 0) return;
+
+    const graphWidth = 1000;
+    const graphHeight = 820;
+    const paddingX = clientWidth < 640 ? 20 : 48;
+    const paddingY = clientHeight < 640 ? 30 : 60;
+
+    const scaleX = (clientWidth - paddingX) / graphWidth;
+    const scaleY = (clientHeight - paddingY) / graphHeight;
+    const optimalZoom = Math.min(1.25, Math.max(0.35, Math.min(scaleX, scaleY)));
+
+    setZoomLevel(Number(optimalZoom.toFixed(2)));
+    setPan({ x: 0, y: 0 });
+  }, []);
+
+  // Auto-fit on mount and window resize
+  useEffect(() => {
+    fitToScreen();
+    const handleResize = () => {
+      fitToScreen();
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [fitToScreen]);
+
+  // Fullscreen escape key handler
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && isFullscreen) {
+        setIsFullscreen(false);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isFullscreen]);
+
+  // Refit when toggling fullscreen
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      fitToScreen();
+    }, 60);
+    return () => clearTimeout(timer);
+  }, [isFullscreen, fitToScreen]);
 
   // Map problems for each node
   const nodeProblemsMap = useMemo(() => {
@@ -440,10 +491,9 @@ export const DsaDependencyGraph: React.FC = () => {
   };
 
   const handleWheel = (e: React.WheelEvent) => {
-    if (e.ctrlKey || Math.abs(e.deltaY) > 30) {
-      const zoomDelta = e.deltaY < 0 ? 0.08 : -0.08;
-      setZoomLevel((z) => Math.min(1.5, Math.max(0.55, Number((z + zoomDelta).toFixed(2)))));
-    }
+    e.preventDefault();
+    const zoomDelta = e.deltaY < 0 ? 0.08 : -0.08;
+    setZoomLevel((z) => Math.min(1.6, Math.max(0.35, Number((z + zoomDelta).toFixed(2)))));
   };
 
   const handleReset = () => {
@@ -476,54 +526,90 @@ export const DsaDependencyGraph: React.FC = () => {
   };
 
   return (
-    <div className="relative w-full rounded-2xl border border-slate-800 bg-[#0c0e14] overflow-hidden shadow-2xl space-y-0">
+    <div className={`relative w-full bg-[#0c0e14] overflow-hidden transition-all duration-200 space-y-0 ${
+      isFullscreen 
+        ? 'fixed inset-0 z-50 rounded-none w-screen h-screen' 
+        : 'rounded-2xl border border-slate-800 shadow-2xl'
+    }`}>
       {/* Top Controls & Stats Header Bar */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 border-b border-slate-800 bg-slate-950/80 backdrop-blur-md z-20 relative">
-        <div className="flex items-center gap-3">
-          {/* Zoom Controls */}
-          <div className="flex items-center gap-1.5 bg-slate-900 p-1 rounded-xl border border-slate-800">
+      <div className="flex flex-wrap items-center justify-between gap-3 p-3 sm:p-4 border-b border-slate-800 bg-slate-950/80 backdrop-blur-md z-20 relative">
+        <div className="flex flex-wrap items-center gap-2">
+          {/* Zoom & Screen Fit Controls */}
+          <div className="flex items-center gap-1 bg-slate-900 p-1 rounded-xl border border-slate-800">
             <button
-              onClick={() => setZoomLevel((z) => Math.min(1.5, Number((z + 0.1).toFixed(2))))}
+              onClick={() => setZoomLevel((z) => Math.min(1.6, Number((z + 0.1).toFixed(2))))}
               className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition"
               title="Zoom In (+)"
+              aria-label="Zoom In"
             >
               <ZoomIn className="h-4 w-4" />
             </button>
             <button
-              onClick={() => setZoomLevel((z) => Math.max(0.55, Number((z - 0.1).toFixed(2))))}
+              onClick={() => setZoomLevel((z) => Math.max(0.35, Number((z - 0.1).toFixed(2))))}
               className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition"
               title="Zoom Out (-)"
+              aria-label="Zoom Out"
             >
               <ZoomOut className="h-4 w-4" />
             </button>
             <button
+              onClick={fitToScreen}
+              className="flex items-center gap-1 px-2 py-1 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition text-xs font-semibold"
+              title="Fit entire roadmap into current window"
+              aria-label="Fit to window"
+            >
+              <Scan className="h-3.5 w-3.5 text-brand-400" />
+              <span>Fit</span>
+            </button>
+            <button
               onClick={handleReset}
-              className="px-2.5 py-1 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition text-xs font-semibold"
-              title="Reset Zoom & Pan"
+              className="px-2 py-1 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition text-xs font-semibold"
+              title="Reset Zoom to 100%"
+              aria-label="Reset zoom"
             >
               Reset ({Math.round(zoomLevel * 100)}%)
             </button>
           </div>
 
-          <div className="hidden md:flex items-center gap-1 text-[11px] text-slate-500 font-medium">
+          {/* Fullscreen Toggle */}
+          <button
+            onClick={() => setIsFullscreen(!isFullscreen)}
+            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-800 text-xs font-semibold text-slate-300 transition"
+            title={isFullscreen ? 'Exit Fullscreen (Esc)' : 'Maximize to full window'}
+            aria-label={isFullscreen ? 'Exit Fullscreen' : 'Fullscreen'}
+          >
+            {isFullscreen ? (
+              <>
+                <Minimize2 className="h-3.5 w-3.5 text-amber-400" />
+                <span className="hidden sm:inline">Exit Fullscreen</span>
+              </>
+            ) : (
+              <>
+                <Maximize2 className="h-3.5 w-3.5 text-brand-400" />
+                <span className="hidden sm:inline">Fullscreen</span>
+              </>
+            )}
+          </button>
+
+          <div className="hidden lg:flex items-center gap-1 text-[11px] text-slate-500 font-medium pl-1">
             <Move className="h-3.5 w-3.5" />
-            <span>Click & Drag to pan canvas</span>
+            <span>Pan canvas &bull; Scroll to zoom</span>
           </div>
         </div>
 
         {/* Global Progress & Pick Random Button */}
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 sm:gap-3">
           <button
             onClick={handlePickRandomProblem}
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-xs font-semibold text-slate-200 border border-slate-800 shadow-sm transition"
             title="Pick a random problem to solve"
           >
             <Shuffle className="h-3.5 w-3.5 text-brand-400" />
-            <span>Pick Random</span>
+            <span className="hidden xs:inline">Pick Random</span>
           </button>
 
           <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-900 border border-slate-800 text-xs">
-            <span className="text-slate-400">Total Solved:</span>
+            <span className="text-slate-400 hidden sm:inline">Total Solved:</span>
             <span className="font-extrabold text-white">
               {totalRoadmapStats.solved}/{totalRoadmapStats.total}
             </span>
@@ -584,9 +670,11 @@ export const DsaDependencyGraph: React.FC = () => {
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
         onWheel={handleWheel}
-        className={`w-full pt-20 pb-16 px-6 min-h-[720px] sm:min-h-[800px] relative flex justify-center items-center select-none overflow-hidden ${
-          isDragging ? 'cursor-grabbing' : 'cursor-grab'
-        }`}
+        className={`w-full relative flex justify-center items-center select-none overflow-hidden transition-all duration-200 ${
+          isFullscreen
+            ? 'h-[calc(100vh-68px)]'
+            : 'h-[72vh] min-h-[500px] max-h-[850px]'
+        } ${isDragging ? 'cursor-grabbing' : 'cursor-grab'}`}
         style={{
           backgroundColor: '#0a0d14',
           backgroundImage: 'radial-gradient(circle, #252b3d 1.5px, transparent 1.5px)',
