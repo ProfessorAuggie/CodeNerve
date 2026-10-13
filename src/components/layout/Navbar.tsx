@@ -192,19 +192,17 @@ export const Navbar: React.FC = () => {
             <span className="hidden md:inline font-medium">{user.name.split(' ')[0]}</span>
           </Link>
 
-          {/* Discreet Faculty / Admin Access Link */}
-          <Link
-            to="/admin"
-            className={`flex items-center gap-1 rounded-lg border px-2 py-1 text-xs font-medium transition ${
-              isAdminAuthenticated
-                ? 'bg-purple-100 dark:bg-purple-950/40 border-purple-300 dark:border-purple-800/60 text-purple-700 dark:text-purple-300 hover:bg-purple-200 dark:hover:bg-purple-900/50'
-                : 'border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/50 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800'
-            }`}
-            title="Faculty & Instructor Admin Portal (Restricted)"
-          >
-            <ShieldCheck className={`h-3.5 w-3.5 ${isAdminAuthenticated ? 'text-purple-600 dark:text-purple-400' : 'text-slate-400'}`} />
-            <span className="hidden xl:inline">{isAdminAuthenticated ? 'Admin' : 'Faculty'}</span>
-          </Link>
+          {/* Admin Access Link (Only visible when authenticated) */}
+          {isAdminAuthenticated && (
+            <Link
+              to="/admin"
+              className="flex items-center gap-1 rounded-lg border border-purple-300 dark:border-purple-800/60 bg-purple-100 dark:bg-purple-950/40 px-2 py-1 text-xs font-medium text-purple-700 dark:text-purple-300 hover:bg-purple-200 dark:hover:bg-purple-900/50 transition"
+              title="Faculty & Instructor Admin Portal (Restricted)"
+            >
+              <ShieldCheck className="h-3.5 w-3.5 text-purple-600 dark:text-purple-400" />
+              <span className="hidden xl:inline">Admin</span>
+            </Link>
+          )}
 
           {/* Mobile hamburger menu toggle */}
           <button
