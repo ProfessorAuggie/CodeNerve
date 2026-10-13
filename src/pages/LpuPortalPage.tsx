@@ -22,10 +22,11 @@ import { VISUALIZER_MAPPINGS, getAlgoNerveUrl } from '../data/visualizers';
 import { PROBLEMS } from '../data/problems';
 import { useUserStore } from '../store/userStore';
 import { ProblemModal } from '../components/problems/ProblemModal';
+import { LpuAcademicGraph } from '../components/roadmap/LpuAcademicGraph';
 import type { Problem } from '../types';
 
 export const LpuPortalPage: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<'syllabus' | 'exams' | 'assignments'>('syllabus');
+  const [activeTab, setActiveTab] = useState<'flowchart' | 'syllabus' | 'exams' | 'assignments'>('flowchart');
   const [selectedSubjectId, setSelectedSubjectId] = useState<string>('cse205');
   const [expandedUnits, setExpandedUnits] = useState<Record<string, boolean>>({
     'cse205-u1': true,
@@ -142,7 +143,22 @@ export const LpuPortalPage: React.FC = () => {
       </div>
 
       {/* Main Section Navigation Tabs */}
-      <div className="flex items-center gap-3 border-b border-slate-800 pb-3">
+      <div className="flex flex-wrap items-center gap-3 border-b border-slate-800 pb-3">
+        <button
+          onClick={() => setActiveTab('flowchart')}
+          className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold transition ${
+            activeTab === 'flowchart'
+              ? 'bg-emerald-600 text-white shadow-lg shadow-emerald-500/25'
+              : 'bg-slate-900 border border-slate-800 text-slate-400 hover:text-white'
+          }`}
+        >
+          <Compass className="h-4 w-4" />
+          <span>Interactive Prerequisite Flowchart</span>
+          <span className="text-[10px] font-bold px-1.5 py-0.2 rounded-full bg-emerald-400/20 text-emerald-300">
+            Hover Trace
+          </span>
+        </button>
+
         <button
           onClick={() => setActiveTab('syllabus')}
           className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold transition ${
@@ -179,6 +195,25 @@ export const LpuPortalPage: React.FC = () => {
           <span>Faculty & Class Assignments ({customProblemSets.length})</span>
         </button>
       </div>
+
+      {/* TAB 0: INTERACTIVE PREREQUISITE FLOWCHART */}
+      {activeTab === 'flowchart' && (
+        <div className="space-y-4">
+          <div className="p-4 rounded-xl bg-slate-900/60 border border-emerald-900/40 text-xs text-slate-300 flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <span className="flex h-2 w-2 rounded-full bg-emerald-400" />
+              <span>
+                <strong>LPU Academic Prerequisite Dependency Engine:</strong> Hover over any unit or topic to trace back the exact prerequisite foundations required by LPU examiners before that concept.
+              </span>
+            </div>
+            <span className="text-emerald-400 font-mono text-[11px] hidden md:inline">
+              CSE205 &bull; CSE202 Syllabus
+            </span>
+          </div>
+
+          <LpuAcademicGraph />
+        </div>
+      )}
 
       {/* TAB 1: CURRICULUM SYLLABI */}
       {activeTab === 'syllabus' && (

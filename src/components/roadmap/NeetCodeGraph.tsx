@@ -258,6 +258,7 @@ const GRAPH_EDGES: EdgeData[] = [
 export const NeetCodeGraph: React.FC = () => {
   const { problemProgress, updateProblemStatus } = useUserStore();
   const [selectedNode, setSelectedNode] = useState<NodeData | null>(GRAPH_NODES[0]);
+  const [hoveredNodeId, setHoveredNodeId] = useState<string | null>(null);
   const [selectedProblem, setSelectedProblem] = useState<Problem | null>(null);
   const [zoomLevel, setZoomLevel] = useState<number>(1);
   const [drawerOpen, setDrawerOpen] = useState(true);
@@ -272,6 +273,37 @@ export const NeetCodeGraph: React.FC = () => {
     });
     return map;
   }, []);
+
+  // Backward DAG trace calculation to find all prerequisite ancestors
+  const hoveredPrereqTrace = useMemo(() => {
+    if (!hoveredNodeId) return null;
+    const ancestorIds = new Set<string>([hoveredNodeId]);
+    const activeEdgeKeys = new Set<string>();
+
+    const queue = [hoveredNodeId];
+    while (queue.length > 0) {
+      const curr = queue.shift()!;
+      for (const edge of GRAPH_EDGES) {
+        if (edge.to === curr) {
+          activeEdgeKeys.add(`${edge.from}->${edge.to}`);
+          if (!ancestorIds.has(edge.from)) {
+            ancestorIds.add(edge.from);
+            queue.push(edge.from);
+          }
+        }
+      }
+    }
+
+    const pathNodes = GRAPH_NODES.filter((n) => ancestorIds.has(n.id));
+    const sortedAncestors = [...pathNodes].sort((a, b) => a.y - b.y);
+
+    return {
+      targetId: hoveredNodeId,
+      ancestorIds,
+      activeEdgeKeys,
+      sortedAncestors,
+    };
+  }, [hoveredNodeId]);
 
   // Compute node progress
   const getNodeStats = (nodeId: string) => {
@@ -329,6 +361,46 @@ export const NeetCodeGraph: React.FC = () => {
         </button>
       </div>
 
+      {/* Floating Prerequisite Trace-Back Breadcrumb HUD */}
+      {hoveredPrereqTrace && (
+        <div className="absolute top-4 left-1/2 -translate-x-1/2 z-30 flex items-center gap-2.5 px-4 py-2 rounded-xl bg-slate-950/95 border border-sky-500/50 backdrop-blur-md shadow-2xl shadow-sky-500/15 animate-in fade-in zoom-in-95 duration-150">
+          <div className="flex items-center gap-1.5 text-xs font-bold text-sky-400 shrink-0">
+            <span className="flex h-2 w-2 rounded-full bg-sky-400 animate-ping" />
+            <span>Prerequisites:</span>
+          </div>
+
+          <div className="flex items-center gap-1.5 text-xs overflow-x-auto max-w-md sm:max-w-lg scrollbar-none py-0.5">
+            {hoveredPrereqTrace.sortedAncestors.map((anc, idx) => {
+              const isTarget = anc.id === hoveredPrereqTrace.targetId;
+              return (
+                <React.Fragment key={anc.id}>
+                  {idx > 0 && <span className="text-sky-400 font-bold text-xs">➔</span>}
+                  <span
+                    className={`px-2 py-0.5 rounded-md text-[11px] font-semibold whitespace-nowrap transition ${
+                      isTarget
+                        ? 'bg-brand-600 text-white shadow-sm ring-1 ring-brand-400'
+                        : 'bg-sky-950/70 text-sky-300 border border-sky-500/40'
+                    }`}
+                  >
+                    {anc.title}
+                  </span>
+                </React.Fragment>
+              );
+            })}
+          </div>
+
+          <span className="text-[10px] text-slate-400 font-medium shrink-0 pl-1">
+            {hoveredPrereqTrace.sortedAncestors.length - 1 === 0 ? (
+              <span className="text-emerald-400 font-semibold">🌟 Starting Root</span>
+            ) : (
+              <span>
+                ({hoveredPrereqTrace.sortedAncestors.length - 1} required)
+              </span>
+            )}
+          </span>
+        </div>
+      )}
+
       <div className="absolute top-4 right-4 z-20">
         <button
           onClick={() => setDrawerOpen(!drawerOpen)}
@@ -341,12 +413,13 @@ export const NeetCodeGraph: React.FC = () => {
 
       {/* Main Flowchart Canvas Area */}
       <div 
-        className="w-full overflow-x-auto overflow-y-auto py-12 px-6 min-h-[750px] relative flex justify-center items-start select-none"
+        className="w-full overflow-x-auto overflow-y-auto py-14 px-6 min-h-[750px] relative flex justify-center items-start select-none"
         style={{
           backgroundColor: '#0a0d14',
           backgroundImage: 'radial-gradient(circle, #252b3d 1.5px, transparent 1.5px)',
           backgroundSize: '24px 24px',
         }}
+        onMouseLeave={() => setHoveredNodeId(null)}
       >
         <div 
           className="relative transition-transform duration-200 origin-top"
@@ -358,9 +431,22 @@ export const NeetCodeGraph: React.FC = () => {
         >
           {/* SVG Connecting Curves */}
           <svg className="absolute inset-0 w-full h-full pointer-events-none z-0">
+            <defs>
+              <filter id="neon-glow" x="-20%" y="-20%" width="140%" height="140%">
+                <feGaussianBlur stdDeviation="3" result="blur" />
+                <feMerge>
+                  <feMergeNode in="blur" />
+                  <feMergeNode in="SourceGraphic" />
+                </feMerge>
+              </filter>
+            </defs>
+
             {GRAPH_EDGES.map((edge, idx) => {
               const pathData = createSmoothPath(edge.from, edge.to);
-              const isHighlighted =
+              const edgeKey = `${edge.from}->${edge.to}`;
+              const isPrereqEdge = hoveredPrereqTrace?.activeEdgeKeys.has(edgeKey);
+              const isDimmed = hoveredPrereqTrace && !isPrereqEdge;
+              const isSelectedEdge =
                 selectedNode && (selectedNode.id === edge.from || selectedNode.id === edge.to);
 
               return (
@@ -368,10 +454,22 @@ export const NeetCodeGraph: React.FC = () => {
                   key={idx}
                   d={pathData}
                   fill="none"
-                  stroke={isHighlighted ? '#6366f1' : edge.isDotted ? '#4e73df' : '#333e5c'}
-                  strokeWidth={isHighlighted ? 2.5 : 2}
+                  stroke={
+                    isPrereqEdge
+                      ? '#38bdf8'
+                      : isDimmed
+                      ? '#161d2e'
+                      : isSelectedEdge
+                      ? '#6366f1'
+                      : edge.isDotted
+                      ? '#4e73df'
+                      : '#333e5c'
+                  }
+                  strokeWidth={isPrereqEdge ? 3.5 : isDimmed ? 1.5 : isSelectedEdge ? 2.5 : 2}
                   strokeDasharray={edge.isDotted ? '4,4' : undefined}
-                  className="transition-all duration-300"
+                  filter={isPrereqEdge ? 'url(#neon-glow)' : undefined}
+                  opacity={isDimmed ? 0.15 : 1}
+                  className="transition-all duration-200"
                 />
               );
             })}
@@ -383,26 +481,50 @@ export const NeetCodeGraph: React.FC = () => {
             const isSelected = selectedNode?.id === node.id;
             const isAllSolved = stats.total > 0 && stats.solved === stats.total;
 
+            const isHovered = hoveredNodeId === node.id;
+            const isAncestor = hoveredPrereqTrace?.ancestorIds.has(node.id);
+            const isDimmedNode = hoveredPrereqTrace && !isAncestor;
+
             return (
               <div
                 key={node.id}
+                onMouseEnter={() => setHoveredNodeId(node.id)}
                 onClick={() => {
                   setSelectedNode(node);
                   setDrawerOpen(true);
                 }}
-                className={`absolute z-10 flex flex-col items-center justify-center cursor-pointer transition-all duration-200 group ${
-                  isSelected ? 'scale-105' : 'hover:scale-102'
-                }`}
+                className={`absolute flex flex-col items-center justify-center cursor-pointer transition-all duration-200 ${
+                  isHovered
+                    ? 'z-40 scale-105'
+                    : isAncestor
+                    ? 'z-30 scale-102'
+                    : 'z-10'
+                } ${isDimmedNode ? 'opacity-25 filter grayscale-[40%]' : 'opacity-100'}`}
                 style={{
                   left: `${node.x}px`,
                   top: `${node.y}px`,
                   width: '140px',
                 }}
               >
+                {/* Micro Badge for Prerequisites or Target on hover */}
+                {isHovered ? (
+                  <span className="text-[9px] uppercase tracking-wider font-extrabold px-1.5 py-0.2 rounded-full bg-brand-500 text-white shadow-md shadow-brand-500/30 mb-0.5 animate-bounce">
+                    Target
+                  </span>
+                ) : isAncestor ? (
+                  <span className="text-[9px] uppercase tracking-wider font-bold px-1.5 py-0.2 rounded-full bg-sky-500/20 text-sky-300 border border-sky-400/40 mb-0.5">
+                    Prereq
+                  </span>
+                ) : null}
+
                 {/* Node Pill Card */}
                 <div
                   className={`w-full py-2.5 px-3 rounded-xl border text-center transition-all duration-200 shadow-xl ${
-                    isSelected
+                    isHovered
+                      ? 'bg-[#252f52] border-brand-400 ring-2 ring-brand-400/80 shadow-brand-500/40'
+                      : isAncestor
+                      ? 'bg-[#15233b] border-sky-400 ring-1 ring-sky-400/60 shadow-sky-500/25'
+                      : isSelected
                       ? 'bg-[#252f52] border-brand-400 shadow-brand-500/30'
                       : isAllSolved
                       ? 'bg-[#152e25] border-emerald-500/50 hover:border-emerald-400'
@@ -419,8 +541,10 @@ export const NeetCodeGraph: React.FC = () => {
                       className={`h-full transition-all duration-300 ${
                         isAllSolved
                           ? 'bg-emerald-400'
-                          : isSelected
+                          : isHovered || isSelected
                           ? 'bg-brand-400'
+                          : isAncestor
+                          ? 'bg-sky-400'
                           : 'bg-indigo-400/80'
                       }`}
                       style={{ width: `${Math.max(15, stats.percent)}%` }}
