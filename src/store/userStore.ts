@@ -123,11 +123,12 @@ export const useUserStore = create<UserState>()(
 
       updateProblemStatus: (problemId, status, notes, submissionUrl) =>
         set((state) => {
-          const current = state.problemProgress[problemId];
+          const progressMap = state.problemProgress || {};
+          const current = progressMap[problemId];
           const isNowSolved = status === 'SOLVED';
           return {
             problemProgress: {
-              ...state.problemProgress,
+              ...progressMap,
               [problemId]: {
                 problemId,
                 status,
@@ -143,22 +144,24 @@ export const useUserStore = create<UserState>()(
 
       toggleBookmark: (problemId) =>
         set((state) => {
-          const isBookmarked = state.bookmarks.includes(problemId);
+          const list = state.bookmarks || [];
+          const isBookmarked = list.includes(problemId);
           return {
             bookmarks: isBookmarked
-              ? state.bookmarks.filter((id) => id !== problemId)
-              : [...state.bookmarks, problemId],
+              ? list.filter((id) => id !== problemId)
+              : [...list, problemId],
           };
         }),
 
       markLessonComplete: (lessonId, completed = true) =>
         set((state) => {
-          const exists = state.completedLessons.includes(lessonId);
+          const list = state.completedLessons || [];
+          const exists = list.includes(lessonId);
           if (completed && !exists) {
-            return { completedLessons: [...state.completedLessons, lessonId] };
+            return { completedLessons: [...list, lessonId] };
           }
           if (!completed && exists) {
-            return { completedLessons: state.completedLessons.filter((id) => id !== lessonId) };
+            return { completedLessons: list.filter((id) => id !== lessonId) };
           }
           return state;
         }),
@@ -166,7 +169,7 @@ export const useUserStore = create<UserState>()(
       saveQuizResult: (quizId, score, total) =>
         set((state) => ({
           quizScores: {
-            ...state.quizScores,
+            ...(state.quizScores || {}),
             [quizId]: { score, total, date: new Date().toISOString() },
           },
         })),
@@ -174,7 +177,7 @@ export const useUserStore = create<UserState>()(
       addCustomProblemSet: (setInfo) =>
         set((state) => ({
           customProblemSets: [
-            ...state.customProblemSets,
+            ...(state.customProblemSets || []),
             {
               ...setInfo,
               id: `set-${Date.now()}`,
@@ -185,7 +188,7 @@ export const useUserStore = create<UserState>()(
 
       deleteCustomProblemSet: (id) =>
         set((state) => ({
-          customProblemSets: state.customProblemSets.filter((s) => s.id !== id),
+          customProblemSets: (state.customProblemSets || []).filter((s) => s.id !== id),
         })),
 
       resetProgress: () =>

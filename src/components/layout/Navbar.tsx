@@ -55,42 +55,39 @@ export const Navbar: React.FC = () => {
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-slate-800/80 bg-slate-950/90 backdrop-blur-md">
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-3 sm:px-5 lg:px-8">
         {/* Brand Logo & Portal Switcher */}
-        <div className="flex items-center gap-4 sm:gap-6">
-          <Link to="/" className="group flex items-center gap-2.5">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-tr from-brand-600 via-indigo-500 to-purple-500 text-white shadow-lg shadow-brand-500/25 transition group-hover:scale-105 group-hover:shadow-brand-500/40">
-              <Code2 className="h-5 w-5" />
+        <div className="flex items-center gap-3 sm:gap-4">
+          <Link to="/" className="group flex items-center gap-2">
+            <div className="flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center rounded-xl bg-gradient-to-tr from-brand-600 via-indigo-500 to-purple-500 text-white shadow-md shadow-brand-500/25 transition group-hover:scale-105 group-hover:shadow-brand-500/40">
+              <Code2 className="h-4 w-4 sm:h-4.5 sm:w-4.5" />
             </div>
             <div>
-              <span className="text-xl font-bold tracking-tight text-white group-hover:text-brand-300 transition">
+              <span className="text-base sm:text-lg font-bold tracking-tight text-white group-hover:text-brand-300 transition">
                 Code<span className="text-brand-400">Nerve</span>
               </span>
-              <span className="hidden sm:inline-block ml-2 text-[10px] font-semibold uppercase tracking-wider px-1.5 py-0.5 rounded bg-brand-500/10 text-brand-300 border border-brand-500/20">
-                {activePortal === 'lpu' ? 'LPU C++ Portal' : 'Global DSA Track'}
+              <span className="hidden sm:inline-block ml-1.5 text-[9px] font-semibold uppercase tracking-wider px-1.5 py-0.2 rounded bg-brand-500/10 text-brand-300 border border-brand-500/20">
+                {activePortal === 'lpu' ? 'LPU C++' : 'Global DSA'}
               </span>
             </div>
           </Link>
 
           {/* Dual Platform Switcher: Global Public (Generic) vs LPU University (C++) */}
-          <div className="hidden md:flex items-center rounded-xl border border-slate-800 bg-slate-900/90 p-1 text-xs shadow-inner">
+          <div className="hidden md:flex items-center rounded-xl border border-slate-800 bg-slate-900/90 p-0.5 text-xs shadow-inner">
             <button
               onClick={() => {
                 setActivePortal('global');
                 if (location.pathname === '/lpu') navigate('/roadmap');
               }}
-              className={`flex items-center gap-1.5 px-3 py-1 rounded-lg font-bold transition ${
+              className={`flex items-center gap-1 px-2.5 py-1 rounded-lg font-bold transition text-xs ${
                 activePortal === 'global'
                   ? 'bg-brand-600 text-white shadow-sm'
                   : 'text-slate-400 hover:text-slate-200'
               }`}
               title="Generic Public Coding Track (Any Language: Python, Java, C++, JS, Go)"
             >
-              <Globe className="h-3.5 w-3.5" />
+              <Globe className="h-3 w-3" />
               <span>Global DSA</span>
-              <span className="text-[9px] px-1 py-0.2 rounded bg-brand-500/20 text-brand-300 font-semibold hidden lg:inline">
-                Any Language
-              </span>
             </button>
 
             <button
@@ -98,33 +95,30 @@ export const Navbar: React.FC = () => {
                 setActivePortal('lpu');
                 navigate('/lpu');
               }}
-              className={`flex items-center gap-1.5 px-3 py-1 rounded-lg font-bold transition ${
+              className={`flex items-center gap-1 px-2.5 py-1 rounded-lg font-bold transition text-xs ${
                 activePortal === 'lpu'
                   ? 'bg-emerald-600 text-white shadow-sm'
                   : 'text-slate-400 hover:text-slate-200'
               }`}
               title="Lovely Professional University C++ Curriculum (CSE202 / CSE205)"
             >
-              <GraduationCap className="h-3.5 w-3.5" />
+              <GraduationCap className="h-3 w-3" />
               <span>LPU Portal</span>
-              <span className="text-[9px] px-1 py-0.2 rounded bg-emerald-500/20 text-emerald-300 font-semibold hidden lg:inline">
-                C++
-              </span>
             </button>
           </div>
 
           <button
             onClick={openTrackModal}
-            className="hidden lg:flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl border border-slate-800 bg-slate-900/80 hover:bg-slate-850 hover:border-slate-700 text-slate-300 text-xs font-semibold transition"
+            className="hidden xl:flex items-center gap-1 px-2 py-1 rounded-lg border border-slate-800 bg-slate-900/80 hover:bg-slate-850 hover:border-slate-700 text-slate-300 text-xs font-semibold transition"
             title="Choose or switch between Global DSA and LPU Portal"
           >
-            <Sparkles className="h-3.5 w-3.5 text-brand-400" />
-            <span>Switch Track</span>
+            <Sparkles className="h-3 w-3 text-brand-400" />
+            <span>Switch</span>
           </button>
         </div>
 
           {/* Desktop Nav Items */}
-          <nav className="hidden xl:flex items-center gap-1">
+          <nav className="hidden lg:flex items-center gap-0.5">
             {currentNavLinks.map((link) => {
               const active = !link.isExternal && isActive(link.path);
               const Icon = link.icon;
@@ -135,12 +129,12 @@ export const Navbar: React.FC = () => {
                     href={link.path}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="relative flex items-center gap-1.5 px-3 py-2 text-sm font-medium rounded-lg text-slate-300 hover:text-white hover:bg-slate-900/60 transition-colors"
+                    className="relative flex items-center gap-1 px-2.5 py-1 text-xs font-medium rounded-lg text-slate-300 hover:text-white hover:bg-slate-900/60 transition-colors"
                   >
-                    <Icon className="h-4 w-4 text-brand-400" />
+                    <Icon className="h-3.5 w-3.5 text-brand-400" />
                     <span>{link.name}</span>
                     {link.badge && (
-                      <span className="ml-1 text-[10px] font-semibold px-1.5 py-0.2 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
+                      <span className="text-[9px] font-semibold px-1 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
                         {link.badge}
                       </span>
                     )}
@@ -151,19 +145,14 @@ export const Navbar: React.FC = () => {
                 <Link
                   key={link.path}
                   to={link.path}
-                  className={`relative flex items-center gap-1.5 px-3 py-2 text-sm font-medium rounded-lg transition-colors ${
+                  className={`relative flex items-center gap-1 px-2.5 py-1 text-xs font-medium rounded-lg transition-colors ${
                     active
                       ? 'bg-slate-800/80 text-white shadow-sm'
                       : 'text-slate-300 hover:text-white hover:bg-slate-900/60'
                   }`}
                 >
-                  <Icon className={`h-4 w-4 ${active ? 'text-brand-400' : 'text-slate-400'}`} />
+                  <Icon className={`h-3.5 w-3.5 ${active ? 'text-brand-400' : 'text-slate-400'}`} />
                   <span>{link.name}</span>
-                  {link.badge && (
-                    <span className="ml-1 text-[10px] font-semibold px-1.5 py-0.2 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
-                      {link.badge}
-                    </span>
-                  )}
                   {active && (
                     <span className="absolute bottom-0 left-2 right-2 h-0.5 bg-brand-500 rounded-full" />
                   )}
@@ -173,50 +162,50 @@ export const Navbar: React.FC = () => {
           </nav>
 
         {/* Right Section: Progress pill & Role Toggle */}
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2">
           {/* Progress Pill */}
           <Link
             to="/dashboard"
-            className="hidden sm:flex items-center gap-2 rounded-full border border-slate-800 bg-slate-900/90 px-3 py-1.5 text-xs text-slate-300 transition hover:border-slate-700 hover:bg-slate-800/80"
+            className="hidden sm:flex items-center gap-1.5 rounded-full border border-slate-800 bg-slate-900/90 px-2.5 py-1 text-xs text-slate-300 transition hover:border-slate-700 hover:bg-slate-800/80"
           >
-            <div className="flex items-center gap-1.5">
+            <div className="flex items-center gap-1">
               <span className="text-emerald-400 font-semibold">{solvedCount}</span>
               <span className="text-slate-500">/</span>
               <span>{totalProblems}</span>
             </div>
-            <div className="h-2 w-14 overflow-hidden rounded-full bg-slate-800">
+            <div className="h-1.5 w-10 sm:w-12 overflow-hidden rounded-full bg-slate-800">
               <div
                 className="h-full bg-gradient-to-r from-brand-500 to-emerald-400 transition-all duration-500"
                 style={{ width: `${progressPercent}%` }}
               />
             </div>
-            <span className="text-[11px] font-medium text-slate-400">{progressPercent}%</span>
+            <span className="text-[10px] font-medium text-slate-400">{progressPercent}%</span>
           </Link>
 
           {/* Role Mode Switcher */}
           <div className="flex items-center rounded-lg border border-slate-800 bg-slate-900/80 p-0.5 text-xs">
             <button
               onClick={() => setRole('student')}
-              className={`flex items-center gap-1 rounded-md px-2.5 py-1 font-medium transition ${
+              className={`flex items-center gap-1 rounded-md px-2 py-0.5 font-medium text-xs transition ${
                 user.role === 'student'
                   ? 'bg-brand-600 text-white shadow-sm'
                   : 'text-slate-400 hover:text-slate-200'
               }`}
               title="Student Mode"
             >
-              <User className="h-3.5 w-3.5" />
+              <User className="h-3 w-3" />
               <span className="hidden md:inline">Student</span>
             </button>
             <button
               onClick={() => setRole('teacher')}
-              className={`flex items-center gap-1 rounded-md px-2.5 py-1 font-medium transition ${
+              className={`flex items-center gap-1 rounded-md px-2 py-0.5 font-medium text-xs transition ${
                 user.role === 'teacher'
                   ? 'bg-purple-600 text-white shadow-sm'
                   : 'text-slate-400 hover:text-slate-200'
               }`}
               title="Teacher Mode"
             >
-              <ShieldCheck className="h-3.5 w-3.5" />
+              <ShieldCheck className="h-3 w-3" />
               <span className="hidden md:inline">Faculty</span>
             </button>
           </div>
@@ -224,9 +213,9 @@ export const Navbar: React.FC = () => {
           {/* Mobile hamburger menu toggle */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="xl:hidden rounded-lg p-2 text-slate-400 hover:bg-slate-800 hover:text-white"
+            className="lg:hidden rounded-lg p-1.5 text-slate-400 hover:bg-slate-800 hover:text-white"
           >
-            {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+            {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
         </div>
       </div>

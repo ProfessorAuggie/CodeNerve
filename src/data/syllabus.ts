@@ -16,7 +16,7 @@ const cse202Units: Unit[] = [
         description: 'Overview of object-oriented programming: encapsulation, abstraction, inheritance, polymorphism, and contrast with procedural C.',
         prerequisites: ['Basic computer programming logic', 'Variables and conditional branching'],
         order: 1,
-        problemIds: ['p-cpp-classes-1', 'p-cpp-structs-1'],
+        problemIds: ['p-cpp-classes-1', 'p-cpp-structs-1', 'p-cpp-const-member-functions-1'],
       },
       {
         id: 'cse202-u1-t2',
@@ -25,7 +25,7 @@ const cse202Units: Unit[] = [
         description: 'C++ I/O streams, features of iostream, stream extraction (>>) and insertion (<<) operators, formatted and unformatted I/O operations.',
         prerequisites: ['Standard C printf/scanf basics', 'Header files and namespaces'],
         order: 2,
-        problemIds: ['p-cpp-io-1'],
+        problemIds: ['p-cpp-io-1', 'p-cpp-stringstream-1'],
       },
       {
         id: 'cse202-u1-t3',
@@ -34,7 +34,7 @@ const cse202Units: Unit[] = [
         description: 'Class definition, object instantiation, accessing class members, public vs private access specifiers.',
         prerequisites: ['C Structures (struct)', 'Functions and parameter passing'],
         order: 3,
-        problemIds: ['p-cpp-classes-1'],
+        problemIds: ['p-cpp-classes-1', 'p-cpp-encapsulation-1', 'p-cpp-const-member-functions-1'],
       },
       {
         id: 'cse202-u1-t4',
@@ -61,7 +61,7 @@ const cse202Units: Unit[] = [
         description: 'Class-level vs instance-level data, static member access rules, static initialization outside class body.',
         prerequisites: ['Classes and Objects', 'Global vs local variable lifetimes'],
         order: 6,
-        problemIds: ['p-cpp-static-1'],
+        problemIds: ['p-cpp-static-1', 'p-cpp-static-counter-1'],
       },
       {
         id: 'cse202-u1-t7',
@@ -70,7 +70,7 @@ const cse202Units: Unit[] = [
         description: 'Default argument rules, trailing parameter requirements, preventing ambiguous function calls.',
         prerequisites: ['Function prototypes and signatures'],
         order: 7,
-        problemIds: ['p-cpp-func-overload-1'],
+        problemIds: ['p-cpp-func-overload-1', 'p-cpp-constructor-overload-1'],
       },
       {
         id: 'cse202-u1-t8',
@@ -79,7 +79,7 @@ const cse202Units: Unit[] = [
         description: 'endl, setw, setprecision, setfill from <iomanip> and custom stream manipulators.',
         prerequisites: ['cin and cout streams', 'Include directives'],
         order: 8,
-        problemIds: ['p-cpp-io-1'],
+        problemIds: ['p-cpp-io-1', 'p-cpp-stringstream-1'],
       },
       {
         id: 'cse202-u1-t9',
@@ -97,7 +97,7 @@ const cse202Units: Unit[] = [
         description: 'Block scope, function scope, class scope, namespace scope, and the :: operator.',
         prerequisites: ['Block scoping in C/C++', 'Local vs global variables'],
         order: 10,
-        problemIds: ['p-cpp-classes-1', 'p-cpp-static-1'],
+        problemIds: ['p-cpp-classes-1', 'p-cpp-static-1', 'p-cpp-static-counter-1'],
       },
       {
         id: 'cse202-u1-t11',
@@ -106,7 +106,7 @@ const cse202Units: Unit[] = [
         description: 'Granting non-member functions or external classes access to private members, friendship rules and security considerations.',
         prerequisites: ['Private access specifier', 'Class encapsulation'],
         order: 11,
-        problemIds: ['p-cpp-friend-1'],
+        problemIds: ['p-cpp-friend-1', 'p-cpp-stream-overloading-1'],
       },
       {
         id: 'cse202-u1-t12',
@@ -115,7 +115,7 @@ const cse202Units: Unit[] = [
         description: 'Reference variable semantics as aliases, pass-by-value vs pass-by-reference vs pass-by-address.',
         prerequisites: ['Memory addresses', 'Pointers introduction'],
         order: 12,
-        problemIds: ['p-cpp-references-1'],
+        problemIds: ['p-cpp-references-1', 'p-cpp-call-by-reference-1'],
       },
       {
         id: 'cse202-u1-t13',
@@ -125,7 +125,7 @@ const cse202Units: Unit[] = [
         prerequisites: ['Function execution stack', 'Mathematical induction'],
         order: 13,
         visualizerId: 'factorial',
-        problemIds: ['p-cpp-recursion-1'],
+        problemIds: ['p-cpp-recursion-1', 'p-dsa-powx-n-1'],
       },
     ],
   },
@@ -142,7 +142,7 @@ const cse202Units: Unit[] = [
         description: 'Generic void* casting, arithmetic offsets on typed pointers, multi-level indirection (**ptr).',
         prerequisites: ['Memory address model', 'Data type sizes in bytes'],
         order: 1,
-        problemIds: ['p-cpp-pointers-1'],
+        problemIds: ['p-cpp-pointers-1', 'p-cpp-dynamic-arr-1', 'p-cpp-matrix-dynamic-2d-1'],
       },
       {
         id: 'cse202-u2-t2',
@@ -151,7 +151,7 @@ const cse202Units: Unit[] = [
         description: 'Common pointer pitfalls: dangling pointers to deallocated heap or expired stack frames, uninitialized wild pointers, nullptr dereferencing.',
         prerequisites: ['Pointers in C++', 'Dynamic memory (new/delete)'],
         order: 2,
-        problemIds: ['p-cpp-pointers-1'],
+        problemIds: ['p-cpp-pointers-1', 'p-cpp-unique-ptr-1'],
       },
       {
         id: 'cse202-u2-t3',
@@ -160,7 +160,7 @@ const cse202Units: Unit[] = [
         description: 'Dynamic data members in classes, the implicit this pointer, returning *this for method chaining.',
         prerequisites: ['Classes and Objects', 'Pointers in C++'],
         order: 3,
-        problemIds: ['p-cpp-this-pointer-1'],
+        problemIds: ['p-cpp-this-pointer-1', 'p-cpp-copy-constructor-deep-1'],
       },
       {
         id: 'cse202-u2-t4',
@@ -169,7 +169,7 @@ const cse202Units: Unit[] = [
         description: 'Creating and manipulating arrays of class objects, invoking constructors for each array element.',
         prerequisites: ['Classes', '1D Arrays'],
         order: 4,
-        problemIds: ['p-cpp-classes-1', 'p-dsa-array-traversal-1'],
+        problemIds: ['p-cpp-classes-1', 'p-cpp-matrix-dynamic-2d-1', 'p-dsa-array-traversal-1'],
       },
       {
         id: 'cse202-u2-t5',
@@ -178,7 +178,7 @@ const cse202Units: Unit[] = [
         description: 'std::string member functions, substring, find, concatenation, and comparison vs C-style null-terminated char arrays.',
         prerequisites: ['Character arrays', 'Standard library basics'],
         order: 5,
-        problemIds: ['p-cpp-strings-1'],
+        problemIds: ['p-cpp-strings-1', 'p-cpp-string-pointers-reverse-1', 'p-cpp-stringstream-1'],
       },
       {
         id: 'cse202-u2-t6',
@@ -187,7 +187,7 @@ const cse202Units: Unit[] = [
         description: '2D array memory layout (row-major), pointer-to-member syntax (.* and ->* operators).',
         prerequisites: ['1D Arrays', 'Pointer arithmetic'],
         order: 6,
-        problemIds: ['p-cpp-pointers-1', 'p-dsa-array-traversal-1'],
+        problemIds: ['p-cpp-pointers-1', 'p-cpp-matrix-dynamic-2d-1', 'p-dsa-rotate-image-1'],
       },
     ],
   },
@@ -204,7 +204,7 @@ const cse202Units: Unit[] = [
         description: 'ifstream, ofstream, fstream; file open modes (ios::in, ios::out, ios::app, ios::binary), checking file open status.',
         prerequisites: ['I/O Streams (cin/cout)', 'Strings in C++'],
         order: 1,
-        problemIds: ['p-cpp-filestreams-1'],
+        problemIds: ['p-cpp-filestreams-1', 'p-cpp-file-stream-operations-1'],
       },
       {
         id: 'cse202-u3-t2',
@@ -213,7 +213,7 @@ const cse202Units: Unit[] = [
         description: 'seekg, seekp, tellg, tellp for file pointer navigation, relative positioning (ios::beg, ios::cur, ios::end).',
         prerequisites: ['File Streams', 'Pointer offsets'],
         order: 2,
-        problemIds: ['p-cpp-filestreams-1'],
+        problemIds: ['p-cpp-constructors-1', 'p-cpp-constructor-overload-1'],
       },
       {
         id: 'cse202-u3-t3',
@@ -222,7 +222,7 @@ const cse202Units: Unit[] = [
         description: 'read() and write() for binary I/O, writing struct and class instances directly to disk.',
         prerequisites: ['File Streams', 'Type casting (reinterpret_cast)'],
         order: 3,
-        problemIds: ['p-cpp-filestreams-1'],
+        problemIds: ['p-cpp-constructors-1', 'p-cpp-copy-constructor-deep-1'],
       },
       {
         id: 'cse202-u3-t4',
@@ -231,7 +231,7 @@ const cse202Units: Unit[] = [
         description: 'Constructor types, member initialization lists, shallow copy vs deep copy, copy constructor invocation syntax.',
         prerequisites: ['Classes and Objects', 'Dynamic memory (new/delete)'],
         order: 4,
-        problemIds: ['p-cpp-constructors-1'],
+        problemIds: ['p-cpp-destructors-1', 'p-cpp-virtual-destructor-1', 'p-cpp-unique-ptr-1'],
       },
       {
         id: 'cse202-u3-t5',
@@ -257,7 +257,7 @@ const cse202Units: Unit[] = [
         description: 'Overloading ++, --, +, -, ==, and stream operators (<<, >>) for user-defined classes.',
         prerequisites: ['Classes and Objects', 'Function Overloading', 'Friend Functions'],
         order: 1,
-        problemIds: ['p-cpp-operator-overload-1'],
+        problemIds: ['p-cpp-operator-overload-1', 'p-cpp-stream-overloading-1', 'p-cpp-subscript-operator-1'],
       },
       {
         id: 'cse202-u4-t2',
@@ -266,7 +266,7 @@ const cse202Units: Unit[] = [
         description: 'Conversion constructor (basic to class), conversion operator (class to basic), and class to class conversions.',
         prerequisites: ['Operator overloading', 'Constructors'],
         order: 2,
-        problemIds: ['p-cpp-operator-overload-1'],
+        problemIds: ['p-cpp-inheritance-1', 'p-cpp-hierarchical-inheritance-1'],
       },
       {
         id: 'cse202-u4-t3',
@@ -275,7 +275,7 @@ const cse202Units: Unit[] = [
         description: 'Base and derived class syntax, public vs protected vs private inheritance modes, constructor chaining.',
         prerequisites: ['Classes and Objects', 'Access specifiers'],
         order: 3,
-        problemIds: ['p-cpp-inheritance-1'],
+        problemIds: ['p-cpp-multiple-inheritance-order-1', 'p-cpp-diamond-problem-1'],
       },
       {
         id: 'cse202-u4-t4',
@@ -301,7 +301,7 @@ const cse202Units: Unit[] = [
         description: 'Base class pointers holding derived class addresses, object slicing, early static binding limitations.',
         prerequisites: ['Pointers in C++', 'Inheritance'],
         order: 1,
-        problemIds: ['p-cpp-polymorphism-1'],
+        problemIds: ['p-cpp-polymorphism-1', 'p-cpp-dynamic-cast-rtti-1'],
       },
       {
         id: 'cse202-u5-t2',
@@ -310,7 +310,7 @@ const cse202Units: Unit[] = [
         description: 'The virtual keyword, vtable and vptr internal mechanics, dynamic dispatch at runtime.',
         prerequisites: ['Base class pointers', 'Function overriding'],
         order: 2,
-        problemIds: ['p-cpp-polymorphism-1'],
+        problemIds: ['p-cpp-abstract-class-1', 'p-cpp-pure-virtual-interface-1', 'p-cpp-virtual-destructor-1'],
       },
       {
         id: 'cse202-u5-t3',
@@ -345,7 +345,7 @@ const cse202Units: Unit[] = [
         description: 'Synchronous exception mechanisms, catching standard exceptions, catch-all (...) handler, rethrowing.',
         prerequisites: ['Control flow', 'Functions', 'Stack unwinding'],
         order: 1,
-        problemIds: ['p-cpp-exceptions-1'],
+        problemIds: ['p-cpp-exceptions-1', 'p-cpp-custom-exception-1'],
       },
       {
         id: 'cse202-u6-t2',
@@ -354,7 +354,7 @@ const cse202Units: Unit[] = [
         description: 'Generic programming, template specialization, non-type template parameters, compiler code generation.',
         prerequisites: ['Function overloading', 'Classes in C++'],
         order: 2,
-        problemIds: ['p-cpp-templates-1'],
+        problemIds: ['p-cpp-templates-1', 'p-cpp-fn-template-max-1', 'p-cpp-class-templates-multi-1'],
       },
       {
         id: 'cse202-u6-t3',
@@ -363,7 +363,7 @@ const cse202Units: Unit[] = [
         description: 'Sequential vs associative containers, memory representations, time complexities of insert and find.',
         prerequisites: ['Class templates', 'Pointers and references'],
         order: 3,
-        problemIds: ['p-cpp-stl-vector-1', 'p-cpp-stl-map-1'],
+        problemIds: ['p-cpp-stl-vector-1', 'p-cpp-stl-map-1', 'p-cpp-stl-unordered-map-1', 'p-cpp-stl-priority-queue-1', 'p-cpp-stl-algorithms-lambda-1'],
       },
       {
         id: 'cse202-u6-t4',
@@ -394,7 +394,7 @@ const cse205Units: Unit[] = [
         description: 'Linear vs non-linear structures, primitive vs non-primitive, asymptotic analysis (Big-O, Omega, Theta), time-space tradeoffs.',
         prerequisites: ['Basic programming', 'Mathematical functions and limits'],
         order: 1,
-        problemIds: ['p-dsa-array-traversal-1'],
+        problemIds: ['p-dsa-array-traversal-1', 'p-dsa-kadane-1'],
       },
       {
         id: 'cse205-u1-t2',
@@ -403,7 +403,7 @@ const cse205Units: Unit[] = [
         description: 'Contiguous 1D and 2D memory addressing, element shifting costs for insertions and deletions at arbitrary indices.',
         prerequisites: ['Array memory model', 'Loop constructs'],
         order: 2,
-        problemIds: ['p-dsa-array-traversal-1', 'p-dsa-array-insert-1'],
+        problemIds: ['p-dsa-array-traversal-1', 'p-dsa-array-insert-1', 'p-dsa-rotate-image-1', 'p-dsa-spiral-matrix-1', 'p-dsa-set-matrix-zeroes-1'],
       },
       {
         id: 'cse205-u1-t3',
@@ -413,7 +413,7 @@ const cse205Units: Unit[] = [
         prerequisites: ['Arrays', 'Swapping values'],
         order: 3,
         visualizerId: 'bubble-sort',
-        problemIds: ['p-dsa-bubble-sort-1'],
+        problemIds: ['p-dsa-bubble-sort-1', 'p-dsa-three-sum-1'],
       },
       {
         id: 'cse205-u1-t4',
@@ -443,7 +443,7 @@ const cse205Units: Unit[] = [
         prerequisites: ['Array traversal'],
         order: 6,
         visualizerId: 'linear-search',
-        problemIds: ['p-dsa-linear-search-1'],
+        problemIds: ['p-dsa-linear-search-1', 'p-dsa-single-number-1'],
       },
       {
         id: 'cse205-u1-t7',
@@ -453,7 +453,7 @@ const cse205Units: Unit[] = [
         prerequisites: ['Sorted arrays', 'Divide-and-conquer concept'],
         order: 7,
         visualizerId: 'binary-search',
-        problemIds: ['p-dsa-binary-search-1', 'p-dsa-search-rotated-1'],
+        problemIds: ['p-dsa-binary-search-1', 'p-dsa-search-rotated-1', 'p-dsa-search-2d-matrix-1', 'p-dsa-find-min-rotated-1', 'p-dsa-koko-bananas-1'],
       },
     ],
   },
@@ -471,7 +471,7 @@ const cse205Units: Unit[] = [
         prerequisites: ['Pointers in C++', 'Dynamic memory (new/delete)'],
         order: 1,
         visualizerId: 'singly-linked-list',
-        problemIds: ['p-dsa-ll-reverse-1', 'p-dsa-ll-merge-two-1'],
+        problemIds: ['p-dsa-ll-reverse-1', 'p-dsa-ll-merge-two-1', 'p-dsa-reorder-list-1'],
       },
       {
         id: 'cse205-u2-t2',
@@ -481,7 +481,7 @@ const cse205Units: Unit[] = [
         prerequisites: ['Singly Linked List basics', 'Pointer reassignment'],
         order: 2,
         visualizerId: 'singly-linked-list',
-        problemIds: ['p-dsa-ll-reverse-1', 'p-dsa-ll-middle-1'],
+        problemIds: ['p-dsa-ll-reverse-1', 'p-dsa-ll-middle-1', 'p-dsa-remove-nth-from-end-1'],
       },
       {
         id: 'cse205-u2-t3',
@@ -490,7 +490,7 @@ const cse205Units: Unit[] = [
         description: 'Bidirectional next and prev pointers, insertion and deletion operations, advantages and memory overhead.',
         prerequisites: ['Singly Linked List', 'Pointer arithmetic'],
         order: 3,
-        problemIds: ['p-dsa-dll-1'],
+        problemIds: ['p-dsa-dll-1', 'p-dsa-lru-cache-1'],
       },
       {
         id: 'cse205-u2-t4',
@@ -499,7 +499,7 @@ const cse205Units: Unit[] = [
         description: 'Tail node linking back to head node, circular traversal loop termination, round-robin applications.',
         prerequisites: ['Linked list traversal'],
         order: 4,
-        problemIds: ['p-dsa-cll-1', 'p-dsa-ll-cycle-1'],
+        problemIds: ['p-dsa-cll-1', 'p-dsa-ll-cycle-1', 'p-dsa-copy-list-random-1'],
       },
     ],
   },
@@ -517,7 +517,7 @@ const cse205Units: Unit[] = [
         prerequisites: ['Arrays', 'Singly Linked Lists'],
         order: 1,
         visualizerId: 'stack-operations',
-        problemIds: ['p-dsa-stack-valid-parens-1', 'p-dsa-min-stack-1'],
+        problemIds: ['p-dsa-stack-valid-parens-1', 'p-dsa-min-stack-1', 'p-dsa-daily-temperatures-1'],
       },
       {
         id: 'cse205-u3-t2',
@@ -527,7 +527,7 @@ const cse205Units: Unit[] = [
         prerequisites: ['Stack ADT', 'Operator precedence and associativity'],
         order: 2,
         visualizerId: 'stack-operations',
-        problemIds: ['p-dsa-stack-postfix-1'],
+        problemIds: ['p-dsa-stack-postfix-1', 'p-dsa-eval-rpn-1', 'p-dsa-generate-parentheses-1'],
       },
       {
         id: 'cse205-u3-t3',
@@ -537,7 +537,7 @@ const cse205Units: Unit[] = [
         prerequisites: ['Arrays', 'Modulo arithmetic'],
         order: 3,
         visualizerId: 'queue-operations',
-        problemIds: ['p-dsa-queue-1', 'p-dsa-circular-queue-1'],
+        problemIds: ['p-dsa-queue-1', 'p-dsa-circular-queue-1', 'p-dsa-largest-rect-histogram-1'],
       },
       {
         id: 'cse205-u3-t4',
@@ -546,7 +546,7 @@ const cse205Units: Unit[] = [
         description: 'Insertions and deletions at both ends (Deque), priority-based removal order.',
         prerequisites: ['Linear Queue ADT'],
         order: 4,
-        problemIds: ['p-dsa-queue-1', 'p-dsa-heap-kth-1'],
+        problemIds: ['p-dsa-queue-1', 'p-dsa-heap-kth-1', 'p-dsa-task-scheduler-1'],
       },
     ],
   },
@@ -564,7 +564,7 @@ const cse205Units: Unit[] = [
         prerequisites: ['Stack ADT', 'Functions and recursion'],
         order: 1,
         visualizerId: 'hanoi',
-        problemIds: ['p-cpp-recursion-1'],
+        problemIds: ['p-cpp-recursion-1', 'p-dsa-powx-n-1', 'p-dsa-subsets-1', 'p-dsa-combination-sum-1'],
       },
       {
         id: 'cse205-u4-t2',
@@ -573,7 +573,7 @@ const cse205Units: Unit[] = [
         description: 'Root, leaf, height, depth, full vs complete binary trees; Inorder, Preorder, Postorder, and Level-Order traversals.',
         prerequisites: ['Linked list node structures', 'Recursion'],
         order: 2,
-        problemIds: ['p-dsa-tree-traversal-1', 'p-dsa-tree-level-order-1', 'p-dsa-tree-max-depth-1'],
+        problemIds: ['p-dsa-tree-traversal-1', 'p-dsa-tree-level-order-1', 'p-dsa-tree-max-depth-1', 'p-dsa-invert-tree-1', 'p-dsa-diameter-tree-1', 'p-dsa-balanced-tree-1', 'p-dsa-same-tree-1'],
       },
       {
         id: 'cse205-u4-t3',
@@ -583,7 +583,7 @@ const cse205Units: Unit[] = [
         prerequisites: ['Binary Trees', 'Binary Search'],
         order: 3,
         visualizerId: 'bst-insert',
-        problemIds: ['p-dsa-bst-validate-1', 'p-dsa-bst-insert-1'],
+        problemIds: ['p-dsa-bst-validate-1', 'p-dsa-bst-insert-1', 'p-dsa-lca-bst-1', 'p-dsa-kth-smallest-bst-1'],
       },
       {
         id: 'cse205-u4-t4',
@@ -593,7 +593,7 @@ const cse205Units: Unit[] = [
         prerequisites: ['Recursion', 'Array manipulation'],
         order: 4,
         visualizerId: 'merge-sort',
-        problemIds: ['p-dsa-merge-sort-1'],
+        problemIds: ['p-dsa-merge-sort-1', 'p-dsa-merge-intervals-1', 'p-dsa-merge-k-sorted-lists-1'],
       },
       {
         id: 'cse205-u4-t5',
@@ -603,7 +603,7 @@ const cse205Units: Unit[] = [
         prerequisites: ['Recursion', 'Array in-place swapping'],
         order: 5,
         visualizerId: 'quick-sort',
-        problemIds: ['p-dsa-quick-sort-1'],
+        problemIds: ['p-dsa-quick-sort-1', 'p-dsa-non-overlapping-intervals-1'],
       },
     ],
   },
@@ -621,7 +621,7 @@ const cse205Units: Unit[] = [
         prerequisites: ['Complete binary trees', 'Array representations of trees'],
         order: 1,
         visualizerId: 'heap-sort',
-        problemIds: ['p-dsa-heap-kth-1', 'p-dsa-heap-sort-1'],
+        problemIds: ['p-dsa-heap-kth-1', 'p-dsa-heap-sort-1', 'p-dsa-heapify-1', 'p-dsa-top-k-frequent-1', 'p-dsa-k-closest-points-1', 'p-dsa-median-data-stream-1'],
       },
       {
         id: 'cse205-u5-t2',
@@ -631,7 +631,7 @@ const cse205Units: Unit[] = [
         prerequisites: ['Binary Search Trees (BST)', 'Tree height calculation'],
         order: 2,
         visualizerId: 'avl-balancing',
-        problemIds: ['p-dsa-avl-tree-1'],
+        problemIds: ['p-dsa-avl-tree-1', 'p-dsa-implement-trie-1'],
       },
       {
         id: 'cse205-u5-t3',
@@ -640,7 +640,7 @@ const cse205Units: Unit[] = [
         description: 'Division, multiplication, and folding hash methods; collision resolution via Separate Chaining vs Open Addressing (linear probing, quadratic probing, double hashing).',
         prerequisites: ['Arrays', 'Linked Lists', 'Modulo arithmetic'],
         order: 3,
-        problemIds: ['p-dsa-hash-chaining-1', 'p-dsa-two-sum-1'],
+        problemIds: ['p-dsa-hash-chaining-1', 'p-dsa-two-sum-1', 'p-dsa-copy-list-random-1', 'p-dsa-lru-cache-1'],
       },
     ],
   },
@@ -658,7 +658,7 @@ const cse205Units: Unit[] = [
         prerequisites: ['Queue ADT', '2D Arrays and Linked Lists'],
         order: 1,
         visualizerId: 'bfs',
-        problemIds: ['p-dsa-bfs-1'],
+        problemIds: ['p-dsa-bfs-1', 'p-dsa-num-islands-1', 'p-dsa-clone-graph-1'],
       },
       {
         id: 'cse205-u6-t2',
@@ -668,7 +668,7 @@ const cse205Units: Unit[] = [
         prerequisites: ['Graph representations', 'Recursion and Call Stacks'],
         order: 2,
         visualizerId: 'dfs',
-        problemIds: ['p-dsa-dfs-1', 'p-dsa-cycle-graph-1'],
+        problemIds: ['p-dsa-dfs-1', 'p-dsa-cycle-graph-1', 'p-dsa-pacific-atlantic-1', 'p-dsa-course-schedule-1', 'p-dsa-course-schedule-ii-1'],
       },
       {
         id: 'cse205-u6-t3',
@@ -678,7 +678,7 @@ const cse205Units: Unit[] = [
         prerequisites: ['Weighted Graphs', 'Priority Queues (Min-Heap)'],
         order: 3,
         visualizerId: 'dijkstra',
-        problemIds: ['p-dsa-dijkstra-1'],
+        problemIds: ['p-dsa-dijkstra-1', 'p-dsa-network-delay-time-1'],
       },
       {
         id: 'cse205-u6-t4',
@@ -697,7 +697,7 @@ const cse205Units: Unit[] = [
         prerequisites: ['Graph representations', '2D arrays', 'Greedy algorithms'],
         order: 5,
         visualizerId: 'prim',
-        problemIds: ['p-dsa-floyd-warshall-1', 'p-dsa-mst-prim-1'],
+        problemIds: ['p-dsa-floyd-warshall-1', 'p-dsa-mst-prim-1', 'p-dsa-mst-kruskal-1'],
       },
     ],
   },

@@ -50,7 +50,7 @@ export const CSE205_NODES: LpuNodeData[] = [
     examScope: 'CA-1',
     prerequisites: ['Basic C++ programming', 'Loop constructs & memory addresses'],
     description: 'Contiguous 1D/2D memory addressing, element shifting, Big-O asymptotic analysis.',
-    problemIds: ['p-dsa-array-traversal-1', 'p-dsa-array-insert-1'],
+    problemIds: ['p-dsa-array-traversal-1', 'p-dsa-array-insert-1', 'p-dsa-kadane-1', 'p-dsa-rotate-image-1', 'p-dsa-spiral-matrix-1'],
   },
 
   // Level 1: Searching & Basic Sorting
@@ -66,7 +66,7 @@ export const CSE205_NODES: LpuNodeData[] = [
     prerequisites: ['Arrays & Big-O Foundations'],
     description: 'Sequential comparison vs logarithmic interval halving on ordered ranges.',
     visualizerId: 'binary-search',
-    problemIds: ['p-dsa-linear-search-1', 'p-dsa-binary-search-1'],
+    problemIds: ['p-dsa-linear-search-1', 'p-dsa-binary-search-1', 'p-dsa-search-rotated-1', 'p-dsa-search-2d-matrix-1', 'p-dsa-find-min-rotated-1'],
   },
   {
     id: 'cse205-sorting',
@@ -80,7 +80,7 @@ export const CSE205_NODES: LpuNodeData[] = [
     prerequisites: ['Arrays & Big-O Foundations'],
     description: 'Quadratic sorting paradigms, bubble passes, insertion shifts, and selection minima.',
     visualizerId: 'bubble-sort',
-    problemIds: ['p-dsa-bubble-sort-1', 'p-dsa-insertion-sort-1', 'p-dsa-selection-sort-1'],
+    problemIds: ['p-dsa-bubble-sort-1', 'p-dsa-insertion-sort-1', 'p-dsa-selection-sort-1', 'p-dsa-three-sum-1'],
   },
 
   // Level 2: Advanced Sorting & Linked Lists
@@ -96,7 +96,7 @@ export const CSE205_NODES: LpuNodeData[] = [
     prerequisites: ['Bubble, Insert & Select Sort', 'Divide and conquer recursion'],
     description: 'Divide and conquer partitioning, recursive stack unwinding, and guaranteed O(n log n) merges.',
     visualizerId: 'merge-sort',
-    problemIds: ['p-dsa-merge-sort-1', 'p-dsa-quick-sort-1'],
+    problemIds: ['p-dsa-merge-sort-1', 'p-dsa-quick-sort-1', 'p-dsa-merge-intervals-1'],
   },
   {
     id: 'cse205-linked-lists',
@@ -110,7 +110,7 @@ export const CSE205_NODES: LpuNodeData[] = [
     prerequisites: ['Arrays & Big-O Foundations', 'Pointers and dynamic memory (new/delete)'],
     description: 'Non-contiguous node allocation, next/prev pointer rewiring, insertion and deletion.',
     visualizerId: 'singly-linked-list',
-    problemIds: ['p-dsa-ll-middle-1', 'p-dsa-ll-reverse-1', 'p-dsa-dll-1'],
+    problemIds: ['p-dsa-ll-middle-1', 'p-dsa-ll-reverse-1', 'p-dsa-dll-1', 'p-dsa-ll-cycle-1', 'p-dsa-reorder-list-1', 'p-dsa-remove-nth-from-end-1'],
   },
 
   // Level 3: Linear Abstract Data Types
@@ -126,7 +126,7 @@ export const CSE205_NODES: LpuNodeData[] = [
     prerequisites: ['Singly & Doubly Linked Lists', 'Arrays & Big-O Foundations'],
     description: 'LIFO stack semantics, expression evaluation (Infix to Postfix), and FIFO circular queues.',
     visualizerId: 'stack-operations',
-    problemIds: ['p-dsa-stack-valid-parens-1', 'p-dsa-queue-1', 'p-dsa-circular-queue-1'],
+    problemIds: ['p-dsa-stack-valid-parens-1', 'p-dsa-queue-1', 'p-dsa-circular-queue-1', 'p-dsa-min-stack-1', 'p-dsa-daily-temperatures-1', 'p-dsa-eval-rpn-1'],
   },
 
   // Level 4: Non-Linear Trees
@@ -142,7 +142,7 @@ export const CSE205_NODES: LpuNodeData[] = [
     prerequisites: ['Stacks & Circular Queues', 'Divide and conquer recursion'],
     description: 'Hierarchical node branching, in-order/pre-order/post-order, BST search invariant.',
     visualizerId: 'bst-insert',
-    problemIds: ['p-dsa-tree-traversal-1', 'p-dsa-bst-insert-1'],
+    problemIds: ['p-dsa-tree-traversal-1', 'p-dsa-bst-insert-1', 'p-dsa-invert-tree-1', 'p-dsa-diameter-tree-1', 'p-dsa-lca-bst-1', 'p-dsa-kth-smallest-bst-1'],
   },
   {
     id: 'cse205-avl',
@@ -170,7 +170,7 @@ export const CSE205_NODES: LpuNodeData[] = [
     prerequisites: ['Binary Trees & BST Traversals', 'Arrays & Big-O Foundations'],
     description: 'Complete binary tree layout in flat arrays, sift-up/sift-down heapify, HeapSort.',
     visualizerId: 'heap-sort',
-    problemIds: ['p-dsa-heap-kth-1', 'p-dsa-heapify-1'],
+    problemIds: ['p-dsa-heap-kth-1', 'p-dsa-heapify-1', 'p-dsa-heap-sort-1', 'p-dsa-top-k-frequent-1', 'p-dsa-task-scheduler-1'],
   },
 
   // Level 5: Graphs & Hashing
@@ -186,7 +186,7 @@ export const CSE205_NODES: LpuNodeData[] = [
     prerequisites: ['Stacks & Circular Queues', 'Binary Trees & BST Traversals'],
     description: 'Adjacency list representations, queue-driven BFS, recursive stack DFS, cycle detection.',
     visualizerId: 'bfs',
-    problemIds: ['p-dsa-bfs-1', 'p-dsa-dfs-1'],
+    problemIds: ['p-dsa-bfs-1', 'p-dsa-dfs-1', 'p-dsa-cycle-graph-1', 'p-dsa-num-islands-1', 'p-dsa-course-schedule-1'],
   },
   {
     id: 'cse205-spanning-trees',
@@ -200,7 +200,7 @@ export const CSE205_NODES: LpuNodeData[] = [
     prerequisites: ['Graph Traversals (BFS & DFS)', 'Binary Heaps & Priority Queues'],
     description: 'Minimum spanning tree discovery using greedy edge selection and Disjoint Set Union (DSU).',
     visualizerId: 'prim',
-    problemIds: ['p-dsa-mst-prim-1', 'p-dsa-mst-kruskal-1'],
+    problemIds: ['p-dsa-mst-prim-1', 'p-dsa-mst-kruskal-1', 'p-dsa-dijkstra-1', 'p-dsa-network-delay-time-1'],
   },
   {
     id: 'cse205-hashing',
@@ -213,7 +213,7 @@ export const CSE205_NODES: LpuNodeData[] = [
     examScope: 'ETE',
     prerequisites: ['Arrays & Big-O Foundations', 'Singly & Doubly Linked Lists'],
     description: 'Hash functions, open addressing linear probing, chaining, load factor amortized O(1).',
-    problemIds: ['p-dsa-hash-chaining-1', 'p-dsa-two-sum-1'],
+    problemIds: ['p-dsa-hash-chaining-1', 'p-dsa-two-sum-1', 'p-dsa-copy-list-random-1', 'p-dsa-lru-cache-1'],
   },
 ];
 
@@ -255,7 +255,7 @@ export const CSE202_NODES: LpuNodeData[] = [
     examScope: 'CA-1',
     prerequisites: ['Introductory computer science concepts', 'Basic computational logic'],
     description: 'Primitive types, std::cin/cout, namespaces, call-by-reference vs call-by-value.',
-    problemIds: ['p-cpp-io-1', 'p-cpp-references-1'],
+    problemIds: ['p-cpp-io-1', 'p-cpp-references-1', 'p-cpp-stringstream-1', 'p-cpp-call-by-reference-1'],
   },
   {
     id: 'cse202-pointers',
@@ -268,7 +268,7 @@ export const CSE202_NODES: LpuNodeData[] = [
     examScope: 'CA-1',
     prerequisites: ['C++ Syntax, I/O & Functions'],
     description: 'Pointer arithmetic, new/delete heap allocation, memory leaks and nullptr safeguards.',
-    problemIds: ['p-cpp-pointers-1', 'p-cpp-dynamic-arr-1'],
+    problemIds: ['p-cpp-pointers-1', 'p-cpp-dynamic-arr-1', 'p-cpp-matrix-dynamic-2d-1', 'p-cpp-unique-ptr-1'],
   },
   {
     id: 'cse202-overloading',
@@ -281,7 +281,7 @@ export const CSE202_NODES: LpuNodeData[] = [
     examScope: 'CA-1',
     prerequisites: ['C++ Syntax, I/O & Functions'],
     description: 'Compile-time function resolution, default arguments, inline performance trade-offs.',
-    problemIds: ['p-cpp-func-overload-1'],
+    problemIds: ['p-cpp-func-overload-1', 'p-cpp-constructor-overload-1'],
   },
 
   // Unit 2
@@ -296,7 +296,7 @@ export const CSE202_NODES: LpuNodeData[] = [
     examScope: 'MTE',
     prerequisites: ['Pointers & Dynamic Memory', 'Function Overloading & Inline'],
     description: 'Access specifiers (public/private/protected), this pointer, member function definition.',
-    problemIds: ['p-cpp-classes-1', 'p-cpp-encapsulation-1'],
+    problemIds: ['p-cpp-classes-1', 'p-cpp-encapsulation-1', 'p-cpp-structs-1', 'p-cpp-const-member-functions-1', 'p-cpp-static-counter-1'],
   },
   {
     id: 'cse202-constructors',
@@ -309,7 +309,7 @@ export const CSE202_NODES: LpuNodeData[] = [
     examScope: 'MTE',
     prerequisites: ['Classes, Objects & Encapsulation'],
     description: 'Default, parameterized, copy constructor, deep vs shallow copy, and destructor lifecycles.',
-    problemIds: ['p-cpp-constructors-1', 'p-cpp-destructors-1'],
+    problemIds: ['p-cpp-constructors-1', 'p-cpp-destructors-1', 'p-cpp-copy-constructor-deep-1', 'p-cpp-constructor-overload-1'],
   },
   {
     id: 'cse202-operator-overload',
@@ -322,7 +322,7 @@ export const CSE202_NODES: LpuNodeData[] = [
     examScope: 'MTE',
     prerequisites: ['Classes, Objects & Encapsulation'],
     description: 'Overloading +, -, <<, >> operators, friend functions, and symmetric binary operands.',
-    problemIds: ['p-cpp-operator-overload-1', 'p-cpp-friend-1'],
+    problemIds: ['p-cpp-operator-overload-1', 'p-cpp-friend-1', 'p-cpp-stream-overloading-1', 'p-cpp-subscript-operator-1'],
   },
 
   // Unit 4
@@ -337,7 +337,7 @@ export const CSE202_NODES: LpuNodeData[] = [
     examScope: 'CA-2',
     prerequisites: ['Constructors, Destructors & Copy', 'Operator Overloading & Friends'],
     description: 'Single, multiple, hierarchical, and virtual base classes to resolve diamond problem.',
-    problemIds: ['p-cpp-inheritance-1', 'p-cpp-diamond-problem-1'],
+    problemIds: ['p-cpp-inheritance-1', 'p-cpp-diamond-problem-1', 'p-cpp-multiple-inheritance-order-1', 'p-cpp-hierarchical-inheritance-1'],
   },
   {
     id: 'cse202-polymorphism',
@@ -350,7 +350,7 @@ export const CSE202_NODES: LpuNodeData[] = [
     examScope: 'CA-2',
     prerequisites: ['Inheritance & Access Control'],
     description: 'Virtual tables (vptr/vtable), late dynamic binding, virtual destructors.',
-    problemIds: ['p-cpp-polymorphism-1'],
+    problemIds: ['p-cpp-polymorphism-1', 'p-cpp-dynamic-cast-rtti-1'],
   },
   {
     id: 'cse202-abstract',
@@ -363,7 +363,7 @@ export const CSE202_NODES: LpuNodeData[] = [
     examScope: 'CA-2',
     prerequisites: ['Inheritance & Access Control'],
     description: 'Abstract base classes, pure virtual (= 0), interface contracts for polymorphic subsystems.',
-    problemIds: ['p-cpp-abstract-class-1', 'p-cpp-virtual-destructor-1'],
+    problemIds: ['p-cpp-abstract-class-1', 'p-cpp-virtual-destructor-1', 'p-cpp-pure-virtual-interface-1'],
   },
 
   // Unit 5 & 6
@@ -378,7 +378,7 @@ export const CSE202_NODES: LpuNodeData[] = [
     examScope: 'ETE',
     prerequisites: ['Virtual Functions & Runtime Poly', 'Pure Virtual & Interfaces'],
     description: 'Generic programming, template specialization, typename and class parameters.',
-    problemIds: ['p-cpp-templates-1', 'p-cpp-fn-template-max-1'],
+    problemIds: ['p-cpp-templates-1', 'p-cpp-fn-template-max-1', 'p-cpp-class-templates-multi-1'],
   },
   {
     id: 'cse202-stl',
@@ -391,7 +391,7 @@ export const CSE202_NODES: LpuNodeData[] = [
     examScope: 'ETE',
     prerequisites: ['Function & Class Templates'],
     description: 'vector, list, map, set, iterators, std::sort, std::find, and lambda predicates.',
-    problemIds: ['p-cpp-stl-vector-1', 'p-cpp-stl-map-1'],
+    problemIds: ['p-cpp-stl-vector-1', 'p-cpp-stl-map-1', 'p-cpp-stl-unordered-map-1', 'p-cpp-stl-priority-queue-1', 'p-cpp-stl-algorithms-lambda-1'],
   },
   {
     id: 'cse202-files',
@@ -404,7 +404,7 @@ export const CSE202_NODES: LpuNodeData[] = [
     examScope: 'ETE',
     prerequisites: ['Function & Class Templates', 'C++ Syntax, I/O & Functions'],
     description: 'ifstream, ofstream, fstream, binary file reading/writing, and error state flags.',
-    problemIds: ['p-cpp-filestreams-1'],
+    problemIds: ['p-cpp-filestreams-1', 'p-cpp-file-stream-operations-1', 'p-cpp-exceptions-1', 'p-cpp-custom-exception-1'],
   },
 ];
 
@@ -432,7 +432,11 @@ const CSE202_EDGES: LpuEdgeData[] = [
   { from: 'cse202-stl', to: 'cse202-files', isDotted: true },
 ];
 
-export const LpuAcademicGraph: React.FC = () => {
+interface LpuAcademicGraphProps {
+  fitScreen?: boolean;
+}
+
+export const LpuAcademicGraph: React.FC<LpuAcademicGraphProps> = ({ fitScreen = true }) => {
   const [selectedSubject, setSelectedSubject] = useState<'cse205' | 'cse202'>('cse205');
   const [selectedNodeId, setSelectedNodeId] = useState<string>('cse205-arrays');
   const [hoveredNodeId, setHoveredNodeId] = useState<string | null>(null);
@@ -703,25 +707,27 @@ export const LpuAcademicGraph: React.FC = () => {
   };
 
   return (
-    <div className={`relative w-full bg-[#090c14] overflow-hidden transition-all duration-200 space-y-0 ${
+    <div className={`relative w-full bg-[#090c14] overflow-hidden transition-all duration-200 flex flex-col ${
       isFullscreen 
         ? 'fixed inset-0 z-50 rounded-none w-screen h-screen' 
+        : fitScreen
+        ? 'flex-1 min-h-0 h-full rounded-2xl border border-indigo-900/40 shadow-2xl'
         : 'rounded-2xl border border-indigo-900/40 shadow-2xl'
     }`}>
       {/* Subject Header & Switcher */}
-      <div className="flex flex-wrap items-center justify-between gap-3 p-3 sm:p-4 border-b border-slate-800 bg-slate-950/80 backdrop-blur-md z-20 relative">
-        <div className="flex items-center gap-3">
-          <div className="h-10 w-10 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 font-bold shrink-0">
-            <GraduationCap className="h-5 w-5" />
+      <div className="flex flex-wrap items-center justify-between gap-2.5 px-3 py-2 sm:px-4 sm:py-2.5 border-b border-slate-800 bg-slate-950/80 backdrop-blur-md z-20 relative shrink-0">
+        <div className="flex items-center gap-2.5">
+          <div className="h-8 w-8 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 font-bold shrink-0">
+            <GraduationCap className="h-4 w-4" />
           </div>
           <div>
-            <h3 className="text-sm font-bold text-white flex items-center gap-2">
+            <h3 className="text-xs sm:text-sm font-bold text-white flex items-center gap-1.5">
               <span>Academic Curriculum Flowchart</span>
-              <span className="text-[10px] font-semibold uppercase px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">
+              <span className="text-[9px] font-semibold uppercase px-1.5 py-0.2 rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">
                 Interactive Graph
               </span>
             </h3>
-            <p className="text-xs text-slate-400 hidden xs:block">
+            <p className="text-[11px] text-slate-400 hidden xs:block">
               Drag to pan &bull; Scroll to zoom &bull; Click node to open study drawer
             </p>
           </div>
@@ -891,7 +897,9 @@ export const LpuAcademicGraph: React.FC = () => {
         onWheel={handleWheel}
         className={`w-full relative flex justify-center items-center select-none overflow-hidden transition-all duration-200 ${
           isFullscreen
-            ? 'h-[calc(100vh-68px)]'
+            ? 'h-[calc(100vh-56px)]'
+            : fitScreen
+            ? 'flex-1 min-h-[380px] h-full'
             : 'h-[72vh] min-h-[500px] max-h-[850px]'
         } ${isDragging ? 'cursor-grabbing' : 'cursor-grab'}`}
         style={{

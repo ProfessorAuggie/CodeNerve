@@ -79,31 +79,31 @@ export const LpuPortalPage: React.FC = () => {
   ];
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 space-y-5">
       {/* University Hero Header */}
-      <div className="rounded-3xl border border-indigo-900/50 bg-gradient-to-r from-[#0d1226] via-[#121936] to-[#0c0f1d] p-8 shadow-2xl relative overflow-hidden">
+      <div className="rounded-2xl border border-indigo-900/50 bg-gradient-to-r from-[#0d1226] via-[#121936] to-[#0c0f1d] p-5 sm:p-6 shadow-2xl relative overflow-hidden">
         <div className="absolute top-0 right-0 w-96 h-96 bg-brand-500/10 rounded-full blur-3xl pointer-events-none" />
 
-        <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
-          <div className="space-y-3">
+        <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-5">
+          <div className="space-y-2">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
               <GraduationCap className="h-4 w-4" />
               <span>Lovely Professional University &bull; School of Computer Science & Engineering</span>
             </div>
 
-            <h1 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
               LPU B.Tech CSE Academic Portal
             </h1>
 
-            <p className="text-sm text-slate-300 max-w-2xl leading-relaxed">
+            <p className="text-xs sm:text-sm text-slate-300 max-w-2xl leading-relaxed">
               University-aligned study portal with structured syllabi for <strong className="text-white">CSE202</strong> (Object Oriented Programming) and <strong className="text-white">CSE205</strong> (Data Structures & Algorithms), complete with topic prerequisites, exam sets, and faculty assignments.
             </p>
           </div>
 
-          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 shrink-0">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2.5 shrink-0">
             <Link
               to="/roadmap"
-              className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-xs font-semibold text-slate-200 border border-slate-700 transition"
+              className="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-xs font-semibold text-slate-200 border border-slate-700 transition"
             >
               <Compass className="h-4 w-4 text-brand-400" />
               <span>Switch to Global Track</span>
@@ -111,7 +111,7 @@ export const LpuPortalPage: React.FC = () => {
 
             <Link
               to="/quizzes"
-              className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-500 text-xs font-semibold text-white shadow-lg shadow-brand-500/25 transition"
+              className="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-brand-600 hover:bg-brand-500 text-xs font-semibold text-white shadow-lg shadow-brand-500/25 transition"
             >
               <Award className="h-4 w-4" />
               <span>Take CA Practice Quiz</span>
@@ -120,31 +120,31 @@ export const LpuPortalPage: React.FC = () => {
         </div>
 
         {/* Portal Quick Stats */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-8 pt-6 border-t border-slate-800/80">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-5 pt-4 border-t border-slate-800/80">
           <div>
-            <div className="text-2xl font-bold text-white">12 Units</div>
+            <div className="text-xl font-bold text-white">12 Units</div>
             <div className="text-xs text-slate-400">Total Syllabus Units</div>
           </div>
           <div>
-            <div className="text-2xl font-bold text-emerald-400">38 Topics</div>
+            <div className="text-xl font-bold text-emerald-400">38 Topics</div>
             <div className="text-xs text-slate-400">With Prerequisites Listed</div>
           </div>
           <div>
-            <div className="text-2xl font-bold text-brand-400">4 Exam Hubs</div>
+            <div className="text-xl font-bold text-brand-400">4 Exam Hubs</div>
             <div className="text-xs text-slate-400">CA-1, CA-2, Midterm & Endterm</div>
           </div>
           <div>
-            <div className="text-2xl font-bold text-purple-400">{customProblemSets.length} Active</div>
+            <div className="text-xl font-bold text-purple-400">{customProblemSets.length} Active</div>
             <div className="text-xs text-slate-400">Faculty Problem Sets</div>
           </div>
         </div>
       </div>
 
       {/* Main Section Navigation Tabs */}
-      <div className="flex flex-wrap items-center gap-3 border-b border-slate-800 pb-3">
+      <div className="flex flex-wrap items-center gap-2.5 border-b border-slate-800 pb-2.5">
         <button
           onClick={() => setActiveTab('flowchart')}
-          className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold transition ${
+          className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold transition ${
             activeTab === 'flowchart'
               ? 'bg-emerald-600 text-white shadow-lg shadow-emerald-500/25'
               : 'bg-slate-900 border border-slate-800 text-slate-400 hover:text-white'
@@ -159,7 +159,7 @@ export const LpuPortalPage: React.FC = () => {
 
         <button
           onClick={() => setActiveTab('syllabus')}
-          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold transition ${
+          className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold transition ${
             activeTab === 'syllabus'
               ? 'bg-brand-600 text-white shadow-lg shadow-brand-500/20'
               : 'bg-slate-900 border border-slate-800 text-slate-400 hover:text-white'
@@ -171,7 +171,7 @@ export const LpuPortalPage: React.FC = () => {
 
         <button
           onClick={() => setActiveTab('exams')}
-          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold transition ${
+          className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold transition ${
             activeTab === 'exams'
               ? 'bg-brand-600 text-white shadow-lg shadow-brand-500/20'
               : 'bg-slate-900 border border-slate-800 text-slate-400 hover:text-white'
@@ -183,7 +183,7 @@ export const LpuPortalPage: React.FC = () => {
 
         <button
           onClick={() => setActiveTab('assignments')}
-          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold transition ${
+          className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold transition ${
             activeTab === 'assignments'
               ? 'bg-brand-600 text-white shadow-lg shadow-brand-500/20'
               : 'bg-slate-900 border border-slate-800 text-slate-400 hover:text-white'
@@ -196,8 +196,8 @@ export const LpuPortalPage: React.FC = () => {
 
       {/* TAB 0: INTERACTIVE PREREQUISITE FLOWCHART */}
       {activeTab === 'flowchart' && (
-        <div className="space-y-4">
-          <div className="p-4 rounded-xl bg-slate-900/60 border border-emerald-900/40 text-xs text-slate-300 flex items-center justify-between">
+        <div className="space-y-3">
+          <div className="p-3 rounded-xl bg-slate-900/60 border border-emerald-900/40 text-xs text-slate-300 flex items-center justify-between">
             <div className="flex items-center gap-2">
               <span className="flex h-2 w-2 rounded-full bg-emerald-400" />
               <span>
@@ -209,7 +209,7 @@ export const LpuPortalPage: React.FC = () => {
             </span>
           </div>
 
-          <LpuAcademicGraph />
+          <LpuAcademicGraph fitScreen={true} />
         </div>
       )}
 

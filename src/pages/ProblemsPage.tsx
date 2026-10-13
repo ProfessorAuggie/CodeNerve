@@ -3,7 +3,9 @@ import {
   Search, 
   Terminal, 
   X, 
-  Bookmark 
+  Bookmark,
+  Maximize2,
+  Minimize2
 } from 'lucide-react';
 import { PROBLEMS } from '../data/problems';
 import type { Problem, ProblemStatus } from '../types';
@@ -13,6 +15,7 @@ import { useUserStore } from '../store/userStore';
 
 export const ProblemsPage: React.FC = () => {
   const { problemProgress, bookmarks } = useUserStore();
+  const [isFitScreen, setIsFitScreen] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedPlatform, setSelectedPlatform] = useState<string>('all');
   const [selectedDifficulty, setSelectedDifficulty] = useState<string>('all');
@@ -103,55 +106,78 @@ export const ProblemsPage: React.FC = () => {
     showOnlyBookmarked;
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
+    <div
+      className={
+        isFitScreen
+          ? 'h-[calc(100vh-56px)] flex flex-col p-3 sm:p-4 max-w-[1700px] mx-auto w-full overflow-hidden space-y-2.5'
+          : 'max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6'
+      }
+    >
       {/* Page Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div>
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 mb-2">
-            <Terminal className="h-3.5 w-3.5" />
-            <span>Problem Catalogue</span>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 shrink-0">
+        <div className="flex items-center gap-3">
+          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 shrink-0">
+            <Terminal className="h-4 w-4" />
           </div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
-            Curated Problem Library
-          </h1>
-          <p className="text-sm text-slate-400 mt-1">
-            Curated problems across LeetCode, GeeksforGeeks, and HackerRank with local tracking and AlgoNerve visualizers.
-          </p>
+          <div>
+            <h1 className="text-lg sm:text-xl font-extrabold text-white tracking-tight flex items-center gap-2">
+              <span>Curated Problem Library</span>
+              <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-slate-800 text-slate-300 border border-slate-700">
+                {totalCount} problems
+              </span>
+            </h1>
+            <p className="text-xs text-slate-400 hidden sm:block">
+              165 canonical problems across LeetCode, GFG, & HackerRank with AlgoNerve visualizers and tracking.
+            </p>
+          </div>
         </div>
 
-        {/* Quick Stats Pill */}
-        <div className="flex items-center gap-2 text-xs">
-          <div className="px-3 py-1.5 rounded-xl bg-slate-900 border border-slate-800 text-slate-300">
+        {/* Quick Stats & Viewport Toggle */}
+        <div className="flex items-center gap-2 text-xs shrink-0 self-end sm:self-auto">
+          <div className="px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-800 text-slate-300">
             Total: <span className="font-bold text-white">{totalCount}</span>
           </div>
-          <div className="px-3 py-1.5 rounded-xl bg-emerald-950/40 border border-emerald-800/40 text-emerald-300">
+          <div className="px-2.5 py-1 rounded-lg bg-emerald-950/40 border border-emerald-800/40 text-emerald-300">
             Solved: <span className="font-bold">{solvedCount}</span>
           </div>
-          <div className="px-3 py-1.5 rounded-xl bg-purple-950/40 border border-purple-800/40 text-purple-300">
+          <div className="px-2.5 py-1 rounded-lg bg-purple-950/40 border border-purple-800/40 text-purple-300">
             Revise: <span className="font-bold">{revisionCount}</span>
           </div>
+
+          <button
+            onClick={() => setIsFitScreen(!isFitScreen)}
+            className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg font-semibold border transition ${
+              isFitScreen
+                ? 'bg-emerald-500/15 border-emerald-500/40 text-emerald-300'
+                : 'bg-slate-900 border-slate-800 text-slate-400 hover:text-white'
+            }`}
+            title={isFitScreen ? 'Switch to Standard Scroll View' : 'Fit Entire Catalogue on One Screen'}
+          >
+            {isFitScreen ? <Minimize2 className="h-3.5 w-3.5" /> : <Maximize2 className="h-3.5 w-3.5" />}
+            <span className="hidden sm:inline">{isFitScreen ? 'Single Screen' : 'Full Page'}</span>
+          </button>
         </div>
       </div>
 
       {/* Filter and Search Bar */}
-      <div className="p-4 rounded-2xl border border-slate-800 bg-slate-900/60 shadow-lg backdrop-blur-sm space-y-3">
-        <div className="flex flex-col sm:flex-row items-center gap-3">
+      <div className="p-2.5 sm:p-3 rounded-xl border border-slate-800 bg-slate-900/60 shadow-lg backdrop-blur-sm space-y-2 shrink-0">
+        <div className="flex flex-col sm:flex-row items-center gap-2">
           {/* Search Input */}
           <div className="relative w-full sm:flex-1">
-            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-slate-400" />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search problems by name, tag, or platform..."
-              className="w-full pl-10 pr-4 py-2 text-xs rounded-xl bg-slate-950 border border-slate-800 text-slate-200 placeholder:text-slate-500 focus:outline-none focus:border-brand-500"
+              className="w-full pl-9 pr-4 py-1.5 text-xs rounded-lg bg-slate-950 border border-slate-800 text-slate-200 placeholder:text-slate-500 focus:outline-none focus:border-brand-500"
             />
             {searchQuery && (
               <button
                 onClick={() => setSearchQuery('')}
                 className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-white"
               >
-                <X className="h-3.5 w-3.5" />
+                <X className="h-3 w-3" />
               </button>
             )}
           </div>
@@ -160,7 +186,7 @@ export const ProblemsPage: React.FC = () => {
           <select
             value={selectedDifficulty}
             onChange={(e) => setSelectedDifficulty(e.target.value)}
-            className="w-full sm:w-auto px-3 py-2 text-xs rounded-xl bg-slate-950 border border-slate-800 text-slate-200 focus:outline-none focus:border-brand-500"
+            className="w-full sm:w-auto px-2.5 py-1.5 text-xs rounded-lg bg-slate-950 border border-slate-800 text-slate-200 focus:outline-none focus:border-brand-500"
           >
             <option value="all">All Difficulties</option>
             <option value="easy">Easy</option>
@@ -172,7 +198,7 @@ export const ProblemsPage: React.FC = () => {
           <select
             value={selectedPlatform}
             onChange={(e) => setSelectedPlatform(e.target.value)}
-            className="w-full sm:w-auto px-3 py-2 text-xs rounded-xl bg-slate-950 border border-slate-800 text-slate-200 focus:outline-none focus:border-brand-500"
+            className="w-full sm:w-auto px-2.5 py-1.5 text-xs rounded-lg bg-slate-950 border border-slate-800 text-slate-200 focus:outline-none focus:border-brand-500"
           >
             <option value="all">All Platforms</option>
             <option value="leetcode">LeetCode</option>
@@ -184,7 +210,7 @@ export const ProblemsPage: React.FC = () => {
           <select
             value={selectedStatus}
             onChange={(e) => setSelectedStatus(e.target.value)}
-            className="w-full sm:w-auto px-3 py-2 text-xs rounded-xl bg-slate-950 border border-slate-800 text-slate-200 focus:outline-none focus:border-brand-500"
+            className="w-full sm:w-auto px-2.5 py-1.5 text-xs rounded-lg bg-slate-950 border border-slate-800 text-slate-200 focus:outline-none focus:border-brand-500"
           >
             <option value="all">All Statuses</option>
             <option value="SOLVED">Solved</option>
@@ -196,7 +222,7 @@ export const ProblemsPage: React.FC = () => {
           {/* Bookmark Filter Toggle */}
           <button
             onClick={() => setShowOnlyBookmarked(!showOnlyBookmarked)}
-            className={`flex items-center gap-1.5 px-3 py-2 text-xs rounded-xl border transition ${
+            className={`flex items-center gap-1.5 px-2.5 py-1.5 text-xs rounded-lg border transition ${
               showOnlyBookmarked
                 ? 'bg-amber-500/20 border-amber-500/50 text-amber-300 font-medium'
                 : 'bg-slate-950 border-slate-800 text-slate-400 hover:text-white'
@@ -218,11 +244,11 @@ export const ProblemsPage: React.FC = () => {
         </div>
 
         {/* Quick Tag Pills */}
-        <div className="flex items-center gap-1.5 overflow-x-auto pt-1 pb-0.5 text-[11px] scrollbar-none">
+        <div className="flex items-center gap-1.5 overflow-x-auto pt-0.5 pb-0.5 text-[11px] scrollbar-none">
           <span className="text-slate-500 text-xs shrink-0 mr-1">Tags:</span>
           <button
             onClick={() => setSelectedTag('all')}
-            className={`px-2 py-0.5 rounded-lg shrink-0 transition ${
+            className={`px-2 py-0.5 rounded text-[11px] shrink-0 transition ${
               selectedTag === 'all'
                 ? 'bg-brand-600 text-white font-medium'
                 : 'bg-slate-800 text-slate-400 hover:text-slate-200'
@@ -234,7 +260,7 @@ export const ProblemsPage: React.FC = () => {
             <button
               key={tag}
               onClick={() => setSelectedTag(tag === selectedTag ? 'all' : tag)}
-              className={`px-2 py-0.5 rounded-lg shrink-0 transition ${
+              className={`px-2 py-0.5 rounded text-[11px] shrink-0 transition ${
                 selectedTag === tag
                   ? 'bg-brand-600 text-white font-medium'
                   : 'bg-slate-800 text-slate-400 hover:text-slate-200'
@@ -246,13 +272,9 @@ export const ProblemsPage: React.FC = () => {
         </div>
       </div>
 
-      {/* Showing count */}
-      <div className="text-xs text-slate-400 flex items-center justify-between">
-        <span>Showing {filteredProblems.length} of {PROBLEMS.length} problems</span>
-      </div>
-
       {/* Problem Table */}
       <ProblemTable
+        fitScreen={isFitScreen}
         problems={filteredProblems}
         onSelectProblem={(prob) => setSelectedProblem(prob)}
       />

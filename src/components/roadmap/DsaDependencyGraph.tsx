@@ -264,7 +264,11 @@ const GRAPH_EDGES: EdgeData[] = [
   { from: 'bit-manipulation', to: 'math-geometry', isDotted: false },
 ];
 
-export const DsaDependencyGraph: React.FC = () => {
+interface DsaDependencyGraphProps {
+  fitScreen?: boolean;
+}
+
+export const DsaDependencyGraph: React.FC<DsaDependencyGraphProps> = ({ fitScreen = true }) => {
   const { problemProgress, updateProblemStatus, bookmarks, toggleBookmark } = useUserStore();
   const [selectedNode, setSelectedNode] = useState<NodeData | null>(GRAPH_NODES[0]);
   const [hoveredNodeId, setHoveredNodeId] = useState<string | null>(null);
@@ -518,94 +522,96 @@ export const DsaDependencyGraph: React.FC = () => {
   };
 
   return (
-    <div className={`relative w-full bg-[#0c0e14] overflow-hidden transition-all duration-200 space-y-0 ${
+    <div className={`relative w-full bg-[#0c0e14] overflow-hidden transition-all duration-200 flex flex-col ${
       isFullscreen 
         ? 'fixed inset-0 z-50 rounded-none w-screen h-screen' 
+        : fitScreen
+        ? 'flex-1 min-h-0 h-full rounded-2xl border border-slate-800 shadow-2xl'
         : 'rounded-2xl border border-slate-800 shadow-2xl'
     }`}>
       {/* Top Controls & Stats Header Bar */}
-      <div className="flex flex-wrap items-center justify-between gap-3 p-3 sm:p-4 border-b border-slate-800 bg-slate-950/80 backdrop-blur-md z-20 relative">
+      <div className="flex flex-wrap items-center justify-between gap-2.5 px-3 py-2 sm:px-4 sm:py-2.5 border-b border-slate-800 bg-slate-950/80 backdrop-blur-md z-20 relative shrink-0">
         <div className="flex flex-wrap items-center gap-2">
           {/* Zoom & Screen Fit Controls */}
-          <div className="flex items-center gap-1 bg-slate-900 p-1 rounded-xl border border-slate-800">
+          <div className="flex items-center gap-1 bg-slate-900 p-0.5 rounded-xl border border-slate-800">
             <button
               onClick={() => setZoomLevel((z) => Math.min(1.6, Number((z + 0.1).toFixed(2))))}
-              className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition"
+              className="p-1 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition"
               title="Zoom In (+)"
               aria-label="Zoom In"
             >
-              <ZoomIn className="h-4 w-4" />
+              <ZoomIn className="h-3.5 w-3.5" />
             </button>
             <button
               onClick={() => setZoomLevel((z) => Math.max(0.35, Number((z - 0.1).toFixed(2))))}
-              className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition"
+              className="p-1 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition"
               title="Zoom Out (-)"
               aria-label="Zoom Out"
             >
-              <ZoomOut className="h-4 w-4" />
+              <ZoomOut className="h-3.5 w-3.5" />
             </button>
             <button
               onClick={fitToScreen}
-              className="flex items-center gap-1 px-2 py-1 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition text-xs font-semibold"
+              className="flex items-center gap-1 px-2 py-0.5 rounded-lg text-slate-300 hover:text-white bg-slate-800/60 hover:bg-slate-800 transition text-[11px] font-semibold"
               title="Fit entire roadmap into current window"
               aria-label="Fit to window"
             >
-              <Scan className="h-3.5 w-3.5 text-brand-400" />
+              <Scan className="h-3 w-3 text-brand-400" />
               <span>Fit</span>
             </button>
             <button
               onClick={handleReset}
-              className="px-2 py-1 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition text-xs font-semibold"
+              className="px-1.5 py-0.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition text-[11px] font-semibold"
               title="Reset Zoom to 100%"
               aria-label="Reset zoom"
             >
-              Reset ({Math.round(zoomLevel * 100)}%)
+              100%
             </button>
           </div>
 
           {/* Fullscreen Toggle */}
           <button
             onClick={() => setIsFullscreen(!isFullscreen)}
-            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-800 text-xs font-semibold text-slate-300 transition"
+            className="flex items-center gap-1 px-2 py-1 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-800 text-[11px] font-semibold text-slate-300 transition"
             title={isFullscreen ? 'Exit Fullscreen (Esc)' : 'Maximize to full window'}
             aria-label={isFullscreen ? 'Exit Fullscreen' : 'Fullscreen'}
           >
             {isFullscreen ? (
               <>
-                <Minimize2 className="h-3.5 w-3.5 text-amber-400" />
-                <span className="hidden sm:inline">Exit Fullscreen</span>
+                <Minimize2 className="h-3 w-3 text-amber-400" />
+                <span className="hidden sm:inline">Exit</span>
               </>
             ) : (
               <>
-                <Maximize2 className="h-3.5 w-3.5 text-brand-400" />
-                <span className="hidden sm:inline">Fullscreen</span>
+                <Maximize2 className="h-3 w-3 text-brand-400" />
+                <span className="hidden sm:inline">Expand</span>
               </>
             )}
           </button>
 
           <div className="hidden lg:flex items-center gap-1 text-[11px] text-slate-500 font-medium pl-1">
-            <Move className="h-3.5 w-3.5" />
+            <Move className="h-3 w-3" />
             <span>Pan canvas &bull; Scroll to zoom</span>
           </div>
         </div>
 
         {/* Global Progress & Pick Random Button */}
-        <div className="flex items-center gap-2 sm:gap-3">
+        <div className="flex items-center gap-2">
           <button
             onClick={handlePickRandomProblem}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-xs font-semibold text-slate-200 border border-slate-800 shadow-sm transition"
+            className="flex items-center gap-1 px-2.5 py-1 rounded-xl bg-slate-900 hover:bg-slate-800 text-xs font-semibold text-slate-200 border border-slate-800 shadow-sm transition"
             title="Pick a random problem to solve"
           >
-            <Shuffle className="h-3.5 w-3.5 text-brand-400" />
-            <span className="hidden xs:inline">Pick Random</span>
+            <Shuffle className="h-3 w-3 text-brand-400" />
+            <span className="hidden xs:inline">Shuffle</span>
           </button>
 
-          <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-900 border border-slate-800 text-xs">
-            <span className="text-slate-400 hidden sm:inline">Total Solved:</span>
+          <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-slate-900 border border-slate-800 text-xs">
+            <span className="text-slate-400 hidden sm:inline">Solved:</span>
             <span className="font-extrabold text-white">
               {totalRoadmapStats.solved}/{totalRoadmapStats.total}
             </span>
-            <span className="text-emerald-400 font-bold">
+            <span className="text-emerald-400 font-bold text-[11px]">
               ({totalRoadmapStats.percent}%)
             </span>
           </div>
@@ -614,20 +620,20 @@ export const DsaDependencyGraph: React.FC = () => {
 
       {/* Floating Prerequisite Trace-Back Breadcrumb HUD */}
       {hoveredPrereqTrace && (
-        <div className="absolute top-20 left-1/2 -translate-x-1/2 z-30 flex items-center gap-2.5 px-4 py-2 rounded-xl bg-slate-950/95 border border-sky-500/50 backdrop-blur-md shadow-2xl shadow-sky-500/20 animate-in fade-in zoom-in-95 duration-150 max-w-[90%]">
-          <div className="flex items-center gap-1.5 text-xs font-bold text-sky-400 shrink-0">
-            <span className="flex h-2 w-2 rounded-full bg-sky-400 animate-ping" />
+        <div className="absolute top-16 left-1/2 -translate-x-1/2 z-30 flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-950/95 border border-sky-500/50 backdrop-blur-md shadow-2xl shadow-sky-500/20 animate-in fade-in zoom-in-95 duration-150 max-w-[90%]">
+          <div className="flex items-center gap-1 text-xs font-bold text-sky-400 shrink-0">
+            <span className="flex h-1.5 w-1.5 rounded-full bg-sky-400 animate-ping" />
             <span>Prerequisites:</span>
           </div>
 
-          <div className="flex items-center gap-1.5 text-xs overflow-x-auto max-w-md sm:max-w-lg scrollbar-none py-0.5">
+          <div className="flex items-center gap-1 text-xs overflow-x-auto max-w-md sm:max-w-lg scrollbar-none py-0.5">
             {hoveredPrereqTrace.sortedAncestors.map((anc, idx) => {
               const isTarget = anc.id === hoveredPrereqTrace.targetId;
               return (
                 <React.Fragment key={anc.id}>
                   {idx > 0 && <span className="text-sky-400 font-bold text-xs">➔</span>}
                   <span
-                    className={`px-2 py-0.5 rounded-md text-[11px] font-semibold whitespace-nowrap transition ${
+                    className={`px-1.5 py-0.2 rounded text-[10px] font-semibold whitespace-nowrap transition ${
                       isTarget
                         ? 'bg-brand-600 text-white shadow-sm ring-1 ring-brand-400'
                         : 'bg-sky-950/70 text-sky-300 border border-sky-500/40'
@@ -645,7 +651,7 @@ export const DsaDependencyGraph: React.FC = () => {
               <span className="text-emerald-400 font-semibold">🌟 Starting Root</span>
             ) : (
               <span>
-                ({hoveredPrereqTrace.sortedAncestors.length - 1} required)
+                ({hoveredPrereqTrace.sortedAncestors.length - 1} req)
               </span>
             )}
           </span>
@@ -664,7 +670,9 @@ export const DsaDependencyGraph: React.FC = () => {
         onWheel={handleWheel}
         className={`w-full relative flex justify-center items-center select-none overflow-hidden transition-all duration-200 ${
           isFullscreen
-            ? 'h-[calc(100vh-68px)]'
+            ? 'h-[calc(100vh-56px)]'
+            : fitScreen
+            ? 'flex-1 min-h-[380px] h-full'
             : 'h-[72vh] min-h-[500px] max-h-[850px]'
         } ${isDragging ? 'cursor-grabbing' : 'cursor-grab'}`}
         style={{
