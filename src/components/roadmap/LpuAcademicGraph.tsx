@@ -175,7 +175,7 @@ export const CSE205_NODES: LpuNodeData[] = [
     prerequisites: ['Binary Trees & BST Traversals', 'Arrays & Big-O Foundations'],
     description: 'Complete binary tree layout in flat arrays, sift-up/sift-down heapify, HeapSort.',
     visualizerId: 'heap-sort',
-    problemIds: ['p-dsa-heap-kth-1', 'p-dsa-heap-sort-1'],
+    problemIds: ['p-dsa-heap-kth-1', 'p-dsa-heapify-1'],
   },
 
   // Level 5: Graphs & Hashing
@@ -204,8 +204,8 @@ export const CSE205_NODES: LpuNodeData[] = [
     examScope: 'ETE',
     prerequisites: ['Graph Traversals (BFS & DFS)', 'Binary Heaps & Priority Queues'],
     description: 'Minimum spanning tree discovery using greedy edge selection and Disjoint Set Union (DSU).',
-    visualizerId: 'dijkstra',
-    problemIds: ['p-dsa-dijkstra-1', 'p-dsa-mst-prim-1'],
+    visualizerId: 'prim',
+    problemIds: ['p-dsa-mst-prim-1', 'p-dsa-mst-kruskal-1'],
   },
   {
     id: 'cse205-hashing',
@@ -273,7 +273,7 @@ export const CSE202_NODES: LpuNodeData[] = [
     examScope: 'CA-1',
     prerequisites: ['C++ Syntax, I/O & Functions'],
     description: 'Pointer arithmetic, new/delete heap allocation, memory leaks and nullptr safeguards.',
-    problemIds: ['p-cpp-pointers-1', 'p-cpp-this-pointer-1'],
+    problemIds: ['p-cpp-pointers-1', 'p-cpp-dynamic-arr-1'],
   },
   {
     id: 'cse202-overloading',
@@ -301,7 +301,7 @@ export const CSE202_NODES: LpuNodeData[] = [
     examScope: 'MTE',
     prerequisites: ['Pointers & Dynamic Memory', 'Function Overloading & Inline'],
     description: 'Access specifiers (public/private/protected), this pointer, member function definition.',
-    problemIds: ['p-cpp-classes-1', 'p-cpp-structs-1'],
+    problemIds: ['p-cpp-classes-1', 'p-cpp-encapsulation-1'],
   },
   {
     id: 'cse202-constructors',
@@ -383,7 +383,7 @@ export const CSE202_NODES: LpuNodeData[] = [
     examScope: 'ETE',
     prerequisites: ['Virtual Functions & Runtime Poly', 'Pure Virtual & Interfaces'],
     description: 'Generic programming, template specialization, typename and class parameters.',
-    problemIds: ['p-cpp-templates-1', 'p-cpp-exceptions-1'],
+    problemIds: ['p-cpp-templates-1', 'p-cpp-fn-template-max-1'],
   },
   {
     id: 'cse202-stl',
