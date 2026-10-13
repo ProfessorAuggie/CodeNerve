@@ -501,6 +501,45 @@ export const LpuAcademicGraph: React.FC<LpuAcademicGraphProps> = ({ fitScreen = 
     return () => clearTimeout(timer);
   }, [isFullscreen, fitToScreen]);
 
+  // Non-passive native wheel listener to zoom roadmap only (prevents browser/webpage zoom & document scroll)
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    const onWheel = (e: WheelEvent) => {
+      // Prevent browser from zooming the webpage and from scrolling the page
+      e.preventDefault();
+      e.stopPropagation();
+
+      const rect = container.getBoundingClientRect();
+      const mouseX = e.clientX - rect.left - rect.width / 2;
+      const mouseY = e.clientY - rect.top - rect.height / 2;
+
+      // Trackpad pinch (ctrlKey) vs standard mouse wheel
+      const zoomFactor = e.ctrlKey ? 0.015 : 0.08;
+      const zoomDelta = e.deltaY < 0 ? zoomFactor : -zoomFactor;
+
+      setZoomLevel((prevZoom) => {
+        const nextZoom = Math.min(2.0, Math.max(0.35, Number((prevZoom + zoomDelta).toFixed(2))));
+        if (nextZoom === prevZoom) return prevZoom;
+
+        // Cursor-centric focal zoom: keep position under mouse stable
+        const scaleRatio = nextZoom / prevZoom;
+        setPan((prevPan) => ({
+          x: Math.round(mouseX - (mouseX - prevPan.x) * scaleRatio),
+          y: Math.round(mouseY - (mouseY - prevPan.y) * scaleRatio),
+        }));
+
+        return nextZoom;
+      });
+    };
+
+    container.addEventListener('wheel', onWheel, { passive: false });
+    return () => {
+      container.removeEventListener('wheel', onWheel);
+    };
+  }, []);
+
   const { problemProgress, updateProblemStatus, bookmarks, toggleBookmark } = useUserStore();
 
   const currentNodes = selectedSubject === 'cse205' ? CSE205_NODES : CSE202_NODES;
@@ -662,13 +701,6 @@ export const LpuAcademicGraph: React.FC<LpuAcademicGraphProps> = ({ fitScreen = 
   const handleTouchEnd = () => {
     setIsDragging(false);
     lastTouchDistance.current = null;
-  };
-
-  // Wheel zoom
-  const handleWheel = (e: React.WheelEvent) => {
-    e.preventDefault();
-    const zoomDelta = e.deltaY < 0 ? 0.08 : -0.08;
-    setZoomLevel((z) => Math.min(1.6, Math.max(0.35, Number((z + zoomDelta).toFixed(2)))));
   };
 
   // Reset view to center
@@ -894,7 +926,6 @@ export const LpuAcademicGraph: React.FC<LpuAcademicGraphProps> = ({ fitScreen = 
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
-        onWheel={handleWheel}
         className={`w-full relative flex justify-center items-center select-none overflow-hidden transition-all duration-200 ${
           isFullscreen
             ? 'h-[calc(100vh-56px)]'
