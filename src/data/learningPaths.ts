@@ -1,0 +1,312 @@
+import type { LearningPath } from '../types';
+
+// ───── DSA Roadmap ─────
+export const DSA_ROADMAP: LearningPath = {
+  id: 'dsa-roadmap',
+  title: 'Data Structures & Algorithms Roadmap',
+  slug: 'dsa-roadmap',
+  description: 'A structured roadmap covering fundamental to advanced DSA topics with curated problems from top coding platforms.',
+  type: 'dsa_roadmap',
+  groups: [
+    {
+      id: 'dsa-g1',
+      title: 'Complexity Analysis',
+      description: 'Understand Big O, Omega, and Theta notations for analyzing algorithm efficiency.',
+      order: 1,
+      icon: '📊',
+      prerequisites: [],
+      items: [
+        { id: 'dsa-g1-i1', type: 'lesson', referenceId: 'cse205-u1-t1', order: 1, isRequired: true },
+      ],
+    },
+    {
+      id: 'dsa-g2',
+      title: 'Arrays',
+      description: 'Master array operations: traversal, insertion, deletion, and common patterns.',
+      order: 2,
+      icon: '📦',
+      prerequisites: ['dsa-g1'],
+      items: [
+        { id: 'dsa-g2-i1', type: 'lesson', referenceId: 'cse205-u1-t2', order: 1, isRequired: true },
+        { id: 'dsa-g2-i2', type: 'problem', referenceId: 'p-dsa-array-traversal-1', order: 2, isRequired: true },
+        { id: 'dsa-g2-i3', type: 'problem', referenceId: 'p-dsa-array-insert-1', order: 3, isRequired: false },
+      ],
+    },
+    {
+      id: 'dsa-g3',
+      title: 'Searching',
+      description: 'Learn linear and binary search with O(n) vs O(log n) trade-offs.',
+      order: 3,
+      icon: '🔍',
+      prerequisites: ['dsa-g2'],
+      items: [
+        { id: 'dsa-g3-i1', type: 'lesson', referenceId: 'cse205-u1-t6', order: 1, isRequired: true },
+        { id: 'dsa-g3-i2', type: 'visualization', referenceId: 'linear-search', order: 2, isRequired: false },
+        { id: 'dsa-g3-i3', type: 'problem', referenceId: 'p-dsa-linear-search-1', order: 3, isRequired: true },
+        { id: 'dsa-g3-i4', type: 'lesson', referenceId: 'cse205-u1-t7', order: 4, isRequired: true },
+        { id: 'dsa-g3-i5', type: 'visualization', referenceId: 'binary-search', order: 5, isRequired: false },
+        { id: 'dsa-g3-i6', type: 'problem', referenceId: 'p-dsa-binary-search-1', order: 6, isRequired: true },
+        { id: 'dsa-g3-i7', type: 'problem', referenceId: 'p-dsa-binary-search-2', order: 7, isRequired: false },
+      ],
+    },
+    {
+      id: 'dsa-g4',
+      title: 'Sorting',
+      description: 'From bubble sort to quicksort — understand trade-offs between O(n²) and O(n log n) algorithms.',
+      order: 4,
+      icon: '🔄',
+      prerequisites: ['dsa-g2'],
+      items: [
+        { id: 'dsa-g4-i1', type: 'lesson', referenceId: 'cse205-u1-t3', order: 1, isRequired: true },
+        { id: 'dsa-g4-i2', type: 'visualization', referenceId: 'bubble-sort', order: 2, isRequired: false },
+        { id: 'dsa-g4-i3', type: 'problem', referenceId: 'p-dsa-bubble-sort-1', order: 3, isRequired: true },
+        { id: 'dsa-g4-i4', type: 'lesson', referenceId: 'cse205-u1-t4', order: 4, isRequired: true },
+        { id: 'dsa-g4-i5', type: 'visualization', referenceId: 'insertion-sort', order: 5, isRequired: false },
+        { id: 'dsa-g4-i6', type: 'problem', referenceId: 'p-dsa-insertion-sort-1', order: 6, isRequired: true },
+        { id: 'dsa-g4-i7', type: 'lesson', referenceId: 'cse205-u1-t5', order: 7, isRequired: true },
+        { id: 'dsa-g4-i8', type: 'visualization', referenceId: 'selection-sort', order: 8, isRequired: false },
+        { id: 'dsa-g4-i9', type: 'problem', referenceId: 'p-dsa-selection-sort-1', order: 9, isRequired: true },
+        { id: 'dsa-g4-i10', type: 'lesson', referenceId: 'cse205-u4-t4', order: 10, isRequired: true },
+        { id: 'dsa-g4-i11', type: 'visualization', referenceId: 'merge-sort', order: 11, isRequired: false },
+        { id: 'dsa-g4-i12', type: 'problem', referenceId: 'p-dsa-merge-sort-1', order: 12, isRequired: true },
+        { id: 'dsa-g4-i13', type: 'lesson', referenceId: 'cse205-u4-t5', order: 13, isRequired: true },
+        { id: 'dsa-g4-i14', type: 'visualization', referenceId: 'quick-sort', order: 14, isRequired: false },
+        { id: 'dsa-g4-i15', type: 'problem', referenceId: 'p-dsa-quick-sort-1', order: 15, isRequired: true },
+      ],
+    },
+    {
+      id: 'dsa-g5',
+      title: 'Linked Lists',
+      description: 'Singly, doubly, and circular linked lists with common manipulation patterns.',
+      order: 5,
+      icon: '🔗',
+      prerequisites: ['dsa-g2'],
+      items: [
+        { id: 'dsa-g5-i1', type: 'lesson', referenceId: 'cse205-u2-t1', order: 1, isRequired: true },
+        { id: 'dsa-g5-i2', type: 'visualization', referenceId: 'singly-linked-list', order: 2, isRequired: false },
+        { id: 'dsa-g5-i3', type: 'problem', referenceId: 'p-dsa-ll-reverse-1', order: 3, isRequired: true },
+        { id: 'dsa-g5-i4', type: 'problem', referenceId: 'p-dsa-ll-middle-1', order: 4, isRequired: true },
+        { id: 'dsa-g5-i5', type: 'lesson', referenceId: 'cse205-u2-t3', order: 5, isRequired: true },
+        { id: 'dsa-g5-i6', type: 'problem', referenceId: 'p-dsa-dll-1', order: 6, isRequired: false },
+      ],
+    },
+    {
+      id: 'dsa-g6',
+      title: 'Stacks & Queues',
+      description: 'LIFO and FIFO data structures with expression evaluation and priority queues.',
+      order: 6,
+      icon: '📚',
+      prerequisites: ['dsa-g5'],
+      items: [
+        { id: 'dsa-g6-i1', type: 'lesson', referenceId: 'cse205-u3-t1', order: 1, isRequired: true },
+        { id: 'dsa-g6-i2', type: 'visualization', referenceId: 'stack-operations', order: 2, isRequired: false },
+        { id: 'dsa-g6-i3', type: 'problem', referenceId: 'p-dsa-stack-valid-parens-1', order: 3, isRequired: true },
+        { id: 'dsa-g6-i4', type: 'lesson', referenceId: 'cse205-u3-t2', order: 4, isRequired: true },
+        { id: 'dsa-g6-i5', type: 'problem', referenceId: 'p-dsa-stack-postfix-1', order: 5, isRequired: true },
+        { id: 'dsa-g6-i6', type: 'lesson', referenceId: 'cse205-u3-t3', order: 6, isRequired: true },
+        { id: 'dsa-g6-i7', type: 'visualization', referenceId: 'queue-operations', order: 7, isRequired: false },
+        { id: 'dsa-g6-i8', type: 'problem', referenceId: 'p-dsa-queue-1', order: 8, isRequired: true },
+        { id: 'dsa-g6-i9', type: 'lesson', referenceId: 'cse205-u3-t4', order: 9, isRequired: true },
+      ],
+    },
+    {
+      id: 'dsa-g7',
+      title: 'Recursion',
+      description: 'Master recursive thinking with factorial, Fibonacci, and Tower of Hanoi.',
+      order: 7,
+      icon: '🔁',
+      prerequisites: ['dsa-g6'],
+      items: [
+        { id: 'dsa-g7-i1', type: 'lesson', referenceId: 'cse205-u4-t1', order: 1, isRequired: true },
+        { id: 'dsa-g7-i2', type: 'visualization', referenceId: 'hanoi', order: 2, isRequired: false },
+      ],
+    },
+    {
+      id: 'dsa-g8',
+      title: 'Trees & BSTs',
+      description: 'Binary trees, BST operations, and tree traversals (inorder, preorder, postorder).',
+      order: 8,
+      icon: '🌳',
+      prerequisites: ['dsa-g7'],
+      items: [
+        { id: 'dsa-g8-i1', type: 'lesson', referenceId: 'cse205-u4-t2', order: 1, isRequired: true },
+        { id: 'dsa-g8-i2', type: 'problem', referenceId: 'p-dsa-tree-traversal-1', order: 2, isRequired: true },
+        { id: 'dsa-g8-i3', type: 'lesson', referenceId: 'cse205-u4-t3', order: 3, isRequired: true },
+        { id: 'dsa-g8-i4', type: 'visualization', referenceId: 'bst-insert', order: 4, isRequired: false },
+        { id: 'dsa-g8-i5', type: 'problem', referenceId: 'p-dsa-bst-insert-1', order: 5, isRequired: true },
+        { id: 'dsa-g8-i6', type: 'problem', referenceId: 'p-dsa-bst-validate-1', order: 6, isRequired: true },
+      ],
+    },
+    {
+      id: 'dsa-g9',
+      title: 'Heaps',
+      description: 'Min/max heaps, heapify process, and heap sort.',
+      order: 9,
+      icon: '⛰️',
+      prerequisites: ['dsa-g8'],
+      items: [
+        { id: 'dsa-g9-i1', type: 'lesson', referenceId: 'cse205-u5-t1', order: 1, isRequired: true },
+        { id: 'dsa-g9-i2', type: 'visualization', referenceId: 'heap-sort', order: 2, isRequired: false },
+        { id: 'dsa-g9-i3', type: 'problem', referenceId: 'p-dsa-heap-kth-1', order: 3, isRequired: true },
+      ],
+    },
+    {
+      id: 'dsa-g10',
+      title: 'Hashing',
+      description: 'Hash functions, hash tables, and collision resolution strategies.',
+      order: 10,
+      icon: '#️⃣',
+      prerequisites: ['dsa-g2'],
+      items: [
+        { id: 'dsa-g10-i1', type: 'lesson', referenceId: 'cse205-u5-t2', order: 1, isRequired: true },
+        { id: 'dsa-g10-i2', type: 'lesson', referenceId: 'cse205-u5-t3', order: 2, isRequired: true },
+        { id: 'dsa-g10-i3', type: 'problem', referenceId: 'p-dsa-hash-two-sum-1', order: 3, isRequired: true },
+      ],
+    },
+    {
+      id: 'dsa-g11',
+      title: 'Graphs',
+      description: 'Graph traversals (BFS, DFS) and shortest path algorithms.',
+      order: 11,
+      icon: '🕸️',
+      prerequisites: ['dsa-g6', 'dsa-g8'],
+      items: [
+        { id: 'dsa-g11-i1', type: 'lesson', referenceId: 'cse205-u6-t1', order: 1, isRequired: true },
+        { id: 'dsa-g11-i2', type: 'visualization', referenceId: 'bfs', order: 2, isRequired: false },
+        { id: 'dsa-g11-i3', type: 'problem', referenceId: 'p-dsa-bfs-1', order: 3, isRequired: true },
+        { id: 'dsa-g11-i4', type: 'lesson', referenceId: 'cse205-u6-t2', order: 4, isRequired: true },
+        { id: 'dsa-g11-i5', type: 'visualization', referenceId: 'dfs', order: 5, isRequired: false },
+        { id: 'dsa-g11-i6', type: 'problem', referenceId: 'p-dsa-dfs-1', order: 6, isRequired: true },
+      ],
+    },
+    {
+      id: 'dsa-g12',
+      title: 'Shortest Path Algorithms',
+      description: "Dijkstra's, Bellman-Ford, and Floyd-Warshall for weighted graphs.",
+      order: 12,
+      icon: '🛤️',
+      prerequisites: ['dsa-g11'],
+      items: [
+        { id: 'dsa-g12-i1', type: 'lesson', referenceId: 'cse205-u6-t3', order: 1, isRequired: true },
+        { id: 'dsa-g12-i2', type: 'visualization', referenceId: 'dijkstra', order: 2, isRequired: false },
+        { id: 'dsa-g12-i3', type: 'problem', referenceId: 'p-dsa-dijkstra-1', order: 3, isRequired: true },
+        { id: 'dsa-g12-i4', type: 'lesson', referenceId: 'cse205-u6-t4', order: 4, isRequired: true },
+        { id: 'dsa-g12-i5', type: 'lesson', referenceId: 'cse205-u6-t5', order: 5, isRequired: true },
+      ],
+    },
+  ],
+};
+
+// ───── C++ Learning Path ─────
+export const CPP_PATH: LearningPath = {
+  id: 'cpp-path',
+  title: 'C++ & Object-Oriented Programming',
+  slug: 'cpp-oop',
+  description: 'Learn C++ from classes to templates, covering OOP principles mapped to university syllabus.',
+  type: 'cpp_path',
+  groups: [
+    {
+      id: 'cpp-g1', title: 'Classes & Objects', description: 'Fundamentals of OOP: creating classes, accessing members, encapsulation.', order: 1, icon: '🏗️', prerequisites: [],
+      items: [
+        { id: 'cpp-g1-i1', type: 'lesson', referenceId: 'cse202-u1-t1', order: 1, isRequired: true },
+        { id: 'cpp-g1-i2', type: 'lesson', referenceId: 'cse202-u1-t3', order: 2, isRequired: true },
+        { id: 'cpp-g1-i3', type: 'problem', referenceId: 'p-cpp-classes-1', order: 3, isRequired: true },
+      ],
+    },
+    {
+      id: 'cpp-g2', title: 'Functions', description: 'Function overloading, default arguments, inline functions, friend functions.', order: 2, icon: '⚡', prerequisites: ['cpp-g1'],
+      items: [
+        { id: 'cpp-g2-i1', type: 'lesson', referenceId: 'cse202-u1-t9', order: 1, isRequired: true },
+        { id: 'cpp-g2-i2', type: 'problem', referenceId: 'p-cpp-func-overload-1', order: 2, isRequired: true },
+        { id: 'cpp-g2-i3', type: 'lesson', referenceId: 'cse202-u1-t11', order: 3, isRequired: true },
+        { id: 'cpp-g2-i4', type: 'problem', referenceId: 'p-cpp-friend-1', order: 4, isRequired: false },
+      ],
+    },
+    {
+      id: 'cpp-g3', title: 'Pointers & References', description: 'Pointer types, reference variables, this pointer, dynamic memory.', order: 3, icon: '👆', prerequisites: ['cpp-g1'],
+      items: [
+        { id: 'cpp-g3-i1', type: 'lesson', referenceId: 'cse202-u1-t12', order: 1, isRequired: true },
+        { id: 'cpp-g3-i2', type: 'lesson', referenceId: 'cse202-u2-t1', order: 2, isRequired: true },
+        { id: 'cpp-g3-i3', type: 'lesson', referenceId: 'cse202-u2-t2', order: 3, isRequired: true },
+        { id: 'cpp-g3-i4', type: 'lesson', referenceId: 'cse202-u2-t3', order: 4, isRequired: true },
+      ],
+    },
+    {
+      id: 'cpp-g4', title: 'Arrays & Strings', description: 'Array handling, std::string operations, multidimensional arrays.', order: 4, icon: '📝', prerequisites: ['cpp-g3'],
+      items: [
+        { id: 'cpp-g4-i1', type: 'lesson', referenceId: 'cse202-u2-t4', order: 1, isRequired: true },
+        { id: 'cpp-g4-i2', type: 'lesson', referenceId: 'cse202-u2-t5', order: 2, isRequired: true },
+        { id: 'cpp-g4-i3', type: 'problem', referenceId: 'p-cpp-strings-1', order: 3, isRequired: true },
+      ],
+    },
+    {
+      id: 'cpp-g5', title: 'File Handling', description: 'File streams, sequential and random access, binary I/O.', order: 5, icon: '📁', prerequisites: ['cpp-g4'],
+      items: [
+        { id: 'cpp-g5-i1', type: 'lesson', referenceId: 'cse202-u3-t1', order: 1, isRequired: true },
+        { id: 'cpp-g5-i2', type: 'lesson', referenceId: 'cse202-u3-t2', order: 2, isRequired: true },
+        { id: 'cpp-g5-i3', type: 'lesson', referenceId: 'cse202-u3-t3', order: 3, isRequired: true },
+      ],
+    },
+    {
+      id: 'cpp-g6', title: 'Constructors & Destructors', description: 'Default, parameterized, copy constructors, initializer lists, destructors.', order: 6, icon: '🔧', prerequisites: ['cpp-g1'],
+      items: [
+        { id: 'cpp-g6-i1', type: 'lesson', referenceId: 'cse202-u3-t4', order: 1, isRequired: true },
+        { id: 'cpp-g6-i2', type: 'lesson', referenceId: 'cse202-u3-t5', order: 2, isRequired: true },
+        { id: 'cpp-g6-i3', type: 'problem', referenceId: 'p-cpp-constructors-1', order: 3, isRequired: true },
+      ],
+    },
+    {
+      id: 'cpp-g7', title: 'Operator Overloading', description: 'Overloading unary/binary operators, type conversion.', order: 7, icon: '➕', prerequisites: ['cpp-g6'],
+      items: [
+        { id: 'cpp-g7-i1', type: 'lesson', referenceId: 'cse202-u4-t1', order: 1, isRequired: true },
+        { id: 'cpp-g7-i2', type: 'problem', referenceId: 'p-cpp-operator-overload-1', order: 2, isRequired: true },
+        { id: 'cpp-g7-i3', type: 'lesson', referenceId: 'cse202-u4-t2', order: 3, isRequired: true },
+      ],
+    },
+    {
+      id: 'cpp-g8', title: 'Inheritance', description: 'Single, multilevel, multiple, hierarchical inheritance and virtual base classes.', order: 8, icon: '🧬', prerequisites: ['cpp-g6'],
+      items: [
+        { id: 'cpp-g8-i1', type: 'lesson', referenceId: 'cse202-u4-t3', order: 1, isRequired: true },
+        { id: 'cpp-g8-i2', type: 'problem', referenceId: 'p-cpp-inheritance-1', order: 2, isRequired: true },
+        { id: 'cpp-g8-i3', type: 'lesson', referenceId: 'cse202-u4-t4', order: 3, isRequired: true },
+        { id: 'cpp-g8-i4', type: 'lesson', referenceId: 'cse202-u4-t5', order: 4, isRequired: true },
+      ],
+    },
+    {
+      id: 'cpp-g9', title: 'Polymorphism', description: 'Virtual functions, abstract classes, early vs late binding.', order: 9, icon: '🎭', prerequisites: ['cpp-g8'],
+      items: [
+        { id: 'cpp-g9-i1', type: 'lesson', referenceId: 'cse202-u5-t1', order: 1, isRequired: true },
+        { id: 'cpp-g9-i2', type: 'lesson', referenceId: 'cse202-u5-t2', order: 2, isRequired: true },
+        { id: 'cpp-g9-i3', type: 'problem', referenceId: 'p-cpp-polymorphism-1', order: 3, isRequired: true },
+        { id: 'cpp-g9-i4', type: 'lesson', referenceId: 'cse202-u5-t3', order: 4, isRequired: true },
+        { id: 'cpp-g9-i5', type: 'lesson', referenceId: 'cse202-u5-t4', order: 5, isRequired: true },
+      ],
+    },
+    {
+      id: 'cpp-g10', title: 'Exception Handling', description: 'try, catch, throw mechanisms and best practices.', order: 10, icon: '🛡️', prerequisites: ['cpp-g9'],
+      items: [
+        { id: 'cpp-g10-i1', type: 'lesson', referenceId: 'cse202-u6-t1', order: 1, isRequired: true },
+      ],
+    },
+    {
+      id: 'cpp-g11', title: 'Templates', description: 'Function and class templates for generic programming.', order: 11, icon: '📐', prerequisites: ['cpp-g9'],
+      items: [
+        { id: 'cpp-g11-i1', type: 'lesson', referenceId: 'cse202-u6-t2', order: 1, isRequired: true },
+        { id: 'cpp-g11-i2', type: 'problem', referenceId: 'p-cpp-templates-1', order: 2, isRequired: true },
+      ],
+    },
+    {
+      id: 'cpp-g12', title: 'STL', description: 'Containers, algorithms, and iterators from the Standard Template Library.', order: 12, icon: '📚', prerequisites: ['cpp-g11'],
+      items: [
+        { id: 'cpp-g12-i1', type: 'lesson', referenceId: 'cse202-u6-t3', order: 1, isRequired: true },
+        { id: 'cpp-g12-i2', type: 'problem', referenceId: 'p-cpp-stl-1', order: 2, isRequired: true },
+      ],
+    },
+  ],
+};
+
+export const LEARNING_PATHS = [DSA_ROADMAP, CPP_PATH];
+
+export function getLearningPathById(id: string): LearningPath | undefined {
+  return LEARNING_PATHS.find(lp => lp.id === id);
+}
