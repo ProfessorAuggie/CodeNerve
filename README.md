@@ -1,6 +1,6 @@
 # CodeNerve ⚡
 
-> **A NeetCode-inspired coding education platform integrated with the AlgoNerve interactive algorithm visualizer, university syllabi, structured DSA & C++ roadmaps, and curated external problem catalogue.**
+> **A comprehensive coding education platform integrated with the AlgoNerve interactive algorithm visualizer, university syllabi, structured DSA & C++ dependency roadmaps, and curated external problem catalogue.**
 
 ---
 
@@ -10,7 +10,7 @@
 
 ### Key Highlights
 - 🧠 **Integrated AlgoNerve Visualizer Engine**: Over 160+ algorithms across 33 categories (Sorting, Searching, Trees, Graphs, DP, Backtracking) with speed controls, step-by-step timeline, D3/SVG graph layouts, and live narration.
-- 🗺️ **NeetCode-Style Roadmaps**: Prerequisite-aware learning graphs for **Data Structures & Algorithms** (12 units) and **Object-Oriented C++** (12 units).
+- 🗺️ **Interactive Flowchart Roadmaps**: Prerequisite-aware learning graphs for **Data Structures & Algorithms** and **Object-Oriented C++** with pan/zoom canvas and slide-over topic drawers.
 - 🎓 **University Syllabus Integration**: Native alignment with **Lovely Professional University (LPU)** B.Tech CSE curricula (**CSE202** Object Oriented Programming & **CSE205** Data Structures and Algorithms).
 - 💻 **Centralized External Problem Catalogue**: Verified problem entries linking out to **LeetCode**, **GeeksforGeeks**, and **HackerRank** without copyright reproduction.
 - 📊 **Student Progress & Revision Queue**: LocalStorage-persisted tracker for `SOLVED`, `ATTEMPTED`, and `REVISION_NEEDED` statuses, personal solution notes, and bookmarks.
@@ -64,7 +64,7 @@ CodeNerve/
 │   │   └── utils.ts        # Helper functions & Tailwind class merging
 │   ├── pages/
 │   │   ├── HomePage.tsx       # Landing page & feature showcase
-│   │   ├── RoadmapPage.tsx    # NeetCode-inspired DSA & C++ roadmaps
+│   │   ├── RoadmapPage.tsx    # Interactive DSA & C++ dependency roadmaps
 │   │   ├── ProblemsPage.tsx   # Searchable & filterable problem catalogue
 │   │   ├── UniversityPage.tsx # LPU syllabus explorer
 │   │   ├── LessonPage.tsx     # Concept guides & code viewer
@@ -115,6 +115,5 @@ CodeNerve/
 ## 📜 License & Acknowledgments
 
 - Built by **Vaibhav Kushwaha**.
-- Inspired by **NeetCode.io** for structured roadmap progression.
 - Powered by **AlgoNerve** for interactive algorithmic step visualization.
 - External coding problems remain the property of their respective platforms (LeetCode, GeeksforGeeks, HackerRank). CodeNerve only links to official external problem URLs.

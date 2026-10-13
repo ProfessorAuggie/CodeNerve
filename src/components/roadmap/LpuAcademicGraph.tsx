@@ -1,23 +1,20 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useRef } from 'react';
 import { 
   GraduationCap, 
   Sparkles, 
-  ExternalLink, 
-  CheckCircle2, 
   ZoomIn, 
   ZoomOut, 
-  BookOpen, 
-  ArrowRight,
+  RotateCcw,
+  Shuffle,
   ShieldAlert,
-  Award,
   Layers,
-  FileText
+  BookOpen
 } from 'lucide-react';
 import { PROBLEMS } from '../../data/problems';
-import { VISUALIZER_MAPPINGS, getAlgoNerveUrl } from '../../data/visualizers';
 import { useUserStore } from '../../store/userStore';
 import { ProblemModal } from '../problems/ProblemModal';
-import type { Problem } from '../../types';
+import { TopicDrawer } from './TopicDrawer';
+import type { Problem, ProblemStatus } from '../../types';
 
 interface LpuNodeData {
   id: string;
@@ -159,87 +156,96 @@ const CSE205_NODES: LpuNodeData[] = [
     y: 540,
     examScope: 'ETE',
     prerequisites: ['Binary Trees & BST Traversals'],
-    description: 'Self-balancing height property, balance factor, single (LL/RR) and double (LR/RL) rotations.',
+    description: 'Self-balancing binary search trees using LL, RR, LR, and RL rotation balance factors.',
     visualizerId: 'avl-tree',
-    problemIds: ['p-dsa-bst-insert-1'],
+    problemIds: ['p-dsa-avl-balance-1'],
   },
   {
     id: 'cse205-heaps',
     unitNumber: 5,
     unitCode: 'Unit 5',
-    title: 'Heaps & Priority Queues',
+    title: 'Binary Heaps & Priority Queues',
     category: 'advanced',
-    x: 650,
+    x: 660,
     y: 540,
     examScope: 'ETE',
     prerequisites: ['Binary Trees & BST Traversals', 'Arrays & Big-O Foundations'],
-    description: 'Complete binary tree array mapping, heapify, max-heap/min-heap, and priority scheduling.',
+    description: 'Complete binary tree layout in flat arrays, sift-up/sift-down heapify, HeapSort.',
     visualizerId: 'heap-sort',
-    problemIds: ['p-dsa-heap-kth-1'],
+    problemIds: ['p-dsa-kth-largest-1', 'p-dsa-heapify-1'],
   },
 
-  // Level 5: Graphs & Advanced Topics
+  // Level 5: Graphs & Hashing
   {
     id: 'cse205-graphs',
     unitNumber: 6,
     unitCode: 'Unit 6',
     title: 'Graph Traversals (BFS & DFS)',
     category: 'advanced',
-    x: 380,
-    y: 640,
+    x: 330,
+    y: 650,
     examScope: 'ETE',
-    prerequisites: ['Binary Trees & BST Traversals', 'Stacks & Circular Queues'],
-    description: 'Adjacency matrix & list, queue-based BFS layer exploration, and stack-based DFS paths.',
-    visualizerId: 'bfs',
-    problemIds: ['p-dsa-bfs-1'],
+    prerequisites: ['Stacks & Circular Queues', 'Binary Trees & BST Traversals'],
+    description: 'Adjacency list representations, queue-driven BFS, recursive stack DFS, cycle detection.',
+    visualizerId: 'bfs-graph',
+    problemIds: ['p-dsa-bfs-1', 'p-dsa-dfs-1'],
   },
   {
-    id: 'cse205-adv-graphs',
+    id: 'cse205-spanning-trees',
     unitNumber: 6,
     unitCode: 'Unit 6',
-    title: 'Shortest Path & MST (Dijkstra, Prim)',
+    title: "Kruskal's & Prim's MST",
     category: 'advanced',
-    x: 560,
-    y: 740,
+    x: 550,
+    y: 650,
     examScope: 'ETE',
-    prerequisites: ['Graph Traversals (BFS & DFS)', 'Heaps & Priority Queues'],
-    description: 'Greedy shortest paths via Dijkstra, minimum spanning trees via Prim and Kruskal algorithms.',
+    prerequisites: ['Graph Traversals (BFS & DFS)', 'Binary Heaps & Priority Queues'],
+    description: 'Minimum spanning tree discovery using greedy edge selection and Disjoint Set Union (DSU).',
     visualizerId: 'dijkstra',
-    problemIds: ['p-dsa-dijkstra-1'],
+    problemIds: ['p-dsa-mst-kruskal-1', 'p-dsa-mst-prim-1'],
+  },
+  {
+    id: 'cse205-hashing',
+    unitNumber: 6,
+    unitCode: 'Unit 6',
+    title: 'Hashing & Collision Resolution',
+    category: 'core',
+    x: 440,
+    y: 750,
+    examScope: 'ETE',
+    prerequisites: ['Arrays & Big-O Foundations', 'Singly & Doubly Linked Lists'],
+    description: 'Hash functions, open addressing linear probing, chaining, load factor amortized O(1).',
+    problemIds: ['p-dsa-hash-table-1'],
   },
 ];
 
 const CSE205_EDGES: LpuEdgeData[] = [
-  // Arrays -> Searching & Sorting
   { from: 'cse205-arrays', to: 'cse205-searching' },
   { from: 'cse205-arrays', to: 'cse205-sorting' },
 
-  // Sorting -> Advanced Sorting
+  { from: 'cse205-searching', to: 'cse205-linked-lists' },
   { from: 'cse205-sorting', to: 'cse205-adv-sorting' },
 
-  // Arrays -> Linked Lists
-  { from: 'cse205-arrays', to: 'cse205-linked-lists' },
-
-  // Linked Lists & Searching -> Stacks & Queues
   { from: 'cse205-linked-lists', to: 'cse205-stacks-queues' },
-  { from: 'cse205-searching', to: 'cse205-stacks-queues', isDotted: true },
+  { from: 'cse205-adv-sorting', to: 'cse205-stacks-queues', isDotted: true },
 
-  // Stacks & Queues -> Trees
   { from: 'cse205-stacks-queues', to: 'cse205-trees' },
 
-  // Trees -> AVL, Heaps, Graphs
   { from: 'cse205-trees', to: 'cse205-avl' },
   { from: 'cse205-trees', to: 'cse205-heaps' },
+
+  { from: 'cse205-avl', to: 'cse205-graphs' },
+  { from: 'cse205-heaps', to: 'cse205-spanning-trees' },
   { from: 'cse205-trees', to: 'cse205-graphs' },
 
-  // Graphs & Heaps -> Shortest Path / MST
-  { from: 'cse205-graphs', to: 'cse205-adv-graphs' },
-  { from: 'cse205-heaps', to: 'cse205-adv-graphs', isDotted: true },
+  { from: 'cse205-graphs', to: 'cse205-spanning-trees' },
+  { from: 'cse205-spanning-trees', to: 'cse205-hashing' },
+  { from: 'cse205-linked-lists', to: 'cse205-hashing', isDotted: true },
 ];
 
-// ───── CSE202 Object Oriented Programming C++ Academic DAG ─────
+// ───── CSE202 C++ Object Oriented Programming Academic DAG ─────
 const CSE202_NODES: LpuNodeData[] = [
-  // Level 0
+  // Unit 1
   {
     id: 'cse202-basics',
     unitNumber: 1,
@@ -249,150 +255,144 @@ const CSE202_NODES: LpuNodeData[] = [
     x: 440,
     y: 40,
     examScope: 'CA-1',
-    prerequisites: ['Basic programming fundamentals'],
-    description: 'Streams (cin/cout), manipulators, parameter passing, and inline member functions.',
-    problemIds: ['p-cpp-io-1', 'p-cpp-classes-1'],
+    prerequisites: ['Introductory computer science concepts', 'Basic computational logic'],
+    description: 'Primitive types, std::cin/cout, namespaces, call-by-reference vs call-by-value.',
+    problemIds: ['p-cpp-io-1', 'p-cpp-func-ref-1'],
   },
-
-  // Level 1
   {
     id: 'cse202-pointers',
-    unitNumber: 2,
-    unitCode: 'Unit 2',
+    unitNumber: 1,
+    unitCode: 'Unit 1',
     title: 'Pointers & Dynamic Memory',
     category: 'foundation',
-    x: 250,
+    x: 280,
     y: 140,
     examScope: 'CA-1',
     prerequisites: ['C++ Syntax, I/O & Functions'],
-    description: 'Pointer arithmetic, void pointers, references, heap allocation with new and delete.',
-    problemIds: ['p-cpp-pointers-1', 'p-cpp-references-1'],
+    description: 'Pointer arithmetic, new/delete heap allocation, memory leaks and nullptr safeguards.',
+    problemIds: ['p-cpp-pointers-1', 'p-cpp-dynamic-arr-1'],
   },
   {
     id: 'cse202-overloading',
     unitNumber: 1,
     unitCode: 'Unit 1',
-    title: 'Function Overloading & Scope (::)',
+    title: 'Function Overloading & Inline',
     category: 'foundation',
-    x: 630,
+    x: 600,
     y: 140,
     examScope: 'CA-1',
     prerequisites: ['C++ Syntax, I/O & Functions'],
-    description: 'Compile-time overload resolution, default arguments, and scope resolution operator.',
-    problemIds: ['p-cpp-func-overload-1'],
+    description: 'Compile-time function resolution, default arguments, inline performance trade-offs.',
+    problemIds: ['p-cpp-fn-overload-1'],
   },
 
-  // Level 2: Classes & Objects
+  // Unit 2
   {
     id: 'cse202-classes',
-    unitNumber: 3,
-    unitCode: 'Unit 3',
-    title: 'Classes & Encapsulation',
+    unitNumber: 2,
+    unitCode: 'Unit 2',
+    title: 'Classes, Objects & Encapsulation',
     category: 'core',
     x: 440,
     y: 240,
     examScope: 'MTE',
-    prerequisites: ['C++ Syntax, I/O & Functions', 'Pointers & Dynamic Memory'],
-    description: 'Data hiding, private/public access, member functions, and static class members.',
-    problemIds: ['p-cpp-classes-1', 'p-cpp-static-1'],
+    prerequisites: ['Pointers & Dynamic Memory', 'Function Overloading & Inline'],
+    description: 'Access specifiers (public/private/protected), this pointer, member function definition.',
+    problemIds: ['p-cpp-class-student-1', 'p-cpp-encapsulation-1'],
   },
-
-  // Level 3: Constructors & Operator Overloading
   {
     id: 'cse202-constructors',
-    unitNumber: 3,
-    unitCode: 'Unit 3',
-    title: 'Constructors & Destructors',
+    unitNumber: 2,
+    unitCode: 'Unit 2',
+    title: 'Constructors, Destructors & Copy',
     category: 'core',
     x: 260,
     y: 340,
     examScope: 'MTE',
-    prerequisites: ['Classes & Encapsulation'],
-    description: 'Default, parameterized, copy constructors, initializer lists, and RAII cleanup.',
-    problemIds: ['p-cpp-constructors-1'],
+    prerequisites: ['Classes, Objects & Encapsulation'],
+    description: 'Default, parameterized, copy constructor, deep vs shallow copy, and destructor lifecycles.',
+    problemIds: ['p-cpp-copy-constructor-1', 'p-cpp-destructor-order-1'],
   },
   {
     id: 'cse202-operator-overload',
-    unitNumber: 4,
-    unitCode: 'Unit 4',
+    unitNumber: 3,
+    unitCode: 'Unit 3',
     title: 'Operator Overloading & Friends',
     category: 'core',
     x: 620,
     y: 340,
-    examScope: 'CA-2',
-    prerequisites: ['Classes & Encapsulation', 'Function Overloading & Scope (::)'],
-    description: 'Unary and binary operator overloading, friend function access, stream operators (<<, >>).',
-    problemIds: ['p-cpp-operator-overload-1', 'p-cpp-friend-1'],
+    examScope: 'MTE',
+    prerequisites: ['Classes, Objects & Encapsulation'],
+    description: 'Overloading +, -, <<, >> operators, friend functions, and symmetric binary operands.',
+    problemIds: ['p-cpp-op-complex-1', 'p-cpp-friend-class-1'],
   },
 
-  // Level 4: Inheritance
+  // Unit 4
   {
     id: 'cse202-inheritance',
     unitNumber: 4,
     unitCode: 'Unit 4',
-    title: 'Inheritance & Access Specifiers',
+    title: 'Inheritance & Access Control',
     category: 'core',
     x: 440,
     y: 440,
     examScope: 'CA-2',
-    prerequisites: ['Constructors & Destructors', 'Classes & Encapsulation'],
-    description: 'Single, multiple, multilevel inheritance, protected members, and constructor chaining.',
-    problemIds: ['p-cpp-inheritance-1'],
+    prerequisites: ['Constructors, Destructors & Copy', 'Operator Overloading & Friends'],
+    description: 'Single, multiple, hierarchical, and virtual base classes to resolve diamond problem.',
+    problemIds: ['p-cpp-single-inherit-1', 'p-cpp-virtual-base-diamond-1'],
   },
-
-  // Level 5: Polymorphism & Virtual Functions
   {
     id: 'cse202-polymorphism',
-    unitNumber: 5,
-    unitCode: 'Unit 5',
-    title: 'Virtual Functions & Polymorphism',
+    unitNumber: 4,
+    unitCode: 'Unit 4',
+    title: 'Virtual Functions & Runtime Poly',
     category: 'advanced',
     x: 260,
     y: 540,
-    examScope: 'ETE',
-    prerequisites: ['Inheritance & Access Specifiers', 'Pointers & Dynamic Memory'],
-    description: 'Dynamic dispatch, vtable/vptr mechanism, runtime polymorphism, and virtual destructors.',
-    problemIds: ['p-cpp-polymorphism-1', 'p-cpp-virtual-destructor-1'],
+    examScope: 'CA-2',
+    prerequisites: ['Inheritance & Access Control'],
+    description: 'Virtual tables (vptr/vtable), late dynamic binding, virtual destructors.',
+    problemIds: ['p-cpp-virtual-vtable-1'],
   },
   {
     id: 'cse202-abstract',
-    unitNumber: 5,
-    unitCode: 'Unit 5',
-    title: 'Pure Virtual & Abstract Classes',
-    category: 'advanced',
+    unitNumber: 4,
+    unitCode: 'Unit 4',
+    title: 'Pure Virtual & Interfaces',
+    category: 'core',
     x: 620,
     y: 540,
-    examScope: 'ETE',
-    prerequisites: ['Inheritance & Access Specifiers'],
-    description: 'Pure virtual functions (= 0), interface contracts, and concrete derived implementations.',
-    problemIds: ['p-cpp-polymorphism-1'],
+    examScope: 'CA-2',
+    prerequisites: ['Inheritance & Access Control'],
+    description: 'Abstract base classes, pure virtual (= 0), interface contracts for polymorphic subsystems.',
+    problemIds: ['p-cpp-pure-virtual-shape-1'],
   },
 
-  // Level 6: Templates & STL
+  // Unit 5 & 6
   {
     id: 'cse202-templates',
-    unitNumber: 6,
-    unitCode: 'Unit 6',
+    unitNumber: 5,
+    unitCode: 'Unit 5',
     title: 'Function & Class Templates',
-    category: 'advanced',
+    category: 'core',
     x: 440,
     y: 640,
     examScope: 'ETE',
-    prerequisites: ['Virtual Functions & Polymorphism', 'Pure Virtual & Abstract Classes'],
-    description: 'Generic programming, template type parameters, and specialized implementations.',
-    problemIds: ['p-cpp-templates-1'],
+    prerequisites: ['Virtual Functions & Runtime Poly', 'Pure Virtual & Interfaces'],
+    description: 'Generic programming, template specialization, typename and class parameters.',
+    problemIds: ['p-cpp-template-stack-1', 'p-cpp-fn-template-max-1'],
   },
   {
     id: 'cse202-stl',
-    unitNumber: 6,
-    unitCode: 'Unit 6',
-    title: 'STL Containers & Iterators',
+    unitNumber: 5,
+    unitCode: 'Unit 5',
+    title: 'STL Containers, Iterators & Algos',
     category: 'advanced',
-    x: 640,
-    y: 640,
+    x: 220,
+    y: 740,
     examScope: 'ETE',
     prerequisites: ['Function & Class Templates'],
-    description: 'Vector, list, map, set, iterators, and <algorithm> standard utilities.',
+    description: 'vector, list, map, set, iterators, std::sort, std::find, and lambda predicates.',
     problemIds: ['p-cpp-stl-vector-1', 'p-cpp-stl-map-1'],
   },
   {
@@ -401,7 +401,7 @@ const CSE202_NODES: LpuNodeData[] = [
     unitCode: 'Unit 6',
     title: 'File I/O Streams & Serialization',
     category: 'advanced',
-    x: 480,
+    x: 660,
     y: 740,
     examScope: 'ETE',
     prerequisites: ['Function & Class Templates', 'C++ Syntax, I/O & Functions'],
@@ -438,17 +438,50 @@ export const LpuAcademicGraph: React.FC = () => {
   const [selectedSubject, setSelectedSubject] = useState<'cse205' | 'cse202'>('cse205');
   const [selectedNodeId, setSelectedNodeId] = useState<string>('cse205-arrays');
   const [hoveredNodeId, setHoveredNodeId] = useState<string | null>(null);
-  const [zoomLevel, setZoomLevel] = useState<number>(1);
   const [selectedProblem, setSelectedProblem] = useState<Problem | null>(null);
-  const [drawerOpen, setDrawerOpen] = useState(true);
+  const [drawerOpen, setDrawerOpen] = useState(false);
 
-  const { problemProgress } = useUserStore();
+  // Pan & Zoom Engine
+  const [zoomLevel, setZoomLevel] = useState<number>(1);
+  const [pan, setPan] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
+  const [isDragging, setIsDragging] = useState<boolean>(false);
+  const [dragStart, setDragStart] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
+  const [hasMoved, setHasMoved] = useState<boolean>(false);
+  const lastTouchDistance = useRef<number | null>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  const { problemProgress, updateProblemStatus, bookmarks, toggleBookmark } = useUserStore();
 
   const currentNodes = selectedSubject === 'cse205' ? CSE205_NODES : CSE202_NODES;
   const currentEdges = selectedSubject === 'cse205' ? CSE205_EDGES : CSE202_EDGES;
 
   // Active selected node data
   const selectedNode = currentNodes.find((n) => n.id === selectedNodeId) || currentNodes[0];
+
+  // Map problems for all nodes
+  const nodeProblemsMap = useMemo(() => {
+    const map: Record<string, Problem[]> = {};
+    for (const node of currentNodes) {
+      map[node.id] = PROBLEMS.filter((p) => node.problemIds.includes(p.id));
+    }
+    return map;
+  }, [currentNodes]);
+
+  // Overall statistics for current subject
+  const subjectStats = useMemo(() => {
+    const allProblemIds = new Set<string>();
+    currentNodes.forEach((n) => n.problemIds.forEach((pid) => allProblemIds.add(pid)));
+    const total = allProblemIds.size;
+    let solved = 0;
+    allProblemIds.forEach((pid) => {
+      if (problemProgress[pid]?.status === 'SOLVED') solved++;
+    });
+    return {
+      total,
+      solved,
+      percent: total > 0 ? Math.round((solved / total) * 100) : 0,
+    };
+  }, [currentNodes, problemProgress]);
 
   // Backward DAG trace calculation on hover
   const hoveredPrereqTrace = useMemo(() => {
@@ -483,7 +516,7 @@ export const LpuAcademicGraph: React.FC = () => {
 
   // Compute node progress
   const getNodeStats = (node: LpuNodeData) => {
-    const problems = PROBLEMS.filter((p) => node.problemIds.includes(p.id));
+    const problems = nodeProblemsMap[node.id] || [];
     const solved = problems.filter((p) => problemProgress[p.id]?.status === 'SOLVED').length;
     return {
       total: problems.length,
@@ -509,68 +542,203 @@ export const LpuAcademicGraph: React.FC = () => {
     return `M ${start.x} ${start.y} C ${start.x} ${midY}, ${end.x} ${midY}, ${end.x} ${end.y}`;
   };
 
-  const selectedNodeStats = getNodeStats(selectedNode);
+  // Mouse pan handlers
+  const handleMouseDown = (e: React.MouseEvent) => {
+    if ((e.target as HTMLElement).closest('button, a, input, select')) return;
+    setIsDragging(true);
+    setHasMoved(false);
+    setDragStart({ x: e.clientX - pan.x, y: e.clientY - pan.y });
+  };
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!isDragging) return;
+    const deltaX = Math.abs(e.clientX - (dragStart.x + pan.x));
+    const deltaY = Math.abs(e.clientY - (dragStart.y + pan.y));
+    if (deltaX > 4 || deltaY > 4) {
+      setHasMoved(true);
+    }
+    setPan({
+      x: e.clientX - dragStart.x,
+      y: e.clientY - dragStart.y,
+    });
+  };
+
+  const handleMouseUp = () => {
+    setIsDragging(false);
+  };
+
+  // Touch pan & pinch zoom handlers
+  const handleTouchStart = (e: React.TouchEvent) => {
+    if ((e.target as HTMLElement).closest('button, a, input, select')) return;
+    if (e.touches.length === 1) {
+      setIsDragging(true);
+      setHasMoved(false);
+      setDragStart({
+        x: e.touches[0].clientX - pan.x,
+        y: e.touches[0].clientY - pan.y,
+      });
+      lastTouchDistance.current = null;
+    } else if (e.touches.length === 2) {
+      setIsDragging(false);
+      const touch1 = e.touches[0];
+      const touch2 = e.touches[1];
+      const dist = Math.hypot(touch2.clientX - touch1.clientX, touch2.clientY - touch1.clientY);
+      lastTouchDistance.current = dist;
+    }
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (e.touches.length === 1 && isDragging) {
+      const deltaX = Math.abs(e.touches[0].clientX - (dragStart.x + pan.x));
+      const deltaY = Math.abs(e.touches[0].clientY - (dragStart.y + pan.y));
+      if (deltaX > 4 || deltaY > 4) {
+        setHasMoved(true);
+      }
+      setPan({
+        x: e.touches[0].clientX - dragStart.x,
+        y: e.touches[0].clientY - dragStart.y,
+      });
+    } else if (e.touches.length === 2 && lastTouchDistance.current !== null) {
+      const touch1 = e.touches[0];
+      const touch2 = e.touches[1];
+      const dist = Math.hypot(touch2.clientX - touch1.clientX, touch2.clientY - touch1.clientY);
+      const factor = dist / lastTouchDistance.current;
+      setZoomLevel((z) => Math.min(1.6, Math.max(0.65, z * factor)));
+      lastTouchDistance.current = dist;
+    }
+  };
+
+  const handleTouchEnd = () => {
+    setIsDragging(false);
+    lastTouchDistance.current = null;
+  };
+
+  // Wheel zoom
+  const handleWheel = (e: React.WheelEvent) => {
+    e.preventDefault();
+    const zoomDelta = e.deltaY > 0 ? -0.08 : 0.08;
+    setZoomLevel((z) => Math.min(1.6, Math.max(0.65, Number((z + zoomDelta).toFixed(2)))));
+  };
+
+  // Reset view to center
+  const resetView = () => {
+    setZoomLevel(1);
+    setPan({ x: 0, y: 0 });
+  };
+
+  // Pick random problem across current subject
+  const pickRandomProblem = () => {
+    const allSubjectProblems: Problem[] = [];
+    currentNodes.forEach((node) => {
+      const pList = nodeProblemsMap[node.id] || [];
+      allSubjectProblems.push(...pList);
+    });
+
+    if (allSubjectProblems.length > 0) {
+      const unsolved = allSubjectProblems.filter((p) => problemProgress[p.id]?.status !== 'SOLVED');
+      const pool = unsolved.length > 0 ? unsolved : allSubjectProblems;
+      const random = pool[Math.floor(Math.random() * pool.length)];
+      setSelectedProblem(random);
+    }
+  };
+
+  const handleToggleStatus = (problemId: string) => {
+    const current = problemProgress[problemId]?.status || 'NOT_STARTED';
+    const next: ProblemStatus = current === 'SOLVED' ? 'NOT_STARTED' : 'SOLVED';
+    updateProblemStatus(problemId, next);
+  };
+
+  const examColors: Record<string, string> = {
+    'CA-1': 'bg-blue-500/15 text-blue-300 border-blue-500/30',
+    'MTE': 'bg-amber-500/15 text-amber-300 border-amber-500/30',
+    'CA-2': 'bg-purple-500/15 text-purple-300 border-purple-500/30',
+    'ETE': 'bg-rose-500/15 text-rose-300 border-rose-500/30',
+  };
 
   return (
     <div className="relative w-full rounded-2xl border border-indigo-900/40 bg-[#090c14] overflow-hidden shadow-2xl space-y-0">
       {/* Subject Header & Switcher */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 border-b border-slate-800 bg-slate-950/80 backdrop-blur-md">
         <div className="flex items-center gap-3">
-          <div className="h-10 w-10 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 font-bold">
+          <div className="h-10 w-10 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 font-bold shrink-0">
             <GraduationCap className="h-5 w-5" />
           </div>
           <div>
             <h3 className="text-sm font-bold text-white flex items-center gap-2">
-              <span>LPU Academic Dependency Flowchart</span>
+              <span>Academic Curriculum Flowchart</span>
               <span className="text-[10px] font-semibold uppercase px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">
-                Prerequisite Tracing
+                Interactive Graph
               </span>
             </h3>
             <p className="text-xs text-slate-400">
-              Hover on any unit node to trace all academic prerequisites required before that topic.
+              Drag to pan &bull; Scroll to zoom &bull; Click any node to open the study drawer
             </p>
           </div>
         </div>
 
-        {/* Subject Course Tabs */}
-        <div className="flex items-center rounded-xl border border-slate-800 bg-slate-900 p-1 text-xs">
+        {/* Top Controls: Course Selector & Overall Progress */}
+        <div className="flex flex-wrap items-center gap-2.5">
+          {/* Progress Pill */}
+          <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-900 border border-slate-800 text-xs">
+            <span className="text-slate-400 font-medium">Solved:</span>
+            <span className="font-mono font-bold text-emerald-400">
+              {subjectStats.solved}/{subjectStats.total}
+            </span>
+            <span className="text-[10px] px-1.5 py-0.5 rounded bg-emerald-500/15 text-emerald-300 font-semibold">
+              {subjectStats.percent}%
+            </span>
+          </div>
+
+          {/* Random Problem Shuffle */}
           <button
-            onClick={() => {
-              setSelectedSubject('cse205');
-              setSelectedNodeId('cse205-arrays');
-              setHoveredNodeId(null);
-            }}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-bold transition ${
-              selectedSubject === 'cse205'
-                ? 'bg-emerald-600 text-white shadow-sm'
-                : 'text-slate-400 hover:text-slate-200'
-            }`}
+            onClick={pickRandomProblem}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-850 border border-slate-800 hover:border-slate-700 text-slate-200 text-xs font-semibold transition"
+            title="Pick a random problem from this curriculum"
           >
-            <span>🌲 CSE205 (Data Structures)</span>
+            <Shuffle className="h-3.5 w-3.5 text-emerald-400" />
+            <span className="hidden sm:inline">Pick Random</span>
           </button>
-          <button
-            onClick={() => {
-              setSelectedSubject('cse202');
-              setSelectedNodeId('cse202-basics');
-              setHoveredNodeId(null);
-            }}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-bold transition ${
-              selectedSubject === 'cse202'
-                ? 'bg-brand-600 text-white shadow-sm'
-                : 'text-slate-400 hover:text-slate-200'
-            }`}
-          >
-            <span>⚡ CSE202 (C++ OOP)</span>
-          </button>
+
+          {/* Subject Course Tabs */}
+          <div className="flex items-center rounded-xl border border-slate-800 bg-slate-900 p-1 text-xs">
+            <button
+              onClick={() => {
+                setSelectedSubject('cse205');
+                setSelectedNodeId('cse205-arrays');
+                setHoveredNodeId(null);
+              }}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-bold transition ${
+                selectedSubject === 'cse205'
+                  ? 'bg-emerald-600 text-white shadow-sm'
+                  : 'text-slate-400 hover:text-slate-200'
+              }`}
+            >
+              <span>🌲 CSE205</span>
+            </button>
+            <button
+              onClick={() => {
+                setSelectedSubject('cse202');
+                setSelectedNodeId('cse202-basics');
+                setHoveredNodeId(null);
+              }}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-bold transition ${
+                selectedSubject === 'cse202'
+                  ? 'bg-brand-600 text-white shadow-sm'
+                  : 'text-slate-400 hover:text-slate-200'
+              }`}
+            >
+              <span>⚡ CSE202</span>
+            </button>
+          </div>
         </div>
       </div>
 
-      {/* Floating Prerequisite Breadcrumb Trace HUD with safe clearance */}
+      {/* Floating Prerequisite Breadcrumb Trace HUD */}
       {hoveredPrereqTrace && (
         <div className="absolute top-20 left-1/2 -translate-x-1/2 z-30 flex items-center gap-2.5 px-4 py-2 rounded-xl bg-slate-950/95 border border-emerald-500/50 backdrop-blur-md shadow-2xl shadow-emerald-500/20 animate-in fade-in zoom-in-95 duration-150 max-w-[90%]">
           <div className="flex items-center gap-1.5 text-xs font-bold text-emerald-400 shrink-0">
             <span className="flex h-2 w-2 rounded-full bg-emerald-400 animate-ping" />
-            <span>LPU Prerequisites:</span>
+            <span>Academic Prerequisites:</span>
           </div>
 
           <div className="flex items-center gap-1.5 text-xs overflow-x-auto max-w-md sm:max-w-lg scrollbar-none py-0.5">
@@ -603,46 +771,65 @@ export const LpuAcademicGraph: React.FC = () => {
         </div>
       )}
 
-      {/* Canvas Area */}
+      {/* Zoom and Navigation Control Bar */}
+      <div className="absolute top-20 left-4 z-20 flex items-center gap-1 bg-slate-950/90 backdrop-blur-md p-1.5 rounded-xl border border-slate-800 shadow-xl">
+        <button
+          onClick={() => setZoomLevel((z) => Math.min(1.6, Number((z + 0.15).toFixed(2))))}
+          className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition"
+          title="Zoom In (+)"
+          aria-label="Zoom In"
+        >
+          <ZoomIn className="h-4 w-4" />
+        </button>
+        <button
+          onClick={() => setZoomLevel((z) => Math.max(0.65, Number((z - 0.15).toFixed(2))))}
+          className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition"
+          title="Zoom Out (-)"
+          aria-label="Zoom Out"
+        >
+          <ZoomOut className="h-4 w-4" />
+        </button>
+        <button
+          onClick={resetView}
+          className="flex items-center gap-1 px-2 py-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition text-xs font-semibold"
+          title="Reset Canvas View"
+          aria-label="Reset View"
+        >
+          <RotateCcw className="h-3 w-3" />
+          <span>{Math.round(zoomLevel * 100)}%</span>
+        </button>
+      </div>
+
+      {/* Interactive Pan-and-Zoom Canvas Container */}
       <div
-        className="w-full overflow-x-auto overflow-y-auto pt-24 pb-14 px-6 min-h-[800px] relative flex justify-center items-start select-none"
+        ref={containerRef}
+        onMouseDown={handleMouseDown}
+        onMouseMove={handleMouseMove}
+        onMouseUp={handleMouseUp}
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
+        onWheel={handleWheel}
+        className={`w-full pt-20 pb-16 px-6 min-h-[720px] sm:min-h-[820px] relative flex justify-center items-center select-none overflow-hidden ${
+          isDragging ? 'cursor-grabbing' : 'cursor-grab'
+        }`}
         style={{
           backgroundColor: '#0a0d14',
           backgroundImage: 'radial-gradient(circle, #252b3d 1.5px, transparent 1.5px)',
           backgroundSize: '24px 24px',
+          touchAction: 'none',
         }}
-        onMouseLeave={() => setHoveredNodeId(null)}
+        onMouseLeave={() => {
+          setIsDragging(false);
+          setHoveredNodeId(null);
+        }}
       >
-        {/* Zoom Controls */}
-        <div className="absolute top-4 left-4 z-20 flex items-center gap-2 bg-slate-900/90 backdrop-blur-md p-1.5 rounded-xl border border-slate-800">
-          <button
-            onClick={() => setZoomLevel((z) => Math.min(1.4, z + 0.1))}
-            className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition"
-            title="Zoom In"
-          >
-            <ZoomIn className="h-4 w-4" />
-          </button>
-          <button
-            onClick={() => setZoomLevel((z) => Math.max(0.7, z - 0.1))}
-            className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition"
-            title="Zoom Out"
-          >
-            <ZoomOut className="h-4 w-4" />
-          </button>
-          <button
-            onClick={() => setZoomLevel(1)}
-            className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition text-xs font-semibold px-2"
-          >
-            Reset
-          </button>
-        </div>
-
         <div
-          className="relative transition-transform duration-200 origin-top"
+          className="relative transition-transform duration-75 origin-center will-change-transform"
           style={{
             width: '1000px',
             height: '840px',
-            transform: `scale(${zoomLevel})`,
+            transform: `translate(${pan.x}px, ${pan.y}px) scale(${zoomLevel})`,
           }}
         >
           {/* SVG Connecting Curves */}
@@ -699,18 +886,12 @@ export const LpuAcademicGraph: React.FC = () => {
             const isAncestor = hoveredPrereqTrace?.ancestorIds.has(node.id);
             const isDimmedNode = hoveredPrereqTrace && !isAncestor;
 
-            const examColors: Record<string, string> = {
-              'CA-1': 'bg-blue-500/15 text-blue-300 border-blue-500/30',
-              'MTE': 'bg-amber-500/15 text-amber-300 border-amber-500/30',
-              'CA-2': 'bg-purple-500/15 text-purple-300 border-purple-500/30',
-              'ETE': 'bg-rose-500/15 text-rose-300 border-rose-500/30',
-            };
-
             return (
               <div
                 key={node.id}
                 onMouseEnter={() => setHoveredNodeId(node.id)}
                 onClick={() => {
+                  if (hasMoved) return;
                   setSelectedNodeId(node.id);
                   setDrawerOpen(true);
                 }}
@@ -727,7 +908,7 @@ export const LpuAcademicGraph: React.FC = () => {
                   width: '172px',
                 }}
               >
-                {/* Absolute Status Indicator to prevent layout jump */}
+                {/* Absolute Status Indicator */}
                 {isHovered ? (
                   <span className="absolute -top-3 left-1/2 -translate-x-1/2 text-[9px] uppercase tracking-wider font-extrabold px-2 py-0.5 rounded-full bg-emerald-500 text-white shadow-md shadow-emerald-500/30 whitespace-nowrap z-50 pointer-events-none">
                     Target Unit
@@ -783,113 +964,25 @@ export const LpuAcademicGraph: React.FC = () => {
         </div>
       </div>
 
-      {/* Bottom Drawer: Selected Unit Details, Prerequisites & Problems */}
-      {drawerOpen && selectedNode && (
-        <div className="border-t border-slate-800 bg-slate-900/95 backdrop-blur-md p-6 space-y-4">
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-800/80 pb-4">
-            <div>
-              <div className="flex items-center gap-2">
-                <span className="text-xs font-bold uppercase tracking-wider text-emerald-400">
-                  {selectedNode.unitCode} Academic Topic
-                </span>
-                <span className="text-slate-600">&bull;</span>
-                <span className="text-xs text-slate-400">
-                  Exam Scope: <strong className="text-white">{selectedNode.examScope}</strong>
-                </span>
-              </div>
-              <h3 className="text-xl font-bold text-white mt-1">{selectedNode.title}</h3>
-              <p className="text-xs text-slate-300 mt-1 max-w-2xl">{selectedNode.description}</p>
-            </div>
-
-            <div className="flex items-center gap-3">
-              {selectedNode.visualizerId && (
-                <a
-                  href={`https://algonerve.vercel.app/visualize/${selectedNode.visualizerId}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white text-xs font-bold shadow-lg shadow-emerald-500/20 transition"
-                >
-                  <Sparkles className="h-3.5 w-3.5" />
-                  <span>Launch Visualizer ↗</span>
-                </a>
-              )}
-            </div>
-          </div>
-
-          {/* Explicit Prerequisites Block */}
-          <div className="p-3.5 rounded-xl bg-slate-950/70 border border-slate-800/80 flex flex-col sm:flex-row sm:items-center gap-3">
-            <span className="text-xs font-bold text-emerald-400 shrink-0 flex items-center gap-1.5">
-              <ShieldAlert className="h-4 w-4" />
-              <span>Academic Prerequisites:</span>
-            </span>
-            <div className="flex flex-wrap items-center gap-1.5">
-              {selectedNode.prerequisites.map((req, idx) => (
-                <span
-                  key={idx}
-                  className="text-xs px-2.5 py-1 rounded-lg bg-emerald-500/10 text-emerald-300 border border-emerald-500/20 font-medium"
-                >
-                  {req}
-                </span>
-              ))}
-            </div>
-          </div>
-
-          {/* Curated Unit Problems */}
-          <div>
-            <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">
-              Practice Problems for this Unit ({selectedNodeStats.total})
-            </h4>
-
-            {selectedNodeStats.problems.length === 0 ? (
-              <p className="text-xs text-slate-500 italic">
-                Problems are mapped dynamically across the full catalogue.
-              </p>
-            ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-                {selectedNodeStats.problems.map((problem) => {
-                  const status = problemProgress[problem.id]?.status || 'UNSOLVED';
-                  return (
-                    <div
-                      key={problem.id}
-                      onClick={() => setSelectedProblem(problem)}
-                      className="p-3 rounded-xl border border-slate-800 bg-slate-950/60 hover:bg-slate-850 hover:border-slate-700 cursor-pointer flex items-center justify-between transition group"
-                    >
-                      <div className="space-y-1">
-                        <span className="text-xs font-bold text-white group-hover:text-emerald-300 transition line-clamp-1">
-                          {problem.title}
-                        </span>
-                        <div className="flex items-center gap-2 text-[10px]">
-                          <span className="text-slate-400 uppercase font-mono">
-                            {problem.platform}
-                          </span>
-                          <span className="text-slate-600">&bull;</span>
-                          <span
-                            className={
-                              problem.difficulty === 'easy'
-                                ? 'text-emerald-400 capitalize'
-                                : problem.difficulty === 'medium'
-                                ? 'text-amber-400 capitalize'
-                                : 'text-rose-400 capitalize'
-                            }
-                          >
-                            {problem.difficulty}
-                          </span>
-                        </div>
-                      </div>
-
-                      <div className="shrink-0 flex items-center gap-2">
-                        {status === 'SOLVED' && (
-                          <CheckCircle2 className="h-4 w-4 text-emerald-400" />
-                        )}
-                        <ArrowRight className="h-3.5 w-3.5 text-slate-500 group-hover:text-white transition" />
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            )}
-          </div>
-        </div>
+      {/* Slide-Over Problem Drawer */}
+      {selectedNode && (
+        <TopicDrawer
+          isOpen={drawerOpen}
+          onClose={() => setDrawerOpen(false)}
+          title={selectedNode.title}
+          description={selectedNode.description}
+          category={`${selectedSubject.toUpperCase()} Curriculum`}
+          unitCode={selectedNode.unitCode}
+          examScope={selectedNode.examScope}
+          prerequisites={selectedNode.prerequisites}
+          visualizerId={selectedNode.visualizerId}
+          problems={nodeProblemsMap[selectedNode.id] || []}
+          problemProgress={problemProgress}
+          bookmarks={bookmarks}
+          onToggleStatus={handleToggleStatus}
+          onToggleBookmark={toggleBookmark}
+          onOpenProblemModal={setSelectedProblem}
+        />
       )}
 
       {/* Problem Modal */}
