@@ -42,7 +42,7 @@ interface LpuEdgeData {
 }
 
 // ───── CSE205 Data Structures & Algorithms Academic DAG ─────
-const CSE205_NODES: LpuNodeData[] = [
+export const CSE205_NODES: LpuNodeData[] = [
   // Level 0: Foundations
   {
     id: 'cse205-arrays',
@@ -247,7 +247,7 @@ const CSE205_EDGES: LpuEdgeData[] = [
 ];
 
 // ───── CSE202 C++ Object Oriented Programming Academic DAG ─────
-const CSE202_NODES: LpuNodeData[] = [
+export const CSE202_NODES: LpuNodeData[] = [
   // Unit 1
   {
     id: 'cse202-basics',

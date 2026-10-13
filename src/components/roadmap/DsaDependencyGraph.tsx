@@ -40,7 +40,7 @@ interface EdgeData {
 }
 
 // ───── Core DSA Interactive Dependency Flowchart Coordinates ─────
-const GRAPH_NODES: NodeData[] = [
+export const GRAPH_NODES: NodeData[] = [
   // Level 0
   {
     id: 'arrays-hashing',

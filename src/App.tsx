@@ -3,6 +3,7 @@ import { Routes, Route, useParams } from 'react-router-dom';
 import { Navbar } from './components/layout/Navbar';
 import { Footer } from './components/layout/Footer';
 import { TrackSelectionModal } from './components/layout/TrackSelectionModal';
+import { ErrorBoundary } from './components/common/ErrorBoundary';
 
 // CodeNerve core pages
 import { HomePage } from './pages/HomePage';
@@ -54,41 +55,43 @@ export const App: React.FC = () => {
 
       {/* Main Content Area */}
       <main className="flex-1">
-        <Routes>
-          {/* Main Landing Page */}
-          <Route path="/" element={<HomePage />} />
+        <ErrorBoundary sectionName="Page View">
+          <Routes>
+            {/* Main Landing Page */}
+            <Route path="/" element={<HomePage />} />
 
-          {/* Roadmaps */}
-          <Route path="/roadmap" element={<RoadmapPage />} />
-          <Route path="/roadmap/:pathId" element={<RoadmapPage />} />
+            {/* Roadmaps */}
+            <Route path="/roadmap" element={<RoadmapPage />} />
+            <Route path="/roadmap/:pathId" element={<RoadmapPage />} />
 
-          {/* Problem Catalogue */}
-          <Route path="/problems" element={<ProblemsPage />} />
+            {/* Problem Catalogue */}
+            <Route path="/problems" element={<ProblemsPage />} />
 
-          {/* Academic LPU University Portal */}
-          <Route path="/university" element={<LpuPortalPage />} />
-          <Route path="/lpu" element={<LpuPortalPage />} />
+            {/* Academic LPU University Portal */}
+            <Route path="/university" element={<LpuPortalPage />} />
+            <Route path="/lpu" element={<LpuPortalPage />} />
 
-          {/* Interactive Lesson Views */}
-          <Route path="/lesson/:lessonId" element={<LessonPage />} />
+            {/* Interactive Lesson Views */}
+            <Route path="/lesson/:lessonId" element={<LessonPage />} />
 
-          {/* Assessment Quizzes */}
-          <Route path="/quizzes" element={<QuizPage />} />
+            {/* Assessment Quizzes */}
+            <Route path="/quizzes" element={<QuizPage />} />
 
-          {/* Student Analytics & Dashboard */}
-          <Route path="/dashboard" element={<DashboardPage />} />
+            {/* Student Analytics & Dashboard */}
+            <Route path="/dashboard" element={<DashboardPage />} />
 
-          {/* Teacher Assignment Portal */}
-          <Route path="/teacher" element={<TeacherPage />} />
+            {/* Teacher Assignment Portal */}
+            <Route path="/teacher" element={<TeacherPage />} />
 
-          {/* AlgoNerve Redirect Routes */}
-          <Route path="/visualize" element={<AlgoNerveRedirect />} />
-          <Route path="/visualize/:id" element={<AlgoNerveRedirect />} />
-          <Route path="/documentation" element={<AlgoNerveRedirect />} />
+            {/* AlgoNerve Redirect Routes */}
+            <Route path="/visualize" element={<AlgoNerveRedirect />} />
+            <Route path="/visualize/:id" element={<AlgoNerveRedirect />} />
+            <Route path="/documentation" element={<AlgoNerveRedirect />} />
 
-          {/* Catch-all redirect to Home */}
-          <Route path="*" element={<HomePage />} />
-        </Routes>
+            {/* Catch-all redirect to Home */}
+            <Route path="*" element={<HomePage />} />
+          </Routes>
+        </ErrorBoundary>
       </main>
 
       {/* Global Footer */}
