@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   X, 
   ExternalLink, 
@@ -29,10 +29,14 @@ interface ProblemModalInnerProps {
 }
 
 const ProblemModalInner: React.FC<ProblemModalInnerProps> = ({ problem, onClose }) => {
-  const { problemProgress, updateProblemStatus, bookmarks, toggleBookmark } = useUserStore();
+  const { problemProgress, updateProblemStatus, bookmarks, toggleBookmark, updateStudentActivity } = useUserStore();
   const currentProgress = problemProgress[problem.id];
   const currentStatus: ProblemStatus = currentProgress?.status || 'NOT_STARTED';
   const isBookmarked = bookmarks.includes(problem.id);
+
+  useEffect(() => {
+    updateStudentActivity(`Practicing: ${problem.title}`);
+  }, [problem.id, problem.title, updateStudentActivity]);
 
   const [notes, setNotes] = useState(currentProgress?.notes || '');
   const [submissionUrl, setSubmissionUrl] = useState(currentProgress?.submissionUrl || '');

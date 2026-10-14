@@ -45,6 +45,9 @@ interface UserState {
   addCustomProblemSet: (set: Omit<CustomProblemSet, 'id' | 'createdAt'>) => void;
   deleteCustomProblemSet: (id: string) => void;
   resetProgress: () => void;
+  updateStudentActivity: (activity: string) => void;
+  recordAssignedTestSubmission: (testId: string, score: number, total: number) => void;
+  syncCohortData: () => void;
 
   // Student Authentication Actions
   loginStudent: (identifier: string, password?: string) => { success: boolean; message: string; student?: StudentRecord };
@@ -310,7 +313,10 @@ export const useUserStore = create<UserState>()(
 
       toggleTheme: () => {
         set((state) => {
-          const next = state.theme === 'dark' ? 'light' : 'dark';
+          const isDarkNow = typeof document !== 'undefined'
+            ? document.documentElement.classList.contains('dark')
+            : state.theme === 'dark';
+          const next = isDarkNow ? 'light' : 'dark';
           if (typeof document !== 'undefined') {
             document.documentElement.classList.toggle('dark', next === 'dark');
             document.documentElement.classList.toggle('light', next === 'light');
@@ -339,19 +345,51 @@ export const useUserStore = create<UserState>()(
           const progressMap = state.problemProgress || {};
           const current = progressMap[problemId];
           const isNowSolved = status === 'SOLVED';
-          return {
-            problemProgress: {
-              ...progressMap,
-              [problemId]: {
-                problemId,
-                status,
-                firstAttempted: current?.firstAttempted || new Date().toISOString(),
-                solvedAt: isNowSolved ? (current?.solvedAt || new Date().toISOString()) : current?.solvedAt,
-                lastUpdated: new Date().toISOString(),
-                notes: notes !== undefined ? notes : current?.notes,
-                submissionUrl: submissionUrl !== undefined ? submissionUrl : current?.submissionUrl,
-              },
+          const newProgressMap = {
+            ...progressMap,
+            [problemId]: {
+              problemId,
+              status,
+              firstAttempted: current?.firstAttempted || new Date().toISOString(),
+              solvedAt: isNowSolved ? (current?.solvedAt || new Date().toISOString()) : current?.solvedAt,
+              lastUpdated: new Date().toISOString(),
+              notes: notes !== undefined ? notes : current?.notes,
+              submissionUrl: submissionUrl !== undefined ? submissionUrl : current?.submissionUrl,
             },
+          };
+
+          // Synchronize active student entry in `students` for live faculty/admin monitoring
+          const currentUserId = state.user.id;
+          const currentRegNo = state.user.registrationNumber;
+          const updatedStudents = (state.students || []).map((s) => {
+            if (s.id === currentUserId || (currentRegNo && s.registrationNumber === currentRegNo)) {
+              let solvedIds = s.solvedProblemIds ? [...s.solvedProblemIds] : [];
+              if (isNowSolved && !solvedIds.includes(problemId)) {
+                solvedIds.push(problemId);
+              } else if (!isNowSolved && solvedIds.includes(problemId)) {
+                solvedIds = solvedIds.filter((id) => id !== problemId);
+              }
+              const activityText = isNowSolved
+                ? `Solved problem: ${problemId}`
+                : status === 'ATTEMPTED'
+                ? `Attempting problem: ${problemId}`
+                : `Reviewing problem: ${problemId}`;
+
+              return {
+                ...s,
+                solvedProblemIds: solvedIds,
+                totalSolved: solvedIds.length,
+                currentActivity: activityText,
+                lastActive: 'Just now',
+                status: 'online' as const,
+              };
+            }
+            return s;
+          });
+
+          return {
+            problemProgress: newProgressMap,
+            students: updatedStudents,
           };
         }),
 
@@ -370,22 +408,120 @@ export const useUserStore = create<UserState>()(
         set((state) => {
           const list = state.completedLessons || [];
           const exists = list.includes(lessonId);
+          let nextList = list;
           if (completed && !exists) {
-            return { completedLessons: [...list, lessonId] };
+            nextList = [...list, lessonId];
+          } else if (!completed && exists) {
+            nextList = list.filter((id) => id !== lessonId);
           }
-          if (!completed && exists) {
-            return { completedLessons: list.filter((id) => id !== lessonId) };
-          }
-          return state;
+
+          const currentUserId = state.user.id;
+          const currentRegNo = state.user.registrationNumber;
+          const updatedStudents = (state.students || []).map((s) => {
+            if (s.id === currentUserId || (currentRegNo && s.registrationNumber === currentRegNo)) {
+              return {
+                ...s,
+                completedLessons: nextList,
+                currentActivity: completed ? `Completed curriculum lesson: ${lessonId}` : `Revisiting lesson: ${lessonId}`,
+                lastActive: 'Just now',
+                status: 'online' as const,
+              };
+            }
+            return s;
+          });
+
+          return {
+            completedLessons: nextList,
+            students: updatedStudents,
+          };
         }),
 
       saveQuizResult: (quizId, score, total) =>
-        set((state) => ({
-          quizScores: {
+        set((state) => {
+          const newQuizScores = {
             ...(state.quizScores || {}),
             [quizId]: { score, total, date: new Date().toISOString() },
-          },
-        })),
+          };
+          const currentUserId = state.user.id;
+          const currentRegNo = state.user.registrationNumber;
+          const updatedStudents = (state.students || []).map((s) => {
+            if (s.id === currentUserId || (currentRegNo && s.registrationNumber === currentRegNo)) {
+              return {
+                ...s,
+                quizScores: newQuizScores,
+                currentActivity: `Completed quiz ${quizId} with score ${score}/${total}`,
+                lastActive: 'Just now',
+                status: 'online' as const,
+              };
+            }
+            return s;
+          });
+
+          return {
+            quizScores: newQuizScores,
+            students: updatedStudents,
+          };
+        }),
+
+      updateStudentActivity: (activity: string) =>
+        set((state) => {
+          const currentUserId = state.user.id;
+          const currentRegNo = state.user.registrationNumber;
+          if (!currentUserId || currentUserId === 'guest') return state;
+
+          const updatedStudents = (state.students || []).map((s) => {
+            if (s.id === currentUserId || (currentRegNo && s.registrationNumber === currentRegNo)) {
+              return {
+                ...s,
+                currentActivity: activity,
+                lastActive: 'Just now',
+                status: 'online' as const,
+              };
+            }
+            return s;
+          });
+          return { students: updatedStudents };
+        }),
+
+      recordAssignedTestSubmission: (testId: string, score: number, total: number) =>
+        set((state) => {
+          const currentUserId = state.user.id;
+          const currentRegNo = state.user.registrationNumber;
+          const nowIso = new Date().toISOString();
+
+          const updatedStudents = (state.students || []).map((s) => {
+            if (s.id === currentUserId || (currentRegNo && s.registrationNumber === currentRegNo)) {
+              const subs = s.assignedTestSubmissions ? { ...s.assignedTestSubmissions } : {};
+              subs[testId] = { score, total, submittedAt: nowIso };
+              return {
+                ...s,
+                assignedTestSubmissions: subs,
+                currentActivity: `Submitted test ${testId} (${score}/${total} marks)`,
+                lastActive: 'Just now',
+                status: 'online' as const,
+              };
+            }
+            return s;
+          });
+
+          const updatedTests = (state.assignedTests || []).map((t) => {
+            if (t.id === testId) {
+              return { ...t, submissionsCount: (t.submissionsCount || 0) + 1 };
+            }
+            return t;
+          });
+
+          return {
+            students: updatedStudents,
+            assignedTests: updatedTests,
+          };
+        }),
+
+      syncCohortData: () => {
+        if (typeof window !== 'undefined') {
+          useUserStore.persist.rehydrate();
+        }
+      },
 
       addCustomProblemSet: (setInfo) =>
         set((state) => ({
@@ -671,6 +807,43 @@ export const useUserStore = create<UserState>()(
     }),
     {
       name: 'codenerve_user_storage_v1',
+      onRehydrateStorage: () => (state) => {
+        if (state && typeof document !== 'undefined') {
+          const theme = state.theme || 'system';
+          const isDark =
+            theme === 'dark' ||
+            (theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+          document.documentElement.classList.toggle('dark', isDark);
+          document.documentElement.classList.toggle('light', !isDark);
+          document.documentElement.style.colorScheme = isDark ? 'dark' : 'light';
+        }
+      },
     }
   )
 );
+
+// Cross-tab real-time cohort synchronization
+if (typeof window !== 'undefined') {
+  window.addEventListener('storage', (event) => {
+    if (event.key === 'codenerve_user_storage_v1') {
+      try {
+        useUserStore.persist.rehydrate();
+      } catch {
+        // Ignore
+      }
+    }
+  });
+
+  if ('BroadcastChannel' in window) {
+    try {
+      const channel = new BroadcastChannel('codenerve_cohort_sync');
+      channel.onmessage = (msg) => {
+        if (msg.data?.type === 'SYNC_STORE') {
+          useUserStore.persist.rehydrate();
+        }
+      };
+    } catch {
+      // Ignore
+    }
+  }
+}
