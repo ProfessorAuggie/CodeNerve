@@ -182,24 +182,28 @@ export const LoginPage: React.FC = () => {
         track: selectedTrack,
         batch: regBatch,
         status: 'online',
-        currentActivity: `Enrolled in ${selectedTrack === 'lpu' ? 'LPU CSE Track' : 'Global DSA Track'}`,
+        currentActivity: `Registration submitted for ${selectedTrack === 'lpu' ? 'LPU CSE Track' : 'Global DSA Track'} (Pending Approval)`,
         lastActive: 'Just now',
         solvedProblemIds: [],
         completedLessons: [],
         quizScores: {},
-      }, true);
+        approvalStatus: 'pending',
+      }, false);
 
       setIsSubmitting(false);
-      setSuccessMsg(`Account created successfully for ${created.name}! Enrolled in the CodeNerve portal.`);
+      setSuccessMsg(`Registration request submitted for ${created.name}! Your account is pending administrator approval. Once approved, you can sign in with your credentials.`);
+      setLoginIdentifier(created.registrationNumber || created.email);
+      setRegPassword('');
+      setRegConfirmPassword('');
       
       setTimeout(() => {
-        navigate(selectedTrack === 'lpu' ? '/lpu' : '/dashboard');
-      }, 700);
+        setMode('login');
+      }, 1800);
     }, 400);
   };
 
-  // Demo students for quick 1-click test access
-  const demoStudents = students.slice(0, 4);
+  // Demo students for quick 1-click test access (only approved accounts)
+  const demoStudents = students.filter((s) => (s.approvalStatus || 'approved') === 'approved').slice(0, 4);
 
   return (
     <div className="min-h-[85vh] flex items-center justify-center px-4 py-12 relative overflow-hidden">
@@ -337,21 +341,6 @@ export const LoginPage: React.FC = () => {
                 );
               })}
             </div>
-          </div>
-
-          {/* Faculty Portal Callout */}
-          <div className="flex items-center justify-between p-3.5 rounded-xl border border-purple-500/20 bg-purple-500/5 text-xs text-slate-600 dark:text-slate-300">
-            <div className="flex items-center gap-2">
-              <ShieldCheck className="h-4 w-4 text-purple-600 dark:text-purple-400" />
-              <span>Are you a teacher or faculty member?</span>
-            </div>
-            <Link
-              to="/admin"
-              className="text-purple-600 dark:text-purple-400 font-bold hover:underline flex items-center gap-0.5"
-            >
-              <span>Faculty Admin</span>
-              <ArrowRight className="h-3 w-3" />
-            </Link>
           </div>
         </div>
 

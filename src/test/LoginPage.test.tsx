@@ -91,7 +91,7 @@ describe('LoginPage Component', () => {
     expect(screen.getByText(/please enter your full name/i)).toBeInTheDocument();
   });
 
-  it('successfully registers and logs in a new student through the form', async () => {
+  it('successfully registers a new student with pending approval notification', async () => {
     render(
       <MemoryRouter>
         <LoginPage />
@@ -121,9 +121,11 @@ describe('LoginPage Component', () => {
     fireEvent.submit(form);
 
     await waitFor(() => {
-      expect(useUserStore.getState().isStudentAuthenticated).toBe(true);
-      expect(useUserStore.getState().user.name).toBe('Tanvi Kapoor');
-      expect(useUserStore.getState().user.registrationNumber).toBe('12119933');
+      expect(screen.getByText(/your account is pending administrator approval/i)).toBeInTheDocument();
+      const student = useUserStore.getState().students.find((s) => s.email === 'tanvi.k@lpu.in');
+      expect(student).toBeDefined();
+      expect(student?.approvalStatus).toBe('pending');
+      expect(useUserStore.getState().isStudentAuthenticated).toBe(false);
     });
   });
 });

@@ -8,6 +8,8 @@ export type Platform = 'leetcode' | 'geeksforgeeks' | 'codechef' | 'codeforces' 
 
 export type UserRole = 'student' | 'teacher' | 'admin';
 
+export type ApprovalStatus = 'approved' | 'pending' | 'disapproved';
+
 export interface UserProfile {
   id: string;
   name: string;
@@ -19,6 +21,7 @@ export interface UserProfile {
   registrationNumber?: string;
   batch?: string;
   track?: 'global' | 'lpu';
+  approvalStatus?: ApprovalStatus;
 }
 
 // ───── University Hierarchy ─────
@@ -206,6 +209,7 @@ export interface StudentRecord {
   completedLessons: string[];
   quizScores: Record<string, { score: number; total: number; date: string }>;
   assignedTestSubmissions?: Record<string, { score: number; total: number; submittedAt: string }>;
+  approvalStatus?: ApprovalStatus;
 }
 
 export interface AssignedTest {

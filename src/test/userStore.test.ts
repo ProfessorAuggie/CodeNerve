@@ -163,7 +163,7 @@ describe('userStore (Zustand state management)', () => {
     expect(invalidRes.success).toBe(false);
   });
 
-  it('registers a new student and automatically signs them in', () => {
+  it('registers a new student with pending approval status and verifies approval/disapproval/deletion workflow', () => {
     const store = useUserStore.getState();
     const studentCount = store.students.length;
 
@@ -177,14 +177,38 @@ describe('userStore (Zustand state management)', () => {
       currentActivity: 'Enrolled in LPU CSE Track',
       lastActive: 'Just now',
       solvedProblemIds: [],
-    }, true);
+    });
 
     expect(newStudent.id).toBeDefined();
+    expect(newStudent.approvalStatus).toBe('pending');
     expect(useUserStore.getState().students.length).toBe(studentCount + 1);
+
+    // Pending student cannot log in
+    const loginAttempt = store.loginStudent('karan.m@lpu.in');
+    expect(loginAttempt.success).toBe(false);
+    expect(loginAttempt.message).toMatch(/pending/i);
+
+    // Admin approves student
+    store.approveStudent(newStudent.id);
+    const approvedStudent = useUserStore.getState().students.find((s) => s.id === newStudent.id);
+    expect(approvedStudent?.approvalStatus).toBe('approved');
+
+    // Now login succeeds
+    const approvedLogin = store.loginStudent('karan.m@lpu.in');
+    expect(approvedLogin.success).toBe(true);
     expect(useUserStore.getState().user.name).toBe('Karan Mehra');
-    expect(useUserStore.getState().user.registrationNumber).toBe('12115599');
     expect(useUserStore.getState().isStudentAuthenticated).toBe(true);
-    expect(useUserStore.getState().activePortal).toBe('lpu');
+
+    // Admin disapproves student - logs them out immediately
+    store.disapproveStudent(newStudent.id);
+    expect(useUserStore.getState().isStudentAuthenticated).toBe(false);
+    const disapprovedLogin = store.loginStudent('karan.m@lpu.in');
+    expect(disapprovedLogin.success).toBe(false);
+    expect(disapprovedLogin.message).toMatch(/disapproved/i);
+
+    // Admin deletes student
+    store.deleteStudent(newStudent.id);
+    expect(useUserStore.getState().students.some((s) => s.id === newStudent.id)).toBe(false);
   });
 
   it('handles corrupted localStorage payload gracefully on initialization', () => {

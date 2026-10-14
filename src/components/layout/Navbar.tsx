@@ -222,18 +222,6 @@ export const Navbar: React.FC = () => {
             </Link>
           )}
 
-          {/* Admin Access Link (Only visible when authenticated) */}
-          {isAdminAuthenticated && (
-            <Link
-              to="/admin"
-              className="flex items-center gap-1 rounded-lg border border-purple-300 dark:border-purple-800/60 bg-purple-100 dark:bg-purple-950/40 px-2 py-1 text-xs font-medium text-purple-700 dark:text-purple-300 hover:bg-purple-200 dark:hover:bg-purple-900/50 transition"
-              title="Faculty & Instructor Admin Portal (Restricted)"
-            >
-              <ShieldCheck className="h-3.5 w-3.5 text-purple-600 dark:text-purple-400" />
-              <span className="hidden xl:inline">Admin</span>
-            </Link>
-          )}
-
           {/* Mobile hamburger menu toggle */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}

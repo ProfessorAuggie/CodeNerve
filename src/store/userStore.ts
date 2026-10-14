@@ -56,6 +56,9 @@ interface UserState {
   logoutAdmin: () => void;
   assignTest: (test: Omit<AssignedTest, 'id' | 'createdAt' | 'submissionsCount'>) => void;
   deleteAssignedTest: (testId: string) => void;
+  approveStudent: (studentId: string) => void;
+  disapproveStudent: (studentId: string) => void;
+  deleteStudent: (studentId: string) => void;
   registerStudent: (
     student: Omit<StudentRecord, 'id' | 'joinedAt' | 'totalSolved' | 'completedLessons' | 'quizScores'> & {
       completedLessons?: string[];
@@ -87,6 +90,7 @@ const INITIAL_STUDENTS: StudentRecord[] = [
     assignedTestSubmissions: {
       'test-midterm-01': { score: 92, total: 100, submittedAt: '2026-10-13T16:00:00Z' },
     },
+    approvalStatus: 'approved',
   },
   {
     id: 'std-102',
@@ -108,6 +112,7 @@ const INITIAL_STUDENTS: StudentRecord[] = [
     assignedTestSubmissions: {
       'test-global-sprint-01': { score: 98, total: 100, submittedAt: '2026-10-12T18:00:00Z' },
     },
+    approvalStatus: 'approved',
   },
   {
     id: 'std-103',
@@ -126,6 +131,7 @@ const INITIAL_STUDENTS: StudentRecord[] = [
     quizScores: {
       'quiz-cpp-oop-basics': { score: 3, total: 5, date: '2026-10-10T09:30:00Z' },
     },
+    approvalStatus: 'approved',
   },
   {
     id: 'std-104',
@@ -147,6 +153,7 @@ const INITIAL_STUDENTS: StudentRecord[] = [
     assignedTestSubmissions: {
       'test-midterm-01': { score: 95, total: 100, submittedAt: '2026-10-13T16:20:00Z' },
     },
+    approvalStatus: 'approved',
   },
   {
     id: 'std-105',
@@ -163,6 +170,7 @@ const INITIAL_STUDENTS: StudentRecord[] = [
     totalSolved: 71,
     completedLessons: [],
     quizScores: {},
+    approvalStatus: 'approved',
   },
   {
     id: 'std-106',
@@ -181,6 +189,7 @@ const INITIAL_STUDENTS: StudentRecord[] = [
     quizScores: {
       'quiz-dsa-arrays-sorting': { score: 4, total: 4, date: '2026-10-12T15:20:00Z' },
     },
+    approvalStatus: 'approved',
   },
 ];
 
@@ -229,6 +238,7 @@ const defaultUser: UserProfile = {
   registrationNumber: '12104921',
   batch: 'LPU B.Tech CSE (CSE202/205)',
   track: 'lpu',
+  approvalStatus: 'approved',
 };
 
 export const useUserStore = create<UserState>()(
@@ -424,6 +434,21 @@ export const useUserStore = create<UserState>()(
           };
         }
 
+        // Approval Check: If student is pending or disapproved, block login
+        if (found.approvalStatus === 'pending') {
+          return {
+            success: false,
+            message: `Your registration request for "${found.name}" is currently PENDING administrator approval. Please wait for an administrator to review and approve your account.`,
+          };
+        }
+
+        if (found.approvalStatus === 'disapproved') {
+          return {
+            success: false,
+            message: `Your registration request for "${found.name}" was DISAPPROVED by the administrator. Please contact your faculty coordinator.`,
+          };
+        }
+
         const userProfile: UserProfile = {
           id: found.id,
           name: found.name,
@@ -435,6 +460,7 @@ export const useUserStore = create<UserState>()(
           batch: found.batch,
           track: found.track,
           avatar: found.avatar,
+          approvalStatus: found.approvalStatus || 'approved',
         };
 
         set((state) => {
@@ -530,23 +556,90 @@ export const useUserStore = create<UserState>()(
           assignedTests: (state.assignedTests || []).filter((t) => t.id !== testId),
         })),
 
+      // Admin Student Approval & Management Actions
+      approveStudent: (studentId: string) => {
+        set((state) => {
+          const updatedStudents = (state.students || []).map((s) =>
+            s.id === studentId ? { ...s, approvalStatus: 'approved' as const } : s
+          );
+          const updatedUser =
+            state.user.id === studentId
+              ? { ...state.user, approvalStatus: 'approved' as const }
+              : state.user;
+          return { students: updatedStudents, user: updatedUser };
+        });
+      },
+
+      disapproveStudent: (studentId: string) => {
+        set((state) => {
+          const isCurrent = state.user.id === studentId;
+          const updatedStudents = (state.students || []).map((s) =>
+            s.id === studentId ? { ...s, approvalStatus: 'disapproved' as const } : s
+          );
+          return {
+            students: updatedStudents,
+            ...(isCurrent
+              ? {
+                  isStudentAuthenticated: false,
+                  user: {
+                    id: 'guest',
+                    name: 'Guest Student',
+                    email: '',
+                    role: 'student' as const,
+                    university: 'Not Logged In',
+                    semester: 1,
+                  },
+                }
+              : {}),
+          };
+        });
+      },
+
+      deleteStudent: (studentId: string) => {
+        set((state) => {
+          const isCurrent = state.user.id === studentId;
+          const updatedStudents = (state.students || []).filter((s) => s.id !== studentId);
+          return {
+            students: updatedStudents,
+            ...(isCurrent
+              ? {
+                  isStudentAuthenticated: false,
+                  user: {
+                    id: 'guest',
+                    name: 'Guest Student',
+                    email: '',
+                    role: 'student' as const,
+                    university: 'Not Logged In',
+                    semester: 1,
+                  },
+                }
+              : {}),
+          };
+        });
+      },
+
       // Student Registration (also connects to Admin Live Roster)
-      registerStudent: (studentData, autoLogin = true) => {
+      registerStudent: (studentData, autoLogin = false) => {
+        const approvalStatus = studentData.approvalStatus || 'pending';
         const newStudent: StudentRecord = {
           ...studentData,
           id: `std-${Date.now()}`,
           joinedAt: new Date().toISOString(),
           totalSolved: studentData.solvedProblemIds?.length || 0,
           status: 'online',
-          currentActivity: 'Just registered & started onboarding',
+          currentActivity: approvalStatus === 'pending'
+            ? 'Registration submitted (Pending Admin Approval)'
+            : 'Just registered & started onboarding',
           lastActive: 'Just now',
           completedLessons: studentData.completedLessons || [],
           quizScores: studentData.quizScores || {},
+          approvalStatus,
         };
 
         set((state) => {
           const updatedStudents = [newStudent, ...(state.students || [])];
-          if (!autoLogin) {
+          // Only auto-login if explicitly requested AND student is approved
+          if (!autoLogin || approvalStatus !== 'approved') {
             return { students: updatedStudents };
           }
 
@@ -561,6 +654,7 @@ export const useUserStore = create<UserState>()(
             batch: newStudent.batch,
             track: newStudent.track,
             avatar: newStudent.avatar,
+            approvalStatus: 'approved',
           };
 
           return {
