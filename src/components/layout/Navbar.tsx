@@ -12,7 +12,9 @@ import {
   Menu, 
   X, 
   Globe, 
-  GitFork 
+  GitFork,
+  LogIn,
+  LogOut
 } from 'lucide-react';
 import { useUserStore } from '../../store/userStore';
 import { PROBLEMS } from '../../data/problems';
@@ -23,7 +25,15 @@ export const Navbar: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const { user, problemProgress, activePortal, setActivePortal, isAdminAuthenticated } = useUserStore();
+  const { 
+    user, 
+    problemProgress, 
+    activePortal, 
+    setActivePortal, 
+    isAdminAuthenticated, 
+    isStudentAuthenticated, 
+    logoutStudent 
+  } = useUserStore();
 
   const portalProblems = PROBLEMS.filter((p) => (p.track || 'global') === activePortal);
   const portalProblemIds = new Set(portalProblems.map((p) => p.id));
@@ -180,17 +190,37 @@ export const Navbar: React.FC = () => {
             <span className="text-[10px] font-medium text-slate-500 dark:text-slate-400">{progressPercent}%</span>
           </Link>
 
-          {/* Student Profile Link */}
-          <Link
-            to="/dashboard"
-            className="flex items-center gap-1.5 rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/80 px-2.5 py-1 text-xs text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:border-slate-300 dark:hover:border-slate-700 transition"
-            title="Student Learning Profile & Dashboard"
-          >
-            <div className="flex h-5 w-5 items-center justify-center rounded-full bg-brand-600/20 dark:bg-brand-600/30 text-brand-700 dark:text-brand-300 text-[10px] font-bold">
-              {user.name[0]}
+          {/* Student Profile / Sign In Link */}
+          {isStudentAuthenticated ? (
+            <div className="flex items-center gap-1">
+              <Link
+                to="/dashboard"
+                className="flex items-center gap-1.5 rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/80 px-2.5 py-1 text-xs text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:border-slate-300 dark:hover:border-slate-700 transition"
+                title={`Student Learning Profile: ${user.name}`}
+              >
+                <div className="flex h-5 w-5 items-center justify-center rounded-full bg-brand-600/20 dark:bg-brand-600/30 text-brand-700 dark:text-brand-300 text-[10px] font-bold">
+                  {user.name[0]}
+                </div>
+                <span className="hidden md:inline font-medium">{user.name.split(' ')[0]}</span>
+              </Link>
+              <Link
+                to="/login"
+                className="p-1 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition"
+                title="Switch Student Account / Sign In"
+              >
+                <LogOut className="h-3.5 w-3.5" />
+              </Link>
             </div>
-            <span className="hidden md:inline font-medium">{user.name.split(' ')[0]}</span>
-          </Link>
+          ) : (
+            <Link
+              to="/login"
+              className="flex items-center gap-1.5 rounded-lg bg-brand-600 hover:bg-brand-500 text-white px-3 py-1 text-xs font-semibold shadow-sm shadow-brand-500/25 transition"
+              title="Student Login & Sign In"
+            >
+              <LogIn className="h-3.5 w-3.5" />
+              <span>Sign In</span>
+            </Link>
+          )}
 
           {/* Admin Access Link (Only visible when authenticated) */}
           {isAdminAuthenticated && (
@@ -319,6 +349,51 @@ export const Navbar: React.FC = () => {
             >
               View Analytics ➔
             </Link>
+          </div>
+
+          {/* Student Auth Bar on Mobile */}
+          <div className="pt-2 border-t border-slate-200 dark:border-slate-800/80 flex items-center justify-between text-xs px-1">
+            {isStudentAuthenticated ? (
+              <>
+                <div className="flex items-center gap-2">
+                  <div className="flex h-6 w-6 items-center justify-center rounded-full bg-brand-600 text-white text-[10px] font-bold">
+                    {user.name[0]}
+                  </div>
+                  <div className="flex flex-col">
+                    <span className="font-semibold text-slate-900 dark:text-white leading-tight">{user.name}</span>
+                    <span className="text-[10px] text-slate-500">{user.track === 'lpu' ? 'LPU Portal' : 'Global DSA'}</span>
+                  </div>
+                </div>
+                <div className="flex items-center gap-2.5">
+                  <Link
+                    to="/dashboard"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="text-brand-600 dark:text-brand-400 font-semibold"
+                  >
+                    Dashboard
+                  </Link>
+                  <button
+                    onClick={() => {
+                      logoutStudent();
+                      setMobileMenuOpen(false);
+                      navigate('/login');
+                    }}
+                    className="text-rose-600 dark:text-rose-400 font-semibold"
+                  >
+                    Sign Out
+                  </button>
+                </div>
+              </>
+            ) : (
+              <Link
+                to="/login"
+                onClick={() => setMobileMenuOpen(false)}
+                className="w-full flex items-center justify-center gap-2 py-2 rounded-xl bg-brand-600 text-white font-bold text-center text-xs shadow-sm"
+              >
+                <LogIn className="h-4 w-4" />
+                <span>Student Sign In</span>
+              </Link>
+            )}
           </div>
         </div>
       )}

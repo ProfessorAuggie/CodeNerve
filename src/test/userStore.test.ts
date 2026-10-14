@@ -124,6 +124,69 @@ describe('userStore (Zustand state management)', () => {
     }
   });
 
+  it('handles student login, logout, and track switching', () => {
+    const store = useUserStore.getState();
+
+    // Sign in as Priya Sharma (Global track)
+    const loginRes = store.loginStudent('GLB-2026-88');
+    expect(loginRes.success).toBe(true);
+    expect(loginRes.student?.name).toBe('Priya Sharma');
+
+    const currentUser = useUserStore.getState().user;
+    expect(currentUser.name).toBe('Priya Sharma');
+    expect(currentUser.registrationNumber).toBe('GLB-2026-88');
+    expect(currentUser.track).toBe('global');
+    expect(useUserStore.getState().isStudentAuthenticated).toBe(true);
+    expect(useUserStore.getState().activePortal).toBe('global');
+
+    // Solved problems should be merged into problemProgress
+    expect(useUserStore.getState().problemProgress['p-dsa-two-sum-1']?.status).toBe('SOLVED');
+
+    // Sign out
+    store.logoutStudent();
+    expect(useUserStore.getState().isStudentAuthenticated).toBe(false);
+    expect(useUserStore.getState().user.name).toBe('Guest Student');
+
+    // Sign back in with email
+    const emailLogin = store.loginStudent('alex.rivera@lpu.in');
+    expect(emailLogin.success).toBe(true);
+    expect(useUserStore.getState().user.name).toBe('Alex Rivera');
+    expect(useUserStore.getState().activePortal).toBe('lpu');
+
+    // Quick login by student ID
+    const quickRes = store.quickLoginStudent('std-103');
+    expect(quickRes).toBe(true);
+    expect(useUserStore.getState().user.name).toBe('Rohan Verma');
+
+    // Failed login with invalid identifier
+    const invalidRes = store.loginStudent('non-existent-user-999');
+    expect(invalidRes.success).toBe(false);
+  });
+
+  it('registers a new student and automatically signs them in', () => {
+    const store = useUserStore.getState();
+    const studentCount = store.students.length;
+
+    const newStudent = store.registerStudent({
+      name: 'Karan Mehra',
+      email: 'karan.m@lpu.in',
+      registrationNumber: '12115599',
+      track: 'lpu',
+      batch: 'LPU B.Tech CSE (CSE202/205)',
+      status: 'online',
+      currentActivity: 'Enrolled in LPU CSE Track',
+      lastActive: 'Just now',
+      solvedProblemIds: [],
+    }, true);
+
+    expect(newStudent.id).toBeDefined();
+    expect(useUserStore.getState().students.length).toBe(studentCount + 1);
+    expect(useUserStore.getState().user.name).toBe('Karan Mehra');
+    expect(useUserStore.getState().user.registrationNumber).toBe('12115599');
+    expect(useUserStore.getState().isStudentAuthenticated).toBe(true);
+    expect(useUserStore.getState().activePortal).toBe('lpu');
+  });
+
   it('handles corrupted localStorage payload gracefully on initialization', () => {
     // Inject corrupt JSON into storage
     localStorage.setItem('user-storage', 'CORRUPT_INVALID_JSON{{{');

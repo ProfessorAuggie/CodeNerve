@@ -7,7 +7,9 @@ import {
   User, 
   ExternalLink, 
   Trash2, 
-  RefreshCw
+  RefreshCw,
+  LogIn,
+  LogOut
 } from 'lucide-react';
 import { useUserStore } from '../store/userStore';
 import { PROBLEMS } from '../data/problems';
@@ -22,7 +24,9 @@ export const DashboardPage: React.FC = () => {
     customProblemSets, 
     deleteCustomProblemSet, 
     resetProgress,
-    activePortal
+    activePortal,
+    isStudentAuthenticated,
+    logoutStudent
   } = useUserStore();
 
   const [selectedProblem, setSelectedProblem] = useState<Problem | null>(null);
@@ -77,6 +81,27 @@ export const DashboardPage: React.FC = () => {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+      {/* Guest Notice (if not authenticated) */}
+      {!isStudentAuthenticated && (
+        <div className="p-4 rounded-2xl border border-brand-500/30 bg-brand-500/10 backdrop-blur-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-xs text-brand-900 dark:text-brand-100">
+          <div className="space-y-1">
+            <div className="font-bold text-sm flex items-center gap-2">
+              <LogIn className="h-4 w-4 text-brand-600 dark:text-brand-400" />
+              <span>You are viewing CodeNerve as Guest</span>
+            </div>
+            <p className="text-slate-600 dark:text-slate-300">
+              Sign in with your student registration number or email to save solved DSA problems, submit midterm lab codes, and sync across devices.
+            </p>
+          </div>
+          <Link
+            to="/login"
+            className="px-4 py-2 rounded-xl bg-brand-600 hover:bg-brand-500 text-white font-semibold text-center shadow-md shadow-brand-500/20 transition shrink-0"
+          >
+            Student Sign In ➔
+          </Link>
+        </div>
+      )}
+
       {/* User Header Profile */}
       <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-gradient-to-r dark:from-slate-900 dark:via-indigo-950/20 dark:to-slate-900 p-6 shadow-sm dark:shadow-xl flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div className="flex items-center gap-4">
@@ -88,18 +113,52 @@ export const DashboardPage: React.FC = () => {
               <h1 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white tracking-tight">
                 {user.name}
               </h1>
-              <span className="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full border bg-brand-50 dark:bg-brand-500/10 text-brand-600 dark:text-brand-300 border-brand-200 dark:border-brand-500/30">
-                Student Account
+              <span className={`text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full border ${
+                isStudentAuthenticated
+                  ? 'bg-brand-50 dark:bg-brand-500/10 text-brand-600 dark:text-brand-300 border-brand-200 dark:border-brand-500/30'
+                  : 'bg-slate-100 dark:bg-slate-800 text-slate-500 border-slate-300 dark:border-slate-700'
+              }`}>
+                {isStudentAuthenticated ? 'Student Account' : 'Guest Mode'}
               </span>
+              {user.track && (
+                <span className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full border ${
+                  user.track === 'lpu'
+                    ? 'bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 border-emerald-500/30'
+                    : 'bg-purple-500/15 text-purple-700 dark:text-purple-300 border-purple-500/30'
+                }`}>
+                  {user.track === 'lpu' ? 'LPU Track' : 'Global Track'}
+                </span>
+              )}
             </div>
             <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
               {user.university} &bull; Semester {user.semester}
+              {user.registrationNumber ? ` • Reg: ${user.registrationNumber}` : ''}
+              {user.batch ? ` • ${user.batch}` : ''}
             </p>
           </div>
         </div>
 
-        {/* Reset controls */}
-        <div className="flex items-center gap-3">
+        {/* User Account Controls */}
+        <div className="flex items-center gap-2.5">
+          {isStudentAuthenticated ? (
+            <Link
+              to="/login"
+              className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/80 border border-slate-200 dark:border-slate-800 transition shadow-sm"
+              title="Switch to another student account or sign in"
+            >
+              <LogOut className="h-3.5 w-3.5 text-slate-400" />
+              <span>Switch Student</span>
+            </Link>
+          ) : (
+            <Link
+              to="/login"
+              className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold bg-brand-600 hover:bg-brand-500 text-white shadow-md shadow-brand-500/20 transition"
+            >
+              <LogIn className="h-3.5 w-3.5" />
+              <span>Sign In</span>
+            </Link>
+          )}
+
           <button
             onClick={() => setConfirmReset(!confirmReset)}
             className="p-2.5 rounded-xl text-xs font-medium text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-500/10 border border-slate-200 dark:border-slate-800 hover:border-rose-300 dark:hover:border-rose-500/30 transition shadow-sm"

@@ -1,16 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import type { ProblemProgress, ProblemStatus, UserRole, StudentRecord, AssignedTest } from '../types';
-
-interface UserProfile {
-  id: string;
-  name: string;
-  email: string;
-  role: UserRole;
-  university: string;
-  semester: number;
-  avatar?: string;
-}
+import type { ProblemProgress, ProblemStatus, UserRole, UserProfile, StudentRecord, AssignedTest } from '../types';
 
 interface CustomProblemSet {
   id: string;
@@ -37,6 +27,7 @@ interface UserState {
   students: StudentRecord[];
   assignedTests: AssignedTest[];
   isAdminAuthenticated: boolean;
+  isStudentAuthenticated: boolean;
   
   // Actions
   setTheme: (theme: 'dark' | 'light' | 'system') => void;
@@ -55,12 +46,23 @@ interface UserState {
   deleteCustomProblemSet: (id: string) => void;
   resetProgress: () => void;
 
+  // Student Authentication Actions
+  loginStudent: (identifier: string, password?: string) => { success: boolean; message: string; student?: StudentRecord };
+  quickLoginStudent: (studentId: string) => boolean;
+  logoutStudent: () => void;
+
   // Admin Actions
   authenticateAdmin: (passcode: string) => boolean;
   logoutAdmin: () => void;
   assignTest: (test: Omit<AssignedTest, 'id' | 'createdAt' | 'submissionsCount'>) => void;
   deleteAssignedTest: (testId: string) => void;
-  registerStudent: (student: Omit<StudentRecord, 'id' | 'joinedAt' | 'totalSolved'>) => void;
+  registerStudent: (
+    student: Omit<StudentRecord, 'id' | 'joinedAt' | 'totalSolved' | 'completedLessons' | 'quizScores'> & {
+      completedLessons?: string[];
+      quizScores?: Record<string, { score: number; total: number; date: string }>;
+    },
+    autoLogin?: boolean
+  ) => StudentRecord;
 }
 
 const INITIAL_STUDENTS: StudentRecord[] = [
@@ -218,23 +220,27 @@ const INITIAL_ASSIGNED_TESTS: AssignedTest[] = [
 ];
 
 const defaultUser: UserProfile = {
-  id: 'user-default-1',
+  id: 'std-101',
   name: 'Alex Rivera',
   email: 'alex.rivera@lpu.in',
   role: 'student',
   university: 'Lovely Professional University (LPU)',
   semester: 3,
+  registrationNumber: '12104921',
+  batch: 'LPU B.Tech CSE (CSE202/205)',
+  track: 'lpu',
 };
 
 export const useUserStore = create<UserState>()(
   persist(
-    (set) => ({
+    (set, get) => ({
       user: defaultUser,
       hasChosenTrack: true,
       showTrackModal: false,
       students: INITIAL_STUDENTS,
       assignedTests: INITIAL_ASSIGNED_TESTS,
       isAdminAuthenticated: false,
+      isStudentAuthenticated: true,
       problemProgress: {
         'p-dsa-array-traversal-1': {
           problemId: 'p-dsa-array-traversal-1',
@@ -396,6 +402,102 @@ export const useUserStore = create<UserState>()(
           quizScores: {},
         }),
 
+      // Student Authentication Actions
+      loginStudent: (identifier: string, _password?: string) => {
+        const clean = identifier.trim().toLowerCase();
+        if (!clean) {
+          return { success: false, message: 'Please enter your Registration Number or Student Email.' };
+        }
+        const currentStudents = get().students;
+        const found = currentStudents.find(
+          (s) =>
+            s.email.toLowerCase() === clean ||
+            s.registrationNumber.toLowerCase() === clean ||
+            s.name.toLowerCase() === clean ||
+            s.id.toLowerCase() === clean
+        );
+
+        if (!found) {
+          return {
+            success: false,
+            message: `No student record found matching "${identifier}". Please check your details, sign up for a new account, or use one of the Quick Demo student accounts.`,
+          };
+        }
+
+        const userProfile: UserProfile = {
+          id: found.id,
+          name: found.name,
+          email: found.email,
+          role: 'student',
+          university: found.track === 'lpu' ? 'Lovely Professional University (LPU)' : 'Global Student Cohort',
+          semester: 3,
+          registrationNumber: found.registrationNumber,
+          batch: found.batch,
+          track: found.track,
+          avatar: found.avatar,
+        };
+
+        set((state) => {
+          const updatedProgress = { ...state.problemProgress };
+          if (found.solvedProblemIds && found.solvedProblemIds.length > 0) {
+            found.solvedProblemIds.forEach((pid) => {
+              if (!updatedProgress[pid]) {
+                updatedProgress[pid] = {
+                  problemId: pid,
+                  status: 'SOLVED',
+                  lastUpdated: new Date().toISOString(),
+                  solvedAt: new Date().toISOString(),
+                };
+              }
+            });
+          }
+
+          const updatedStudents = state.students.map((s) =>
+            s.id === found.id
+              ? { ...s, status: 'online' as const, lastActive: 'Just now' }
+              : s
+          );
+
+          return {
+            user: userProfile,
+            isStudentAuthenticated: true,
+            activePortal: found.track,
+            hasChosenTrack: true,
+            problemProgress: updatedProgress,
+            students: updatedStudents,
+          };
+        });
+
+        return {
+          success: true,
+          message: `Welcome back, ${found.name}! Signed in successfully to ${found.track === 'lpu' ? 'LPU Portal' : 'Global DSA Track'}.`,
+          student: found,
+        };
+      },
+
+      quickLoginStudent: (studentId: string) => {
+        const student = get().students.find((s) => s.id === studentId);
+        if (student) {
+          const res = get().loginStudent(student.registrationNumber);
+          return res.success;
+        }
+        return false;
+      },
+
+      logoutStudent: () => {
+        set({
+          isStudentAuthenticated: false,
+          user: {
+            id: 'guest',
+            name: 'Guest Student',
+            email: '',
+            role: 'student',
+            university: 'Not Logged In',
+            semester: 1,
+          },
+        });
+      },
+
       // Admin Authentication Actions
       authenticateAdmin: (passcode) => {
         const cleaned = passcode.trim().toLowerCase();
@@ -428,24 +530,50 @@ export const useUserStore = create<UserState>()(
           assignedTests: (state.assignedTests || []).filter((t) => t.id !== testId),
         })),
 
-      // Future Signup/Auth Hook: Automatically register a new student and display on admin portal
-      registerStudent: (studentData) =>
+      // Student Registration (also connects to Admin Live Roster)
+      registerStudent: (studentData, autoLogin = true) => {
+        const newStudent: StudentRecord = {
+          ...studentData,
+          id: `std-${Date.now()}`,
+          joinedAt: new Date().toISOString(),
+          totalSolved: studentData.solvedProblemIds?.length || 0,
+          status: 'online',
+          currentActivity: 'Just registered & started onboarding',
+          lastActive: 'Just now',
+          completedLessons: studentData.completedLessons || [],
+          quizScores: studentData.quizScores || {},
+        };
+
         set((state) => {
-          const newStudent: StudentRecord = {
-            ...studentData,
-            id: `std-${Date.now()}`,
-            joinedAt: new Date().toISOString(),
-            totalSolved: studentData.solvedProblemIds?.length || 0,
-            status: 'online',
-            currentActivity: 'Just registered & started onboarding',
-            lastActive: 'Just now',
-            completedLessons: [],
-            quizScores: {},
+          const updatedStudents = [newStudent, ...(state.students || [])];
+          if (!autoLogin) {
+            return { students: updatedStudents };
+          }
+
+          const userProfile: UserProfile = {
+            id: newStudent.id,
+            name: newStudent.name,
+            email: newStudent.email,
+            role: 'student',
+            university: newStudent.track === 'lpu' ? 'Lovely Professional University (LPU)' : 'Global Student Cohort',
+            semester: 3,
+            registrationNumber: newStudent.registrationNumber,
+            batch: newStudent.batch,
+            track: newStudent.track,
+            avatar: newStudent.avatar,
           };
+
           return {
-            students: [newStudent, ...(state.students || [])],
+            students: updatedStudents,
+            user: userProfile,
+            isStudentAuthenticated: true,
+            activePortal: newStudent.track,
+            hasChosenTrack: true,
           };
-        }),
+        });
+
+        return newStudent;
+      },
     }),
     {
       name: 'codenerve_user_storage_v1',

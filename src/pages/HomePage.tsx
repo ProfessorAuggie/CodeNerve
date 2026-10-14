@@ -36,7 +36,9 @@ export const HomePage: React.FC = () => {
             <span className="flex h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
             <span className="font-semibold">Dual-Track Architecture</span>
             <span className="text-slate-300 dark:text-slate-600">|</span>
-            <span className="text-slate-600 dark:text-slate-400">Switch Portals in Top Navbar</span>
+            <Link to="/login" className="text-brand-600 dark:text-brand-400 font-bold hover:underline flex items-center gap-1">
+              <span>Student Portal Login / Sign Up ➔</span>
+            </Link>
           </div>
 
           <h1 className="text-4xl sm:text-6xl font-extrabold tracking-tight text-slate-900 dark:text-white leading-tight">

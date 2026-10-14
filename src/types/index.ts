@@ -8,6 +8,19 @@ export type Platform = 'leetcode' | 'geeksforgeeks' | 'codechef' | 'codeforces' 
 
 export type UserRole = 'student' | 'teacher' | 'admin';
 
+export interface UserProfile {
+  id: string;
+  name: string;
+  email: string;
+  role: UserRole;
+  university: string;
+  semester: number;
+  avatar?: string;
+  registrationNumber?: string;
+  batch?: string;
+  track?: 'global' | 'lpu';
+}
+
 // ───── University Hierarchy ─────
 
 export interface University {
