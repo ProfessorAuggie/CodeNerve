@@ -9,7 +9,7 @@ import { useUserStore } from '../store/userStore';
 
 export const RoadmapPage: React.FC = () => {
   const { pathId } = useParams<{ pathId: string }>();
-  const { activePortal } = useUserStore();
+  const { activePortal, updateStudentActivity } = useUserStore();
 
   // Intra-portal sub-view state
   const [subView, setSubView] = useState<'flowchart' | 'list'>('flowchart');
@@ -21,6 +21,10 @@ export const RoadmapPage: React.FC = () => {
       setSubView('flowchart');
     }
   }, [pathId, activePortal]);
+
+  useEffect(() => {
+    updateStudentActivity(`Exploring ${activePortal === 'lpu' ? 'LPU CSE Curriculum Roadmap' : 'Global DSA Dependency Graph'}`);
+  }, [activePortal, updateStudentActivity]);
 
   const isGlobal = activePortal === 'global';
 

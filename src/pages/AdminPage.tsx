@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { 
   ShieldCheck, 
   Users, 
@@ -58,9 +58,18 @@ export const AdminPage: React.FC = () => {
   const [trackFilter, setTrackFilter] = useState<'all' | 'global' | 'lpu'>('all');
   const [statusFilter, setStatusFilter] = useState<'all' | 'online' | 'idle' | 'offline'>('all');
   const [approvalFilter, setApprovalFilter] = useState<'all' | 'pending' | 'approved' | 'disapproved'>('all');
-  const [selectedStudent, setSelectedStudent] = useState<StudentRecord | null>(null);
+  const [selectedStudentId, setSelectedStudentId] = useState<string | null>(null);
+  const selectedStudent = useMemo(() => {
+    if (!selectedStudentId) return null;
+    return students.find((s) => s.id === selectedStudentId) || null;
+  }, [students, selectedStudentId]);
   const [studentToDelete, setStudentToDelete] = useState<StudentRecord | null>(null);
   const [toastMessage, setToastMessage] = useState<{ text: string; type: 'success' | 'error' | 'info' } | null>(null);
+
+  // Auto-sync roster on component mount
+  useEffect(() => {
+    syncCohortData();
+  }, [syncCohortData]);
 
   // Manual cohort re-sync handler
   const handleManualSync = () => {
@@ -806,7 +815,7 @@ export const AdminPage: React.FC = () => {
 
                             {/* View Dossier Button */}
                             <button
-                              onClick={() => setSelectedStudent(std)}
+                              onClick={() => setSelectedStudentId(std.id)}
                               className="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-[11px] font-semibold border border-slate-200 dark:border-slate-700 transition cursor-pointer"
                               title="View student dossier"
                             >
@@ -1202,7 +1211,7 @@ export const AdminPage: React.FC = () => {
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-sm animate-in fade-in">
           <div className="w-full max-w-2xl rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 shadow-2xl space-y-6 relative max-h-[85vh] overflow-y-auto">
             <button
-              onClick={() => setSelectedStudent(null)}
+              onClick={() => setSelectedStudentId(null)}
               className="absolute top-5 right-5 p-1.5 rounded-xl text-slate-400 hover:text-slate-700 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition"
             >
               <X className="h-5 w-5" />
@@ -1271,7 +1280,7 @@ export const AdminPage: React.FC = () => {
               <h4 className="text-xs font-bold uppercase text-slate-500 dark:text-slate-400">Assigned Test Submissions</h4>
               {selectedStudent.assignedTestSubmissions && Object.keys(selectedStudent.assignedTestSubmissions).length > 0 ? (
                 <div className="space-y-2">
-                  {Object.entries(selectedStudent.assignedTestSubmissions).map(([testId, sub]) => (
+                  {Object.entries(selectedStudent.assignedTestSubmissions).map(([testId, sub]: [string, any]) => (
                     <div key={testId} className="flex items-center justify-between p-3 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-xs">
                       <div>
                         <span className="font-semibold text-slate-900 dark:text-white">{testId}</span>
@@ -1295,7 +1304,6 @@ export const AdminPage: React.FC = () => {
                   <button
                     onClick={() => {
                       approveStudent(selectedStudent.id);
-                      setSelectedStudent({ ...selectedStudent, approvalStatus: 'approved' });
                       setToastMessage({ text: `Approved student ${selectedStudent.name}`, type: 'success' });
                       setTimeout(() => setToastMessage(null), 3000);
                     }}
@@ -1308,7 +1316,6 @@ export const AdminPage: React.FC = () => {
                   <button
                     onClick={() => {
                       disapproveStudent(selectedStudent.id);
-                      setSelectedStudent({ ...selectedStudent, approvalStatus: 'disapproved' });
                       setToastMessage({ text: `Disapproved student ${selectedStudent.name}`, type: 'info' });
                       setTimeout(() => setToastMessage(null), 3000);
                     }}
@@ -1323,7 +1330,7 @@ export const AdminPage: React.FC = () => {
               <button
                 onClick={() => {
                   const student = selectedStudent;
-                  setSelectedStudent(null);
+                  setSelectedStudentId(null);
                   setStudentToDelete(student);
                 }}
                 className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-rose-100 hover:bg-rose-200 dark:bg-rose-600/20 dark:hover:bg-rose-600/30 text-rose-700 dark:text-rose-300 border border-rose-300 dark:border-rose-500/30 font-bold text-xs transition cursor-pointer"

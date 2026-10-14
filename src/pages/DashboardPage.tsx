@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { 
   CheckCircle2, 
@@ -26,8 +26,15 @@ export const DashboardPage: React.FC = () => {
     resetProgress,
     activePortal,
     isStudentAuthenticated,
-    logoutStudent
+    logoutStudent,
+    updateStudentActivity
   } = useUserStore();
+
+  useEffect(() => {
+    if (isStudentAuthenticated) {
+      updateStudentActivity('Viewing performance dashboard & solved progress');
+    }
+  }, [isStudentAuthenticated, updateStudentActivity]);
 
   const [selectedProblem, setSelectedProblem] = useState<Problem | null>(null);
   const [confirmReset, setConfirmReset] = useState(false);

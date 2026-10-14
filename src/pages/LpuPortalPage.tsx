@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { 
   GraduationCap, 
@@ -30,8 +30,12 @@ export const LpuPortalPage: React.FC = () => {
   });
   const [selectedProblem, setSelectedProblem] = useState<Problem | null>(null);
 
-  const { completedLessons, markLessonComplete, problemProgress, customProblemSets } = useUserStore();
+  const { completedLessons, markLessonComplete, problemProgress, customProblemSets, updateStudentActivity } = useUserStore();
   const currentSubject = getSubjectById(selectedSubjectId) || SUBJECTS[0];
+
+  useEffect(() => {
+    updateStudentActivity(`Studying LPU Academic Portal · ${currentSubject.code.toUpperCase()}`);
+  }, [currentSubject.code, updateStudentActivity]);
 
   const toggleUnit = (unitId: string) => {
     setExpandedUnits((prev) => ({

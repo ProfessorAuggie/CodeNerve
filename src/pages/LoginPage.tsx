@@ -36,7 +36,10 @@ export const LoginPage: React.FC = () => {
     logoutStudent, 
     registerStudent,
     activePortal,
-    setActivePortal 
+    setActivePortal,
+    problemProgress,
+    completedLessons,
+    quizScores
   } = useUserStore();
 
   // Tab: 'login' | 'register'
@@ -175,6 +178,10 @@ export const LoginPage: React.FC = () => {
         return;
       }
 
+      const solvedFromProgress = Object.values(problemProgress || {})
+        .filter((p) => p.status === 'SOLVED')
+        .map((p) => p.problemId);
+
       const created = registerStudent({
         name: regName.trim(),
         email: regEmail.trim(),
@@ -184,9 +191,9 @@ export const LoginPage: React.FC = () => {
         status: 'online',
         currentActivity: `Registration submitted for ${selectedTrack === 'lpu' ? 'LPU CSE Track' : 'Global DSA Track'} (Pending Approval)`,
         lastActive: 'Just now',
-        solvedProblemIds: [],
-        completedLessons: [],
-        quizScores: {},
+        solvedProblemIds: solvedFromProgress,
+        completedLessons: completedLessons || [],
+        quizScores: quizScores || {},
         approvalStatus: 'pending',
       }, false);
 

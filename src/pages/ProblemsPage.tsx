@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { 
   Search, 
   Terminal, 
@@ -14,7 +14,11 @@ import { ProblemModal } from '../components/problems/ProblemModal';
 import { useUserStore } from '../store/userStore';
 
 export const ProblemsPage: React.FC = () => {
-  const { problemProgress, bookmarks, activePortal } = useUserStore();
+  const { problemProgress, bookmarks, activePortal, updateStudentActivity } = useUserStore();
+
+  useEffect(() => {
+    updateStudentActivity(`Practicing in problem catalogue (${activePortal === 'lpu' ? 'LPU Track' : 'Global DSA Track'})`);
+  }, [activePortal, updateStudentActivity]);
   const [isFitScreen, setIsFitScreen] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedPlatform, setSelectedPlatform] = useState<string>('all');

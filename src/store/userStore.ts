@@ -244,6 +244,113 @@ const defaultUser: UserProfile = {
   approvalStatus: 'approved',
 };
 
+// Cross-tab real-time sync broadcaster channel
+const cohortChannel =
+  typeof window !== 'undefined' && 'BroadcastChannel' in window
+    ? new BroadcastChannel('codenerve_cohort_sync')
+    : null;
+
+export const broadcastCohortSync = () => {
+  if (cohortChannel) {
+    try {
+      cohortChannel.postMessage({ type: 'SYNC_STORE', timestamp: Date.now() });
+    } catch {
+      // Ignore
+    }
+  }
+};
+
+/**
+ * Reconciles student roster entries with store problemProgress and completed modules.
+ * Guarantees that any active or registered student's solved count, progress list,
+ * and online activity match actual problem store data.
+ */
+export function reconcileAllStudents(
+  students: StudentRecord[],
+  user: UserProfile,
+  problemProgress: Record<string, ProblemProgress>,
+  completedLessons: string[] = [],
+  quizScores: Record<string, { score: number; total: number; date: string }> = {}
+): StudentRecord[] {
+  const allSolvedIds = Object.values(problemProgress || {})
+    .filter((p) => p.status === 'SOLVED')
+    .map((p) => p.problemId);
+
+  const isStudentActive = user && user.role === 'student' && user.id !== 'guest';
+
+  let foundActive = false;
+
+  let updated = (students || []).map((s) => {
+    const isThisUser =
+      isStudentActive &&
+      (s.id === user.id ||
+        (user.registrationNumber && s.registrationNumber === user.registrationNumber) ||
+        (user.email && s.email && s.email.toLowerCase() === user.email.toLowerCase()));
+
+    if (isThisUser) {
+      foundActive = true;
+    }
+
+    let mergedSolved = s.solvedProblemIds ? [...s.solvedProblemIds] : [];
+    if (isThisUser) {
+      mergedSolved = Array.from(new Set([...mergedSolved, ...allSolvedIds]));
+    }
+
+    const totalSolved = Math.max(s.totalSolved || 0, mergedSolved.length);
+
+    let mergedLessons = s.completedLessons ? [...s.completedLessons] : [];
+    if (isThisUser) {
+      mergedLessons = Array.from(new Set([...mergedLessons, ...completedLessons]));
+    }
+
+    let mergedQuizzes = s.quizScores ? { ...s.quizScores } : {};
+    if (isThisUser) {
+      mergedQuizzes = { ...mergedQuizzes, ...quizScores };
+    }
+
+    let currentActivity = s.currentActivity || 'Active learner';
+    if (s.approvalStatus === 'approved' && currentActivity.toLowerCase().includes('pending')) {
+      currentActivity = isThisUser
+        ? 'Active learner · Solving DSA problems & roadmaps'
+        : 'Account approved by faculty';
+    }
+
+    return {
+      ...s,
+      solvedProblemIds: mergedSolved,
+      totalSolved,
+      completedLessons: mergedLessons,
+      quizScores: mergedQuizzes,
+      currentActivity: isThisUser ? currentActivity : s.currentActivity,
+      status: isThisUser ? ('online' as const) : s.status,
+      lastActive: isThisUser ? 'Just now' : s.lastActive,
+    };
+  });
+
+  if (isStudentActive && !foundActive) {
+    const newStudent: StudentRecord = {
+      id: user.id || `std-${Date.now()}`,
+      name: user.name || 'Student',
+      email: user.email || '',
+      registrationNumber: user.registrationNumber || `REG-${Date.now().toString().slice(-6)}`,
+      track: user.track || 'global',
+      batch: user.batch || (user.track === 'lpu' ? 'LPU B.Tech CSE' : 'Global Student Cohort'),
+      joinedAt: new Date().toISOString(),
+      status: 'online',
+      currentActivity: 'Active learner · Solving DSA problems & roadmaps',
+      lastActive: 'Just now',
+      solvedProblemIds: allSolvedIds,
+      totalSolved: allSolvedIds.length,
+      completedLessons: completedLessons || [],
+      quizScores: quizScores || {},
+      approvalStatus: user.approvalStatus || 'approved',
+    };
+    updated = [newStudent, ...updated];
+  }
+
+  return updated;
+}
+
 export const useUserStore = create<UserState>()(
   persist(
     (set, get) => ({
@@ -358,17 +465,21 @@ export const useUserStore = create<UserState>()(
             },
           };
 
-          // Synchronize active student entry in `students` for live faculty/admin monitoring
-          const currentUserId = state.user.id;
-          const currentRegNo = state.user.registrationNumber;
+          const allSolvedIds = Object.values(newProgressMap)
+            .filter((p) => p.status === 'SOLVED')
+            .map((p) => p.problemId);
+
+          const currentUserId = state.user?.id;
+          const currentRegNo = state.user?.registrationNumber;
+          const currentEmail = state.user?.email?.toLowerCase();
+
           const updatedStudents = (state.students || []).map((s) => {
-            if (s.id === currentUserId || (currentRegNo && s.registrationNumber === currentRegNo)) {
-              let solvedIds = s.solvedProblemIds ? [...s.solvedProblemIds] : [];
-              if (isNowSolved && !solvedIds.includes(problemId)) {
-                solvedIds.push(problemId);
-              } else if (!isNowSolved && solvedIds.includes(problemId)) {
-                solvedIds = solvedIds.filter((id) => id !== problemId);
-              }
+            const matches =
+              s.id === currentUserId ||
+              (currentRegNo && s.registrationNumber === currentRegNo) ||
+              (currentEmail && s.email && s.email.toLowerCase() === currentEmail);
+
+            if (matches) {
               const activityText = isNowSolved
                 ? `Solved problem: ${problemId}`
                 : status === 'ATTEMPTED'
@@ -377,8 +488,8 @@ export const useUserStore = create<UserState>()(
 
               return {
                 ...s,
-                solvedProblemIds: solvedIds,
-                totalSolved: solvedIds.length,
+                solvedProblemIds: allSolvedIds,
+                totalSolved: allSolvedIds.length,
                 currentActivity: activityText,
                 lastActive: 'Just now',
                 status: 'online' as const,
@@ -386,6 +497,8 @@ export const useUserStore = create<UserState>()(
             }
             return s;
           });
+
+          broadcastCohortSync();
 
           return {
             problemProgress: newProgressMap,
@@ -415,10 +528,17 @@ export const useUserStore = create<UserState>()(
             nextList = list.filter((id) => id !== lessonId);
           }
 
-          const currentUserId = state.user.id;
-          const currentRegNo = state.user.registrationNumber;
+          const currentUserId = state.user?.id;
+          const currentRegNo = state.user?.registrationNumber;
+          const currentEmail = state.user?.email?.toLowerCase();
+
           const updatedStudents = (state.students || []).map((s) => {
-            if (s.id === currentUserId || (currentRegNo && s.registrationNumber === currentRegNo)) {
+            const matches =
+              s.id === currentUserId ||
+              (currentRegNo && s.registrationNumber === currentRegNo) ||
+              (currentEmail && s.email && s.email.toLowerCase() === currentEmail);
+
+            if (matches) {
               return {
                 ...s,
                 completedLessons: nextList,
@@ -429,6 +549,8 @@ export const useUserStore = create<UserState>()(
             }
             return s;
           });
+
+          broadcastCohortSync();
 
           return {
             completedLessons: nextList,
@@ -442,10 +564,17 @@ export const useUserStore = create<UserState>()(
             ...(state.quizScores || {}),
             [quizId]: { score, total, date: new Date().toISOString() },
           };
-          const currentUserId = state.user.id;
-          const currentRegNo = state.user.registrationNumber;
+          const currentUserId = state.user?.id;
+          const currentRegNo = state.user?.registrationNumber;
+          const currentEmail = state.user?.email?.toLowerCase();
+
           const updatedStudents = (state.students || []).map((s) => {
-            if (s.id === currentUserId || (currentRegNo && s.registrationNumber === currentRegNo)) {
+            const matches =
+              s.id === currentUserId ||
+              (currentRegNo && s.registrationNumber === currentRegNo) ||
+              (currentEmail && s.email && s.email.toLowerCase() === currentEmail);
+
+            if (matches) {
               return {
                 ...s,
                 quizScores: newQuizScores,
@@ -457,6 +586,8 @@ export const useUserStore = create<UserState>()(
             return s;
           });
 
+          broadcastCohortSync();
+
           return {
             quizScores: newQuizScores,
             students: updatedStudents,
@@ -465,12 +596,18 @@ export const useUserStore = create<UserState>()(
 
       updateStudentActivity: (activity: string) =>
         set((state) => {
-          const currentUserId = state.user.id;
-          const currentRegNo = state.user.registrationNumber;
+          const currentUserId = state.user?.id;
+          const currentRegNo = state.user?.registrationNumber;
+          const currentEmail = state.user?.email?.toLowerCase();
           if (!currentUserId || currentUserId === 'guest') return state;
 
           const updatedStudents = (state.students || []).map((s) => {
-            if (s.id === currentUserId || (currentRegNo && s.registrationNumber === currentRegNo)) {
+            const matches =
+              s.id === currentUserId ||
+              (currentRegNo && s.registrationNumber === currentRegNo) ||
+              (currentEmail && s.email && s.email.toLowerCase() === currentEmail);
+
+            if (matches) {
               return {
                 ...s,
                 currentActivity: activity,
@@ -480,17 +617,26 @@ export const useUserStore = create<UserState>()(
             }
             return s;
           });
+
+          broadcastCohortSync();
+
           return { students: updatedStudents };
         }),
 
       recordAssignedTestSubmission: (testId: string, score: number, total: number) =>
         set((state) => {
-          const currentUserId = state.user.id;
-          const currentRegNo = state.user.registrationNumber;
+          const currentUserId = state.user?.id;
+          const currentRegNo = state.user?.registrationNumber;
+          const currentEmail = state.user?.email?.toLowerCase();
           const nowIso = new Date().toISOString();
 
           const updatedStudents = (state.students || []).map((s) => {
-            if (s.id === currentUserId || (currentRegNo && s.registrationNumber === currentRegNo)) {
+            const matches =
+              s.id === currentUserId ||
+              (currentRegNo && s.registrationNumber === currentRegNo) ||
+              (currentEmail && s.email && s.email.toLowerCase() === currentEmail);
+
+            if (matches) {
               const subs = s.assignedTestSubmissions ? { ...s.assignedTestSubmissions } : {};
               subs[testId] = { score, total, submittedAt: nowIso };
               return {
@@ -511,6 +657,8 @@ export const useUserStore = create<UserState>()(
             return t;
           });
 
+          broadcastCohortSync();
+
           return {
             students: updatedStudents,
             assignedTests: updatedTests,
@@ -518,9 +666,17 @@ export const useUserStore = create<UserState>()(
         }),
 
       syncCohortData: () => {
-        if (typeof window !== 'undefined') {
-          useUserStore.persist.rehydrate();
-        }
+        set((state) => {
+          const updatedStudents = reconcileAllStudents(
+            state.students || [],
+            state.user,
+            state.problemProgress || {},
+            state.completedLessons || [],
+            state.quizScores || {}
+          );
+          return { students: updatedStudents };
+        });
+        broadcastCohortSync();
       },
 
       addCustomProblemSet: (setInfo) =>
@@ -601,6 +757,8 @@ export const useUserStore = create<UserState>()(
 
         set((state) => {
           const updatedProgress = { ...state.problemProgress };
+
+          // 1. Seed any solved problems from student record into active problemProgress
           if (found.solvedProblemIds && found.solvedProblemIds.length > 0) {
             found.solvedProblemIds.forEach((pid) => {
               if (!updatedProgress[pid]) {
@@ -614,11 +772,32 @@ export const useUserStore = create<UserState>()(
             });
           }
 
-          const updatedStudents = state.students.map((s) =>
-            s.id === found.id
-              ? { ...s, status: 'online' as const, lastActive: 'Just now' }
-              : s
-          );
+          // 2. Collect all solved problems in active problemProgress and sync back to student record
+          const allSolvedIds = Object.values(updatedProgress)
+            .filter((p) => p.status === 'SOLVED')
+            .map((p) => p.problemId);
+
+          const updatedStudents = state.students.map((s) => {
+            const matches =
+              s.id === found.id ||
+              s.registrationNumber === found.registrationNumber ||
+              (s.email && found.email && s.email.toLowerCase() === found.email.toLowerCase());
+
+            if (matches) {
+              return {
+                ...s,
+                solvedProblemIds: allSolvedIds,
+                totalSolved: allSolvedIds.length,
+                completedLessons: Array.from(new Set([...(s.completedLessons || []), ...(state.completedLessons || [])])),
+                status: 'online' as const,
+                lastActive: 'Just now',
+                currentActivity: `Active in ${found.track === 'lpu' ? 'LPU Portal' : 'Global DSA Track'}`,
+              };
+            }
+            return s;
+          });
+
+          broadcastCohortSync();
 
           return {
             user: userProfile,
@@ -647,6 +826,7 @@ export const useUserStore = create<UserState>()(
       },
 
       logoutStudent: () => {
+        broadcastCohortSync();
         set({
           isStudentAuthenticated: false,
           user: {
@@ -682,26 +862,44 @@ export const useUserStore = create<UserState>()(
             createdAt: new Date().toISOString(),
             submissionsCount: 0,
           };
+          broadcastCohortSync();
           return {
             assignedTests: [newTest, ...(state.assignedTests || [])],
           };
         }),
 
       deleteAssignedTest: (testId) =>
-        set((state) => ({
-          assignedTests: (state.assignedTests || []).filter((t) => t.id !== testId),
-        })),
+        set((state) => {
+          broadcastCohortSync();
+          return {
+            assignedTests: (state.assignedTests || []).filter((t) => t.id !== testId),
+          };
+        }),
 
       // Admin Student Approval & Management Actions
       approveStudent: (studentId: string) => {
         set((state) => {
-          const updatedStudents = (state.students || []).map((s) =>
-            s.id === studentId ? { ...s, approvalStatus: 'approved' as const } : s
-          );
+          const updatedStudents = (state.students || []).map((s) => {
+            if (s.id === studentId) {
+              const currentAct = s.currentActivity || '';
+              const newAct = currentAct.toLowerCase().includes('pending')
+                ? 'Account approved by faculty · Ready for coursework'
+                : currentAct;
+              return {
+                ...s,
+                approvalStatus: 'approved' as const,
+                currentActivity: newAct,
+              };
+            }
+            return s;
+          });
           const updatedUser =
             state.user.id === studentId
               ? { ...state.user, approvalStatus: 'approved' as const }
               : state.user;
+
+          broadcastCohortSync();
+
           return { students: updatedStudents, user: updatedUser };
         });
       },
@@ -712,6 +910,7 @@ export const useUserStore = create<UserState>()(
           const updatedStudents = (state.students || []).map((s) =>
             s.id === studentId ? { ...s, approvalStatus: 'disapproved' as const } : s
           );
+          broadcastCohortSync();
           return {
             students: updatedStudents,
             ...(isCurrent
@@ -735,6 +934,7 @@ export const useUserStore = create<UserState>()(
         set((state) => {
           const isCurrent = state.user.id === studentId;
           const updatedStudents = (state.students || []).filter((s) => s.id !== studentId);
+          broadcastCohortSync();
           return {
             students: updatedStudents,
             ...(isCurrent
@@ -757,23 +957,39 @@ export const useUserStore = create<UserState>()(
       // Student Registration (also connects to Admin Live Roster)
       registerStudent: (studentData, autoLogin = false) => {
         const approvalStatus = studentData.approvalStatus || 'pending';
+
+        // Inherit current solved problems if any exist in the local session
+        const currentSolved = get().problemProgress
+          ? Object.values(get().problemProgress)
+              .filter((p) => p.status === 'SOLVED')
+              .map((p) => p.problemId)
+          : [];
+
+        const solvedProblemIds =
+          studentData.solvedProblemIds && studentData.solvedProblemIds.length > 0
+            ? studentData.solvedProblemIds
+            : currentSolved;
+
         const newStudent: StudentRecord = {
           ...studentData,
           id: `std-${Date.now()}`,
           joinedAt: new Date().toISOString(),
-          totalSolved: studentData.solvedProblemIds?.length || 0,
+          solvedProblemIds,
+          totalSolved: solvedProblemIds.length,
           status: 'online',
           currentActivity: approvalStatus === 'pending'
             ? 'Registration submitted (Pending Admin Approval)'
             : 'Just registered & started onboarding',
           lastActive: 'Just now',
-          completedLessons: studentData.completedLessons || [],
-          quizScores: studentData.quizScores || {},
+          completedLessons: studentData.completedLessons || get().completedLessons || [],
+          quizScores: studentData.quizScores || get().quizScores || {},
           approvalStatus,
         };
 
         set((state) => {
           const updatedStudents = [newStudent, ...(state.students || [])];
+          broadcastCohortSync();
+
           // Only auto-login if explicitly requested AND student is approved
           if (!autoLogin || approvalStatus !== 'approved') {
             return { students: updatedStudents };
@@ -816,6 +1032,17 @@ export const useUserStore = create<UserState>()(
           document.documentElement.classList.toggle('dark', isDark);
           document.documentElement.classList.toggle('light', !isDark);
           document.documentElement.style.colorScheme = isDark ? 'dark' : 'light';
+
+          // Auto-reconcile student roster entries upon rehydrate
+          if (state.students && state.problemProgress) {
+            state.students = reconcileAllStudents(
+              state.students,
+              state.user,
+              state.problemProgress,
+              state.completedLessons || [],
+              state.quizScores || {}
+            );
+          }
         }
       },
     }
@@ -828,22 +1055,23 @@ if (typeof window !== 'undefined') {
     if (event.key === 'codenerve_user_storage_v1') {
       try {
         useUserStore.persist.rehydrate();
+        useUserStore.getState().syncCohortData();
       } catch {
         // Ignore
       }
     }
   });
 
-  if ('BroadcastChannel' in window) {
-    try {
-      const channel = new BroadcastChannel('codenerve_cohort_sync');
-      channel.onmessage = (msg) => {
-        if (msg.data?.type === 'SYNC_STORE') {
+  if (cohortChannel) {
+    cohortChannel.onmessage = (msg) => {
+      if (msg.data?.type === 'SYNC_STORE') {
+        try {
           useUserStore.persist.rehydrate();
+          useUserStore.getState().syncCohortData();
+        } catch {
+          // Ignore
         }
-      };
-    } catch {
-      // Ignore
-    }
+      }
+    };
   }
 }
