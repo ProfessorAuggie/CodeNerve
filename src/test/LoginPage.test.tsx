@@ -60,6 +60,15 @@ describe('LoginPage Component', () => {
   });
 
   it('allows student login using registered credentials', async () => {
+    useUserStore.getState().registerStudent({
+      name: 'Sahil Sharma',
+      email: 'sahil@lpu.in',
+      registrationNumber: '12104921',
+      track: 'lpu',
+      batch: 'LPU B.Tech CSE',
+      approvalStatus: 'approved',
+    });
+
     render(
       <MemoryRouter>
         <LoginPage />
@@ -74,7 +83,7 @@ describe('LoginPage Component', () => {
 
     await waitFor(() => {
       expect(useUserStore.getState().isStudentAuthenticated).toBe(true);
-      expect(useUserStore.getState().user.name).toBe('Alex Rivera');
+      expect(useUserStore.getState().user.name).toBe('Sahil Sharma');
     });
   });
 

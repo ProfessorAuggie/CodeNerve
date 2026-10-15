@@ -18,6 +18,8 @@ const AdminPage = React.lazy(() => import('./pages/AdminPage').then((m) => ({ de
 const TeacherPage = React.lazy(() => import('./pages/TeacherPage').then((m) => ({ default: m.TeacherPage })));
 const LoginPage = React.lazy(() => import('./pages/LoginPage').then((m) => ({ default: m.LoginPage })));
 
+import { AuthPromptModal } from './components/auth/AuthPromptModal';
+
 // External AlgoNerve Redirect component
 const AlgoNerveRedirect: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -125,6 +127,9 @@ export const App: React.FC = () => {
           </Suspense>
         </ErrorBoundary>
       </main>
+
+      {/* Global Auth Prompt Modal for Guests attempting tasks */}
+      <AuthPromptModal />
 
       {/* Global Footer */}
       <Footer />

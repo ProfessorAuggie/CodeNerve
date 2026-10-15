@@ -12,7 +12,16 @@ describe('EditProfileModal Component', () => {
   });
 
   it('allows a student to edit their own profile', async () => {
-    // Set active student
+    // Register and login active student
+    const testStudent = useUserStore.getState().registerStudent({
+      name: 'Alex Rivera',
+      email: 'alex.rivera@lpu.in',
+      registrationNumber: '12104921',
+      track: 'lpu',
+      batch: 'LPU B.Tech CSE (CSE202/205)',
+      status: 'online',
+      approvalStatus: 'approved',
+    });
     useUserStore.getState().loginStudent('12104921');
     const onClose = () => {};
 
@@ -41,7 +50,7 @@ describe('EditProfileModal Component', () => {
       expect(user.batch).toBe('LPU B.Tech CSE Honors');
 
       // Also verifies cohort student roster entry was synced
-      const studentInRoster = useUserStore.getState().students.find((s) => s.id === 'std-101');
+      const studentInRoster = useUserStore.getState().students.find((s) => s.id === testStudent.id);
       expect(studentInRoster?.name).toBe('Alex R. Rivera');
       expect(studentInRoster?.batch).toBe('LPU B.Tech CSE Honors');
     });
@@ -71,7 +80,15 @@ describe('EditProfileModal Component', () => {
   });
 
   it('allows admin to edit a student profile from the roster', async () => {
-    const student = useUserStore.getState().students.find((s) => s.id === 'std-102')!;
+    const student = useUserStore.getState().registerStudent({
+      name: 'Priya Sharma',
+      email: 'priya.sharma@lpu.in',
+      registrationNumber: '12104999',
+      track: 'lpu',
+      batch: 'LPU B.Tech CSE (CSE202/205)',
+      status: 'online',
+      approvalStatus: 'approved',
+    });
 
     render(
       <EditProfileModal
@@ -91,7 +108,7 @@ describe('EditProfileModal Component', () => {
     fireEvent.click(saveBtn);
 
     await waitFor(() => {
-      const updated = useUserStore.getState().students.find((s) => s.id === 'std-102');
+      const updated = useUserStore.getState().students.find((s) => s.id === student.id);
       expect(updated?.name).toBe('Priya Sharma (Class Rep)');
     });
   });

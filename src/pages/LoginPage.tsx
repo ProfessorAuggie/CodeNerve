@@ -187,12 +187,7 @@ export const LoginPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-[85vh] flex items-center justify-center px-4 py-12 relative overflow-hidden">
-      {/* Decorative Background Lighting Effects */}
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[650px] h-[450px] bg-gradient-to-tr from-brand-600/15 via-purple-600/10 to-emerald-500/10 rounded-full blur-3xl pointer-events-none -z-10" />
-      <div className="absolute -bottom-10 left-10 w-72 h-72 bg-emerald-500/10 rounded-full blur-2xl pointer-events-none -z-10" />
-      <div className="absolute -top-10 right-10 w-72 h-72 bg-indigo-500/10 rounded-full blur-2xl pointer-events-none -z-10" />
-
+    <div className="min-h-[85vh] flex items-center justify-center px-4 py-12 relative">
       <div className="w-full max-w-4xl grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
         {/* Left Side: Brand Context, Tracks & Highlights */}
         <div className="lg:col-span-5 space-y-6">

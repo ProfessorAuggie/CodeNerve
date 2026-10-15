@@ -29,7 +29,7 @@ interface ProblemModalInnerProps {
 }
 
 const ProblemModalInner: React.FC<ProblemModalInnerProps> = ({ problem, onClose }) => {
-  const { problemProgress, updateProblemStatus, bookmarks, toggleBookmark, updateStudentActivity } = useUserStore();
+  const { problemProgress, updateProblemStatus, bookmarks, toggleBookmark, updateStudentActivity, isStudentAuthenticated } = useUserStore();
   const currentProgress = problemProgress[problem.id];
   const currentStatus: ProblemStatus = currentProgress?.status || 'NOT_STARTED';
   const isBookmarked = bookmarks.includes(problem.id);
@@ -198,7 +198,19 @@ const ProblemModalInner: React.FC<ProblemModalInnerProps> = ({ problem, onClose 
 
               {/* Progress Tracker Selector */}
               <div>
-                <h4 className="text-[11px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1.5">My Progress Status</h4>
+                <div className="flex items-center justify-between mb-1.5">
+                  <h4 className="text-[11px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">My Progress Status</h4>
+                  {!isStudentAuthenticated && (
+                    <span className="text-[10px] text-amber-600 dark:text-amber-400 font-semibold bg-amber-500/10 px-2 py-0.5 rounded-full border border-amber-500/20">
+                      Explorer Mode
+                    </span>
+                  )}
+                </div>
+                {!isStudentAuthenticated && (
+                  <p className="text-[11px] text-slate-500 dark:text-slate-400 mb-2">
+                    Sign in to track solved questions, update status, and record notes.
+                  </p>
+                )}
                 <div className="grid grid-cols-2 gap-1.5">
                   <button
                     onClick={() => handleStatusChange('NOT_STARTED')}

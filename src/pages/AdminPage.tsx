@@ -24,7 +24,10 @@ import {
   Check,
   AlertCircle,
   RefreshCw,
-  Edit3
+  Edit3,
+  BookOpen,
+  Award,
+  CheckSquare
 } from 'lucide-react';
 import { useUserStore } from '../store/userStore';
 import { PROBLEMS } from '../data/problems';
@@ -54,7 +57,8 @@ export const AdminPage: React.FC = () => {
   const [isSyncing, setIsSyncing] = useState(false);
 
   // Active Admin Tab
-  const [activeTab, setActiveTab] = useState<'students' | 'assign-test' | 'future-auth'>('students');
+  const [activeTab, setActiveTab] = useState<'students' | 'assign-test' | 'onboard-student'>('students');
+  const [dossierTab, setDossierTab] = useState<'profile' | 'problems' | 'lessons' | 'quizzes' | 'tests'>('profile');
 
   // Student Roster Filters
   const [searchQuery, setSearchQuery] = useState('');
@@ -215,31 +219,28 @@ export const AdminPage: React.FC = () => {
   if (!isAdminAuthenticated) {
     return (
       <div className="min-h-[75vh] flex items-center justify-center px-4 py-12">
-        <div className="w-full max-w-md rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-gradient-to-b dark:from-slate-900 dark:via-slate-950 dark:to-slate-950 p-8 shadow-xl dark:shadow-2xl relative overflow-hidden transition-colors">
-          {/* Ambient Glow */}
-          <div className="absolute top-0 right-0 -mr-16 -mt-16 w-48 h-48 bg-purple-500/10 rounded-full blur-3xl pointer-events-none" />
-
+        <div className="w-full max-w-md rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/95 p-8 shadow-xl dark:shadow-2xl relative transition-colors">
           <div className="text-center space-y-3">
-            <div className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-purple-100 dark:bg-purple-600/20 text-purple-600 dark:text-purple-400 border border-purple-200 dark:border-purple-500/30 shadow-lg shadow-purple-500/10 mb-1">
+            <div className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-purple-100 dark:bg-purple-950/80 text-purple-600 dark:text-purple-400 border border-purple-200 dark:border-purple-800/80 shadow-sm mb-1">
               <Lock className="h-7 w-7" />
             </div>
             
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold bg-purple-50 dark:bg-purple-500/10 text-purple-700 dark:text-purple-300 border border-purple-200 dark:border-purple-500/20">
-              <ShieldCheck className="h-3.5 w-3.5" />
-              <span>Restricted Access</span>
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-mono font-bold bg-slate-100 dark:bg-slate-800 text-purple-700 dark:text-purple-300 border border-slate-200 dark:border-slate-700">
+              <ShieldCheck className="h-3.5 w-3.5 text-purple-500" />
+              <span>FACULTY RESTRICTED ACCESS</span>
             </div>
 
             <h1 className="text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight">
-              Faculty & Admin Portal
+              Faculty & Admin Command Center
             </h1>
             <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed max-w-xs mx-auto">
-              Command center restricted to faculty and instructors to monitor student cohorts, track live activities, and assign curriculum tests.
+              Live cohort intelligence, student approvals, practice analytics, and curriculum assessment management.
             </p>
           </div>
 
           <form onSubmit={handleLogin} className="mt-8 space-y-4">
             <div>
-              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">
+              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2 font-mono">
                 Faculty Passcode
               </label>
               <div className="relative">
@@ -249,20 +250,20 @@ export const AdminPage: React.FC = () => {
                   onChange={(e) => setPasscode(e.target.value)}
                   placeholder="Enter admin passcode (e.g. admin123)"
                   autoFocus
-                  className="w-full rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 pl-10 pr-4 py-3 text-sm text-slate-900 dark:text-slate-200 placeholder:text-slate-400 dark:placeholder:text-slate-600 focus:outline-none focus:border-purple-500 transition"
+                  className="w-full rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 pl-10 pr-4 py-3 text-sm text-slate-900 dark:text-slate-200 placeholder:text-slate-400 dark:placeholder:text-slate-600 focus:outline-none focus:border-purple-500 transition font-mono"
                 />
                 <Key className="absolute left-3.5 top-3.5 h-4 w-4 text-slate-400" />
               </div>
               {authError && (
                 <p className="text-xs text-rose-500 dark:text-rose-400 mt-1.5 font-medium animate-in fade-in">
-                  Invalid passcode. Try <code className="text-rose-600 dark:text-rose-300 font-bold">admin123</code>.
+                  Invalid passcode. Try <code className="text-rose-600 dark:text-rose-300 font-bold font-mono">admin123</code>.
                 </p>
               )}
             </div>
 
             <button
               type="submit"
-              className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-bold text-xs shadow-lg shadow-purple-600/30 transition cursor-pointer"
+              className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs shadow-md transition cursor-pointer"
             >
               <Unlock className="h-4 w-4" />
               <span>Unlock Admin Command Center</span>
@@ -285,16 +286,16 @@ export const AdminPage: React.FC = () => {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
       {/* Top Header & Admin Session Controls */}
-      <div className="rounded-2xl border border-purple-200 dark:border-purple-800/40 bg-gradient-to-r from-purple-50/70 via-white to-white dark:from-purple-950/40 dark:via-slate-900 dark:to-slate-900 p-6 shadow-sm dark:shadow-xl flex flex-col md:flex-row md:items-center justify-between gap-6 transition-colors">
+      <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/90 p-6 shadow-sm dark:shadow-xl flex flex-col md:flex-row md:items-center justify-between gap-6 transition-colors">
         <div>
           <div className="flex items-center gap-2 mb-2">
             <span className="flex h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-purple-100 dark:bg-purple-500/20 text-purple-700 dark:text-purple-300 border border-purple-200 dark:border-purple-500/30">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-purple-100 dark:bg-purple-950/60 text-purple-700 dark:text-purple-300 border border-purple-200 dark:border-purple-800/60">
               <ShieldCheck className="h-3.5 w-3.5" />
               <span>Faculty Admin Command Center</span>
             </div>
             <span className="text-slate-400 text-xs hidden sm:inline">•</span>
-            <span className="text-slate-500 dark:text-slate-400 text-xs hidden sm:inline">Restricted Portal</span>
+            <span className="text-slate-500 dark:text-slate-400 text-xs hidden sm:inline font-mono">LIVE ROSTER ENGINE</span>
           </div>
 
           <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
@@ -432,17 +433,17 @@ export const AdminPage: React.FC = () => {
         </button>
 
         <button
-          onClick={() => setActiveTab('future-auth')}
+          onClick={() => setActiveTab('onboard-student')}
           className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold transition ${
-            activeTab === 'future-auth'
+            activeTab === 'onboard-student'
               ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-500/25'
               : 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800'
           }`}
         >
           <UserPlus className="h-4 w-4" />
-          <span>Manual Student Onboarding</span>
+          <span>Enroll Student to Roster</span>
           <span className="text-[10px] font-bold px-1.5 py-0.2 rounded bg-indigo-100 dark:bg-indigo-500/20 text-indigo-700 dark:text-indigo-300">
-            Admin Roster
+            Manual
           </span>
         </button>
       </div>
@@ -511,27 +512,42 @@ export const AdminPage: React.FC = () => {
               <span>Real-Time Activity Pulse (Live Student Tracking)</span>
             </div>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-              {students.slice(0, 3).map((std) => (
-                <div 
-                  key={std.id}
-                  className="flex items-start gap-2.5 p-2.5 rounded-xl bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800 text-xs transition-colors"
-                >
-                  <span className={`h-2 w-2 rounded-full mt-1.5 shrink-0 ${
-                    std.status === 'online' ? 'bg-emerald-500 animate-pulse' : 'bg-amber-400'
-                  }`} />
-                  <div className="min-w-0 flex-1">
-                    <div className="flex items-center justify-between gap-1">
-                      <span className="font-semibold text-slate-900 dark:text-white truncate">{std.name}</span>
-                      <span className="text-[10px] text-slate-400 dark:text-slate-500 shrink-0">{std.lastActive}</span>
-                    </div>
-                    <div className="text-[11px] text-slate-600 dark:text-slate-400 truncate mt-0.5">
-                      {std.currentActivity}
+            {students.length > 0 ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                {students.slice(0, 3).map((std) => (
+                  <div 
+                    key={std.id}
+                    className="flex items-start gap-2.5 p-2.5 rounded-xl bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800 text-xs transition-colors"
+                  >
+                    <span className={`h-2 w-2 rounded-full mt-1.5 shrink-0 ${
+                      std.status === 'online' ? 'bg-emerald-500 animate-pulse' : 'bg-amber-400'
+                    }`} />
+                    <div className="min-w-0 flex-1">
+                      <div className="flex items-center justify-between gap-1">
+                        <span className="font-semibold text-slate-900 dark:text-white truncate">{std.name}</span>
+                        <span className="text-[10px] text-slate-400 dark:text-slate-500 shrink-0">{std.lastActive}</span>
+                      </div>
+                      <div className="text-[11px] text-slate-600 dark:text-slate-400 truncate mt-0.5">
+                        {std.currentActivity}
+                      </div>
                     </div>
                   </div>
+                ))}
+              </div>
+            ) : (
+              <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-950/40 border border-dashed border-slate-200 dark:border-slate-800 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs">
+                <div className="flex items-center gap-2 text-slate-500 dark:text-slate-400">
+                  <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
+                  <span>Real-Time Pulse Standby · Live student actions stream here as registered learners solve problems.</span>
                 </div>
-              ))}
-            </div>
+                <button
+                  onClick={() => setActiveTab('onboard-student')}
+                  className="text-xs font-bold text-purple-600 dark:text-purple-400 hover:underline shrink-0"
+                >
+                  Enroll Student ➔
+                </button>
+              </div>
+            )}
           </div>
 
           {/* Search & Filter Bar */}
@@ -654,7 +670,7 @@ export const AdminPage: React.FC = () => {
               <thead className="bg-slate-50 dark:bg-slate-950/80 text-slate-500 dark:text-slate-400 uppercase tracking-wider font-semibold border-b border-slate-200 dark:border-slate-800">
                 <tr>
                   <th className="py-3.5 px-4">Student</th>
-                  <th className="py-3.5 px-4">Track / Batch</th>
+                  <th className="py-3.5 px-4">Track & Institution</th>
                   <th className="py-3.5 px-4">Approval Status</th>
                   <th className="py-3.5 px-4">Live Activity</th>
                   <th className="py-3.5 px-4">Progress</th>
@@ -664,11 +680,34 @@ export const AdminPage: React.FC = () => {
               </thead>
               <tbody className="divide-y divide-slate-100 dark:divide-slate-800/60">
                 {filteredStudents.length === 0 ? (
-                  <tr>
-                    <td colSpan={7} className="py-10 text-center text-slate-500 italic">
-                      No students found matching your filters.
-                    </td>
-                  </tr>
+                  students.length === 0 ? (
+                    <tr>
+                      <td colSpan={7} className="py-14 text-center">
+                        <div className="max-w-md mx-auto space-y-3 px-4">
+                          <div className="h-12 w-12 rounded-2xl bg-purple-500/10 border border-purple-500/20 text-purple-600 dark:text-purple-400 flex items-center justify-center mx-auto">
+                            <Users className="h-6 w-6" />
+                          </div>
+                          <h3 className="text-sm font-bold text-slate-900 dark:text-white">Active Cohort Roster · Standby</h3>
+                          <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+                            No dummy accounts exist. Real students will appear here as soon as they register on the Student Portal. You can also provision learners directly.
+                          </p>
+                          <button
+                            onClick={() => setActiveTab('onboard-student')}
+                            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-purple-600 hover:bg-purple-500 text-white text-xs font-bold transition shadow-md cursor-pointer"
+                          >
+                            <UserPlus className="h-3.5 w-3.5" />
+                            <span>Enroll First Student</span>
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ) : (
+                    <tr>
+                      <td colSpan={7} className="py-10 text-center text-slate-500 italic">
+                        No students found matching your filters.
+                      </td>
+                    </tr>
+                  )
                 ) : (
                   filteredStudents.map((std) => {
                     const maxCatalogue = std.track === 'lpu' ? 82 : 182;
@@ -1114,28 +1153,25 @@ export const AdminPage: React.FC = () => {
       )}
 
       {/* ─────────────────────────────────────────────────────────────
-          TAB 3: FUTURE AUTH & STUDENT ONBOARDING PREVIEW
+          TAB 3: DIRECT STUDENT ENROLLMENT & PROVISIONING
          ───────────────────────────────────────────────────────────── */}
-      {activeTab === 'future-auth' && (
+      {activeTab === 'onboard-student' && (
         <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/60 p-8 space-y-6 max-w-3xl mx-auto shadow-xl">
           <div className="flex items-center gap-3">
             <div className="h-12 w-12 rounded-2xl bg-indigo-50 dark:bg-indigo-600/20 text-indigo-600 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-500/30 flex items-center justify-center font-bold">
               <UserPlus className="h-6 w-6" />
             </div>
             <div>
-              <h2 className="text-xl font-bold text-slate-900 dark:text-white">Student Onboarding & Auth Integration</h2>
+              <h2 className="text-xl font-bold text-slate-900 dark:text-white">Direct Student Enrollment</h2>
               <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-                Ready for upcoming user signup & login page integration.
+                Register, verify, and provision new student accounts directly into the active cohort roster.
               </p>
             </div>
           </div>
 
           <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-xs text-slate-700 dark:text-slate-300 space-y-2 leading-relaxed">
             <p>
-              <strong>How the Auth Pipeline Works:</strong> When you connect your signup/login page in the future, calling <code className="text-indigo-600 dark:text-indigo-300 font-mono font-bold">useUserStore.getState().registerStudent(...)</code> will automatically register new student accounts into this Admin Command Center.
-            </p>
-            <p className="text-slate-500 dark:text-slate-400">
-              You can test the pipeline right now by onboarding a student below — they will appear instantly on the live roster with real-time tracking!
+              Students who self-register on the <strong>Student Portal</strong> will appear automatically in the Live Roster for instant review and telemetry tracking. You can also provision learners directly here with their university registration credentials.
             </p>
           </div>
 
@@ -1215,15 +1251,15 @@ export const AdminPage: React.FC = () => {
             <div className="flex items-center justify-between pt-2">
               <button
                 type="submit"
-                className="flex items-center gap-2 px-6 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs shadow-lg shadow-indigo-600/30 transition cursor-pointer"
+                className="flex items-center gap-2 px-6 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs shadow-md transition cursor-pointer"
               >
                 <UserPlus className="h-4 w-4" />
-                <span>Onboard Student (Simulate Signup)</span>
+                <span>Enroll Student to Active Roster</span>
               </button>
 
               {studentCreatedSuccess && (
                 <span className="text-xs text-emerald-600 dark:text-emerald-400 font-bold animate-in fade-in">
-                  ✓ Student onboarded and live on roster!
+                  ✓ Student enrolled and live on roster!
                 </span>
               )}
             </div>
@@ -1232,100 +1268,420 @@ export const AdminPage: React.FC = () => {
       )}
 
       {/* ─────────────────────────────────────────────────────────────
-          STUDENT DOSSIER DRILLDOWN MODAL
+          STUDENT DOSSIER DRILLDOWN MODAL (ALL USER INFORMATION)
          ───────────────────────────────────────────────────────────── */}
       {selectedStudent && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-sm animate-in fade-in">
-          <div className="w-full max-w-2xl rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 shadow-2xl space-y-6 relative max-h-[85vh] overflow-y-auto">
-            <button
-              onClick={() => setSelectedStudentId(null)}
-              className="absolute top-5 right-5 p-1.5 rounded-xl text-slate-400 hover:text-slate-700 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition"
-            >
-              <X className="h-5 w-5" />
-            </button>
-
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-slate-950/75 backdrop-blur-sm animate-in fade-in">
+          <div className="w-full max-w-3xl rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-2xl relative max-h-[90vh] flex flex-col overflow-hidden">
             {/* Modal Header */}
-            <div className="flex items-center gap-4">
-              <div className="h-14 w-14 rounded-2xl bg-gradient-to-tr from-purple-600 to-indigo-600 flex items-center justify-center text-xl font-bold text-white shadow-lg">
-                {selectedStudent.name[0]}
-              </div>
-              <div>
-                <div className="flex items-center gap-2">
-                  <h3 className="text-xl font-bold text-slate-900 dark:text-white">{selectedStudent.name}</h3>
-                  <span className={`h-2 w-2 rounded-full ${
-                    selectedStudent.status === 'online' ? 'bg-emerald-500' : 'bg-slate-400 dark:bg-slate-500'
-                  }`} />
-                  {selectedStudent.approvalStatus === 'pending' && (
-                    <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 dark:bg-amber-500/20 text-amber-700 dark:text-amber-300 border border-amber-300 dark:border-amber-500/30">
-                      Pending Approval
-                    </span>
-                  )}
-                  {selectedStudent.approvalStatus === 'disapproved' && (
-                    <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-100 dark:bg-rose-500/20 text-rose-700 dark:text-rose-300 border border-rose-300 dark:border-rose-500/30">
-                      Disapproved
-                    </span>
-                  )}
-                  {(selectedStudent.approvalStatus === 'approved' || !selectedStudent.approvalStatus) && (
-                    <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 dark:bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-500/30">
-                      Approved
-                    </span>
-                  )}
+            <div className="p-5 border-b border-slate-200 dark:border-slate-800 flex items-start justify-between gap-4 bg-slate-50/80 dark:bg-slate-900/90 shrink-0">
+              <div className="flex items-center gap-3.5">
+                <div className="h-12 w-12 rounded-xl bg-purple-600 flex items-center justify-center text-lg font-bold text-white shadow-md">
+                  {selectedStudent.name[0]}
                 </div>
-                <div className="text-xs text-slate-500 dark:text-slate-400">{selectedStudent.email} &bull; {selectedStudent.registrationNumber}</div>
-                <div className="text-xs text-purple-600 dark:text-purple-400 mt-0.5 font-medium">{selectedStudent.batch}</div>
+                <div>
+                  <div className="flex flex-wrap items-center gap-2">
+                    <h3 className="text-lg font-bold text-slate-900 dark:text-white">{selectedStudent.name}</h3>
+                    <span 
+                      className={`h-2.5 w-2.5 rounded-full ${
+                        selectedStudent.status === 'online' ? 'bg-emerald-500 animate-pulse' : 'bg-slate-400'
+                      }`} 
+                      title={`Status: ${selectedStudent.status}`}
+                    />
+                    {selectedStudent.approvalStatus === 'pending' && (
+                      <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 dark:bg-amber-500/20 text-amber-700 dark:text-amber-300 border border-amber-300 dark:border-amber-500/30">
+                        Pending Verification
+                      </span>
+                    )}
+                    {selectedStudent.approvalStatus === 'disapproved' && (
+                      <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-100 dark:bg-rose-500/20 text-rose-700 dark:text-rose-300 border border-rose-300 dark:border-rose-500/30">
+                        Disapproved
+                      </span>
+                    )}
+                    {(selectedStudent.approvalStatus === 'approved' || !selectedStudent.approvalStatus) && (
+                      <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 dark:bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-500/30">
+                        Approved
+                      </span>
+                    )}
+                  </div>
+                  <div className="text-xs text-slate-500 dark:text-slate-400 mt-0.5 font-mono">
+                    ID: {selectedStudent.id} • Reg: {selectedStudent.registrationNumber} • {selectedStudent.email}
+                  </div>
+                </div>
               </div>
+
+              <button
+                onClick={() => setSelectedStudentId(null)}
+                className="p-1.5 rounded-xl text-slate-400 hover:text-slate-700 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition cursor-pointer"
+              >
+                <X className="h-5 w-5" />
+              </button>
             </div>
 
-            {/* Current Real-Time Activity */}
-            <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-950/80 border border-slate-200 dark:border-slate-800 space-y-1">
-              <div className="text-[11px] font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400 flex items-center gap-1.5">
-                <Activity className="h-3.5 w-3.5" />
-                <span>Current Real-Time Activity</span>
-              </div>
-              <div className="text-sm font-semibold text-slate-900 dark:text-white">{selectedStudent.currentActivity}</div>
-              <div className="text-[10px] text-slate-500">Last heartbeat: {selectedStudent.lastActive}</div>
+            {/* Dossier Navigation Tabs */}
+            <div className="px-5 pt-3 border-b border-slate-200 dark:border-slate-800 flex flex-wrap items-center gap-1 bg-white dark:bg-slate-900 shrink-0">
+              <button
+                onClick={() => setDossierTab('profile')}
+                className={`px-3 py-2 text-xs font-bold border-b-2 transition ${
+                  dossierTab === 'profile'
+                    ? 'border-purple-600 text-purple-600 dark:text-purple-400'
+                    : 'border-transparent text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                }`}
+              >
+                Profile & Telemetry
+              </button>
+              <button
+                onClick={() => setDossierTab('problems')}
+                className={`px-3 py-2 text-xs font-bold border-b-2 transition flex items-center gap-1.5 ${
+                  dossierTab === 'problems'
+                    ? 'border-purple-600 text-purple-600 dark:text-purple-400'
+                    : 'border-transparent text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                }`}
+              >
+                <span>Solved Problems</span>
+                <span className="px-1.5 py-0.2 rounded-full text-[10px] bg-slate-100 dark:bg-slate-800 font-bold">
+                  {selectedStudent.totalSolved}
+                </span>
+              </button>
+              <button
+                onClick={() => setDossierTab('lessons')}
+                className={`px-3 py-2 text-xs font-bold border-b-2 transition flex items-center gap-1.5 ${
+                  dossierTab === 'lessons'
+                    ? 'border-purple-600 text-purple-600 dark:text-purple-400'
+                    : 'border-transparent text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                }`}
+              >
+                <span>Lessons</span>
+                <span className="px-1.5 py-0.2 rounded-full text-[10px] bg-slate-100 dark:bg-slate-800 font-bold">
+                  {selectedStudent.completedLessons?.length || 0}
+                </span>
+              </button>
+              <button
+                onClick={() => setDossierTab('quizzes')}
+                className={`px-3 py-2 text-xs font-bold border-b-2 transition flex items-center gap-1.5 ${
+                  dossierTab === 'quizzes'
+                    ? 'border-purple-600 text-purple-600 dark:text-purple-400'
+                    : 'border-transparent text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                }`}
+              >
+                <span>Quizzes</span>
+                <span className="px-1.5 py-0.2 rounded-full text-[10px] bg-slate-100 dark:bg-slate-800 font-bold">
+                  {Object.keys(selectedStudent.quizScores || {}).length}
+                </span>
+              </button>
+              <button
+                onClick={() => setDossierTab('tests')}
+                className={`px-3 py-2 text-xs font-bold border-b-2 transition flex items-center gap-1.5 ${
+                  dossierTab === 'tests'
+                    ? 'border-purple-600 text-purple-600 dark:text-purple-400'
+                    : 'border-transparent text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                }`}
+              >
+                <span>Tests</span>
+                <span className="px-1.5 py-0.2 rounded-full text-[10px] bg-slate-100 dark:bg-slate-800 font-bold">
+                  {Object.keys(selectedStudent.assignedTestSubmissions || {}).length}
+                </span>
+              </button>
             </div>
 
-            {/* Metrics Breakdown */}
-            <div className="grid grid-cols-3 gap-3">
-              <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-center">
-                <div className="text-xl font-bold text-slate-900 dark:text-white">{selectedStudent.totalSolved}</div>
-                <div className="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">Problems Solved</div>
-              </div>
-              <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-center">
-                <div className="text-xl font-bold text-slate-900 dark:text-white">{selectedStudent.completedLessons.length}</div>
-                <div className="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">Lessons Completed</div>
-              </div>
-              <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-center">
-                <div className="text-xl font-bold text-slate-900 dark:text-white">{Object.keys(selectedStudent.assignedTestSubmissions || {}).length}</div>
-                <div className="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">Tests Submitted</div>
-              </div>
-            </div>
+            {/* Dossier Body Content */}
+            <div className="p-5 overflow-y-auto space-y-5 flex-1 text-xs">
+              {/* TAB 1: PROFILE & TELEMETRY */}
+              {dossierTab === 'profile' && (
+                <div className="space-y-4">
+                  {/* Real-time Activity Card */}
+                  <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-950/80 border border-slate-200 dark:border-slate-800 space-y-1">
+                    <div className="text-[11px] font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400 flex items-center gap-1.5 font-mono">
+                      <Activity className="h-3.5 w-3.5" />
+                      <span>Live Heartbeat Telemetry</span>
+                    </div>
+                    <div className="text-sm font-semibold text-slate-900 dark:text-white">{selectedStudent.currentActivity}</div>
+                    <div className="text-[10px] text-slate-500 dark:text-slate-400 font-mono">Last active heartbeat: {selectedStudent.lastActive}</div>
+                  </div>
 
-            {/* Test Submissions History */}
-            <div className="space-y-2">
-              <h4 className="text-xs font-bold uppercase text-slate-500 dark:text-slate-400">Assigned Test Submissions</h4>
-              {selectedStudent.assignedTestSubmissions && Object.keys(selectedStudent.assignedTestSubmissions).length > 0 ? (
-                <div className="space-y-2">
-                  {Object.entries(selectedStudent.assignedTestSubmissions).map(([testId, sub]: [string, any]) => (
-                    <div key={testId} className="flex items-center justify-between p-3 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-xs">
-                      <div>
-                        <span className="font-semibold text-slate-900 dark:text-white">{testId}</span>
-                        <div className="text-[10px] text-slate-500">Submitted at: {new Date(sub.submittedAt).toLocaleDateString()}</div>
+                  {/* Comprehensive User Information Grid */}
+                  <div>
+                    <h4 className="text-[11px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-2 font-mono">
+                      Full Academic & Identity Information
+                    </h4>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                      <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800">
+                        <span className="text-[10px] text-slate-400 dark:text-slate-500 uppercase tracking-wider font-semibold">Full Name</span>
+                        <div className="font-bold text-slate-900 dark:text-white mt-0.5">{selectedStudent.name}</div>
                       </div>
-                      <div className="font-extrabold text-emerald-600 dark:text-emerald-400 text-sm">
-                        {sub.score} / {sub.total}
+
+                      <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800">
+                        <span className="text-[10px] text-slate-400 dark:text-slate-500 uppercase tracking-wider font-semibold">Student Email</span>
+                        <div className="font-bold text-slate-900 dark:text-white mt-0.5 font-mono">{selectedStudent.email}</div>
+                      </div>
+
+                      <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800">
+                        <span className="text-[10px] text-slate-400 dark:text-slate-500 uppercase tracking-wider font-semibold">Registration / Roll No</span>
+                        <div className="font-bold text-purple-600 dark:text-purple-400 mt-0.5 font-mono">{selectedStudent.registrationNumber}</div>
+                      </div>
+
+                      <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800">
+                        <span className="text-[10px] text-slate-400 dark:text-slate-500 uppercase tracking-wider font-semibold">Institution / University</span>
+                        <div className="font-bold text-slate-900 dark:text-white mt-0.5">
+                          {selectedStudent.university || (selectedStudent.track === 'lpu' ? 'Lovely Professional University (LPU)' : 'Global Student Cohort')}
+                        </div>
+                      </div>
+
+                      <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800">
+                        <span className="text-[10px] text-slate-400 dark:text-slate-500 uppercase tracking-wider font-semibold">Class Batch & Section</span>
+                        <div className="font-bold text-slate-900 dark:text-white mt-0.5">{selectedStudent.batch}</div>
+                      </div>
+
+                      <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800">
+                        <span className="text-[10px] text-slate-400 dark:text-slate-500 uppercase tracking-wider font-semibold">Current Semester</span>
+                        <div className="font-bold text-slate-900 dark:text-white mt-0.5">Semester {selectedStudent.semester || 3}</div>
+                      </div>
+
+                      <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800">
+                        <span className="text-[10px] text-slate-400 dark:text-slate-500 uppercase tracking-wider font-semibold">Enrolled Learning Track</span>
+                        <div className="font-bold text-slate-900 dark:text-white mt-0.5">
+                          {selectedStudent.track === 'lpu' ? '🎓 LPU Academic C++ Portal (CSE202/205)' : '🌐 Global DSA Roadmap (Language Agnostic)'}
+                        </div>
+                      </div>
+
+                      <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800">
+                        <span className="text-[10px] text-slate-400 dark:text-slate-500 uppercase tracking-wider font-semibold">Registration Date</span>
+                        <div className="font-bold text-slate-900 dark:text-white mt-0.5 font-mono">
+                          {selectedStudent.joinedAt ? new Date(selectedStudent.joinedAt).toLocaleString() : 'Recent Active'}
+                        </div>
                       </div>
                     </div>
-                  ))}
+                  </div>
+
+                  {/* Summary Metric Counters */}
+                  <div className="grid grid-cols-4 gap-2 pt-1">
+                    <div className="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-center">
+                      <div className="text-lg font-bold text-slate-900 dark:text-white">{selectedStudent.totalSolved}</div>
+                      <div className="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">DSA Solved</div>
+                    </div>
+                    <div className="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-center">
+                      <div className="text-lg font-bold text-slate-900 dark:text-white">{selectedStudent.completedLessons?.length || 0}</div>
+                      <div className="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">Lessons Done</div>
+                    </div>
+                    <div className="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-center">
+                      <div className="text-lg font-bold text-slate-900 dark:text-white">{Object.keys(selectedStudent.quizScores || {}).length}</div>
+                      <div className="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">Quizzes Taken</div>
+                    </div>
+                    <div className="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-center">
+                      <div className="text-lg font-bold text-slate-900 dark:text-white">{Object.keys(selectedStudent.assignedTestSubmissions || {}).length}</div>
+                      <div className="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">Tests Submitted</div>
+                    </div>
+                  </div>
                 </div>
-              ) : (
-                <p className="text-xs text-slate-400 dark:text-slate-500 italic">No assigned test submissions yet for this student.</p>
+              )}
+
+              {/* TAB 2: SOLVED PROBLEMS */}
+              {dossierTab === 'problems' && (
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between">
+                    <h4 className="text-xs font-bold uppercase text-slate-500 dark:text-slate-400 font-mono">
+                      Solved Problem Submissions ({selectedStudent.solvedProblemIds?.length || 0})
+                    </h4>
+                  </div>
+
+                  {selectedStudent.solvedProblemIds && selectedStudent.solvedProblemIds.length > 0 ? (
+                    <div className="divide-y divide-slate-100 dark:divide-slate-800 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950">
+                      {selectedStudent.solvedProblemIds.map((pId) => {
+                        const matched = PROBLEMS.find((p) => p.id === pId);
+                        const title = matched?.title || pId;
+                        const difficulty = matched?.difficulty || 'Medium';
+                        const platform = matched?.platform || 'LeetCode';
+
+                        return (
+                          <div key={pId} className="p-3 flex items-center justify-between gap-3 hover:bg-slate-100 dark:hover:bg-slate-900 transition">
+                            <div className="min-w-0">
+                              <div className="flex items-center gap-2">
+                                <CheckCircle2 className="h-4 w-4 text-emerald-500 shrink-0" />
+                                <span className="font-semibold text-slate-900 dark:text-white truncate">{title}</span>
+                              </div>
+                              <div className="flex items-center gap-2 text-[10px] text-slate-500 dark:text-slate-400 mt-1 pl-6">
+                                <span className="font-mono">ID: {pId}</span>
+                                <span>•</span>
+                                <span>{platform}</span>
+                                {matched?.topicTags && matched.topicTags.length > 0 && (
+                                  <>
+                                    <span>•</span>
+                                    <span>#{matched.topicTags[0]}</span>
+                                  </>
+                                )}
+                              </div>
+                            </div>
+
+                            <div className="flex items-center gap-2 shrink-0">
+                              <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase ${
+                                String(difficulty).toLowerCase() === 'easy'
+                                  ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400'
+                                  : String(difficulty).toLowerCase() === 'hard'
+                                  ? 'bg-rose-500/10 text-rose-600 dark:text-rose-400'
+                                  : 'bg-amber-500/10 text-amber-600 dark:text-amber-400'
+                              }`}>
+                                {difficulty}
+                              </span>
+                              {matched?.externalUrl && (
+                                <a
+                                  href={matched.externalUrl}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="p-1 text-slate-400 hover:text-purple-600"
+                                  title="View on platform"
+                                >
+                                  <ExternalLink className="h-3.5 w-3.5" />
+                                </a>
+                              )}
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  ) : (
+                    <div className="p-6 text-center rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-slate-400 dark:text-slate-500 italic">
+                      No DSA problems recorded as solved yet.
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* TAB 3: COMPLETED LESSONS */}
+              {dossierTab === 'lessons' && (
+                <div className="space-y-3">
+                  <h4 className="text-xs font-bold uppercase text-slate-500 dark:text-slate-400 font-mono">
+                    Curriculum Lessons Completed ({selectedStudent.completedLessons?.length || 0})
+                  </h4>
+
+                  {selectedStudent.completedLessons && selectedStudent.completedLessons.length > 0 ? (
+                    <div className="divide-y divide-slate-100 dark:divide-slate-800 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950">
+                      {selectedStudent.completedLessons.map((lessonId) => (
+                        <div key={lessonId} className="p-3 flex items-center justify-between gap-3 hover:bg-slate-100 dark:hover:bg-slate-900 transition">
+                          <div className="flex items-center gap-2 min-w-0">
+                            <BookOpen className="h-4 w-4 text-brand-500 shrink-0" />
+                            <div>
+                              <div className="font-semibold text-slate-900 dark:text-white capitalize">
+                                {lessonId.replace(/-/g, ' ')}
+                              </div>
+                              <div className="text-[10px] text-slate-500 dark:text-slate-400 font-mono">
+                                Lesson ID: {lessonId}
+                              </div>
+                            </div>
+                          </div>
+
+                          <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
+                            Completed
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="p-6 text-center rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-slate-400 dark:text-slate-500 italic">
+                      No curriculum lessons completed yet.
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* TAB 4: INTERACTIVE QUIZZES */}
+              {dossierTab === 'quizzes' && (
+                <div className="space-y-3">
+                  <h4 className="text-xs font-bold uppercase text-slate-500 dark:text-slate-400 font-mono">
+                    Quiz Assessment Scores ({Object.keys(selectedStudent.quizScores || {}).length})
+                  </h4>
+
+                  {selectedStudent.quizScores && Object.keys(selectedStudent.quizScores).length > 0 ? (
+                    <div className="divide-y divide-slate-100 dark:divide-slate-800 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950">
+                      {Object.entries(selectedStudent.quizScores).map(([quizId, q]: [string, any]) => {
+                        const pct = Math.round((q.score / (q.total || 1)) * 100);
+                        return (
+                          <div key={quizId} className="p-3 flex items-center justify-between gap-3 hover:bg-slate-100 dark:hover:bg-slate-900 transition">
+                            <div className="min-w-0">
+                              <div className="font-semibold text-slate-900 dark:text-white capitalize">
+                                {quizId.replace(/-/g, ' ')}
+                              </div>
+                              <div className="text-[10px] text-slate-500 dark:text-slate-400 font-mono mt-0.5">
+                                Taken on: {new Date(q.date).toLocaleDateString()}
+                              </div>
+                            </div>
+
+                            <div className="flex items-center gap-3 shrink-0">
+                              <span className="font-mono font-bold text-slate-900 dark:text-white">
+                                {q.score} / {q.total}
+                              </span>
+                              <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
+                                pct >= 80
+                                  ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400'
+                                  : pct >= 50
+                                  ? 'bg-amber-500/10 text-amber-600 dark:text-amber-400'
+                                  : 'bg-rose-500/10 text-rose-600 dark:text-rose-400'
+                              }`}>
+                                {pct}%
+                              </span>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  ) : (
+                    <div className="p-6 text-center rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-slate-400 dark:text-slate-500 italic">
+                      No interactive quizzes attempted yet.
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* TAB 5: ASSIGNED TESTS */}
+              {dossierTab === 'tests' && (
+                <div className="space-y-3">
+                  <h4 className="text-xs font-bold uppercase text-slate-500 dark:text-slate-400 font-mono">
+                    Assigned Coursework Tests ({Object.keys(selectedStudent.assignedTestSubmissions || {}).length})
+                  </h4>
+
+                  {selectedStudent.assignedTestSubmissions && Object.keys(selectedStudent.assignedTestSubmissions).length > 0 ? (
+                    <div className="divide-y divide-slate-100 dark:divide-slate-800 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950">
+                      {Object.entries(selectedStudent.assignedTestSubmissions).map(([testId, sub]: [string, any]) => {
+                        const pct = Math.round((sub.score / (sub.total || 1)) * 100);
+                        return (
+                          <div key={testId} className="p-3 flex items-center justify-between gap-3 hover:bg-slate-100 dark:hover:bg-slate-900 transition">
+                            <div className="min-w-0">
+                              <div className="font-semibold text-slate-900 dark:text-white font-mono">
+                                Test: {testId}
+                              </div>
+                              <div className="text-[10px] text-slate-500 dark:text-slate-400 font-mono mt-0.5">
+                                Submitted on: {new Date(sub.submittedAt).toLocaleString()}
+                              </div>
+                            </div>
+
+                            <div className="flex items-center gap-3 shrink-0">
+                              <span className="font-mono font-bold text-slate-900 dark:text-white">
+                                {sub.score} / {sub.total} marks
+                              </span>
+                              <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
+                                pct >= 80
+                                  ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400'
+                                  : pct >= 50
+                                  ? 'bg-amber-500/10 text-amber-600 dark:text-amber-400'
+                                  : 'bg-rose-500/10 text-rose-600 dark:text-rose-400'
+                              }`}>
+                                {pct}%
+                              </span>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  ) : (
+                    <div className="p-6 text-center rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-slate-400 dark:text-slate-500 italic">
+                      No assigned coursework tests submitted yet.
+                    </div>
+                  )}
+                </div>
               )}
             </div>
 
-            {/* Modal Actions: Approve, Disapprove, Delete */}
-            <div className="pt-4 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between">
+            {/* Modal Actions Footer: Approve, Disapprove, Edit, Delete */}
+            <div className="p-4 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between bg-slate-50 dark:bg-slate-950 shrink-0">
               <div className="flex items-center gap-2">
                 {selectedStudent.approvalStatus !== 'approved' ? (
                   <button

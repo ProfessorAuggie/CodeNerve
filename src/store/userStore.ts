@@ -49,9 +49,14 @@ interface UserState {
   recordAssignedTestSubmission: (testId: string, score: number, total: number) => void;
   syncCohortData: () => void;
 
+  // Guest Task Guard & Auth Modal
+  isAuthModalOpen: boolean;
+  authModalAction: string;
+  openAuthModal: (actionText?: string) => void;
+  closeAuthModal: () => void;
+
   // Student Authentication Actions
   loginStudent: (identifier: string, password?: string) => { success: boolean; message: string; student?: StudentRecord };
-  quickLoginStudent: (studentId: string) => boolean;
   logoutStudent: () => void;
 
   // Admin Actions
@@ -65,7 +70,11 @@ interface UserState {
   updateUserProfile: (updates: Partial<UserProfile>) => void;
   updateStudentByAdmin: (studentId: string, updates: Partial<StudentRecord>) => void;
   registerStudent: (
-    student: Omit<StudentRecord, 'id' | 'joinedAt' | 'totalSolved' | 'completedLessons' | 'quizScores'> & {
+    student: Omit<StudentRecord, 'id' | 'joinedAt' | 'totalSolved' | 'completedLessons' | 'quizScores' | 'status' | 'currentActivity' | 'lastActive' | 'solvedProblemIds'> & {
+      status?: 'online' | 'idle' | 'offline';
+      currentActivity?: string;
+      lastActive?: string;
+      solvedProblemIds?: string[];
       completedLessons?: string[];
       quizScores?: Record<string, { score: number; total: number; date: string }>;
     },
@@ -73,177 +82,20 @@ interface UserState {
   ) => StudentRecord;
 }
 
-const INITIAL_STUDENTS: StudentRecord[] = [
-  {
-    id: 'std-101',
-    name: 'Alex Rivera',
-    email: 'alex.rivera@lpu.in',
-    registrationNumber: '12104921',
-    track: 'lpu',
-    batch: 'LPU B.Tech CSE (CSE202/205)',
-    joinedAt: '2026-08-15T09:00:00Z',
-    status: 'online',
-    currentActivity: 'Practicing: CSE205 Midterm Lab (BST Traversal & Balance)',
-    lastActive: 'Just now',
-    solvedProblemIds: ['p-lpu-205-01', 'p-lpu-205-02', 'p-lpu-205-03', 'p-lpu-205-04', 'p-cpp-classes-1', 'p-cpp-constructors-1'],
-    totalSolved: 42,
-    completedLessons: ['cse205-u1-t1', 'cse202-u1-t1'],
-    quizScores: {
-      'quiz-cpp-oop-basics': { score: 5, total: 5, date: '2026-10-12T14:30:00Z' },
-      'quiz-dsa-arrays-sorting': { score: 4, total: 4, date: '2026-10-13T10:15:00Z' },
-    },
-    assignedTestSubmissions: {
-      'test-midterm-01': { score: 92, total: 100, submittedAt: '2026-10-13T16:00:00Z' },
-    },
-    approvalStatus: 'approved',
-  },
-  {
-    id: 'std-102',
-    name: 'Priya Sharma',
-    email: 'priya.s@gmail.com',
-    registrationNumber: 'GLB-2026-88',
-    track: 'global',
-    batch: 'Global DSA Cohort 2026',
-    joinedAt: '2026-08-20T11:30:00Z',
-    status: 'online',
-    currentActivity: 'Solving: Two Sum (Hash Map O(n)) - DSA 130 Sheet',
-    lastActive: '2m ago',
-    solvedProblemIds: ['p-dsa-two-sum-1', 'p-dsa-3sum-1', 'p-dsa-container-water-1', 'p-dsa-binary-search-1'],
-    totalSolved: 94,
-    completedLessons: ['lesson-dsa-binary-search', 'lesson-dsa-arrays'],
-    quizScores: {
-      'quiz-dsa-arrays-sorting': { score: 4, total: 4, date: '2026-10-11T12:00:00Z' },
-    },
-    assignedTestSubmissions: {
-      'test-global-sprint-01': { score: 98, total: 100, submittedAt: '2026-10-12T18:00:00Z' },
-    },
-    approvalStatus: 'approved',
-  },
-  {
-    id: 'std-103',
-    name: 'Rohan Verma',
-    email: 'rohan.v@lpu.in',
-    registrationNumber: '12108842',
-    track: 'lpu',
-    batch: 'LPU B.Tech CSE Section K22-A',
-    joinedAt: '2026-08-16T10:00:00Z',
-    status: 'idle',
-    currentActivity: 'Viewing AlgoNerve Visualizer: Singly Linked List Reversal',
-    lastActive: '14m ago',
-    solvedProblemIds: ['p-lpu-205-01', 'p-lpu-205-02', 'p-cpp-classes-1'],
-    totalSolved: 28,
-    completedLessons: ['cse205-u1-t1'],
-    quizScores: {
-      'quiz-cpp-oop-basics': { score: 3, total: 5, date: '2026-10-10T09:30:00Z' },
-    },
-    approvalStatus: 'approved',
-  },
-  {
-    id: 'std-104',
-    name: 'Ananya Gupta',
-    email: 'ananya.gupta@lpu.in',
-    registrationNumber: '12109433',
-    track: 'lpu',
-    batch: 'LPU B.Tech CSE Section K22-B',
-    joinedAt: '2026-08-18T14:20:00Z',
-    status: 'online',
-    currentActivity: 'Attempting: Pure Virtual Functions & Dynamic Polymorphism in C++',
-    lastActive: 'Just now',
-    solvedProblemIds: ['p-lpu-205-05', 'p-lpu-205-06', 'p-cpp-virtual-functions-1', 'p-cpp-abstract-classes-1'],
-    totalSolved: 58,
-    completedLessons: ['cse202-u1-t1'],
-    quizScores: {
-      'quiz-cpp-oop-basics': { score: 5, total: 5, date: '2026-10-13T11:45:00Z' },
-    },
-    assignedTestSubmissions: {
-      'test-midterm-01': { score: 95, total: 100, submittedAt: '2026-10-13T16:20:00Z' },
-    },
-    approvalStatus: 'approved',
-  },
-  {
-    id: 'std-105',
-    name: 'Sahil Kumar',
-    email: 'sahil.code@outlook.com',
-    registrationNumber: 'GLB-2026-102',
-    track: 'global',
-    batch: 'Global DSA Cohort 2026',
-    joinedAt: '2026-09-01T08:10:00Z',
-    status: 'offline',
-    currentActivity: 'Last solved: LRU Cache (Doubly Linked List + Hash Map)',
-    lastActive: '3h ago',
-    solvedProblemIds: ['p-dsa-lru-cache-1', 'p-dsa-two-sum-1'],
-    totalSolved: 71,
-    completedLessons: [],
-    quizScores: {},
-    approvalStatus: 'approved',
-  },
-  {
-    id: 'std-106',
-    name: 'Devika Nair',
-    email: 'devika.n@lpu.in',
-    registrationNumber: '12110294',
-    track: 'lpu',
-    batch: 'LPU B.Tech CSE Section K22-A',
-    joinedAt: '2026-08-25T16:00:00Z',
-    status: 'online',
-    currentActivity: 'Solving: CSE205 Circular Queue Using Arrays (Unit 3)',
-    lastActive: '5m ago',
-    solvedProblemIds: ['p-lpu-205-07', 'p-lpu-205-08', 'p-cpp-operator-overloading-1'],
-    totalSolved: 36,
-    completedLessons: ['cse205-u1-t1'],
-    quizScores: {
-      'quiz-dsa-arrays-sorting': { score: 4, total: 4, date: '2026-10-12T15:20:00Z' },
-    },
-    approvalStatus: 'approved',
-  },
-];
+const INITIAL_STUDENTS: StudentRecord[] = [];
 
-const INITIAL_ASSIGNED_TESTS: AssignedTest[] = [
-  {
-    id: 'test-midterm-01',
-    title: 'CSE205 Data Structures Practical Readiness Evaluation',
-    description: 'Mandatory practical evaluation test covering Array ADTs, Linked Lists, and Stack/Queue real-world practical implementations in C++.',
-    targetTrack: 'lpu',
-    targetBatch: 'LPU B.Tech CSE (CSE202/205)',
-    subjectCode: 'CSE205',
-    problemIds: ['p-lpu-205-01', 'p-lpu-205-02', 'p-lpu-205-05', 'p-lpu-205-07'],
-    durationMinutes: 60,
-    totalMarks: 100,
-    dueDate: '2026-10-20',
-    createdAt: '2026-10-10T10:00:00Z',
-    createdBy: 'Dr. Auggie (HOD CSE Faculty)',
-    submissionsCount: 4,
-    totalAssignedCount: 6,
-  },
-  {
-    id: 'test-global-sprint-01',
-    title: 'Global DSA 130 Speed Challenge: Two Pointers & Hashing',
-    description: 'Timed assessment on Two Sum, 3Sum, Container With Most Water, and Trapping Rain Water patterns.',
-    targetTrack: 'global',
-    targetBatch: 'Global DSA Cohort 2026',
-    subjectCode: 'DSA-130',
-    problemIds: ['p-dsa-two-sum-1', 'p-dsa-3sum-1', 'p-dsa-container-water-1', 'p-dsa-trapping-rain-water-1'],
-    durationMinutes: 45,
-    totalMarks: 100,
-    dueDate: '2026-10-22',
-    createdAt: '2026-10-12T14:00:00Z',
-    createdBy: 'Dr. Auggie (Algorithm Lead)',
-    submissionsCount: 2,
-    totalAssignedCount: 4,
-  },
-];
+const INITIAL_ASSIGNED_TESTS: AssignedTest[] = [];
 
 const defaultUser: UserProfile = {
-  id: 'std-101',
-  name: 'Alex Rivera',
-  email: 'alex.rivera@lpu.in',
+  id: 'guest',
+  name: 'Guest Learner',
+  email: '',
   role: 'student',
-  university: 'Lovely Professional University (LPU)',
-  semester: 3,
-  registrationNumber: '12104921',
-  batch: 'LPU B.Tech CSE (CSE202/205)',
-  track: 'lpu',
-  approvalStatus: 'approved',
+  university: 'CodeNerve Explorer',
+  semester: 1,
+  registrationNumber: '',
+  batch: 'Independent Study',
+  track: 'global',
 };
 
 // Cross-tab real-time sync broadcaster channel
@@ -362,48 +214,17 @@ export const useUserStore = create<UserState>()(
       students: INITIAL_STUDENTS,
       assignedTests: INITIAL_ASSIGNED_TESTS,
       isAdminAuthenticated: false,
-      isStudentAuthenticated: true,
-      problemProgress: {
-        'p-dsa-array-traversal-1': {
-          problemId: 'p-dsa-array-traversal-1',
-          status: 'SOLVED',
-          lastUpdated: new Date().toISOString(),
-          solvedAt: new Date().toISOString(),
-          notes: 'Standard linear scan keeping track of max_val.',
-        },
-        'p-dsa-bubble-sort-1': {
-          problemId: 'p-dsa-bubble-sort-1',
-          status: 'SOLVED',
-          lastUpdated: new Date().toISOString(),
-          solvedAt: new Date().toISOString(),
-        },
-        'p-dsa-binary-search-1': {
-          problemId: 'p-dsa-binary-search-1',
-          status: 'ATTEMPTED',
-          lastUpdated: new Date().toISOString(),
-          notes: 'Beware of integer overflow with mid = low + (high - low) / 2.',
-        },
-        'p-dsa-ll-reverse-1': {
-          problemId: 'p-dsa-ll-reverse-1',
-          status: 'REVISION_NEEDED',
-          lastUpdated: new Date().toISOString(),
-          notes: 'Practice 3-pointer iterative vs recursive approach before midterms!',
-        },
-      },
-      bookmarks: ['p-dsa-ll-reverse-1', 'p-dsa-dijkstra-1', 'p-cpp-constructors-1'],
-      completedLessons: ['cse205-u1-t1', 'cse202-u1-t1'],
-      quizScores: {
-        'quiz-cpp-oop-basics': { score: 4, total: 5, date: new Date().toISOString() },
-      },
-      customProblemSets: [
-        {
-          id: 'set-midterm-prep',
-          title: 'CSE205 Midterm Essential DSA',
-          description: 'Top array, linked list and sorting problems for end-term exams.',
-          problemIds: ['p-dsa-array-traversal-1', 'p-dsa-bubble-sort-1', 'p-dsa-ll-reverse-1', 'p-dsa-binary-search-1'],
-          createdAt: new Date().toISOString(),
-        },
-      ],
+      isStudentAuthenticated: false,
+      problemProgress: {},
+      bookmarks: [],
+      completedLessons: [],
+      quizScores: {},
+      customProblemSets: [],
+      isAuthModalOpen: false,
+      authModalAction: '',
+      openAuthModal: (actionText = 'perform interactive learning tasks') =>
+        set({ isAuthModalOpen: true, authModalAction: actionText }),
+      closeAuthModal: () => set({ isAuthModalOpen: false }),
 
       theme: 'dark',
       activePortal: 'global',
@@ -449,7 +270,11 @@ export const useUserStore = create<UserState>()(
       setRole: (role) =>
         set((state) => ({ user: { ...state.user, role } })),
 
-      updateProblemStatus: (problemId, status, notes, submissionUrl) =>
+      updateProblemStatus: (problemId, status, notes, submissionUrl) => {
+        if (!get().isStudentAuthenticated || get().user.id === 'guest') {
+          get().openAuthModal('mark questions completed or track DSA progress');
+          return;
+        }
         set((state) => {
           const progressMap = state.problemProgress || {};
           const current = progressMap[problemId];
@@ -506,9 +331,14 @@ export const useUserStore = create<UserState>()(
             problemProgress: newProgressMap,
             students: updatedStudents,
           };
-        }),
+        });
+      },
 
-      toggleBookmark: (problemId) =>
+      toggleBookmark: (problemId) => {
+        if (!get().isStudentAuthenticated || get().user.id === 'guest') {
+          get().openAuthModal('bookmark problems for revision');
+          return;
+        }
         set((state) => {
           const list = state.bookmarks || [];
           const isBookmarked = list.includes(problemId);
@@ -517,9 +347,14 @@ export const useUserStore = create<UserState>()(
               ? list.filter((id) => id !== problemId)
               : [...list, problemId],
           };
-        }),
+        });
+      },
 
-      markLessonComplete: (lessonId, completed = true) =>
+      markLessonComplete: (lessonId, completed = true) => {
+        if (!get().isStudentAuthenticated || get().user.id === 'guest') {
+          get().openAuthModal('mark curriculum lessons completed');
+          return;
+        }
         set((state) => {
           const list = state.completedLessons || [];
           const exists = list.includes(lessonId);
@@ -558,9 +393,14 @@ export const useUserStore = create<UserState>()(
             completedLessons: nextList,
             students: updatedStudents,
           };
-        }),
+        });
+      },
 
-      saveQuizResult: (quizId, score, total) =>
+      saveQuizResult: (quizId, score, total) => {
+        if (!get().isStudentAuthenticated || get().user.id === 'guest') {
+          get().openAuthModal('save quiz results and assessment scores');
+          return;
+        }
         set((state) => {
           const newQuizScores = {
             ...(state.quizScores || {}),
@@ -594,7 +434,8 @@ export const useUserStore = create<UserState>()(
             quizScores: newQuizScores,
             students: updatedStudents,
           };
-        }),
+        });
+      },
 
       updateStudentActivity: (activity: string) =>
         set((state) => {
@@ -625,7 +466,11 @@ export const useUserStore = create<UserState>()(
           return { students: updatedStudents };
         }),
 
-      recordAssignedTestSubmission: (testId: string, score: number, total: number) =>
+      recordAssignedTestSubmission: (testId: string, score: number, total: number) => {
+        if (!get().isStudentAuthenticated || get().user.id === 'guest') {
+          get().openAuthModal('submit assigned tests and coursework');
+          return;
+        }
         set((state) => {
           const currentUserId = state.user?.id;
           const currentRegNo = state.user?.registrationNumber;
@@ -665,7 +510,8 @@ export const useUserStore = create<UserState>()(
             students: updatedStudents,
             assignedTests: updatedTests,
           };
-        }),
+        });
+      },
 
       syncCohortData: () => {
         set((state) => {
@@ -681,7 +527,11 @@ export const useUserStore = create<UserState>()(
         broadcastCohortSync();
       },
 
-      addCustomProblemSet: (setInfo) =>
+      addCustomProblemSet: (setInfo) => {
+        if (!get().isStudentAuthenticated || get().user.id === 'guest') {
+          get().openAuthModal('create custom problem sets');
+          return;
+        }
         set((state) => ({
           customProblemSets: [
             ...(state.customProblemSets || []),
@@ -691,7 +541,8 @@ export const useUserStore = create<UserState>()(
               createdAt: new Date().toISOString(),
             },
           ],
-        })),
+        }));
+      },
 
       deleteCustomProblemSet: (id) =>
         set((state) => ({
@@ -818,27 +669,15 @@ export const useUserStore = create<UserState>()(
         };
       },
 
-      quickLoginStudent: (studentId: string) => {
-        const student = get().students.find((s) => s.id === studentId);
-        if (student) {
-          const res = get().loginStudent(student.registrationNumber);
-          return res.success;
-        }
-        return false;
-      },
-
       logoutStudent: () => {
         broadcastCohortSync();
         set({
           isStudentAuthenticated: false,
-          user: {
-            id: 'guest',
-            name: 'Guest Student',
-            email: '',
-            role: 'student',
-            university: 'Not Logged In',
-            semester: 1,
-          },
+          user: defaultUser,
+          problemProgress: {},
+          bookmarks: [],
+          completedLessons: [],
+          quizScores: {},
         });
       },
 
@@ -1126,7 +965,7 @@ export const useUserStore = create<UserState>()(
       },
     }),
     {
-      name: 'codenerve_user_storage_v1',
+      name: 'codenerve_user_storage_v2',
       onRehydrateStorage: () => (state) => {
         if (state && typeof document !== 'undefined') {
           const theme = state.theme || 'system';
@@ -1156,7 +995,7 @@ export const useUserStore = create<UserState>()(
 // Cross-tab real-time cohort synchronization
 if (typeof window !== 'undefined') {
   window.addEventListener('storage', (event) => {
-    if (event.key === 'codenerve_user_storage_v1') {
+    if (event.key === 'codenerve_user_storage_v2') {
       try {
         useUserStore.persist.rehydrate();
         useUserStore.getState().syncCohortData();

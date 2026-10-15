@@ -64,6 +64,16 @@ describe('LessonPage Component & Curriculum State Handling', () => {
   });
 
   it('handles lesson completion toggling in the user store', () => {
+    useUserStore.getState().registerStudent({
+      name: 'Lesson Student',
+      email: 'lesson@lpu.in',
+      registrationNumber: '12105555',
+      track: 'lpu',
+      batch: 'LPU B.Tech CSE',
+      approvalStatus: 'approved',
+    });
+    useUserStore.getState().loginStudent('12105555');
+
     const lessonId = 'lesson-cpp-classes';
     const store = useUserStore.getState();
 

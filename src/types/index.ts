@@ -198,6 +198,8 @@ export interface StudentRecord {
   email: string;
   registrationNumber: string;
   avatar?: string;
+  university?: string;
+  semester?: number;
   track: 'global' | 'lpu';
   batch: string; // e.g. "LPU B.Tech CSE (CSE205)", "Global DSA Cohort"
   joinedAt: string;
