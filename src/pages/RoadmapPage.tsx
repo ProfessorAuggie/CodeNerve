@@ -16,14 +16,16 @@ export const RoadmapPage: React.FC = () => {
   const [subView, setSubView] = useState<'flowchart' | 'list' | 'mindmap'>('flowchart');
 
   useEffect(() => {
-    if (activePortal === 'lpu' && subView === 'mindmap') {
-      setSubView('flowchart');
-    } else if (pathId === 'cpp-path' || pathId === 'dsa-roadmap') {
+    if (pathId === 'cpp-path' || pathId === 'dsa-roadmap') {
       setSubView('list');
-    } else {
+    }
+  }, [pathId]);
+
+  useEffect(() => {
+    if (activePortal === 'lpu') {
       setSubView('flowchart');
     }
-  }, [pathId, activePortal, subView]);
+  }, [activePortal]);
 
   useEffect(() => {
     updateStudentActivity(`Exploring ${activePortal === 'lpu' ? 'LPU CSE Curriculum Roadmap' : 'Global DSA Dependency Graph'}`);
