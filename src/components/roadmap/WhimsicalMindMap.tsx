@@ -190,9 +190,9 @@ export const WhimsicalMindMap: React.FC<WhimsicalMindMapProps> = ({ fitScreen = 
   // Hierarchical positioning algorithm
   const { positionedRoot, positionedCategories, connections, bounds } = useMemo(() => {
     // Level dimensions
-    const LEVEL_WIDTHS = [220, 190, 200, 260, 260];
+    const LEVEL_WIDTHS = [220, 190, 220, 260, 260];
     const LEVEL_HEIGHTS = [74, 38, 34, 32, 32];
-    const LEVEL_X_OFFSETS = [50, 360, 610, 870, 1190];
+    const LEVEL_X_OFFSETS = [50, 360, 610, 890, 1210];
     const NODE_MARGIN_Y = 12;
 
     const pathConnections: PathConnection[] = [];
@@ -507,7 +507,7 @@ export const WhimsicalMindMap: React.FC<WhimsicalMindMapProps> = ({ fitScreen = 
               </div>
             </div>
           ) : node.level === 2 ? (
-            /* LEVEL 2: Sub-Topics (e.g. Two Pointer ○) */
+            /* LEVEL 2: Sub-Topics (e.g. Two Pointer [3] ○) */
             <div
               onClick={() => (hasChildren ? toggleNode(node.id) : handleOpenPattern(node))}
               className={`w-full h-full flex items-center justify-between px-3 rounded-full border text-xs font-semibold transition-all duration-150 shadow-sm hover:scale-[1.01] cursor-pointer ${
@@ -519,15 +519,24 @@ export const WhimsicalMindMap: React.FC<WhimsicalMindMapProps> = ({ fitScreen = 
               <span className="truncate">{node.title}</span>
 
               {hasChildren ? (
-                <span
-                  className={`w-3.5 h-3.5 rounded-full flex items-center justify-center text-[9px] font-black border transition shrink-0 ml-1.5 ${
-                    isExpanded
-                      ? 'bg-slate-200 dark:bg-slate-700 text-slate-800 dark:text-slate-200 border-slate-300'
-                      : 'bg-slate-50 dark:bg-slate-800 text-slate-400 border-slate-200'
-                  }`}
-                >
-                  {isExpanded ? '−' : '+'}
-                </span>
+                <div className="flex items-center gap-1.5 shrink-0 ml-1.5">
+                  <span
+                    className="px-2 py-0.5 rounded-full text-[10px] font-black text-white shadow-sm"
+                    style={{ backgroundColor: node.color }}
+                    title={`${node.children.length} branches`}
+                  >
+                    {node.children.length}
+                  </span>
+                  <span
+                    className={`w-4 h-4 rounded-full flex items-center justify-center text-[10px] font-black border transition shrink-0 ${
+                      isExpanded
+                        ? 'bg-slate-200 dark:bg-slate-700 text-slate-800 dark:text-slate-200 border-slate-300'
+                        : 'bg-slate-50 dark:bg-slate-800 text-slate-400 border-slate-200'
+                    }`}
+                  >
+                    {isExpanded ? '−' : '+'}
+                  </span>
+                </div>
               ) : (
                 totalProblems > 0 && (
                   <span className="text-[10px] text-slate-400 font-mono">
@@ -537,7 +546,7 @@ export const WhimsicalMindMap: React.FC<WhimsicalMindMapProps> = ({ fitScreen = 
               )}
             </div>
           ) : hasChildren ? (
-            /* LEVEL 3 with sub-branches (e.g. Variable Size ○) */
+            /* LEVEL 3 with sub-branches (e.g. Variable Size [2] ○) */
             <div
               onClick={() => toggleNode(node.id)}
               className={`w-full h-full flex items-center justify-between px-3 rounded-full border text-xs font-semibold transition-all duration-150 shadow-sm hover:scale-[1.01] cursor-pointer ${
@@ -547,15 +556,24 @@ export const WhimsicalMindMap: React.FC<WhimsicalMindMapProps> = ({ fitScreen = 
               }`}
             >
               <span className="truncate">{node.title}</span>
-              <span
-                className={`w-3.5 h-3.5 rounded-full flex items-center justify-center text-[9px] font-black border transition shrink-0 ml-1.5 ${
-                  isExpanded
-                    ? 'bg-slate-200 dark:bg-slate-700 text-slate-800 dark:text-slate-200 border-slate-300'
-                    : 'bg-slate-50 dark:bg-slate-800 text-slate-400 border-slate-200'
-                }`}
-              >
-                {isExpanded ? '−' : '+'}
-              </span>
+              <div className="flex items-center gap-1.5 shrink-0 ml-1.5">
+                <span
+                  className="px-2 py-0.5 rounded-full text-[10px] font-black text-white shadow-sm"
+                  style={{ backgroundColor: node.color }}
+                  title={`${node.children.length} branches`}
+                >
+                  {node.children.length}
+                </span>
+                <span
+                  className={`w-4 h-4 rounded-full flex items-center justify-center text-[10px] font-black border transition shrink-0 ${
+                    isExpanded
+                      ? 'bg-slate-200 dark:bg-slate-700 text-slate-800 dark:text-slate-200 border-slate-300'
+                      : 'bg-slate-50 dark:bg-slate-800 text-slate-400 border-slate-200'
+                  }`}
+                >
+                  {isExpanded ? '−' : '+'}
+                </span>
+              </div>
             </div>
           ) : (
             /* LEAF NODES (e.g. Opposite ends (left + right)) */
@@ -771,7 +789,7 @@ export const WhimsicalMindMap: React.FC<WhimsicalMindMapProps> = ({ fitScreen = 
               DSA Patterns
             </h2>
             <p className="text-[11px] text-slate-500 dark:text-slate-400">
-              (Core Algorithmic Taxonomy)
+              (Core Algorithmic Taxonomy • 16 Branches)
             </p>
           </div>
 
