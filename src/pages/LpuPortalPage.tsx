@@ -19,11 +19,10 @@ import { PROBLEMS } from '../data/problems';
 import { useUserStore } from '../store/userStore';
 import { ProblemModal } from '../components/problems/ProblemModal';
 import { LpuAcademicGraph } from '../components/roadmap/LpuAcademicGraph';
-import { DsaMindMapGraph } from '../components/roadmap/DsaMindMapGraph';
 import type { Problem } from '../types';
 
 export const LpuPortalPage: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<'syllabus' | 'flowchart' | 'assignments' | 'mindmap'>('syllabus');
+  const [activeTab, setActiveTab] = useState<'syllabus' | 'flowchart' | 'assignments'>('syllabus');
   const [selectedSubjectId, setSelectedSubjectId] = useState<string>('cse205');
   const [expandedUnits, setExpandedUnits] = useState<Record<string, boolean>>({
     'cse205-u1': true,
@@ -139,29 +138,7 @@ export const LpuPortalPage: React.FC = () => {
           <Users className="h-4 w-4" />
           <span>Faculty & Class Assignments ({customProblemSets.length})</span>
         </button>
-
-        <button
-          onClick={() => setActiveTab('mindmap')}
-          className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold transition ${
-            activeTab === 'mindmap'
-              ? 'bg-emerald-600 text-white shadow-md shadow-emerald-500/25'
-              : 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
-          }`}
-        >
-          <Sparkles className="h-4 w-4 text-emerald-500 dark:text-emerald-300" />
-          <span>LPU Syllabus Concept Tree</span>
-          <span className="text-[10px] font-bold px-1.5 py-0.2 rounded-full bg-emerald-500/15 text-emerald-700 dark:text-emerald-300">
-            Concept Tree
-          </span>
-        </button>
       </div>
-
-      {/* TAB -1: SYLLABUS CONCEPT TREE */}
-      {activeTab === 'mindmap' && (
-        <div className="space-y-3">
-          <DsaMindMapGraph initialVariant="lpu" fitScreen={true} />
-        </div>
-      )}
 
       {/* TAB 0: INTERACTIVE PREREQUISITE FLOWCHART */}
       {activeTab === 'flowchart' && (

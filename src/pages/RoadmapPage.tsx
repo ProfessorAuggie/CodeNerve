@@ -16,12 +16,14 @@ export const RoadmapPage: React.FC = () => {
   const [subView, setSubView] = useState<'flowchart' | 'list' | 'mindmap'>('flowchart');
 
   useEffect(() => {
-    if (pathId === 'cpp-path' || pathId === 'dsa-roadmap') {
+    if (activePortal === 'lpu' && subView === 'mindmap') {
+      setSubView('flowchart');
+    } else if (pathId === 'cpp-path' || pathId === 'dsa-roadmap') {
       setSubView('list');
     } else {
       setSubView('flowchart');
     }
-  }, [pathId, activePortal]);
+  }, [pathId, activePortal, subView]);
 
   useEffect(() => {
     updateStudentActivity(`Exploring ${activePortal === 'lpu' ? 'LPU CSE Curriculum Roadmap' : 'Global DSA Dependency Graph'}`);
@@ -117,22 +119,6 @@ export const RoadmapPage: React.FC = () => {
                   6 Units
                 </span>
               </button>
-
-              {/* 3. LPU Syllabus Mind Map */}
-              <button
-                onClick={() => setSubView('mindmap')}
-                className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold transition ${
-                  subView === 'mindmap'
-                    ? 'bg-emerald-600 text-white shadow-md shadow-emerald-500/25'
-                    : 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800'
-                }`}
-              >
-                <Sparkles className="h-4 w-4 text-emerald-500 dark:text-emerald-400" />
-                <span>LPU Syllabus Tree</span>
-                <span className="text-[10px] uppercase font-bold px-1.5 py-0.2 rounded bg-emerald-500/15 text-emerald-700 dark:text-emerald-300">
-                  Concept Tree
-                </span>
-              </button>
             </>
           )}
         </div>
@@ -153,7 +139,7 @@ export const RoadmapPage: React.FC = () => {
       {isGlobal ? (
         subView === 'mindmap' ? (
           <div className="flex flex-col flex-1 min-h-0 pt-2">
-            <DsaMindMapGraph initialVariant="global" fitScreen={true} />
+            <DsaMindMapGraph fitScreen={true} />
           </div>
         ) : subView === 'flowchart' ? (
           <div className="flex flex-col flex-1 min-h-0 pt-2">
@@ -177,11 +163,7 @@ export const RoadmapPage: React.FC = () => {
           </div>
         )
       ) : (
-        subView === 'mindmap' ? (
-          <div className="flex flex-col flex-1 min-h-0 pt-2">
-            <DsaMindMapGraph initialVariant="lpu" fitScreen={true} />
-          </div>
-        ) : subView === 'flowchart' ? (
+        subView === 'flowchart' ? (
           <div className="flex flex-col flex-1 min-h-0 pt-2">
             <div className="p-2.5 sm:p-3 mb-2 rounded-xl bg-white dark:bg-slate-900/60 border border-emerald-500/30 text-xs text-slate-700 dark:text-slate-300 flex items-center justify-between shrink-0 shadow-sm">
               <div className="flex items-center gap-2">

@@ -86,21 +86,23 @@ export const Navbar: React.FC = () => {
             </div>
           </Link>
 
-          {/* Dual Platform Switcher: Global Public (Generic) vs LPU University (C++) */}
-          <div className="flex items-center rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-900/95 p-0.5 text-xs shadow-inner">
+          {/* Dual Platform Mode Switcher: Global DSA vs LPU Portal */}
+          <div className="flex items-center rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-900/95 p-1 text-xs shadow-inner">
             <button
               onClick={() => {
                 setActivePortal('global');
-                if (location.pathname === '/lpu' || location.pathname === '/teacher') navigate('/roadmap');
+                if (location.pathname === '/lpu' || location.pathname === '/teacher' || location.pathname === '/syllabus') {
+                  navigate('/roadmap');
+                }
               }}
-              className={`flex items-center gap-1 px-2 sm:px-2.5 py-1 rounded-lg font-bold transition text-[11px] sm:text-xs ${
+              className={`flex items-center gap-1.5 px-2.5 sm:px-3 py-1 rounded-lg font-bold transition text-xs cursor-pointer ${
                 activePortal === 'global'
-                  ? 'bg-brand-600 text-white shadow-sm shadow-brand-500/30'
+                  ? 'bg-indigo-600 text-white shadow-md shadow-indigo-500/30 ring-1 ring-white/20'
                   : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
               }`}
               title="Generic Public Coding Track (Language Agnostic: Python, Java, C++, JS, Go)"
             >
-              <Globe className="h-3 w-3" />
+              <Globe className="h-3.5 w-3.5" />
               <span>Global DSA</span>
             </button>
 
@@ -109,14 +111,14 @@ export const Navbar: React.FC = () => {
                 setActivePortal('lpu');
                 navigate('/lpu');
               }}
-              className={`flex items-center gap-1 px-2 sm:px-2.5 py-1 rounded-lg font-bold transition text-[11px] sm:text-xs ${
+              className={`flex items-center gap-1.5 px-2.5 sm:px-3 py-1 rounded-lg font-bold transition text-xs cursor-pointer ${
                 activePortal === 'lpu'
-                  ? 'bg-emerald-600 text-white shadow-sm shadow-emerald-500/30'
+                  ? 'bg-emerald-600 text-white shadow-md shadow-emerald-500/30 ring-1 ring-white/20'
                   : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
               }`}
               title="Lovely Professional University Academic Portal (CSE202 / CSE205)"
             >
-              <GraduationCap className="h-3 w-3" />
+              <GraduationCap className="h-3.5 w-3.5" />
               <span>LPU Portal</span>
             </button>
           </div>

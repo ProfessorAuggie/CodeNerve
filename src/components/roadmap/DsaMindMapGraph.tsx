@@ -8,15 +8,12 @@ import {
   Sparkles,
   FolderOpen,
   Folder,
-  GraduationCap,
   Globe2,
   BookOpen,
-  X,
-  Maximize2
+  X
 } from 'lucide-react';
 import { 
   GLOBAL_DSA_PATTERNS, 
-  LPU_ACADEMIC_PATTERNS, 
   type MindMapCategory, 
   type MindMapSubPattern, 
   type MindMapLeafPattern 
@@ -28,26 +25,14 @@ import { TopicDrawer } from './TopicDrawer';
 import type { Problem, ProblemStatus } from '../../types';
 
 interface DsaMindMapGraphProps {
-  initialVariant?: 'global' | 'lpu';
   fitScreen?: boolean;
 }
 
 export const DsaMindMapGraph: React.FC<DsaMindMapGraphProps> = ({ 
-  initialVariant = 'global',
   fitScreen = true 
 }) => {
-  const { activePortal, problemProgress, updateProblemStatus, bookmarks, toggleBookmark } = useUserStore();
-  const effectiveVariant = initialVariant || (activePortal === 'lpu' ? 'lpu' : 'global');
-  const [variant, setVariant] = useState<'global' | 'lpu'>(effectiveVariant);
-
-  // Sync with activePortal if changed
-  useEffect(() => {
-    setVariant(initialVariant || (activePortal === 'lpu' ? 'lpu' : 'global'));
-  }, [activePortal, initialVariant]);
-
-  const categories = useMemo(() => {
-    return variant === 'global' ? GLOBAL_DSA_PATTERNS : LPU_ACADEMIC_PATTERNS;
-  }, [variant]);
+  const { problemProgress, updateProblemStatus, bookmarks, toggleBookmark } = useUserStore();
+  const categories = GLOBAL_DSA_PATTERNS;
 
   // Expanded nodes state
   const [expandedCategories, setExpandedCategories] = useState<Set<string>>(() => {
@@ -61,18 +46,6 @@ export const DsaMindMapGraph: React.FC<DsaMindMapGraphProps> = ({
     });
     return initialSubs;
   });
-
-  // Re-expand when variant changes
-  useEffect(() => {
-    const newCats = new Set<string>();
-    const newSubs = new Set<string>();
-    categories.forEach((c) => {
-      newCats.add(c.id);
-      c.subPatterns.forEach((s) => newSubs.add(s.id));
-    });
-    setExpandedCategories(newCats);
-    setExpandedSubPatterns(newSubs);
-  }, [categories]);
 
   // Search & filter
   const [searchQuery, setSearchQuery] = useState('');
@@ -248,42 +221,21 @@ export const DsaMindMapGraph: React.FC<DsaMindMapGraphProps> = ({
     <div className={`relative w-full bg-slate-50 dark:bg-[#07090f] flex flex-col overflow-hidden transition-all duration-200 select-none ${
       fitScreen ? 'flex-1 min-h-0 h-full rounded-2xl border border-slate-200 dark:border-slate-800/80 shadow-2xl' : 'h-[850px] rounded-2xl border border-slate-200 dark:border-slate-800'
     }`}>
-      {/* ───── Top Unified Controls Bar ───── */}
+      {/* ───── Top Controls Bar ───── */}
       <div className="flex flex-wrap items-center justify-between gap-3 px-3.5 py-2.5 sm:px-4 sm:py-3 border-b border-slate-200 dark:border-slate-800/80 bg-white/95 dark:bg-[#0b0e17]/95 backdrop-blur-md z-30 shrink-0">
-        <div className="flex flex-wrap items-center gap-2">
-          {/* Variant Switcher: Global DSA Patterns vs LPU Syllabus Units */}
-          <div className="flex items-center bg-slate-100 dark:bg-slate-900 p-0.5 rounded-xl border border-slate-200 dark:border-slate-800 shadow-inner">
-            <button
-              onClick={() => setVariant('global')}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition ${
-                variant === 'global'
-                  ? 'bg-indigo-600 text-white shadow-md shadow-indigo-500/25'
-                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
-              }`}
-            >
-              <Globe2 className="h-3.5 w-3.5" />
-              <span>Global DSA Patterns</span>
-              <span className="text-[10px] px-1.5 py-0.2 rounded-full bg-white/20">16 Categories</span>
-            </button>
-            <button
-              onClick={() => setVariant('lpu')}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition ${
-                variant === 'lpu'
-                  ? 'bg-emerald-600 text-white shadow-md shadow-emerald-500/25'
-                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
-              }`}
-            >
-              <GraduationCap className="h-3.5 w-3.5" />
-              <span>LPU Academic Syllabus</span>
-              <span className="text-[10px] px-1.5 py-0.2 rounded-full bg-white/20">CSE205 &bull; CSE202</span>
-            </button>
+        <div className="flex flex-wrap items-center gap-2.5">
+          {/* Header Badge */}
+          <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-indigo-50 dark:bg-indigo-950/60 border border-indigo-200 dark:border-indigo-800/80 shadow-sm">
+            <Globe2 className="h-4 w-4 text-indigo-600 dark:text-indigo-400" />
+            <span className="text-xs font-black text-indigo-950 dark:text-indigo-100">Global DSA Patterns</span>
+            <span className="text-[10px] font-bold px-1.5 py-0.2 rounded-full bg-indigo-600 text-white">16 Categories</span>
           </div>
 
           {/* Expand / Collapse Controls */}
-          <div className="flex items-center gap-1 bg-slate-100 dark:bg-slate-900 p-0.5 rounded-xl border border-slate-200 dark:border-slate-800 text-xs">
+          <div className="flex items-center gap-1 bg-slate-100 dark:bg-slate-900 p-0.5 rounded-xl border border-slate-200 dark:border-slate-800 text-xs shadow-inner">
             <button
               onClick={handleExpandAll}
-              className="flex items-center gap-1 px-2.5 py-1 rounded-lg text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-800 font-semibold transition"
+              className="flex items-center gap-1 px-2.5 py-1 rounded-lg text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-800 font-semibold transition cursor-pointer"
               title="Expand all branches"
             >
               <FolderOpen className="h-3.5 w-3.5 text-indigo-500" />
@@ -291,7 +243,7 @@ export const DsaMindMapGraph: React.FC<DsaMindMapGraphProps> = ({
             </button>
             <button
               onClick={handleCollapseAll}
-              className="flex items-center gap-1 px-2.5 py-1 rounded-lg text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-800 font-semibold transition"
+              className="flex items-center gap-1 px-2.5 py-1 rounded-lg text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-800 font-semibold transition cursor-pointer"
               title="Collapse branches to category root"
             >
               <Folder className="h-3.5 w-3.5 text-slate-400" />
@@ -300,24 +252,24 @@ export const DsaMindMapGraph: React.FC<DsaMindMapGraphProps> = ({
           </div>
 
           {/* Zoom Controls */}
-          <div className="flex items-center gap-1 bg-slate-100 dark:bg-slate-900 p-0.5 rounded-xl border border-slate-200 dark:border-slate-800">
+          <div className="flex items-center gap-1 bg-slate-100 dark:bg-slate-900 p-0.5 rounded-xl border border-slate-200 dark:border-slate-800 shadow-inner">
             <button
               onClick={() => setZoomLevel((z) => Math.min(1.8, Number((z + 0.1).toFixed(2))))}
-              className="p-1.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-800 transition"
+              className="p-1.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-800 transition cursor-pointer"
               title="Zoom In"
             >
               <ZoomIn className="h-3.5 w-3.5" />
             </button>
             <button
               onClick={() => setZoomLevel((z) => Math.max(0.25, Number((z - 0.1).toFixed(2))))}
-              className="p-1.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-800 transition"
+              className="p-1.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-800 transition cursor-pointer"
               title="Zoom Out"
             >
               <ZoomOut className="h-3.5 w-3.5" />
             </button>
             <button
               onClick={handleReset}
-              className="px-2 py-0.5 text-[11px] font-bold text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-800 rounded-md transition"
+              className="px-2 py-0.5 text-[11px] font-bold text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-800 rounded-md transition cursor-pointer"
               title="Reset View to 85%"
             >
               {Math.round(zoomLevel * 100)}%
@@ -339,7 +291,7 @@ export const DsaMindMapGraph: React.FC<DsaMindMapGraphProps> = ({
             {searchQuery && (
               <button
                 onClick={() => setSearchQuery('')}
-                className="absolute right-2 top-2 p-0.5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 rounded-full"
+                className="absolute right-2 top-2 p-0.5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 rounded-full cursor-pointer"
               >
                 <X className="h-3 w-3" />
               </button>
@@ -395,21 +347,19 @@ export const DsaMindMapGraph: React.FC<DsaMindMapGraphProps> = ({
                 <div className="flex items-center justify-between">
                   <span className="text-[10px] font-extrabold uppercase tracking-widest text-indigo-600 dark:text-indigo-400 flex items-center gap-1.5">
                     <Sparkles className="h-3 w-3" />
-                    {variant === 'global' ? 'DSA Pattern Tree' : 'LPU Syllabus Tree'}
+                    DSA Pattern Tree
                   </span>
                   <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-800">
-                    {categories.length} Categories
+                    16 Categories
                   </span>
                 </div>
 
                 <h2 className="text-base font-black text-slate-900 dark:text-white leading-tight">
-                  {variant === 'global' ? 'DSA Patterns & Frameworks' : 'LPU Academic Curriculum'}
+                  DSA Patterns & Frameworks
                 </h2>
 
                 <p className="text-xs text-slate-500 dark:text-slate-400 leading-snug">
-                  {variant === 'global' 
-                    ? '(Core Algorithmic Taxonomy & Frameworks)' 
-                    : '(CSE205 Data Structures & CSE202 C++ OOP)'}
+                  (Core Algorithmic Taxonomy & Frameworks)
                 </p>
 
                 <div className="pt-2.5 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-[11px] text-slate-500 dark:text-slate-400">
