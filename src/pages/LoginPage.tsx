@@ -32,7 +32,6 @@ export const LoginPage: React.FC = () => {
     isStudentAuthenticated, 
     students, 
     loginStudent, 
-    quickLoginStudent, 
     logoutStudent, 
     registerStudent,
     activePortal,
@@ -114,28 +113,6 @@ export const LoginPage: React.FC = () => {
     }, 300);
   };
 
-  const handleQuickLogin = (studentId: string) => {
-    setErrorMsg(null);
-    setSuccessMsg(null);
-    setIsSubmitting(true);
-
-    setTimeout(() => {
-      const success = quickLoginStudent(studentId);
-      setIsSubmitting(false);
-
-      if (success) {
-        const student = students.find((s) => s.id === studentId);
-        setSuccessMsg(`Welcome, ${student?.name || 'Student'}! Redirecting to your dashboard...`);
-        setTimeout(() => {
-          const target = student?.track === 'lpu' ? '/lpu' : '/dashboard';
-          navigate(target);
-        }, 500);
-      } else {
-        setErrorMsg('Failed to sign in with demo student profile.');
-      }
-    }, 250);
-  };
-
   const handleRegisterSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMsg(null);
@@ -209,9 +186,6 @@ export const LoginPage: React.FC = () => {
     }, 400);
   };
 
-  // Demo students for quick 1-click test access (only approved accounts)
-  const demoStudents = students.filter((s) => (s.approvalStatus || 'approved') === 'approved').slice(0, 4);
-
   return (
     <div className="min-h-[85vh] flex items-center justify-center px-4 py-12 relative overflow-hidden">
       {/* Decorative Background Lighting Effects */}
@@ -220,7 +194,7 @@ export const LoginPage: React.FC = () => {
       <div className="absolute -top-10 right-10 w-72 h-72 bg-indigo-500/10 rounded-full blur-2xl pointer-events-none -z-10" />
 
       <div className="w-full max-w-4xl grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-        {/* Left Side: Brand Context, Tracks & Quick Demo Switcher */}
+        {/* Left Side: Brand Context, Tracks & Highlights */}
         <div className="lg:col-span-5 space-y-6">
           {/* Logo & Headline */}
           <div className="space-y-3">
@@ -296,57 +270,49 @@ export const LoginPage: React.FC = () => {
             </div>
           )}
 
-          {/* 1-Click Quick Demo Accounts */}
-          <div className="rounded-2xl border border-slate-200 dark:border-slate-800/90 bg-white/70 dark:bg-slate-900/60 p-4 backdrop-blur-md shadow-sm space-y-3">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-1.5 text-xs font-bold text-slate-900 dark:text-white">
-                <Zap className="h-3.5 w-3.5 text-amber-500" />
-                <span>Instant Demo Access</span>
-              </div>
-              <span className="text-[10px] text-slate-500 dark:text-slate-400">1-Click Test</span>
+          {/* Platform Feature Highlights */}
+          <div className="rounded-2xl border border-slate-200 dark:border-slate-800/90 bg-white/70 dark:bg-slate-900/60 p-5 backdrop-blur-md shadow-sm space-y-4">
+            <div className="flex items-center gap-2 text-xs font-bold text-slate-900 dark:text-white">
+              <Sparkles className="h-4 w-4 text-brand-500" />
+              <span>Unified Academic & DSA Platform</span>
             </div>
-            <p className="text-[11px] text-slate-500 dark:text-slate-400 leading-normal">
-              Evaluating the platform? Click any pre-configured student profile to test with live progress and syllabus alignments:
-            </p>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1">
-              {demoStudents.map((std) => {
-                const isCurrent = isStudentAuthenticated && user.id === std.id;
-                return (
-                  <button
-                    key={std.id}
-                    type="button"
-                    onClick={() => handleQuickLogin(std.id)}
-                    className={`flex flex-col text-left p-2.5 rounded-xl border transition text-xs relative ${
-                      isCurrent
-                        ? 'border-emerald-500/60 bg-emerald-500/10 text-emerald-800 dark:text-emerald-200'
-                        : 'border-slate-200 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-950/40 hover:border-brand-500/50 hover:bg-brand-500/5 text-slate-700 dark:text-slate-300'
-                    }`}
-                  >
-                    <div className="flex items-center justify-between">
-                      <span className="font-bold text-slate-900 dark:text-white truncate">
-                        {std.name}
-                      </span>
-                      <span className={`text-[9px] font-bold uppercase px-1.5 py-0.2 rounded ${
-                        std.track === 'lpu'
-                          ? 'bg-emerald-500/20 text-emerald-700 dark:text-emerald-300'
-                          : 'bg-indigo-500/20 text-indigo-700 dark:text-indigo-300'
-                      }`}>
-                        {std.track.toUpperCase()}
-                      </span>
-                    </div>
-                    <div className="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5 truncate">
-                      Reg: {std.registrationNumber}
-                    </div>
-                    <div className="flex items-center justify-between text-[10px] text-slate-600 dark:text-slate-400 mt-2 pt-1.5 border-t border-slate-200/60 dark:border-slate-800">
-                      <span>{std.totalSolved} Solved</span>
-                      <span className="text-brand-600 dark:text-brand-400 font-semibold group-hover:underline">
-                        {isCurrent ? 'Active ✓' : 'Login ➔'}
-                      </span>
-                    </div>
-                  </button>
-                );
-              })}
+            <div className="space-y-3">
+              <div className="flex items-start gap-3 p-3 rounded-xl bg-slate-50/70 dark:bg-slate-950/40 border border-slate-100 dark:border-slate-800/70">
+                <div className="p-2 rounded-lg bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 shrink-0">
+                  <GraduationCap className="h-4 w-4" />
+                </div>
+                <div>
+                  <div className="text-xs font-bold text-slate-900 dark:text-white">Syllabus-Aligned Roadmaps</div>
+                  <div className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5 leading-relaxed">
+                    Official unit breakdowns for LPU CSE202 (C++ OOP) & CSE205 (Data Structures) practical curriculum.
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex items-start gap-3 p-3 rounded-xl bg-slate-50/70 dark:bg-slate-950/40 border border-slate-100 dark:border-slate-800/70">
+                <div className="p-2 rounded-lg bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 shrink-0">
+                  <Terminal className="h-4 w-4" />
+                </div>
+                <div>
+                  <div className="text-xs font-bold text-slate-900 dark:text-white">AlgoNerve Visualizer Integration</div>
+                  <div className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5 leading-relaxed">
+                    Step-by-step memory pointer graphs, BST tree traversals, and dynamic array reallocation visualizations.
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex items-start gap-3 p-3 rounded-xl bg-slate-50/70 dark:bg-slate-950/40 border border-slate-100 dark:border-slate-800/70">
+                <div className="p-2 rounded-lg bg-purple-500/10 text-purple-600 dark:text-purple-400 shrink-0">
+                  <ShieldCheck className="h-4 w-4" />
+                </div>
+                <div>
+                  <div className="text-xs font-bold text-slate-900 dark:text-white">Faculty Supervised Evaluations</div>
+                  <div className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5 leading-relaxed">
+                    Automated code verification, timed midterm tests, and real-time progress synced directly to faculty cohorts.
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -494,7 +460,7 @@ export const LoginPage: React.FC = () => {
                     />
                   </div>
                   <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-1">
-                    Tip: You can use registration number <code className="text-brand-600 dark:text-brand-300 font-mono font-bold">12104921</code> or email <code className="text-brand-600 dark:text-brand-300 font-mono font-bold">alex.rivera@lpu.in</code>
+                    Enter your registered University Registration Number or Student Email address.
                   </p>
                 </div>
 
@@ -506,7 +472,7 @@ export const LoginPage: React.FC = () => {
                     </label>
                     <button
                       type="button"
-                      onClick={() => alert('Demo Mode: You can enter any password (default: demo123) or click any demo student card on the left for instant login.')}
+                      onClick={() => alert('For password resets or account assistance, please contact your university faculty coordinator or administrator.')}
                       className="text-[11px] text-brand-600 dark:text-brand-400 hover:underline"
                     >
                       Forgot password?

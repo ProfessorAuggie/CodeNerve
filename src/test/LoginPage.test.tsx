@@ -12,7 +12,7 @@ describe('LoginPage Component', () => {
     useUserStore.getState().logoutStudent();
   });
 
-  it('renders student sign in tab by default with demo accounts', () => {
+  it('renders student sign in tab by default with platform highlights', () => {
     render(
       <MemoryRouter>
         <LoginPage />
@@ -21,9 +21,10 @@ describe('LoginPage Component', () => {
 
     expect(screen.getByText('Student Sign In')).toBeInTheDocument();
     expect(screen.getByText('Create Account')).toBeInTheDocument();
-    expect(screen.getByText('Instant Demo Access')).toBeInTheDocument();
+    expect(screen.getByText('Unified Academic & DSA Platform')).toBeInTheDocument();
+    expect(screen.getByText('Syllabus-Aligned Roadmaps')).toBeInTheDocument();
     expect(screen.getByText('Sign In to CodeNerve')).toBeInTheDocument();
-    expect(screen.getByText('Alex Rivera')).toBeInTheDocument();
+    expect(screen.queryByText('Instant Demo Access')).not.toBeInTheDocument();
   });
 
   it('toggles to registration mode when Create Account is clicked', () => {
@@ -58,19 +59,22 @@ describe('LoginPage Component', () => {
     expect(useUserStore.getState().activePortal).toBe('lpu');
   });
 
-  it('allows 1-click quick demo login', async () => {
+  it('allows student login using registered credentials', async () => {
     render(
       <MemoryRouter>
         <LoginPage />
       </MemoryRouter>
     );
 
-    const priyaDemo = screen.getByText('Priya Sharma');
-    fireEvent.click(priyaDemo);
+    const input = screen.getByPlaceholderText(/12104921/i);
+    fireEvent.change(input, { target: { value: '12104921' } });
+
+    const submitBtn = screen.getByRole('button', { name: /sign in to codenerve/i });
+    fireEvent.click(submitBtn);
 
     await waitFor(() => {
       expect(useUserStore.getState().isStudentAuthenticated).toBe(true);
-      expect(useUserStore.getState().user.name).toBe('Priya Sharma');
+      expect(useUserStore.getState().user.name).toBe('Alex Rivera');
     });
   });
 

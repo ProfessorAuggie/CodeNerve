@@ -14,17 +14,19 @@ import {
   Globe, 
   GitFork,
   LogIn,
-  LogOut
+  LogOut,
+  Edit3
 } from 'lucide-react';
 import { useUserStore } from '../../store/userStore';
 import { PROBLEMS } from '../../data/problems';
-
 import { ThemeToggle } from '../common/ThemeToggle';
+import { EditProfileModal } from '../common/EditProfileModal';
 
 export const Navbar: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const { 
     user, 
     problemProgress, 
@@ -203,6 +205,14 @@ export const Navbar: React.FC = () => {
                 </div>
                 <span className="hidden md:inline font-medium">{user.name.split(' ')[0]}</span>
               </Link>
+              <button
+                type="button"
+                onClick={() => setIsEditModalOpen(true)}
+                className="p-1 rounded-lg text-slate-400 hover:text-brand-600 dark:hover:text-brand-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition cursor-pointer"
+                title="Edit Student Profile"
+              >
+                <Edit3 className="h-3.5 w-3.5" />
+              </button>
               <Link
                 to="/login"
                 className="p-1 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition"
@@ -385,6 +395,13 @@ export const Navbar: React.FC = () => {
           </div>
         </div>
       )}
+
+      {/* Edit Profile Modal */}
+      <EditProfileModal
+        isOpen={isEditModalOpen}
+        onClose={() => setIsEditModalOpen(false)}
+        mode="student-self"
+      />
     </header>
   );
 };

@@ -62,6 +62,8 @@ interface UserState {
   approveStudent: (studentId: string) => void;
   disapproveStudent: (studentId: string) => void;
   deleteStudent: (studentId: string) => void;
+  updateUserProfile: (updates: Partial<UserProfile>) => void;
+  updateStudentByAdmin: (studentId: string, updates: Partial<StudentRecord>) => void;
   registerStudent: (
     student: Omit<StudentRecord, 'id' | 'joinedAt' | 'totalSolved' | 'completedLessons' | 'quizScores'> & {
       completedLessons?: string[];
@@ -722,7 +724,7 @@ export const useUserStore = create<UserState>()(
         if (!found) {
           return {
             success: false,
-            message: `No student record found matching "${identifier}". Please check your details, sign up for a new account, or use one of the Quick Demo student accounts.`,
+            message: `No student record found matching "${identifier}". Please check your details or create a new student account.`,
           };
         }
 
@@ -844,7 +846,21 @@ export const useUserStore = create<UserState>()(
       authenticateAdmin: (passcode) => {
         const cleaned = passcode.trim().toLowerCase();
         if (cleaned === 'admin123' || cleaned === 'faculty' || cleaned === 'admin' || cleaned === 'codenerve') {
-          set({ isAdminAuthenticated: true, user: { ...defaultUser, role: 'admin' } });
+          set((state) => ({
+            isAdminAuthenticated: true,
+            user: {
+              id: 'admin-001',
+              name: state.user.role === 'admin' && state.user.name !== 'Alex Rivera' ? state.user.name : 'Dr. Auggie',
+              email: state.user.role === 'admin' && state.user.email !== 'alex.rivera@lpu.in' ? state.user.email : 'auggie.hod@lpu.in',
+              role: 'admin',
+              university: state.user.role === 'admin' ? state.user.university : 'Lovely Professional University (LPU)',
+              semester: 0,
+              registrationNumber: state.user.role === 'admin' && state.user.registrationNumber !== '12104921' ? state.user.registrationNumber : 'FAC-1001',
+              batch: state.user.role === 'admin' && state.user.batch !== 'LPU B.Tech CSE (CSE202/205)' ? state.user.batch : 'Head of CSE Faculty',
+              track: 'lpu',
+              approvalStatus: 'approved',
+            },
+          }));
           return true;
         }
         return false;
@@ -950,6 +966,94 @@ export const useUserStore = create<UserState>()(
                   },
                 }
               : {}),
+          };
+        });
+      },
+
+      updateUserProfile: (updates: Partial<UserProfile>) => {
+        set((state) => {
+          const updatedUser: UserProfile = { ...state.user, ...updates };
+          const isStudent = updatedUser.role === 'student' && updatedUser.id !== 'guest';
+
+          let updatedStudents = state.students || [];
+          if (isStudent) {
+            const currentUserId = state.user?.id;
+            const currentRegNo = state.user?.registrationNumber;
+            const currentEmail = state.user?.email?.toLowerCase();
+
+            updatedStudents = updatedStudents.map((s) => {
+              const matches =
+                s.id === currentUserId ||
+                (currentRegNo && s.registrationNumber === currentRegNo) ||
+                (currentEmail && s.email && s.email.toLowerCase() === currentEmail);
+
+              if (matches) {
+                return {
+                  ...s,
+                  name: updates.name !== undefined ? updates.name : s.name,
+                  email: updates.email !== undefined ? updates.email : s.email,
+                  registrationNumber: updates.registrationNumber !== undefined ? updates.registrationNumber : s.registrationNumber,
+                  track: updates.track !== undefined ? updates.track : s.track,
+                  batch: updates.batch !== undefined ? updates.batch : s.batch,
+                  avatar: updates.avatar !== undefined ? updates.avatar : s.avatar,
+                  approvalStatus: updates.approvalStatus !== undefined ? updates.approvalStatus : s.approvalStatus,
+                  currentActivity: 'Updated profile details',
+                  lastActive: 'Just now',
+                  status: 'online' as const,
+                };
+              }
+              return s;
+            });
+          }
+
+          broadcastCohortSync();
+
+          return {
+            user: updatedUser,
+            students: updatedStudents,
+            ...(updates.track ? { activePortal: updates.track } : {}),
+          };
+        });
+      },
+
+      updateStudentByAdmin: (studentId: string, updates: Partial<StudentRecord>) => {
+        set((state) => {
+          const updatedStudents = (state.students || []).map((s) => {
+            if (s.id === studentId) {
+              return {
+                ...s,
+                ...updates,
+              };
+            }
+            return s;
+          });
+
+          // If the edited student is the current active student, keep their session synced
+          const isCurrentActive =
+            state.user.id === studentId ||
+            (state.user.registrationNumber &&
+              state.students.find((s) => s.id === studentId)?.registrationNumber === state.user.registrationNumber);
+
+          let updatedUser = state.user;
+          if (isCurrentActive && state.user.role === 'student') {
+            updatedUser = {
+              ...state.user,
+              ...(updates.name !== undefined ? { name: updates.name } : {}),
+              ...(updates.email !== undefined ? { email: updates.email } : {}),
+              ...(updates.registrationNumber !== undefined ? { registrationNumber: updates.registrationNumber } : {}),
+              ...(updates.batch !== undefined ? { batch: updates.batch } : {}),
+              ...(updates.track !== undefined ? { track: updates.track } : {}),
+              ...(updates.avatar !== undefined ? { avatar: updates.avatar } : {}),
+              ...(updates.approvalStatus !== undefined ? { approvalStatus: updates.approvalStatus } : {}),
+            };
+          }
+
+          broadcastCohortSync();
+
+          return {
+            students: updatedStudents,
+            user: updatedUser,
+            ...(isCurrentActive && updates.track ? { activePortal: updates.track } : {}),
           };
         });
       },

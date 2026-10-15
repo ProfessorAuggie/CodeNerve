@@ -9,11 +9,13 @@ import {
   Trash2, 
   RefreshCw,
   LogIn,
-  LogOut
+  LogOut,
+  Edit3
 } from 'lucide-react';
 import { useUserStore } from '../store/userStore';
 import { PROBLEMS } from '../data/problems';
 import { ProblemModal } from '../components/problems/ProblemModal';
+import { EditProfileModal } from '../components/common/EditProfileModal';
 import type { Problem } from '../types';
 
 export const DashboardPage: React.FC = () => {
@@ -38,6 +40,8 @@ export const DashboardPage: React.FC = () => {
 
   const [selectedProblem, setSelectedProblem] = useState<Problem | null>(null);
   const [confirmReset, setConfirmReset] = useState(false);
+  const [isEditProfileOpen, setIsEditProfileOpen] = useState(false);
+  const [profileSuccessMsg, setProfileSuccessMsg] = useState<string | null>(null);
 
   // Active portal filtered problems (zero overlap)
   const portalProblems = PROBLEMS.filter((p) => (p.track || 'global') === activePortal);
@@ -147,6 +151,16 @@ export const DashboardPage: React.FC = () => {
 
         {/* User Account Controls */}
         <div className="flex items-center gap-2.5">
+          {/* Edit Profile Button */}
+          <button
+            onClick={() => setIsEditProfileOpen(true)}
+            className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/80 border border-slate-200 dark:border-slate-800 transition shadow-sm cursor-pointer"
+            title="Edit student profile details"
+          >
+            <Edit3 className="h-3.5 w-3.5 text-brand-600 dark:text-brand-400" />
+            <span>Edit Profile</span>
+          </button>
+
           {isStudentAuthenticated ? (
             <Link
               to="/login"
@@ -176,6 +190,22 @@ export const DashboardPage: React.FC = () => {
           </button>
         </div>
       </div>
+
+      {/* Profile Updated Alert Banner */}
+      {profileSuccessMsg && (
+        <div className="p-3.5 rounded-2xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-300 dark:border-emerald-800 text-xs text-emerald-800 dark:text-emerald-200 flex items-center justify-between shadow-sm animate-in fade-in">
+          <div className="flex items-center gap-2 font-medium">
+            <CheckCircle2 className="h-4 w-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
+            <span>{profileSuccessMsg}</span>
+          </div>
+          <button
+            onClick={() => setProfileSuccessMsg(null)}
+            className="text-emerald-600 hover:text-emerald-800 dark:text-emerald-400 text-xs font-bold"
+          >
+            Dismiss
+          </button>
+        </div>
+      )}
 
       {/* Confirm Reset Alert */}
       {confirmReset && (
@@ -415,6 +445,17 @@ export const DashboardPage: React.FC = () => {
           onClose={() => setSelectedProblem(null)}
         />
       )}
+
+      {/* Edit Profile Modal */}
+      <EditProfileModal
+        isOpen={isEditProfileOpen}
+        onClose={() => setIsEditProfileOpen(false)}
+        mode="student-self"
+        onSuccess={(msg) => {
+          setProfileSuccessMsg(msg);
+          setTimeout(() => setProfileSuccessMsg(null), 4000);
+        }}
+      />
     </div>
   );
 };

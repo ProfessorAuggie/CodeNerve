@@ -23,14 +23,17 @@ import {
   BarChart3,
   Check,
   AlertCircle,
-  RefreshCw
+  RefreshCw,
+  Edit3
 } from 'lucide-react';
 import { useUserStore } from '../store/userStore';
 import { PROBLEMS } from '../data/problems';
+import { EditProfileModal } from '../components/common/EditProfileModal';
 import type { StudentRecord, AssignedTest } from '../types';
 
 export const AdminPage: React.FC = () => {
   const { 
+    user,
     students, 
     assignedTests, 
     isAdminAuthenticated, 
@@ -64,6 +67,8 @@ export const AdminPage: React.FC = () => {
     return students.find((s) => s.id === selectedStudentId) || null;
   }, [students, selectedStudentId]);
   const [studentToDelete, setStudentToDelete] = useState<StudentRecord | null>(null);
+  const [studentToEdit, setStudentToEdit] = useState<StudentRecord | null>(null);
+  const [isAdminProfileModalOpen, setIsAdminProfileModalOpen] = useState(false);
   const [toastMessage, setToastMessage] = useState<{ text: string; type: 'success' | 'error' | 'info' } | null>(null);
 
   // Auto-sync roster on component mount
@@ -313,13 +318,26 @@ export const AdminPage: React.FC = () => {
           </button>
 
           <div className="flex items-center gap-2.5 px-3 py-1.5 rounded-xl bg-white dark:bg-slate-900/90 border border-slate-200 dark:border-slate-800 text-xs shadow-sm">
-            <div className="h-7 w-7 rounded-lg bg-purple-100 dark:bg-purple-600/30 border border-purple-200 dark:border-purple-500/40 flex items-center justify-center font-bold text-purple-700 dark:text-purple-200">
-              DA
+            <div className="h-7 w-7 rounded-lg bg-purple-100 dark:bg-purple-600/30 border border-purple-200 dark:border-purple-500/40 flex items-center justify-center font-bold text-purple-700 dark:text-purple-200 text-[11px]">
+              {(user?.name || 'Dr. Auggie')
+                .split(' ')
+                .filter(Boolean)
+                .map((n) => n[0])
+                .slice(0, 2)
+                .join('')
+                .toUpperCase() || 'DA'}
             </div>
             <div>
-              <div className="font-semibold text-slate-900 dark:text-white">Dr. Auggie</div>
-              <div className="text-[10px] text-purple-600 dark:text-purple-400">Head of CSE Faculty</div>
+              <div className="font-semibold text-slate-900 dark:text-white">{user?.name || 'Dr. Auggie'}</div>
+              <div className="text-[10px] text-purple-600 dark:text-purple-400">{user?.batch || 'Head of CSE Faculty'}</div>
             </div>
+            <button
+              onClick={() => setIsAdminProfileModalOpen(true)}
+              className="ml-1 p-1 rounded-lg text-slate-400 hover:text-purple-600 dark:hover:text-purple-400 hover:bg-purple-50 dark:hover:bg-purple-950/40 transition cursor-pointer"
+              title="Edit Admin Faculty Profile"
+            >
+              <Edit3 className="h-3.5 w-3.5" />
+            </button>
           </div>
 
           <button
@@ -812,6 +830,15 @@ export const AdminPage: React.FC = () => {
                                 Disapprove
                               </button>
                             )}
+
+                            {/* Edit Student Profile Button */}
+                            <button
+                              onClick={() => setStudentToEdit(std)}
+                              className="p-1.5 rounded-lg bg-slate-100 hover:bg-purple-100 dark:bg-slate-800 dark:hover:bg-purple-950/60 text-slate-500 dark:text-slate-400 hover:text-purple-600 dark:hover:text-purple-300 border border-slate-200 dark:border-slate-700 hover:border-purple-300 dark:hover:border-purple-800/60 transition cursor-pointer"
+                              title={`Edit ${std.name}'s profile`}
+                            >
+                              <Edit3 className="h-3.5 w-3.5" />
+                            </button>
 
                             {/* View Dossier Button */}
                             <button
@@ -1325,6 +1352,18 @@ export const AdminPage: React.FC = () => {
                     <span>Disapprove Student</span>
                   </button>
                 )}
+
+                <button
+                  onClick={() => {
+                    const student = selectedStudent;
+                    setStudentToEdit(student);
+                  }}
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-purple-50 hover:bg-purple-100 dark:bg-purple-950/60 dark:hover:bg-purple-900/60 text-purple-700 dark:text-purple-300 border border-purple-300 dark:border-purple-800/50 font-bold text-xs transition cursor-pointer"
+                  title="Edit student profile details"
+                >
+                  <Edit3 className="h-3.5 w-3.5" />
+                  <span>Edit Profile</span>
+                </button>
               </div>
 
               <button
@@ -1405,6 +1444,29 @@ export const AdminPage: React.FC = () => {
           <span>{toastMessage.text}</span>
         </div>
       )}
+
+      {/* Edit Admin Faculty Profile Modal */}
+      <EditProfileModal
+        isOpen={isAdminProfileModalOpen}
+        onClose={() => setIsAdminProfileModalOpen(false)}
+        mode="admin-self"
+        onSuccess={(msg) => {
+          setToastMessage({ text: msg, type: 'success' });
+          setTimeout(() => setToastMessage(null), 3500);
+        }}
+      />
+
+      {/* Edit Student Record Modal (Admin Mode) */}
+      <EditProfileModal
+        isOpen={!!studentToEdit}
+        onClose={() => setStudentToEdit(null)}
+        mode="admin-student"
+        student={studentToEdit}
+        onSuccess={(msg) => {
+          setToastMessage({ text: msg, type: 'success' });
+          setTimeout(() => setToastMessage(null), 3500);
+        }}
+      />
     </div>
   );
 };
