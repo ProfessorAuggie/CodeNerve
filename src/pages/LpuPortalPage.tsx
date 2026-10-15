@@ -149,14 +149,14 @@ export const LpuPortalPage: React.FC = () => {
           }`}
         >
           <Sparkles className="h-4 w-4 text-emerald-500 dark:text-emerald-300" />
-          <span>LPU Syllabus Mind Map</span>
+          <span>LPU Syllabus Concept Tree</span>
           <span className="text-[10px] font-bold px-1.5 py-0.2 rounded-full bg-emerald-500/15 text-emerald-700 dark:text-emerald-300">
-            Whimsical
+            Concept Tree
           </span>
         </button>
       </div>
 
-      {/* TAB -1: WHIMSICAL MIND MAP */}
+      {/* TAB -1: SYLLABUS CONCEPT TREE */}
       {activeTab === 'mindmap' && (
         <div className="space-y-3">
           <DsaMindMapGraph initialVariant="lpu" fitScreen={true} />

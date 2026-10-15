@@ -32,7 +32,7 @@ export interface MindMapCategory {
 }
 
 // ══════════════════════════════════════════════════════════════════
-// 1. GLOBAL DSA PATTERNS TREE (Extracted from Whimsical Board)
+// 1. GLOBAL DSA PATTERNS TREE (Core Algorithmic Taxonomy)
 // ══════════════════════════════════════════════════════════════════
 export const GLOBAL_DSA_PATTERNS: MindMapCategory[] = [
   // 1. Array (20)
@@ -1501,59 +1501,94 @@ export const GLOBAL_DSA_PATTERNS: MindMapCategory[] = [
     courseCode: 'GLOBAL',
     subPatterns: [
       {
-        id: 'sorting-comparison',
-        title: 'Comparison Sorts',
-        description: 'Algorithms establishing ordering through pairwise element comparisons.',
+        id: 'sorting-bubble',
+        title: 'Bubble Sort',
+        description: 'Repeatedly swap adjacent out-of-order elements; largest bubbles to end each pass. O(N^2).',
         patterns: [
           {
             id: 'pat-sort-bubble',
-            title: 'Bubble Sort',
-            description: 'Repeatedly swap adjacent out-of-order elements; largest bubbles to end each pass. O(N^2).',
+            title: 'Bubble Sort (Adjacent Swaps)',
+            description: 'Adaptive pass optimization with early-exit flag when array is already sorted.',
             difficulty: 'easy',
             visualizerId: 'bubble-sort',
             problemIds: ['p-dsa-bubble-sort-1', 'p-lpu-bubble-sort-1'],
             keyRule: 'Adaptive stable sorting with adjacent element swaps',
           },
+        ],
+      },
+      {
+        id: 'sorting-selection',
+        title: 'Selection Sort',
+        description: 'Repeatedly scan unsorted portion for minimum element and swap into current position. O(N^2).',
+        patterns: [
           {
             id: 'pat-sort-selection',
-            title: 'Selection Sort',
-            description: 'Repeatedly scan unsorted portion for minimum element and swap into current position. O(N^2).',
+            title: 'Selection Sort (Minimum Scan)',
+            description: 'Scans remaining unsorted suffix for minimum element; places at head.',
             difficulty: 'easy',
             visualizerId: 'selection-sort',
             problemIds: ['p-dsa-selection-sort-1', 'p-lpu-selection-sort-1'],
             keyRule: 'Unstable minimum-selection sorting with minimal write operations',
           },
+        ],
+      },
+      {
+        id: 'sorting-insertion',
+        title: 'Insertion Sort',
+        description: 'Build sorted array one element at a time by shifting larger elements right. O(N^2), O(N) best.',
+        patterns: [
           {
             id: 'pat-sort-insertion',
-            title: 'Insertion Sort',
-            description: 'Build sorted array one element at a time by shifting larger elements right. O(N^2), O(N) best.',
+            title: 'Insertion Sort (Card Shifting)',
+            description: 'Maintains sorted prefix, shifting elements to make room for current key.',
             difficulty: 'easy',
             visualizerId: 'insertion-sort',
             problemIds: ['p-dsa-insertion-sort-1', 'p-lpu-insertion-sort-1'],
             keyRule: 'Fastest for nearly sorted or small datasets',
           },
+        ],
+      },
+      {
+        id: 'sorting-merge',
+        title: 'Merge Sort',
+        description: 'Divide array into two halves, recursively sort, and merge in linear time. Guaranteed O(N log N).',
+        patterns: [
           {
             id: 'pat-sort-merge',
-            title: 'Merge Sort',
-            description: 'Divide array into two halves, recursively sort, and merge in linear time. Guaranteed O(N log N).',
+            title: 'Merge Sort (Divide & Conquer)',
+            description: 'Stable O(N log N) recursive halving and linear merging using auxiliary buffer.',
             difficulty: 'medium',
             visualizerId: 'merge-sort',
             problemIds: ['p-dsa-merge-sort-1', 'p-lpu-merge-sort-1'],
             keyRule: 'Stable O(N log N) divide and conquer sorting',
           },
+        ],
+      },
+      {
+        id: 'sorting-quick',
+        title: 'Quick Sort',
+        description: 'Partition array around pivot (Lomuto / Hoare); recurse on sub-arrays. O(N log N) average.',
+        patterns: [
           {
             id: 'pat-sort-quick',
-            title: 'Quick Sort',
-            description: 'Partition array around pivot (Lomuto / Hoare); recurse on sub-arrays. O(N log N) average.',
+            title: 'Quick Sort (Pivot Partitioning)',
+            description: 'In-place partitioning with 3-way Dutch National Flag optimization.',
             difficulty: 'medium',
             visualizerId: 'quick-sort',
             problemIds: ['p-dsa-quick-sort-1', 'p-lpu-quick-sort-1'],
             keyRule: 'In-place cache-friendly sorting algorithm',
           },
+        ],
+      },
+      {
+        id: 'sorting-heap',
+        title: 'Heap Sort',
+        description: 'Build max-heap in O(N); swap root with last element and sift-down. Guaranteed O(N log N) in-place.',
+        patterns: [
           {
             id: 'pat-sort-heap',
-            title: 'Heap Sort',
-            description: 'Build max-heap in O(N); swap root with last element and sift-down. Guaranteed O(N log N) in-place.',
+            title: 'Heap Sort (In-Place Max-Heap)',
+            description: 'Complete binary tree index mapping with sift-down restorative operations.',
             difficulty: 'medium',
             visualizerId: 'heap-sort',
             problemIds: ['p-dsa-heap-sort-1', 'p-lpu-heap-sort-1'],
@@ -1562,30 +1597,44 @@ export const GLOBAL_DSA_PATTERNS: MindMapCategory[] = [
         ],
       },
       {
-        id: 'sorting-non-comparison',
-        title: 'Non-Comparison Sorts',
+        id: 'sorting-counting',
+        title: 'Counting Sort',
         description: 'Linear time sorting exploiting integer keys and bounded ranges.',
         patterns: [
           {
             id: 'pat-sort-counting',
-            title: 'Counting Sort (Sort Colors)',
+            title: 'Counting Sort (Sort Colors / Frequency Prefix)',
             description: 'Count frequencies of each key in range [0..K]; compute prefix sums for stable placement.',
             difficulty: 'easy',
             problemIds: ['p-dsa130-sort-colors'],
             keyRule: 'Linear time sorting when key range K is comparable to N',
           },
+        ],
+      },
+      {
+        id: 'sorting-radix',
+        title: 'Radix Sort',
+        description: 'Sort numbers digit by digit from least significant digit (LSD) using stable counting sort.',
+        patterns: [
           {
             id: 'pat-sort-radix',
-            title: 'Radix Sort',
-            description: 'Sort numbers digit by digit from least significant digit (LSD) using stable counting sort.',
+            title: 'Radix Sort (Digit by Digit LSD)',
+            description: 'Stable distribution per base/radix exponent in O(D * (N + B)).',
             difficulty: 'medium',
             problemIds: ['p-dsa130-sort-colors'],
             keyRule: 'Linear time integer sorting for fixed bit/digit length numbers',
           },
+        ],
+      },
+      {
+        id: 'sorting-bucket',
+        title: 'Bucket Sort',
+        description: 'Distribute elements into uniform buckets; sort individual buckets and concatenate.',
+        patterns: [
           {
             id: 'pat-sort-bucket',
-            title: 'Bucket Sort',
-            description: 'Distribute elements into uniform buckets; sort individual buckets and concatenate.',
+            title: 'Bucket Sort (Uniform Distribution Partition)',
+            description: 'Scatter elements into interval buckets, sort independently, and gather.',
             difficulty: 'medium',
             problemIds: ['p-dsa-top-k-frequent-1'],
             keyRule: 'Uniformly distributed floating point or integer arrays',

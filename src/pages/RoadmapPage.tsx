@@ -12,7 +12,7 @@ export const RoadmapPage: React.FC = () => {
   const { pathId } = useParams<{ pathId: string }>();
   const { activePortal, updateStudentActivity } = useUserStore();
 
-  // Intra-portal sub-view state: flowchart (DAG, default) | list (Roadmap groups) | mindmap (Whimsical tree)
+  // Intra-portal sub-view state: flowchart (DAG, default) | list (Roadmap groups) | mindmap (Concept tree)
   const [subView, setSubView] = useState<'flowchart' | 'list' | 'mindmap'>('flowchart');
 
   useEffect(() => {
@@ -68,7 +68,7 @@ export const RoadmapPage: React.FC = () => {
                 </span>
               </button>
 
-              {/* 3. Whimsical DSA Patterns Mind Map */}
+              {/* 3. DSA Patterns Concept Tree */}
               <button
                 onClick={() => setSubView('mindmap')}
                 className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold transition ${
@@ -78,7 +78,7 @@ export const RoadmapPage: React.FC = () => {
                 }`}
               >
                 <Sparkles className="h-4 w-4 text-indigo-500 dark:text-indigo-400" />
-                <span>Whimsical Mind Map</span>
+                <span>DSA Patterns Tree</span>
                 <span className="text-[10px] uppercase font-bold px-1.5 py-0.2 rounded bg-indigo-500/15 text-indigo-700 dark:text-indigo-300">
                   16 Branches
                 </span>
@@ -128,9 +128,9 @@ export const RoadmapPage: React.FC = () => {
                 }`}
               >
                 <Sparkles className="h-4 w-4 text-emerald-500 dark:text-emerald-400" />
-                <span>LPU Syllabus Mind Map</span>
+                <span>LPU Syllabus Tree</span>
                 <span className="text-[10px] uppercase font-bold px-1.5 py-0.2 rounded bg-emerald-500/15 text-emerald-700 dark:text-emerald-300">
-                  Whimsical
+                  Concept Tree
                 </span>
               </button>
             </>

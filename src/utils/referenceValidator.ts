@@ -170,7 +170,7 @@ export function validateReferences(): ValidationResult {
     }
   }
 
-  // 10. Check Mind Map Pattern Nodes (Global & LPU Whimsical Tree)
+  // 10. Check Mind Map Pattern Nodes (Global & LPU Concept Tree)
   const allMindMapCategories = [...GLOBAL_DSA_PATTERNS, ...LPU_ACADEMIC_PATTERNS];
   for (const cat of allMindMapCategories) {
     for (const sub of cat.subPatterns) {

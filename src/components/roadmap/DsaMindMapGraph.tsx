@@ -2,18 +2,19 @@ import React, { useState, useMemo, useRef, useEffect, useCallback } from 'react'
 import { 
   ZoomIn, 
   ZoomOut, 
-  Scan, 
   Search, 
-  ExternalLink, 
   Play, 
   CheckCircle2, 
-  GraduationCap, 
   Sparkles,
-  Layers,
   FolderOpen,
   Folder,
-  Globe,
-  Maximize2
+  Layers,
+  GraduationCap,
+  Globe2,
+  ChevronRight,
+  Code2,
+  BookOpen,
+  X
 } from 'lucide-react';
 import { 
   GLOBAL_DSA_PATTERNS, 
@@ -41,13 +42,10 @@ export const DsaMindMapGraph: React.FC<DsaMindMapGraphProps> = ({
   const effectiveVariant = initialVariant || (activePortal === 'lpu' ? 'lpu' : 'global');
   const [variant, setVariant] = useState<'global' | 'lpu'>(effectiveVariant);
 
-  // View Mode: 'whimsical-embed' (Original Whimsical Canvas) vs 'interactive-tree' (Native Tree with Problems)
-  const [viewMode, setViewMode] = useState<'whimsical-embed' | 'interactive-tree'>('whimsical-embed');
-
   // Sync with activePortal if changed
   useEffect(() => {
-    setVariant(activePortal === 'lpu' ? 'lpu' : 'global');
-  }, [activePortal]);
+    setVariant(initialVariant || (activePortal === 'lpu' ? 'lpu' : 'global'));
+  }, [activePortal, initialVariant]);
 
   const categories = useMemo(() => {
     return variant === 'global' ? GLOBAL_DSA_PATTERNS : LPU_ACADEMIC_PATTERNS;
@@ -66,6 +64,18 @@ export const DsaMindMapGraph: React.FC<DsaMindMapGraphProps> = ({
     return initialSubs;
   });
 
+  // Re-expand when variant changes
+  useEffect(() => {
+    const newCats = new Set<string>();
+    const newSubs = new Set<string>();
+    categories.forEach((c) => {
+      newCats.add(c.id);
+      c.subPatterns.forEach((s) => newSubs.add(s.id));
+    });
+    setExpandedCategories(newCats);
+    setExpandedSubPatterns(newSubs);
+  }, [categories]);
+
   // Search & filter
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedDifficulty, setSelectedDifficulty] = useState<'all' | 'easy' | 'medium' | 'hard'>('all');
@@ -76,8 +86,8 @@ export const DsaMindMapGraph: React.FC<DsaMindMapGraphProps> = ({
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
   // Canvas Pan & Zoom
-  const [zoomLevel, setZoomLevel] = useState(0.8);
-  const [pan, setPan] = useState({ x: 40, y: 30 });
+  const [zoomLevel, setZoomLevel] = useState(0.85);
+  const [pan, setPan] = useState({ x: 30, y: 30 });
   const [isDragging, setIsDragging] = useState(false);
   const dragStartRef = useRef({ x: 0, y: 0 });
   const containerRef = useRef<HTMLDivElement>(null);
@@ -139,6 +149,38 @@ export const DsaMindMapGraph: React.FC<DsaMindMapGraphProps> = ({
     setExpandedSubPatterns(new Set());
   };
 
+  // Auto-expand on search match
+  useEffect(() => {
+    if (!searchQuery.trim()) return;
+    const q = searchQuery.toLowerCase();
+    const matchedCats = new Set<string>();
+    const matchedSubs = new Set<string>();
+
+    categories.forEach((cat) => {
+      let catMatched = cat.title.toLowerCase().includes(q);
+      cat.subPatterns.forEach((sub) => {
+        let subMatched = sub.title.toLowerCase().includes(q) || (sub.description && sub.description.toLowerCase().includes(q));
+        const patternMatch = sub.patterns.some((p) => 
+          p.title.toLowerCase().includes(q) || 
+          p.description.toLowerCase().includes(q) || 
+          (p.keyRule && p.keyRule.toLowerCase().includes(q))
+        );
+        if (subMatched || patternMatch) {
+          catMatched = true;
+          matchedSubs.add(sub.id);
+        }
+      });
+      if (catMatched) {
+        matchedCats.add(cat.id);
+      }
+    });
+
+    if (matchedCats.size > 0) {
+      setExpandedCategories((prev) => new Set([...prev, ...matchedCats]));
+      setExpandedSubPatterns((prev) => new Set([...prev, ...matchedSubs]));
+    }
+  }, [searchQuery, categories]);
+
   // Canvas Mouse Dragging
   const handleMouseDown = (e: React.MouseEvent) => {
     if ((e.target as HTMLElement).closest('button, input, select, a, .interactive-card')) {
@@ -172,8 +214,8 @@ export const DsaMindMapGraph: React.FC<DsaMindMapGraphProps> = ({
   };
 
   const handleReset = () => {
-    setZoomLevel(0.8);
-    setPan({ x: 40, y: 30 });
+    setZoomLevel(0.85);
+    setPan({ x: 30, y: 30 });
   };
 
   // Solved Stats calculation
@@ -206,345 +248,357 @@ export const DsaMindMapGraph: React.FC<DsaMindMapGraphProps> = ({
   };
 
   return (
-    <div className={`relative w-full bg-slate-50 dark:bg-[#090b10] flex flex-col overflow-hidden transition-all duration-200 ${
+    <div className={`relative w-full bg-slate-50 dark:bg-[#080a11] flex flex-col overflow-hidden transition-all duration-200 select-none ${
       fitScreen ? 'flex-1 min-h-0 h-full rounded-2xl border border-slate-200 dark:border-slate-800/80 shadow-2xl' : 'h-[850px] rounded-2xl border border-slate-200 dark:border-slate-800'
     }`}>
-      {/* ───── Top Controls Bar ───── */}
+      {/* ───── Top Unified Toolbar ───── */}
       <div className="flex flex-wrap items-center justify-between gap-3 px-3.5 py-2.5 sm:px-4 sm:py-3 border-b border-slate-200 dark:border-slate-800/80 bg-white/95 dark:bg-[#0c0f17]/95 backdrop-blur-md z-30 shrink-0">
         <div className="flex flex-wrap items-center gap-2">
-          {/* Dual View Mode: Live Whimsical Embed vs Interactive Mind Map */}
-          <div className="flex items-center bg-slate-100 dark:bg-slate-900 p-0.5 rounded-xl border border-slate-200 dark:border-slate-800">
+          {/* Variant Switcher: Global DSA Patterns vs LPU Syllabus Units */}
+          <div className="flex items-center bg-slate-100 dark:bg-slate-900 p-0.5 rounded-xl border border-slate-200 dark:border-slate-800 shadow-inner">
             <button
-              onClick={() => setViewMode('whimsical-embed')}
-              className={`flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-bold transition ${
-                viewMode === 'whimsical-embed'
-                  ? 'bg-purple-600 text-white shadow-sm shadow-purple-500/30'
+              onClick={() => setVariant('global')}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition ${
+                variant === 'global'
+                  ? 'bg-indigo-600 text-white shadow-md shadow-indigo-500/25'
                   : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
               }`}
             >
-              <Globe className="h-3.5 w-3.5" />
-              <span>Live Whimsical Board</span>
-              <span className="text-[10px] px-1.5 py-0.2 rounded-full bg-white/20">Original</span>
+              <Globe2 className="h-3.5 w-3.5" />
+              <span>Global DSA Patterns</span>
+              <span className="text-[10px] px-1.5 py-0.2 rounded-full bg-white/20">16 Categories</span>
             </button>
             <button
-              onClick={() => setViewMode('interactive-tree')}
-              className={`flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-bold transition ${
-                viewMode === 'interactive-tree'
-                  ? 'bg-indigo-600 text-white shadow-sm shadow-indigo-500/30'
+              onClick={() => setVariant('lpu')}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition ${
+                variant === 'lpu'
+                  ? 'bg-emerald-600 text-white shadow-md shadow-emerald-500/25'
                   : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
               }`}
             >
-              <Sparkles className="h-3.5 w-3.5" />
-              <span>Interactive Mind Map</span>
-              <span className="text-[10px] px-1.5 py-0.2 rounded-full bg-white/20">Practice Sync</span>
+              <GraduationCap className="h-3.5 w-3.5" />
+              <span>LPU Academic Syllabus</span>
+              <span className="text-[10px] px-1.5 py-0.2 rounded-full bg-white/20">CSE205 &bull; CSE202</span>
             </button>
           </div>
 
-          {/* If in interactive-tree mode: allow toggling Global vs LPU */}
-          {viewMode === 'interactive-tree' && (
-            <div className="flex items-center bg-slate-100 dark:bg-slate-900 p-0.5 rounded-xl border border-slate-200 dark:border-slate-800">
-              <button
-                onClick={() => setVariant('global')}
-                className={`px-2.5 py-1 rounded-lg text-xs font-semibold transition ${
-                  variant === 'global'
-                    ? 'bg-brand-600 text-white shadow-sm'
-                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
-                }`}
-              >
-                Global Patterns
-              </button>
-              <button
-                onClick={() => setVariant('lpu')}
-                className={`px-2.5 py-1 rounded-lg text-xs font-semibold transition ${
-                  variant === 'lpu'
-                    ? 'bg-emerald-600 text-white shadow-sm'
-                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
-                }`}
-              >
-                LPU Syllabus
-              </button>
-            </div>
-          )}
+          {/* Expand / Collapse Controls */}
+          <div className="flex items-center gap-1 bg-slate-100 dark:bg-slate-900 p-0.5 rounded-xl border border-slate-200 dark:border-slate-800 text-xs">
+            <button
+              onClick={handleExpandAll}
+              className="flex items-center gap-1 px-2.5 py-1 rounded-lg text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-800 font-semibold transition"
+              title="Expand all branches & sub-topics"
+            >
+              <FolderOpen className="h-3.5 w-3.5 text-indigo-500" />
+              <span className="hidden sm:inline">Expand All</span>
+            </button>
+            <button
+              onClick={handleCollapseAll}
+              className="flex items-center gap-1 px-2.5 py-1 rounded-lg text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-800 font-semibold transition"
+              title="Collapse branches to category root"
+            >
+              <Folder className="h-3.5 w-3.5 text-slate-400" />
+              <span className="hidden sm:inline">Collapse</span>
+            </button>
+          </div>
 
-          {viewMode === 'interactive-tree' && (
-            <div className="flex items-center gap-1 bg-slate-100 dark:bg-slate-900 p-0.5 rounded-xl border border-slate-200 dark:border-slate-800 text-xs">
-              <button
-                onClick={handleExpandAll}
-                className="flex items-center gap-1 px-2 py-1 rounded-lg text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-800 font-semibold"
-                title="Expand all branches"
-              >
-                <FolderOpen className="h-3.5 w-3.5 text-indigo-500" />
-                <span className="hidden sm:inline">Expand All</span>
-              </button>
-              <button
-                onClick={handleCollapseAll}
-                className="flex items-center gap-1 px-2 py-1 rounded-lg text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-800 font-semibold"
-                title="Collapse all branches"
-              >
-                <Folder className="h-3.5 w-3.5 text-slate-400" />
-                <span className="hidden sm:inline">Collapse</span>
-              </button>
-            </div>
-          )}
-
-          {viewMode === 'interactive-tree' && (
-            <div className="flex items-center gap-1 bg-slate-100 dark:bg-slate-900 p-0.5 rounded-xl border border-slate-200 dark:border-slate-800">
-              <button
-                onClick={() => setZoomLevel((z) => Math.min(1.8, Number((z + 0.1).toFixed(2))))}
-                className="p-1 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-800"
-                title="Zoom In"
-              >
-                <ZoomIn className="h-3.5 w-3.5" />
-              </button>
-              <button
-                onClick={() => setZoomLevel((z) => Math.max(0.25, Number((z - 0.1).toFixed(2))))}
-                className="p-1 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-800"
-                title="Zoom Out"
-              >
-                <ZoomOut className="h-3.5 w-3.5" />
-              </button>
-              <button
-                onClick={handleReset}
-                className="px-2 py-0.5 text-[11px] font-bold text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-800 rounded-md"
-                title="Reset View"
-              >
-                {Math.round(zoomLevel * 100)}%
-              </button>
-            </div>
-          )}
+          {/* Zoom & Canvas Reset */}
+          <div className="flex items-center gap-1 bg-slate-100 dark:bg-slate-900 p-0.5 rounded-xl border border-slate-200 dark:border-slate-800">
+            <button
+              onClick={() => setZoomLevel((z) => Math.min(1.8, Number((z + 0.1).toFixed(2))))}
+              className="p-1.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-800 transition"
+              title="Zoom In"
+            >
+              <ZoomIn className="h-3.5 w-3.5" />
+            </button>
+            <button
+              onClick={() => setZoomLevel((z) => Math.max(0.25, Number((z - 0.1).toFixed(2))))}
+              className="p-1.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-800 transition"
+              title="Zoom Out"
+            >
+              <ZoomOut className="h-3.5 w-3.5" />
+            </button>
+            <button
+              onClick={handleReset}
+              className="px-2 py-0.5 text-[11px] font-bold text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-800 rounded-md transition"
+              title="Reset View to 85%"
+            >
+              {Math.round(zoomLevel * 100)}%
+            </button>
+          </div>
         </div>
 
-        {/* Right Info & External Link */}
-        <div className="flex items-center gap-2">
-          {viewMode === 'whimsical-embed' ? (
-            <a
-              href="https://whimsical.com/dsa-patterns-47DQdVg8MiLZ1idPyveWFr"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-1.5 px-3 py-1 bg-purple-50 dark:bg-purple-950/40 border border-purple-200 dark:border-purple-800 text-purple-700 dark:text-purple-300 rounded-xl text-xs font-bold hover:bg-purple-100 transition shadow-sm"
-            >
-              <span>Open in Whimsical</span>
-              <ExternalLink className="h-3.5 w-3.5" />
-            </a>
-          ) : (
-            <div className="flex items-center gap-2">
-              <div className="relative">
-                <Search className="absolute left-2.5 top-2 h-3.5 w-3.5 text-slate-400" />
-                <input
-                  type="text"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Filter pattern..."
-                  className="pl-8 pr-3 py-1 bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-xs text-slate-800 dark:text-slate-200 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-indigo-500 w-40 sm:w-48"
-                />
-              </div>
+        {/* Right Info: Search & Solved Counter */}
+        <div className="flex items-center gap-2.5">
+          <div className="relative">
+            <Search className="absolute left-2.5 top-2.5 h-3.5 w-3.5 text-slate-400" />
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Filter pattern or sub-topic..."
+              className="pl-8 pr-7 py-1.5 bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-xs text-slate-800 dark:text-slate-200 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-indigo-500 w-44 sm:w-56 transition shadow-inner"
+            />
+            {searchQuery && (
+              <button
+                onClick={() => setSearchQuery('')}
+                className="absolute right-2 top-2 p-0.5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 rounded-full"
+              >
+                <X className="h-3 w-3" />
+              </button>
+            )}
+          </div>
 
-              <div className="hidden md:flex items-center gap-2 px-3 py-1 bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-xs">
-                <span className="text-slate-500 dark:text-slate-400 font-medium">Solved:</span>
-                <span className="font-extrabold text-emerald-600 dark:text-emerald-400 font-mono">
-                  {totalPatternProblems.solved} / {totalPatternProblems.total}
-                </span>
-              </div>
+          <div className="hidden md:flex items-center gap-2 px-3 py-1.5 bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-xs shadow-sm">
+            <span className="text-slate-500 dark:text-slate-400 font-medium">Solved:</span>
+            <span className="font-extrabold text-emerald-600 dark:text-emerald-400 font-mono">
+              {totalPatternProblems.solved} / {totalPatternProblems.total}
+            </span>
+            <div className="w-12 h-1.5 bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden">
+              <div 
+                className="h-full bg-emerald-500 transition-all duration-300"
+                style={{ width: `${totalPatternProblems.percentage}%` }}
+              />
             </div>
-          )}
+            <span className="text-[10px] font-bold text-slate-400">
+              {totalPatternProblems.percentage}%
+            </span>
+          </div>
         </div>
       </div>
 
-      {/* ───── VIEW 1: LIVE ORIGINAL WHIMSICAL BOARD EMBED ───── */}
-      {viewMode === 'whimsical-embed' && (
-        <div className="relative flex-1 min-h-0 w-full h-full bg-slate-100 dark:bg-[#12151e]">
-          <iframe
-            src="https://whimsical.com/embed/47DQdVg8MiLZ1idPyveWFr?key=0"
-            title="Whimsical DSA Patterns Board"
-            className="w-full h-full border-0"
-            allow="fullscreen"
-          />
-        </div>
-      )}
-
-      {/* ───── VIEW 2: INTERACTIVE PRACTICE MIND MAP WITH HORIZONTAL BRANCHING ───── */}
-      {viewMode === 'interactive-tree' && (
+      {/* ───── UNIFIED NATIVE INTERACTIVE CONCEPT TREE CANVAS ───── */}
+      <div
+        ref={containerRef}
+        onMouseDown={handleMouseDown}
+        onMouseMove={handleMouseMove}
+        onMouseUp={handleMouseUp}
+        onMouseLeave={handleMouseUp}
+        onWheel={handleWheel}
+        className={`relative flex-1 min-h-0 w-full overflow-hidden cursor-grab active:cursor-grabbing ${
+          isDragging ? 'cursor-grabbing' : ''
+        }`}
+        style={{
+          backgroundImage: `radial-gradient(circle at 1px 1px, rgba(148, 163, 184, 0.18) 1px, transparent 0)`,
+          backgroundSize: '24px 24px',
+        }}
+      >
+        {/* Scaled & Panned Canvas Viewport */}
         <div
-          ref={containerRef}
-          onMouseDown={handleMouseDown}
-          onMouseMove={handleMouseMove}
-          onMouseUp={handleMouseUp}
-          onMouseLeave={handleMouseUp}
-          onWheel={handleWheel}
-          className={`relative flex-1 min-h-0 w-full overflow-hidden select-none cursor-grab ${
-            isDragging ? 'cursor-grabbing' : ''
-          }`}
+          className="absolute origin-top-left transition-transform duration-75 ease-out"
           style={{
-            backgroundImage: `radial-gradient(circle at 1px 1px, rgba(148, 163, 184, 0.15) 1px, transparent 0)`,
-            backgroundSize: '24px 24px',
+            transform: `translate(${pan.x}px, ${pan.y}px) scale(${zoomLevel})`,
           }}
         >
-          {/* Scaled & Panned 2D Canvas */}
-          <div
-            className="absolute origin-top-left transition-transform duration-75 ease-out"
-            style={{
-              transform: `translate(${pan.x}px, ${pan.y}px) scale(${zoomLevel})`,
-            }}
-          >
-            {/* Horizontal Tree Fan-Out */}
-            <div className="flex items-start gap-16 py-8 pr-20 min-w-max">
-              {/* Central Root Card (DSA Patterns CodeWithNishchal) */}
-              <div className="sticky top-1/2 -translate-y-1/2 shrink-0 z-20">
-                <div className="w-64 p-4 rounded-2xl bg-white dark:bg-slate-900 border-2 border-indigo-500 shadow-xl flex flex-col gap-2">
-                  <span className="text-[10px] font-extrabold uppercase tracking-wider text-indigo-600 dark:text-indigo-400">
-                    DSA Patterns Mind Map
+          {/* Horizontal Tree Fan-Out Layout */}
+          <div className="flex items-start gap-12 py-10 pr-24 pl-6 min-w-max">
+            {/* 1. CENTRAL ROOT NODE CARD */}
+            <div className="sticky top-1/2 -translate-y-1/2 shrink-0 z-20">
+              <div className="w-72 p-5 rounded-2xl bg-white dark:bg-[#111422] border-2 border-indigo-500/80 shadow-2xl flex flex-col gap-2.5 backdrop-blur-md">
+                <div className="flex items-center justify-between">
+                  <span className="text-[10px] font-extrabold uppercase tracking-widest text-indigo-600 dark:text-indigo-400 flex items-center gap-1.5">
+                    <Sparkles className="h-3 w-3" />
+                    {variant === 'global' ? 'DSA Pattern Tree' : 'LPU Syllabus Tree'}
                   </span>
-                  <h2 className="text-base font-black text-slate-900 dark:text-white leading-tight">
-                    {variant === 'global' ? 'DSA Patterns' : 'LPU Academic Curricula'}
-                  </h2>
-                  <p className="text-[11px] text-slate-500 dark:text-slate-400">
-                    {variant === 'global' 
-                      ? '(CodeWithNishchal)' 
-                      : '(CSE205 & CSE202 Syllabi)'}
-                  </p>
-                  <div className="pt-2 border-t border-slate-100 dark:border-slate-800 text-[10px] text-slate-400">
-                    Click colored pills to expand branches
-                  </div>
+                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-800">
+                    {categories.length} Categories
+                  </span>
+                </div>
+
+                <h2 className="text-base font-black text-slate-900 dark:text-white leading-tight">
+                  {variant === 'global' ? 'DSA Patterns & Frameworks' : 'LPU Academic Curriculum'}
+                </h2>
+
+                <p className="text-xs text-slate-500 dark:text-slate-400 leading-snug">
+                  {variant === 'global' 
+                    ? '(Core Algorithmic Taxonomy & Frameworks)' 
+                    : '(CSE205 Data Structures & CSE202 C++ OOP)'}
+                </p>
+
+                <div className="pt-2.5 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-[11px] text-slate-500 dark:text-slate-400">
+                  <span>Click pills to expand branches</span>
+                  <span className="font-bold text-emerald-600 dark:text-emerald-400">
+                    {totalPatternProblems.solved}/{totalPatternProblems.total} Solved
+                  </span>
                 </div>
               </div>
+            </div>
 
-              {/* Category Columns */}
-              <div className="flex flex-col gap-5 relative">
-                {categories.map((cat) => {
-                  const isCatExpanded = expandedCategories.has(cat.id);
+            {/* 2. CATEGORIES COLUMN WITH CURVED BRANCHES */}
+            <div className="flex flex-col gap-6 relative">
+              {categories.map((cat) => {
+                const isCatExpanded = expandedCategories.has(cat.id);
+                const totalSubPatterns = cat.subPatterns.length;
+                const totalLeafPatterns = cat.subPatterns.reduce((acc, s) => acc + s.patterns.length, 0);
 
-                  return (
-                    <div key={cat.id} className="flex items-start gap-8 relative group">
-                      {/* Category Pill Button */}
-                      <div className="shrink-0 z-10">
-                        <button
-                          onClick={() => toggleCategory(cat.id)}
-                          className={`flex items-center gap-2 px-3 py-1.5 rounded-full border transition shadow-sm hover:shadow ${
-                            isCatExpanded
-                              ? 'bg-white dark:bg-slate-900 border-slate-300 dark:border-slate-700'
-                              : 'bg-white/80 dark:bg-slate-900/80 border-slate-200 dark:border-slate-800'
-                          }`}
+                return (
+                  <div key={cat.id} className="flex items-start gap-8 relative group">
+                    {/* Category Capsule Button */}
+                    <div className="shrink-0 z-10">
+                      <button
+                        onClick={() => toggleCategory(cat.id)}
+                        className={`flex items-center gap-2.5 px-3.5 py-2 rounded-full border transition-all duration-200 shadow-sm hover:shadow-md hover:scale-[1.02] ${
+                          isCatExpanded
+                            ? 'bg-white dark:bg-slate-900 border-slate-300 dark:border-slate-700 ring-2 ring-indigo-500/20'
+                            : 'bg-white/90 dark:bg-slate-900/90 border-slate-200 dark:border-slate-800'
+                        }`}
+                      >
+                        <span
+                          className="w-3 h-3 rounded-full shrink-0 shadow-sm"
+                          style={{ backgroundColor: cat.color }}
+                        />
+                        <span className="text-xs font-bold text-slate-900 dark:text-slate-100 tracking-tight">
+                          {cat.title}
+                        </span>
+                        <span
+                          className="px-2 py-0.5 rounded-full text-[10px] font-extrabold text-white shrink-0 shadow-sm"
+                          style={{ backgroundColor: cat.color }}
                         >
-                          <span
-                            className="w-2.5 h-2.5 rounded-full shrink-0"
-                            style={{ backgroundColor: cat.color }}
-                          />
-                          <span className="text-xs font-bold text-slate-800 dark:text-slate-200">
-                            {cat.title}
-                          </span>
-                          <span
-                            className="px-2 py-0.5 rounded-full text-[10px] font-extrabold text-white shrink-0"
-                            style={{ backgroundColor: cat.color }}
-                          >
-                            {cat.count}
-                          </span>
-                        </button>
-                      </div>
+                          {cat.count}
+                        </span>
+                        <ChevronRight className={`h-3 w-3 text-slate-400 transition-transform duration-200 ${
+                          isCatExpanded ? 'rotate-90' : ''
+                        }`} />
+                      </button>
+                    </div>
 
-                      {/* Sub-Pattern Children (Branching to the Right) */}
-                      {isCatExpanded && (
-                        <div className="flex flex-col gap-3 pl-4 border-l-2" style={{ borderColor: cat.color }}>
-                          {cat.subPatterns.map((sub) => {
-                            const isSubExpanded = expandedSubPatterns.has(sub.id);
+                    {/* Sub-Topics / Sub-Patterns Branching to the Right */}
+                    {isCatExpanded && (
+                      <div 
+                        className="flex flex-col gap-3.5 pl-5 border-l-2 relative" 
+                        style={{ borderColor: cat.color }}
+                      >
+                        {cat.subPatterns.map((sub) => {
+                          const isSubExpanded = expandedSubPatterns.has(sub.id);
+                          const patternCount = sub.patterns.length;
 
-                            return (
-                              <div key={sub.id} className="flex items-start gap-6 relative">
-                                <div className="shrink-0 z-10">
-                                  <button
-                                    onClick={() => toggleSubPattern(sub.id)}
-                                    className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full border text-xs font-semibold transition ${
-                                      isSubExpanded
-                                        ? 'bg-slate-100 dark:bg-slate-800 border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white'
-                                        : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300'
-                                    }`}
-                                  >
-                                    <span>{sub.title}</span>
+                          return (
+                            <div key={sub.id} className="flex items-start gap-6 relative">
+                              {/* Sub-Topic Capsule Button */}
+                              <div className="shrink-0 z-10">
+                                <button
+                                  onClick={() => toggleSubPattern(sub.id)}
+                                  className={`flex items-center gap-2 px-3 py-1.5 rounded-full border text-xs font-semibold transition-all duration-150 shadow-sm hover:scale-[1.02] ${
+                                    isSubExpanded
+                                      ? 'bg-slate-100 dark:bg-slate-800 border-slate-300 dark:border-slate-700 text-slate-950 dark:text-white'
+                                      : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300'
+                                  }`}
+                                >
+                                  <span className="tracking-tight">{sub.title}</span>
+                                  {patternCount > 0 && (
                                     <span 
                                       className="px-1.5 py-0.2 rounded-full text-[9px] font-extrabold text-white"
                                       style={{ backgroundColor: cat.color }}
                                     >
-                                      {sub.patterns.length}
+                                      {patternCount}
                                     </span>
-                                  </button>
-                                </div>
+                                  )}
+                                  <ChevronRight className={`h-2.5 w-2.5 text-slate-400 transition-transform duration-150 ${
+                                    isSubExpanded ? 'rotate-90' : ''
+                                  }`} />
+                                </button>
+                              </div>
 
-                                {/* Leaf Pattern Cards */}
-                                {isSubExpanded && (
-                                  <div className="flex flex-col gap-2 pl-3 border-l border-slate-300 dark:border-slate-700">
-                                    {sub.patterns.map((pat) => {
-                                      const solvedCount = pat.problemIds.filter(
-                                        (id) => problemProgress[id]?.status === 'SOLVED'
-                                      ).length;
-                                      const isComplete = pat.problemIds.length > 0 && solvedCount === pat.problemIds.length;
+                              {/* Concrete Leaf Pattern Cards */}
+                              {isSubExpanded && (
+                                <div className="flex flex-col gap-2.5 pl-4 border-l-2 border-slate-300 dark:border-slate-700">
+                                  {sub.patterns.map((pat) => {
+                                    const solvedCount = pat.problemIds.filter(
+                                      (id) => problemProgress[id]?.status === 'SOLVED'
+                                    ).length;
+                                    const isComplete = pat.problemIds.length > 0 && solvedCount === pat.problemIds.length;
 
-                                      return (
-                                        <div
-                                          key={pat.id}
-                                          className={`p-2.5 rounded-xl border bg-white dark:bg-slate-900 shadow-sm w-72 sm:w-80 flex flex-col gap-1.5 text-xs ${
-                                            isComplete
-                                              ? 'border-emerald-500/50 bg-emerald-500/5'
-                                              : 'border-slate-200 dark:border-slate-800'
-                                          }`}
-                                        >
-                                          <div className="flex items-center justify-between gap-1">
-                                            <span className="font-bold text-slate-900 dark:text-white line-clamp-1">
-                                              {pat.title}
+                                    return (
+                                      <div
+                                        key={pat.id}
+                                        className={`interactive-card p-3 rounded-xl border bg-white dark:bg-slate-900 shadow-sm hover:shadow-md transition w-72 sm:w-84 flex flex-col gap-1.5 text-xs ${
+                                          isComplete
+                                            ? 'border-emerald-500/50 bg-emerald-500/5'
+                                            : 'border-slate-200 dark:border-slate-800'
+                                        }`}
+                                      >
+                                        {/* Pattern Title & Difficulty */}
+                                        <div className="flex items-center justify-between gap-1.5">
+                                          <span className="font-bold text-slate-900 dark:text-white line-clamp-1">
+                                            {pat.title}
+                                          </span>
+                                          {pat.difficulty && (
+                                            <span className={`text-[9px] px-1.5 py-0.2 rounded font-bold uppercase shrink-0 ${
+                                              pat.difficulty === 'easy'
+                                                ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400'
+                                                : pat.difficulty === 'hard'
+                                                ? 'bg-rose-500/10 text-rose-600 dark:text-rose-400'
+                                                : 'bg-amber-500/10 text-amber-600 dark:text-amber-400'
+                                            }`}>
+                                              {pat.difficulty}
                                             </span>
-                                            {pat.difficulty && (
-                                              <span className={`text-[9px] px-1.5 py-0.2 rounded font-bold uppercase shrink-0 ${
-                                                pat.difficulty === 'easy'
-                                                  ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400'
-                                                  : pat.difficulty === 'hard'
-                                                  ? 'bg-rose-500/10 text-rose-600 dark:text-rose-400'
-                                                  : 'bg-amber-500/10 text-amber-600 dark:text-amber-400'
-                                              }`}>
-                                                {pat.difficulty}
+                                          )}
+                                        </div>
+
+                                        {/* Description */}
+                                        <p className="text-[11px] text-slate-500 dark:text-slate-400 line-clamp-2 leading-relaxed">
+                                          {pat.description}
+                                        </p>
+
+                                        {/* Key Rule / Invariant Monospace Callout */}
+                                        {pat.keyRule && (
+                                          <div className="text-[10px] font-mono p-1.5 rounded-lg bg-slate-50 dark:bg-slate-950/70 border border-slate-200/60 dark:border-slate-800 text-slate-600 dark:text-slate-300 line-clamp-1">
+                                            {pat.keyRule}
+                                          </div>
+                                        )}
+
+                                        {/* Actions: Problem Drawer & Visualizer */}
+                                        <div className="flex items-center justify-between pt-1.5 border-t border-slate-100 dark:border-slate-800 text-[11px]">
+                                          <button
+                                            onClick={() => handleOpenDrawer(pat.title, pat.description, pat.problemIds)}
+                                            className="font-bold text-indigo-600 dark:text-indigo-400 hover:underline flex items-center gap-1"
+                                          >
+                                            <BookOpen className="h-3 w-3" />
+                                            <span>
+                                              {pat.problemIds.length} Practice {pat.problemIds.length === 1 ? 'Problem' : 'Problems'}
+                                            </span>
+                                            {solvedCount > 0 && (
+                                              <span className="text-[10px] text-emerald-600 dark:text-emerald-400 font-bold">
+                                                ({solvedCount}/{pat.problemIds.length})
                                               </span>
                                             )}
-                                          </div>
+                                          </button>
 
-                                          {pat.keyRule && (
-                                            <div className="text-[10px] font-mono p-1 rounded bg-slate-50 dark:bg-slate-950/60 border border-slate-200/60 dark:border-slate-800 text-slate-600 dark:text-slate-400 line-clamp-1">
-                                              {pat.keyRule}
-                                            </div>
-                                          )}
-
-                                          <div className="flex items-center justify-between pt-1 border-t border-slate-100 dark:border-slate-800 text-[10px]">
-                                            <button
-                                              onClick={() => handleOpenDrawer(pat.title, pat.description, pat.problemIds)}
-                                              className="font-bold text-indigo-600 dark:text-indigo-400 hover:underline"
-                                            >
-                                              {pat.problemIds.length} Practice Problems
-                                            </button>
-
+                                          <div className="flex items-center gap-2">
                                             {pat.visualizerId && (
                                               <a
-                                                href="/visualizers"
-                                                className="flex items-center gap-1 font-semibold text-indigo-500 hover:text-indigo-600"
+                                                href={`/visualizers`}
+                                                className="flex items-center gap-1 font-semibold text-indigo-500 hover:text-indigo-600 dark:hover:text-indigo-400 transition"
+                                                title="Open algorithm visualizer"
                                               >
                                                 <Play className="h-2.5 w-2.5" />
                                                 <span>Visualizer</span>
                                               </a>
                                             )}
+                                            {isComplete && (
+                                              <span className="flex items-center gap-0.5 text-emerald-600 dark:text-emerald-400 font-bold text-[10px]" title="All problems solved">
+                                                <CheckCircle2 className="h-3 w-3" />
+                                              </span>
+                                            )}
                                           </div>
                                         </div>
-                                      );
-                                    })}
-                                  </div>
-                                )}
-                              </div>
-                            );
-                          })}
-                        </div>
-                      )}
-                    </div>
-                  );
-                })}
-              </div>
+                                      </div>
+                                    );
+                                  })}
+                                </div>
+                              )}
+                            </div>
+                          );
+                        })}
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
             </div>
           </div>
         </div>
-      )}
+      </div>
 
       {/* ───── Topic Drawer for Pattern Problems ───── */}
       {drawerNode && (
