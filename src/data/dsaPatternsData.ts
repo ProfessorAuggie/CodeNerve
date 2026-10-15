@@ -54,7 +54,7 @@ export const GLOBAL_DSA_PATTERNS: MindMapCategory[] = [
         patterns: [
           {
             id: 'pat-two-pointer-opposite',
-            title: 'Opposite Ends (Inward Pointers)',
+            title: 'Opposite ends (left + right)',
             description: 'Two pointers moving inward from both ends (left -> <- right) for sorted pairs or palindromes.',
             difficulty: 'easy',
             problemIds: ['p-dsa-two-sum-1', 'p-dsa-three-sum-1'],
@@ -62,7 +62,7 @@ export const GLOBAL_DSA_PATTERNS: MindMapCategory[] = [
           },
           {
             id: 'pat-two-pointer-same-dir',
-            title: 'Same Direction (Fast & Slow / Shifting)',
+            title: 'Same direction (fast & slow pointers)',
             description: 'Read and write pointers moving in the same direction for in-place removal or compaction.',
             difficulty: 'easy',
             problemIds: ['p-dsa-array-insert-1', 'p-lpu-array-insert-1'],
@@ -70,7 +70,7 @@ export const GLOBAL_DSA_PATTERNS: MindMapCategory[] = [
           },
           {
             id: 'pat-two-pointer-merge',
-            title: 'Merging Two Arrays / Intersecting',
+            title: 'Partition / Dutch flag',
             description: 'Traverse two sorted arrays simultaneously using independent pointers.',
             difficulty: 'easy',
             problemIds: ['p-dsa-array-traversal-1', 'p-lpu-array-traversal-1'],
@@ -85,7 +85,7 @@ export const GLOBAL_DSA_PATTERNS: MindMapCategory[] = [
         patterns: [
           {
             id: 'pat-sw-fixed',
-            title: 'Fixed Size Window (K)',
+            title: 'Fixed Size',
             description: 'Subarray of fixed size K. Slide window by adding incoming element and subtracting outgoing.',
             difficulty: 'easy',
             problemIds: ['p-dsa-stock-buy-sell-1'],
@@ -93,7 +93,7 @@ export const GLOBAL_DSA_PATTERNS: MindMapCategory[] = [
           },
           {
             id: 'pat-sw-variable',
-            title: 'Variable Size Window (Condition <= K, >= K)',
+            title: 'Variable Size (Expand-Shrink)',
             description: 'Expand right pointer until condition is broken; contract left pointer until valid again.',
             difficulty: 'medium',
             problemIds: ['p-dsa-char-replacement-1', 'p-dsa-container-water-1'],
@@ -101,7 +101,7 @@ export const GLOBAL_DSA_PATTERNS: MindMapCategory[] = [
           },
           {
             id: 'pat-sw-aux-hash',
-            title: 'Window with Auxiliary HashMap / Set',
+            title: 'Variable Size (Monotonic Window)',
             description: 'Maintain element frequencies or uniqueness inside the sliding window.',
             difficulty: 'medium',
             problemIds: ['p-dsa-longest-substring-no-repeat-1'],
@@ -124,7 +124,7 @@ export const GLOBAL_DSA_PATTERNS: MindMapCategory[] = [
         patterns: [
           {
             id: 'pat-prefix-range-sum',
-            title: 'Prefix Sum & Range Queries',
+            title: 'Prefix Sum',
             description: 'Range sum query in O(1): sum(L..R) = prefix[R] - prefix[L-1].',
             difficulty: 'easy',
             problemIds: ['p-dsa-array-traversal-1', 'p-lpu-array-traversal-1'],
@@ -132,7 +132,7 @@ export const GLOBAL_DSA_PATTERNS: MindMapCategory[] = [
           },
           {
             id: 'pat-prefix-xor',
-            title: 'Prefix XOR & Bitwise Range',
+            title: 'Prefix XOR',
             description: 'XOR range query: xor(L..R) = prefixXor[R] ^ prefixXor[L-1].',
             difficulty: 'medium',
             problemIds: ['p-dsa-single-number-1', 'p-dsa-counting-bits-1'],
@@ -140,7 +140,7 @@ export const GLOBAL_DSA_PATTERNS: MindMapCategory[] = [
           },
           {
             id: 'pat-prefix-hash-target',
-            title: 'Prefix Sum + HashMap (Subarray Sum = K)',
+            title: '2D Prefix',
             description: 'Track seen prefix sums in a HashMap to find subarrays summing to exact target in O(N).',
             difficulty: 'medium',
             problemIds: ['p-dsa-two-sum-1'],
@@ -155,7 +155,7 @@ export const GLOBAL_DSA_PATTERNS: MindMapCategory[] = [
         patterns: [
           {
             id: 'pat-kadane-max-sum',
-            title: 'Maximum Subarray Sum (Kadane)',
+            title: "Max subarray sum (Kadane's)",
             description: 'current_max = max(num, current_max + num); overall_max = max(overall_max, current_max).',
             difficulty: 'medium',
             problemIds: ['p-dsa-kadane-1', 'p-lpu-kadane-1'],
@@ -163,7 +163,7 @@ export const GLOBAL_DSA_PATTERNS: MindMapCategory[] = [
           },
           {
             id: 'pat-kadane-max-product',
-            title: 'Maximum Product Subarray',
+            title: 'Max product subarray',
             description: 'Track both maximum and minimum running products to handle negative sign reversals.',
             difficulty: 'medium',
             problemIds: ['p-dsa-kadane-1'],
@@ -171,7 +171,7 @@ export const GLOBAL_DSA_PATTERNS: MindMapCategory[] = [
           },
           {
             id: 'pat-kadane-circular',
-            title: 'Circular Subarray Sum',
+            title: 'Subarray with given XOR / sum',
             description: 'max(standard_kadane, total_sum - min_kadane) to handle circular wrapping.',
             difficulty: 'medium',
             problemIds: ['p-dsa-kadane-1', 'p-lpu-kadane-1'],
@@ -186,7 +186,7 @@ export const GLOBAL_DSA_PATTERNS: MindMapCategory[] = [
         patterns: [
           {
             id: 'pat-bs-index',
-            title: 'Binary Search on Array / Index',
+            title: 'on index',
             description: 'Search in sorted, rotated, or peaked arrays by checking midpoint against boundary conditions.',
             difficulty: 'easy',
             visualizerId: 'binary-search',
@@ -195,7 +195,7 @@ export const GLOBAL_DSA_PATTERNS: MindMapCategory[] = [
           },
           {
             id: 'pat-bs-answer',
-            title: 'Binary Search on Answer / Search Space',
+            title: 'on answer',
             description: 'Define monotonic boolean predicate isPossible(mid) and binary search on possible output values.',
             difficulty: 'medium',
             problemIds: ['p-dsa-koko-bananas-1', 'p-dsa-find-min-rotated-1'],
@@ -225,7 +225,7 @@ export const GLOBAL_DSA_PATTERNS: MindMapCategory[] = [
         patterns: [
           {
             id: 'pat-str-longest-no-repeat',
-            title: 'Longest Substring Without Repeating Characters',
+            title: 'Longest substring without repeat',
             description: 'Dynamic window using last seen character index map to advance left boundary.',
             difficulty: 'medium',
             problemIds: ['p-dsa-longest-substring-no-repeat-1'],
@@ -233,7 +233,7 @@ export const GLOBAL_DSA_PATTERNS: MindMapCategory[] = [
           },
           {
             id: 'pat-str-min-window',
-            title: 'Minimum Window Substring',
+            title: 'Minimum window substring',
             description: 'Two pointer expansion/shrink tracking required character count frequencies.',
             difficulty: 'hard',
             problemIds: ['p-dsa130-minimum-window-substring'],
@@ -241,7 +241,7 @@ export const GLOBAL_DSA_PATTERNS: MindMapCategory[] = [
           },
           {
             id: 'pat-str-anagram-window',
-            title: 'Find All Anagrams in a String',
+            title: 'Anagram / permutation in string',
             description: 'Fixed size window of size length(pattern) with frequency delta tracking.',
             difficulty: 'medium',
             problemIds: ['p-dsa130-find-all-anagrams-in-a-string'],
@@ -256,7 +256,7 @@ export const GLOBAL_DSA_PATTERNS: MindMapCategory[] = [
         patterns: [
           {
             id: 'pat-str-valid-palindrome',
-            title: 'Valid Palindrome & Alphanumeric Clean-up',
+            title: 'Palindrome check',
             description: 'Inward pointers ignoring non-alphanumeric symbols and case differences.',
             difficulty: 'easy',
             problemIds: ['p-dsa130-longest-palindromic-substring', 'p-dsa-palindrome-partitioning-1'],
@@ -264,7 +264,7 @@ export const GLOBAL_DSA_PATTERNS: MindMapCategory[] = [
           },
           {
             id: 'pat-str-reverse-words',
-            title: 'Reverse String / Reverse Words',
+            title: 'Reverse words / characters',
             description: 'Two pointer character swap followed by individual word boundary swaps.',
             difficulty: 'medium',
             problemIds: ['p-dsa-reverse-bits-1', 'p-cpp-strings-1'],
@@ -272,7 +272,7 @@ export const GLOBAL_DSA_PATTERNS: MindMapCategory[] = [
           },
           {
             id: 'pat-str-compaction',
-            title: 'String Compression & In-Place Compaction',
+            title: 'String compression',
             description: 'Fast and slow pointer write indexing for run-length encoding.',
             difficulty: 'medium',
             problemIds: ['p-dsa-char-replacement-1'],
@@ -287,7 +287,7 @@ export const GLOBAL_DSA_PATTERNS: MindMapCategory[] = [
         patterns: [
           {
             id: 'pat-str-kmp',
-            title: 'KMP Algorithm (Longest Prefix Suffix - LPS)',
+            title: 'KMP (failure function)',
             description: 'Precompute LPS array to avoid backtracking text pointer upon mismatch. O(N+M).',
             difficulty: 'hard',
             problemIds: ['p-dsa-word-ladder-1'],
@@ -295,7 +295,7 @@ export const GLOBAL_DSA_PATTERNS: MindMapCategory[] = [
           },
           {
             id: 'pat-str-rabin-karp',
-            title: 'Rabin-Karp Rolling Hash',
+            title: 'Rabin-Karp (rolling hash)',
             description: 'Rolling polynomial hash with modular arithmetic for fast O(1) window hash updates.',
             difficulty: 'hard',
             problemIds: ['p-dsa130-longest-common-prefix'],
@@ -303,7 +303,7 @@ export const GLOBAL_DSA_PATTERNS: MindMapCategory[] = [
           },
           {
             id: 'pat-str-z-algo',
-            title: 'Z-Algorithm',
+            title: 'Z-algorithm',
             description: 'Construct Z-array where Z[i] is the length of longest prefix match starting at index i.',
             difficulty: 'hard',
             problemIds: ['p-dsa130-longest-common-prefix'],
@@ -423,7 +423,7 @@ export const GLOBAL_DSA_PATTERNS: MindMapCategory[] = [
         patterns: [
           {
             id: 'pat-mono-stack-inc',
-            title: 'Monotonic Increasing Stack',
+            title: 'Increasing',
             description: 'Pushes elements while maintaining ascending order; pops larger elements to identify previous bounds.',
             difficulty: 'medium',
             problemIds: ['p-dsa-daily-temperatures-1'],
@@ -431,7 +431,7 @@ export const GLOBAL_DSA_PATTERNS: MindMapCategory[] = [
           },
           {
             id: 'pat-mono-stack-dec',
-            title: 'Monotonic Decreasing Stack',
+            title: 'Decreasing',
             description: 'Pushes elements maintaining descending order; pops smaller elements to find bounds.',
             difficulty: 'medium',
             problemIds: ['p-dsa-next-greater-1'],
@@ -446,7 +446,7 @@ export const GLOBAL_DSA_PATTERNS: MindMapCategory[] = [
         patterns: [
           {
             id: 'pat-stack-nge',
-            title: 'Next Greater Element (NGE)',
+            title: 'Next Greater',
             description: 'Traverse array maintaining monotonic stack of candidates.',
             difficulty: 'medium',
             problemIds: ['p-dsa-next-greater-1'],
@@ -454,7 +454,7 @@ export const GLOBAL_DSA_PATTERNS: MindMapCategory[] = [
           },
           {
             id: 'pat-stack-pse',
-            title: 'Previous Smaller Element (PSE)',
+            title: 'Next Smaller',
             description: 'Traverse array from left to right to capture closest smaller boundary to left.',
             difficulty: 'medium',
             problemIds: ['p-dsa-largest-rect-histogram-1'],
@@ -462,7 +462,7 @@ export const GLOBAL_DSA_PATTERNS: MindMapCategory[] = [
           },
           {
             id: 'pat-stack-nse',
-            title: 'Next Smaller Element (NSE)',
+            title: 'Previous Variants',
             description: 'Traverse array capturing closest smaller boundary to right.',
             difficulty: 'medium',
             problemIds: ['p-dsa-largest-rect-histogram-1'],
@@ -576,7 +576,7 @@ export const GLOBAL_DSA_PATTERNS: MindMapCategory[] = [
         patterns: [
           {
             id: 'pat-queue-level-order',
-            title: 'BFS Level Order Traversal',
+            title: 'BFS (Level Order/ zigzag/ right side view)',
             description: 'Process current queue length in a batch to separate tree/graph elements by depth level.',
             difficulty: 'medium',
             problemIds: ['p-dsa-tree-level-order-1', 'p-lpu-tree-level-order-1'],
@@ -636,7 +636,7 @@ export const GLOBAL_DSA_PATTERNS: MindMapCategory[] = [
         patterns: [
           {
             id: 'pat-ll-cycle-detection',
-            title: "Floyd's Cycle Detection (Fast & Slow Pointers)",
+            title: 'Fast-Slow',
             description: 'Slow advances 1 step, fast advances 2 steps. If they collide, a cycle exists.',
             difficulty: 'easy',
             problemIds: ['p-dsa-ll-cycle-1', 'p-lpu-ll-cycle-1'],
@@ -644,7 +644,7 @@ export const GLOBAL_DSA_PATTERNS: MindMapCategory[] = [
           },
           {
             id: 'pat-ll-middle-node',
-            title: 'Finding the Middle Node',
+            title: 'Cycle Detection',
             description: 'When fast pointer reaches end of list, slow pointer resides at exact midpoint.',
             difficulty: 'easy',
             problemIds: ['p-dsa-ll-middle-1', 'p-lpu-ll-middle-1'],
@@ -652,7 +652,7 @@ export const GLOBAL_DSA_PATTERNS: MindMapCategory[] = [
           },
           {
             id: 'pat-ll-remove-nth-end',
-            title: 'Remove N-th Node from End of List',
+            title: 'Finding Middle',
             description: 'Advance first pointer by N steps; then advance both until first reaches end.',
             difficulty: 'medium',
             problemIds: ['p-dsa-remove-nth-from-end-1'],
@@ -667,7 +667,7 @@ export const GLOBAL_DSA_PATTERNS: MindMapCategory[] = [
         patterns: [
           {
             id: 'pat-ll-reverse-standard',
-            title: 'Reverse Linked List (Iterative & Recursive)',
+            title: 'Full Reverse',
             description: 'Three pointers (prev, curr, next) to reverse link directions in O(N) time.',
             difficulty: 'easy',
             visualizerId: 'singly-linked-list',
@@ -676,7 +676,7 @@ export const GLOBAL_DSA_PATTERNS: MindMapCategory[] = [
           },
           {
             id: 'pat-ll-reverse-k-group',
-            title: 'Reorder and Segmented Reverse',
+            title: 'Partial (k-group)',
             description: 'Segment and reorder linked lists in-place.',
             difficulty: 'hard',
             problemIds: ['p-dsa-reorder-list-1'],
@@ -721,7 +721,7 @@ export const GLOBAL_DSA_PATTERNS: MindMapCategory[] = [
         patterns: [
           {
             id: 'pat-tree-dfs-traversals',
-            title: 'DFS Traversals (Inorder, Preorder, Postorder)',
+            title: 'DFS (Pre / In / Post order)',
             description: 'Recursive and iterative traversals using stack. Inorder on BST yields sorted order.',
             difficulty: 'easy',
             problemIds: ['p-dsa-tree-traversal-1', 'p-lpu-tree-traversal-1'],
@@ -744,7 +744,7 @@ export const GLOBAL_DSA_PATTERNS: MindMapCategory[] = [
         patterns: [
           {
             id: 'pat-tree-max-depth',
-            title: 'Maximum Depth / Height of Binary Tree',
+            title: 'Top Down approach',
             description: '1 + max(maxDepth(root.left), maxDepth(root.right)). Base case: null node returns 0.',
             difficulty: 'easy',
             problemIds: ['p-dsa-tree-max-depth-1', 'p-dsa-invert-tree-1'],
@@ -752,7 +752,7 @@ export const GLOBAL_DSA_PATTERNS: MindMapCategory[] = [
           },
           {
             id: 'pat-tree-diameter',
-            title: 'Diameter of Binary Tree & Balanced Tree',
+            title: 'Bottom Up approach',
             description: 'Calculate left height + right height at each node while returning 1 + max height upwards.',
             difficulty: 'easy',
             problemIds: ['p-dsa-diameter-tree-1', 'p-dsa-balanced-tree-1'],
@@ -767,7 +767,7 @@ export const GLOBAL_DSA_PATTERNS: MindMapCategory[] = [
         patterns: [
           {
             id: 'pat-tree-path-sum-leaf',
-            title: 'Subtree & Same Tree Verification',
+            title: 'Max path sum',
             description: 'Recursively verify structural equivalence and subtree matches.',
             difficulty: 'easy',
             problemIds: ['p-dsa-same-tree-1', 'p-dsa-subtree-of-tree-1'],
@@ -860,7 +860,7 @@ export const GLOBAL_DSA_PATTERNS: MindMapCategory[] = [
         patterns: [
           {
             id: 'pat-dc-merge-sort',
-            title: 'Merge Sort & Inversion Count',
+            title: 'Merge sort pattern',
             description: 'Halve array, sort left and right halves, merge in linear time.',
             difficulty: 'medium',
             visualizerId: 'merge-sort',
@@ -869,7 +869,7 @@ export const GLOBAL_DSA_PATTERNS: MindMapCategory[] = [
           },
           {
             id: 'pat-dc-quick-select',
-            title: 'Quick Sort & Partitioning',
+            title: 'Quick select (Kth largest)',
             description: 'Partition array around pivot; recurse on sub-arrays.',
             difficulty: 'medium',
             visualizerId: 'quick-sort',
@@ -878,7 +878,7 @@ export const GLOBAL_DSA_PATTERNS: MindMapCategory[] = [
           },
           {
             id: 'pat-dc-pow-x-n',
-            title: 'Binary Exponentiation (Pow(x, n))',
+            title: 'Count inversions',
             description: 'Compute x^n by squaring x^(n/2) in O(log n) time.',
             difficulty: 'medium',
             problemIds: ['p-dsa-powx-n-1'],
@@ -939,7 +939,7 @@ export const GLOBAL_DSA_PATTERNS: MindMapCategory[] = [
         patterns: [
           {
             id: 'pat-heap-task-scheduler',
-            title: 'Task Scheduler with Cooldown & Median Stream',
+            title: 'Task scheduler',
             description: 'Max-heap of task frequencies + waiting queue tracking when tasks become eligible.',
             difficulty: 'medium',
             problemIds: ['p-dsa-task-scheduler-1', 'p-dsa-median-data-stream-1'],
@@ -947,7 +947,7 @@ export const GLOBAL_DSA_PATTERNS: MindMapCategory[] = [
           },
           {
             id: 'pat-heap-meeting-rooms-ii',
-            title: 'Meeting Rooms II (Min Conference Rooms)',
+            title: 'Meeting rooms',
             description: 'Sort meetings by start time; min-heap stores end times of active meetings.',
             difficulty: 'medium',
             problemIds: ['p-dsa-meeting-rooms-ii-1'],
@@ -992,7 +992,7 @@ export const GLOBAL_DSA_PATTERNS: MindMapCategory[] = [
         patterns: [
           {
             id: 'pat-graph-bfs',
-            title: 'Breadth-First Search (BFS)',
+            title: 'BFS',
             description: 'Queue-based traversal exploring nearest neighbors first. Finds shortest path in unweighted graphs.',
             difficulty: 'medium',
             visualizerId: 'bfs',
@@ -1001,7 +1001,7 @@ export const GLOBAL_DSA_PATTERNS: MindMapCategory[] = [
           },
           {
             id: 'pat-graph-dfs',
-            title: 'Depth-First Search (DFS)',
+            title: 'DFS',
             description: 'Recursive exploration visiting deepest unvisited branch before backtracking.',
             difficulty: 'medium',
             visualizerId: 'dfs',
@@ -1032,7 +1032,7 @@ export const GLOBAL_DSA_PATTERNS: MindMapCategory[] = [
         patterns: [
           {
             id: 'pat-graph-kahns-algo',
-            title: "Kahn's Algorithm (BFS In-Degree) & Course Schedule",
+            title: 'Topological Sort (BFS / DFS)',
             description: 'Compute in-degrees. Push 0 in-degree nodes into queue. Remove, decrement neighbors, repeat.',
             difficulty: 'medium',
             problemIds: ['p-dsa-course-schedule-1', 'p-dsa-course-schedule-ii-1'],
@@ -1047,7 +1047,7 @@ export const GLOBAL_DSA_PATTERNS: MindMapCategory[] = [
         patterns: [
           {
             id: 'pat-graph-dijkstra',
-            title: "Dijkstra's Algorithm (Non-Negative Weights)",
+            title: 'Dijkstra',
             description: 'Min-heap priority queue tracking (dist, node). Greedily relax edges with non-negative weights.',
             difficulty: 'medium',
             visualizerId: 'dijkstra',
@@ -1056,7 +1056,7 @@ export const GLOBAL_DSA_PATTERNS: MindMapCategory[] = [
           },
           {
             id: 'pat-graph-bellman-ford',
-            title: 'Bellman-Ford Algorithm (Negative Weights & Cycles)',
+            title: 'Bellman-Ford',
             description: 'Relax all edges V-1 times. A V-th relaxation improvement indicates negative weight cycle.',
             difficulty: 'medium',
             problemIds: ['p-dsa-bellman-ford-1'],
@@ -1064,7 +1064,7 @@ export const GLOBAL_DSA_PATTERNS: MindMapCategory[] = [
           },
           {
             id: 'pat-graph-floyd-warshall',
-            title: 'Floyd-Warshall All-Pairs Shortest Path',
+            title: 'Floyd-Warshall (all pairs)',
             description: 'Dynamic programming matrix update: dist[i][j] = min(dist[i][j], dist[i][k] + dist[k][j]).',
             difficulty: 'hard',
             problemIds: ['p-dsa-floyd-warshall-1'],
@@ -1079,7 +1079,7 @@ export const GLOBAL_DSA_PATTERNS: MindMapCategory[] = [
         patterns: [
           {
             id: 'pat-graph-kruskal',
-            title: "Kruskal's Algorithm (Edge Sorting + DSU)",
+            title: 'Kruskal',
             description: 'Sort edges ascending by weight. Greedily add edge if it connects two disconnected components.',
             difficulty: 'medium',
             problemIds: ['p-dsa-mst-kruskal-1', 'p-lpu-mst-kruskal-1'],
@@ -1087,7 +1087,7 @@ export const GLOBAL_DSA_PATTERNS: MindMapCategory[] = [
           },
           {
             id: 'pat-graph-prim',
-            title: "Prim's Algorithm (Vertex-based Priority Queue)",
+            title: 'Prims',
             description: 'Start at arbitrary node. Priority queue greedily pulls lightest edge crossing cut boundary.',
             difficulty: 'medium',
             problemIds: ['p-dsa-mst-prim-1'],
@@ -1155,7 +1155,7 @@ export const GLOBAL_DSA_PATTERNS: MindMapCategory[] = [
         patterns: [
           {
             id: 'pat-trie-dict',
-            title: 'Implement Trie (Prefix Tree) & Word Dictionary',
+            title: 'Insert/Search',
             description: 'Insert words character by character; mark isEndOfWord flag. O(L) insert and lookup.',
             difficulty: 'medium',
             problemIds: ['p-dsa-implement-trie-1', 'p-dsa-word-dictionary-trie-1'],
@@ -1163,7 +1163,7 @@ export const GLOBAL_DSA_PATTERNS: MindMapCategory[] = [
           },
           {
             id: 'pat-trie-word-search-ii',
-            title: 'Word Search II (Boggle Grid with Trie)',
+            title: 'Prefix Match',
             description: 'Insert dictionary words into Trie; DFS on 2D board guided by Trie prefix existence.',
             difficulty: 'hard',
             problemIds: ['p-dsa-word-search-ii-trie-1'],
@@ -1208,7 +1208,7 @@ export const GLOBAL_DSA_PATTERNS: MindMapCategory[] = [
         patterns: [
           {
             id: 'pat-dp-memoization',
-            title: 'Memoization (Top-Down with Cache)',
+            title: '1D',
             description: 'Recursive state space with lookup table to prevent redundant re-computation.',
             difficulty: 'easy',
             visualizerId: 'fibonacci-dp',
@@ -1217,7 +1217,7 @@ export const GLOBAL_DSA_PATTERNS: MindMapCategory[] = [
           },
           {
             id: 'pat-dp-tabulation',
-            title: 'Tabulation (Bottom-Up Iteration)',
+            title: '2D',
             description: 'Solve base cases first, then iteratively build DP table towards final target.',
             difficulty: 'medium',
             problemIds: ['p-dsa-coin-change-1'],
@@ -1232,7 +1232,7 @@ export const GLOBAL_DSA_PATTERNS: MindMapCategory[] = [
         patterns: [
           {
             id: 'pat-dp-1d',
-            title: '1D State DP (House Robber / Stairs)',
+            title: 'Linear DP',
             description: 'dp[i] = max(dp[i-1], dp[i-2] + nums[i]). Depends on immediate prior states.',
             difficulty: 'medium',
             problemIds: ['p-dsa-house-robber-1'],
@@ -1240,7 +1240,7 @@ export const GLOBAL_DSA_PATTERNS: MindMapCategory[] = [
           },
           {
             id: 'pat-dp-2d-grid',
-            title: '2D Grid / Matrix DP (Unique Paths)',
+            title: 'Grid DP',
             description: 'dp[r][c] = dp[r-1][c] + dp[r][c-1]. Bounded path traversal across grid coordinates.',
             difficulty: 'medium',
             problemIds: ['p-dsa-unique-paths-1'],
@@ -1255,7 +1255,7 @@ export const GLOBAL_DSA_PATTERNS: MindMapCategory[] = [
         patterns: [
           {
             id: 'pat-dp-knapsack',
-            title: '0/1 Knapsack & Target Sum',
+            title: 'Knapsack',
             description: 'Include or exclude item at index i. For 0/1 knapsack, iterate capacity backwards.',
             difficulty: 'medium',
             problemIds: ['p-dsa-target-sum-1'],
@@ -1263,7 +1263,7 @@ export const GLOBAL_DSA_PATTERNS: MindMapCategory[] = [
           },
           {
             id: 'pat-dp-lcs',
-            title: 'Longest Common Subsequence (LCS) & Edit Distance',
+            title: 'Sequence DP',
             description: 'Compare characters: if s1[i]==s2[j] -> 1 + dp[i-1][j-1]; else max(dp[i-1][j], dp[i][j-1]).',
             difficulty: 'medium',
             visualizerId: 'lcs',
@@ -1272,7 +1272,7 @@ export const GLOBAL_DSA_PATTERNS: MindMapCategory[] = [
           },
           {
             id: 'pat-dp-lis',
-            title: 'Longest Increasing Subsequence (LIS - O(N log N))',
+            title: 'Partition DP',
             description: 'dp[i] = 1 + max(dp[j]) or Patience Sort with Binary Search in tails array.',
             difficulty: 'medium',
             problemIds: ['p-dsa-lis-1'],
@@ -1280,7 +1280,7 @@ export const GLOBAL_DSA_PATTERNS: MindMapCategory[] = [
           },
           {
             id: 'pat-dp-mcm',
-            title: 'Word Break & Partition DP',
+            title: 'Interval DP',
             description: 'Try all partition points k between i and j.',
             difficulty: 'hard',
             problemIds: ['p-dsa-word-break-1'],
@@ -1340,7 +1340,7 @@ export const GLOBAL_DSA_PATTERNS: MindMapCategory[] = [
         patterns: [
           {
             id: 'pat-greedy-merge-intervals',
-            title: 'Merge Intervals',
+            title: 'Activity Selection',
             description: 'Sort by start time. If current.start <= prev.end, merge (prev.end = max(prev.end, current.end)).',
             difficulty: 'medium',
             problemIds: ['p-dsa-merge-intervals-1'],
@@ -1348,7 +1348,7 @@ export const GLOBAL_DSA_PATTERNS: MindMapCategory[] = [
           },
           {
             id: 'pat-greedy-non-overlap',
-            title: 'Non-Overlapping Intervals (Erase Minimum)',
+            title: 'Non-overlapping Intervals',
             description: 'Sort by end time. Greedily keep interval with earliest finish time to maximize room for others.',
             difficulty: 'medium',
             problemIds: ['p-dsa-non-overlapping-intervals-1'],
@@ -1356,7 +1356,7 @@ export const GLOBAL_DSA_PATTERNS: MindMapCategory[] = [
           },
           {
             id: 'pat-greedy-insert-interval',
-            title: 'Insert Interval into Sorted Non-overlapping List',
+            title: 'Minimum Removals',
             description: 'Add preceding intervals; merge all overlapping intervals into newInterval; add remaining.',
             difficulty: 'medium',
             problemIds: ['p-dsa-insert-interval-1'],
@@ -1371,7 +1371,7 @@ export const GLOBAL_DSA_PATTERNS: MindMapCategory[] = [
         patterns: [
           {
             id: 'pat-greedy-activity-selection',
-            title: 'Meeting Rooms II & Partition Labels',
+            title: 'Deadline Based Scheduling',
             description: 'Greedily select intervals and partition indices based on last seen bounds.',
             difficulty: 'medium',
             problemIds: ['p-dsa-meeting-rooms-ii-1', 'p-dsa-partition-labels-1'],
@@ -1386,7 +1386,7 @@ export const GLOBAL_DSA_PATTERNS: MindMapCategory[] = [
         patterns: [
           {
             id: 'pat-greedy-gas-station',
-            title: 'Gas Station (Circular Greedy Tour)',
+            title: 'Minimum Platforms / Rooms',
             description: 'If total gas < total cost, return -1. Else if running tank < 0, start must be at next station i+1.',
             difficulty: 'medium',
             problemIds: ['p-dsa-gas-station-1'],
@@ -1446,7 +1446,7 @@ export const GLOBAL_DSA_PATTERNS: MindMapCategory[] = [
         patterns: [
           {
             id: 'pat-bits-operators',
-            title: 'Bitwise Operators & Masking (Set, Clear, Toggle, Check)',
+            title: 'XOR Pattern',
             description: 'Check: (n & (1<<k))!=0; Set: n | (1<<k); Clear: n & ~(1<<k); Toggle: n ^ (1<<k).',
             difficulty: 'easy',
             problemIds: ['p-dsa-single-number-1', 'p-dsa-reverse-bits-1'],
@@ -1461,7 +1461,7 @@ export const GLOBAL_DSA_PATTERNS: MindMapCategory[] = [
         patterns: [
           {
             id: 'pat-bits-single-number',
-            title: 'Single Number (XOR Cancellation)',
+            title: 'Subset via Bits',
             description: 'x ^ x = 0 and x ^ 0 = x. XORing all elements cancels duplicates, isolating unique value.',
             difficulty: 'easy',
             problemIds: ['p-dsa-single-number-1'],
@@ -1469,7 +1469,7 @@ export const GLOBAL_DSA_PATTERNS: MindMapCategory[] = [
           },
           {
             id: 'pat-bits-count-set-bits',
-            title: "Counting Set Bits (Brian Kernighan's Algorithm)",
+            title: 'Bit Checks',
             description: 'n = n & (n - 1) clears lowest set bit in O(number of 1s).',
             difficulty: 'easy',
             problemIds: ['p-dsa-number-of-1-bits-1', 'p-dsa-counting-bits-1'],
@@ -1477,7 +1477,7 @@ export const GLOBAL_DSA_PATTERNS: MindMapCategory[] = [
           },
           {
             id: 'pat-bits-power-of-two',
-            title: 'Power of Two Verification & Subsets via Bitmask',
+            title: 'Prefix XOR',
             description: '(n > 0) && (n & (n - 1)) == 0 verifies power of 2. Iterate mask 0..(1<<N)-1 for subsets.',
             difficulty: 'easy',
             problemIds: ['p-dsa-subsets-bitmask-1'],
@@ -1658,12 +1658,12 @@ export const GLOBAL_DSA_PATTERNS: MindMapCategory[] = [
     subPatterns: [
       {
         id: 'range-segment-tree',
-        title: 'Segment Tree & Calendar Overlaps',
+        title: 'Segment Tree',
         description: 'Binary tree storing aggregated intervals for O(log N) point/range queries and updates.',
         patterns: [
           {
             id: 'pat-range-seg-point',
-            title: 'Segment Tree Range Queries & Interval Booking',
+            title: 'Range Query',
             description: 'Query aggregate over [L..R] in O(log N); update element at index in O(log N).',
             difficulty: 'medium',
             problemIds: ['p-dsa130-my-calendar-i', 'p-dsa-time-key-value-1'],
@@ -1678,7 +1678,7 @@ export const GLOBAL_DSA_PATTERNS: MindMapCategory[] = [
         patterns: [
           {
             id: 'pat-range-fenwick-bit',
-            title: 'Binary Indexed Tree (Prefix Sum & Point Update)',
+            title: 'Prefix Query',
             description: 'Compact array where node i covers interval of length (i & -i). O(log N) prefix sum & point update.',
             difficulty: 'medium',
             problemIds: ['p-dsa-time-key-value-1'],

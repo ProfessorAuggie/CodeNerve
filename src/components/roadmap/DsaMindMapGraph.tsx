@@ -8,13 +8,11 @@ import {
   Sparkles,
   FolderOpen,
   Folder,
-  Layers,
   GraduationCap,
   Globe2,
-  ChevronRight,
-  Code2,
   BookOpen,
-  X
+  X,
+  Maximize2
 } from 'lucide-react';
 import { 
   GLOBAL_DSA_PATTERNS, 
@@ -78,7 +76,6 @@ export const DsaMindMapGraph: React.FC<DsaMindMapGraphProps> = ({
 
   // Search & filter
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedDifficulty, setSelectedDifficulty] = useState<'all' | 'easy' | 'medium' | 'hard'>('all');
 
   // Modals & Drawer
   const [selectedProblem, setSelectedProblem] = useState<Problem | null>(null);
@@ -87,7 +84,7 @@ export const DsaMindMapGraph: React.FC<DsaMindMapGraphProps> = ({
 
   // Canvas Pan & Zoom
   const [zoomLevel, setZoomLevel] = useState(0.85);
-  const [pan, setPan] = useState({ x: 30, y: 30 });
+  const [pan, setPan] = useState({ x: 40, y: 35 });
   const [isDragging, setIsDragging] = useState(false);
   const dragStartRef = useRef({ x: 0, y: 0 });
   const containerRef = useRef<HTMLDivElement>(null);
@@ -215,7 +212,7 @@ export const DsaMindMapGraph: React.FC<DsaMindMapGraphProps> = ({
 
   const handleReset = () => {
     setZoomLevel(0.85);
-    setPan({ x: 30, y: 30 });
+    setPan({ x: 40, y: 35 });
   };
 
   // Solved Stats calculation
@@ -248,11 +245,11 @@ export const DsaMindMapGraph: React.FC<DsaMindMapGraphProps> = ({
   };
 
   return (
-    <div className={`relative w-full bg-slate-50 dark:bg-[#080a11] flex flex-col overflow-hidden transition-all duration-200 select-none ${
+    <div className={`relative w-full bg-slate-50 dark:bg-[#07090f] flex flex-col overflow-hidden transition-all duration-200 select-none ${
       fitScreen ? 'flex-1 min-h-0 h-full rounded-2xl border border-slate-200 dark:border-slate-800/80 shadow-2xl' : 'h-[850px] rounded-2xl border border-slate-200 dark:border-slate-800'
     }`}>
-      {/* ───── Top Unified Toolbar ───── */}
-      <div className="flex flex-wrap items-center justify-between gap-3 px-3.5 py-2.5 sm:px-4 sm:py-3 border-b border-slate-200 dark:border-slate-800/80 bg-white/95 dark:bg-[#0c0f17]/95 backdrop-blur-md z-30 shrink-0">
+      {/* ───── Top Unified Controls Bar ───── */}
+      <div className="flex flex-wrap items-center justify-between gap-3 px-3.5 py-2.5 sm:px-4 sm:py-3 border-b border-slate-200 dark:border-slate-800/80 bg-white/95 dark:bg-[#0b0e17]/95 backdrop-blur-md z-30 shrink-0">
         <div className="flex flex-wrap items-center gap-2">
           {/* Variant Switcher: Global DSA Patterns vs LPU Syllabus Units */}
           <div className="flex items-center bg-slate-100 dark:bg-slate-900 p-0.5 rounded-xl border border-slate-200 dark:border-slate-800 shadow-inner">
@@ -287,7 +284,7 @@ export const DsaMindMapGraph: React.FC<DsaMindMapGraphProps> = ({
             <button
               onClick={handleExpandAll}
               className="flex items-center gap-1 px-2.5 py-1 rounded-lg text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-800 font-semibold transition"
-              title="Expand all branches & sub-topics"
+              title="Expand all branches"
             >
               <FolderOpen className="h-3.5 w-3.5 text-indigo-500" />
               <span className="hidden sm:inline">Expand All</span>
@@ -302,7 +299,7 @@ export const DsaMindMapGraph: React.FC<DsaMindMapGraphProps> = ({
             </button>
           </div>
 
-          {/* Zoom & Canvas Reset */}
+          {/* Zoom Controls */}
           <div className="flex items-center gap-1 bg-slate-100 dark:bg-slate-900 p-0.5 rounded-xl border border-slate-200 dark:border-slate-800">
             <button
               onClick={() => setZoomLevel((z) => Math.min(1.8, Number((z + 0.1).toFixed(2))))}
@@ -336,7 +333,7 @@ export const DsaMindMapGraph: React.FC<DsaMindMapGraphProps> = ({
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Filter pattern or sub-topic..."
+              placeholder="Search topic or pattern..."
               className="pl-8 pr-7 py-1.5 bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-xs text-slate-800 dark:text-slate-200 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-indigo-500 w-44 sm:w-56 transition shadow-inner"
             />
             {searchQuery && (
@@ -367,7 +364,7 @@ export const DsaMindMapGraph: React.FC<DsaMindMapGraphProps> = ({
         </div>
       </div>
 
-      {/* ───── UNIFIED NATIVE INTERACTIVE CONCEPT TREE CANVAS ───── */}
+      {/* ───── INTERACTIVE CONCEPT TREE CANVAS ───── */}
       <div
         ref={containerRef}
         onMouseDown={handleMouseDown}
@@ -379,7 +376,7 @@ export const DsaMindMapGraph: React.FC<DsaMindMapGraphProps> = ({
           isDragging ? 'cursor-grabbing' : ''
         }`}
         style={{
-          backgroundImage: `radial-gradient(circle at 1px 1px, rgba(148, 163, 184, 0.18) 1px, transparent 0)`,
+          backgroundImage: `radial-gradient(circle at 1px 1px, rgba(148, 163, 184, 0.22) 1.2px, transparent 0)`,
           backgroundSize: '24px 24px',
         }}
       >
@@ -390,11 +387,11 @@ export const DsaMindMapGraph: React.FC<DsaMindMapGraphProps> = ({
             transform: `translate(${pan.x}px, ${pan.y}px) scale(${zoomLevel})`,
           }}
         >
-          {/* Horizontal Tree Fan-Out Layout */}
-          <div className="flex items-start gap-12 py-10 pr-24 pl-6 min-w-max">
-            {/* 1. CENTRAL ROOT NODE CARD */}
+          {/* Horizontal Tree Layout */}
+          <div className="flex items-start gap-14 py-12 pr-28 pl-6 min-w-max">
+            {/* 1. CENTRAL ROOT NODE */}
             <div className="sticky top-1/2 -translate-y-1/2 shrink-0 z-20">
-              <div className="w-72 p-5 rounded-2xl bg-white dark:bg-[#111422] border-2 border-indigo-500/80 shadow-2xl flex flex-col gap-2.5 backdrop-blur-md">
+              <div className="w-72 p-5 rounded-2xl bg-white dark:bg-[#101320] border-2 border-indigo-500/80 shadow-2xl flex flex-col gap-2.5 backdrop-blur-md">
                 <div className="flex items-center justify-between">
                   <span className="text-[10px] font-extrabold uppercase tracking-widest text-indigo-600 dark:text-indigo-400 flex items-center gap-1.5">
                     <Sparkles className="h-3 w-3" />
@@ -425,22 +422,20 @@ export const DsaMindMapGraph: React.FC<DsaMindMapGraphProps> = ({
             </div>
 
             {/* 2. CATEGORIES COLUMN WITH CURVED BRANCHES */}
-            <div className="flex flex-col gap-6 relative">
+            <div className="flex flex-col gap-7 relative">
               {categories.map((cat) => {
                 const isCatExpanded = expandedCategories.has(cat.id);
-                const totalSubPatterns = cat.subPatterns.length;
-                const totalLeafPatterns = cat.subPatterns.reduce((acc, s) => acc + s.patterns.length, 0);
 
                 return (
-                  <div key={cat.id} className="flex items-start gap-8 relative group">
+                  <div key={cat.id} className="flex items-start gap-9 relative group">
                     {/* Category Capsule Button */}
-                    <div className="shrink-0 z-10">
+                    <div className="shrink-0 z-10 flex items-center">
                       <button
                         onClick={() => toggleCategory(cat.id)}
-                        className={`flex items-center gap-2.5 px-3.5 py-2 rounded-full border transition-all duration-200 shadow-sm hover:shadow-md hover:scale-[1.02] ${
+                        className={`flex items-center gap-2.5 px-3.5 py-2 rounded-full border transition-all duration-200 shadow-sm hover:shadow-md hover:scale-[1.02] cursor-pointer ${
                           isCatExpanded
                             ? 'bg-white dark:bg-slate-900 border-slate-300 dark:border-slate-700 ring-2 ring-indigo-500/20'
-                            : 'bg-white/90 dark:bg-slate-900/90 border-slate-200 dark:border-slate-800'
+                            : 'bg-white/95 dark:bg-slate-900/95 border-slate-200 dark:border-slate-800'
                         }`}
                       >
                         <span
@@ -456,16 +451,22 @@ export const DsaMindMapGraph: React.FC<DsaMindMapGraphProps> = ({
                         >
                           {cat.count}
                         </span>
-                        <ChevronRight className={`h-3 w-3 text-slate-400 transition-transform duration-200 ${
-                          isCatExpanded ? 'rotate-90' : ''
-                        }`} />
+                        <span 
+                          className={`w-4 h-4 rounded-full flex items-center justify-center text-[11px] font-black border transition ${
+                            isCatExpanded 
+                              ? 'bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-300 dark:border-slate-700' 
+                              : 'bg-slate-100 dark:bg-slate-800 text-slate-500 border-slate-200 dark:border-slate-700'
+                          }`}
+                        >
+                          {isCatExpanded ? '−' : '+'}
+                        </span>
                       </button>
                     </div>
 
                     {/* Sub-Topics / Sub-Patterns Branching to the Right */}
                     {isCatExpanded && (
                       <div 
-                        className="flex flex-col gap-3.5 pl-5 border-l-2 relative" 
+                        className="flex flex-col gap-4 pl-6 border-l-2 relative" 
                         style={{ borderColor: cat.color }}
                       >
                         {cat.subPatterns.map((sub) => {
@@ -473,12 +474,12 @@ export const DsaMindMapGraph: React.FC<DsaMindMapGraphProps> = ({
                           const patternCount = sub.patterns.length;
 
                           return (
-                            <div key={sub.id} className="flex items-start gap-6 relative">
+                            <div key={sub.id} className="flex items-start gap-7 relative">
                               {/* Sub-Topic Capsule Button */}
-                              <div className="shrink-0 z-10">
+                              <div className="shrink-0 z-10 flex items-center">
                                 <button
                                   onClick={() => toggleSubPattern(sub.id)}
-                                  className={`flex items-center gap-2 px-3 py-1.5 rounded-full border text-xs font-semibold transition-all duration-150 shadow-sm hover:scale-[1.02] ${
+                                  className={`flex items-center gap-2 px-3 py-1.5 rounded-full border text-xs font-semibold transition-all duration-150 shadow-sm hover:scale-[1.02] cursor-pointer ${
                                     isSubExpanded
                                       ? 'bg-slate-100 dark:bg-slate-800 border-slate-300 dark:border-slate-700 text-slate-950 dark:text-white'
                                       : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300'
@@ -493,15 +494,21 @@ export const DsaMindMapGraph: React.FC<DsaMindMapGraphProps> = ({
                                       {patternCount}
                                     </span>
                                   )}
-                                  <ChevronRight className={`h-2.5 w-2.5 text-slate-400 transition-transform duration-150 ${
-                                    isSubExpanded ? 'rotate-90' : ''
-                                  }`} />
+                                  <span 
+                                    className={`w-3.5 h-3.5 rounded-full flex items-center justify-center text-[10px] font-black border transition ${
+                                      isSubExpanded 
+                                        ? 'bg-slate-200 dark:bg-slate-700 text-slate-800 dark:text-slate-200 border-slate-300' 
+                                        : 'bg-slate-100 dark:bg-slate-800 text-slate-400 border-slate-200 dark:border-slate-700'
+                                    }`}
+                                  >
+                                    {isSubExpanded ? '−' : '+'}
+                                  </span>
                                 </button>
                               </div>
 
                               {/* Concrete Leaf Pattern Cards */}
                               {isSubExpanded && (
-                                <div className="flex flex-col gap-2.5 pl-4 border-l-2 border-slate-300 dark:border-slate-700">
+                                <div className="flex flex-col gap-2.5 pl-5 border-l-2 border-slate-300 dark:border-slate-700">
                                   {sub.patterns.map((pat) => {
                                     const solvedCount = pat.problemIds.filter(
                                       (id) => problemProgress[id]?.status === 'SOLVED'
@@ -551,7 +558,7 @@ export const DsaMindMapGraph: React.FC<DsaMindMapGraphProps> = ({
                                         <div className="flex items-center justify-between pt-1.5 border-t border-slate-100 dark:border-slate-800 text-[11px]">
                                           <button
                                             onClick={() => handleOpenDrawer(pat.title, pat.description, pat.problemIds)}
-                                            className="font-bold text-indigo-600 dark:text-indigo-400 hover:underline flex items-center gap-1"
+                                            className="font-bold text-indigo-600 dark:text-indigo-400 hover:underline flex items-center gap-1 cursor-pointer"
                                           >
                                             <BookOpen className="h-3 w-3" />
                                             <span>
