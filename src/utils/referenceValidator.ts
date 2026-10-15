@@ -5,6 +5,7 @@ import { SUBJECTS } from '../data/syllabus';
 import { DSA_ROADMAP, CPP_PATH } from '../data/learningPaths';
 import { CSE205_NODES, CSE202_NODES } from '../components/roadmap/LpuAcademicGraph';
 import { GRAPH_NODES } from '../components/roadmap/DsaDependencyGraph';
+import { GLOBAL_DSA_PATTERNS, LPU_ACADEMIC_PATTERNS } from '../data/dsaPatternsData';
 
 export interface ValidationResult {
   passed: boolean;
@@ -164,6 +165,23 @@ export function validateReferences(): ValidationResult {
       for (const topic of unit.topics) {
         if (topic.visualizerId && !registeredAlgoIds.has(topic.visualizerId)) {
           errors.push(`Syllabus Topic "${topic.id}" references unregistered visualizerId: "${topic.visualizerId}".`);
+        }
+      }
+    }
+  }
+
+  // 10. Check Mind Map Pattern Nodes (Global & LPU Whimsical Tree)
+  const allMindMapCategories = [...GLOBAL_DSA_PATTERNS, ...LPU_ACADEMIC_PATTERNS];
+  for (const cat of allMindMapCategories) {
+    for (const sub of cat.subPatterns) {
+      for (const pat of sub.patterns) {
+        for (const pId of pat.problemIds) {
+          if (!validProblemIds.has(pId)) {
+            errors.push(`Mind Map Pattern "${pat.id}" (${pat.title}) references non-existent problem ID: "${pId}".`);
+          }
+        }
+        if (pat.visualizerId && !registeredAlgoIds.has(pat.visualizerId)) {
+          errors.push(`Mind Map Pattern "${pat.id}" references unregistered visualizerId: "${pat.visualizerId}".`);
         }
       }
     }

@@ -19,10 +19,11 @@ import { PROBLEMS } from '../data/problems';
 import { useUserStore } from '../store/userStore';
 import { ProblemModal } from '../components/problems/ProblemModal';
 import { LpuAcademicGraph } from '../components/roadmap/LpuAcademicGraph';
+import { DsaMindMapGraph } from '../components/roadmap/DsaMindMapGraph';
 import type { Problem } from '../types';
 
 export const LpuPortalPage: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<'syllabus' | 'flowchart' | 'assignments'>('syllabus');
+  const [activeTab, setActiveTab] = useState<'mindmap' | 'syllabus' | 'flowchart' | 'assignments'>('mindmap');
   const [selectedSubjectId, setSelectedSubjectId] = useState<string>('cse205');
   const [expandedUnits, setExpandedUnits] = useState<Record<string, boolean>>({
     'cse205-u1': true,
@@ -101,6 +102,21 @@ export const LpuPortalPage: React.FC = () => {
       {/* Main Section Navigation Tabs */}
       <div className="flex flex-wrap items-center gap-2 border-b border-slate-200 dark:border-slate-800 pb-2.5">
         <button
+          onClick={() => setActiveTab('mindmap')}
+          className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold transition ${
+            activeTab === 'mindmap'
+              ? 'bg-emerald-600 text-white shadow-md shadow-emerald-500/25'
+              : 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+          }`}
+        >
+          <Sparkles className="h-4 w-4 text-emerald-200" />
+          <span>LPU Syllabus Mind Map</span>
+          <span className="text-[10px] font-bold px-1.5 py-0.2 rounded-full bg-white/20 text-white">
+            Whimsical
+          </span>
+        </button>
+
+        <button
           onClick={() => setActiveTab('syllabus')}
           className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold transition ${
             activeTab === 'syllabus'
@@ -139,6 +155,13 @@ export const LpuPortalPage: React.FC = () => {
           <span>Faculty & Class Assignments ({customProblemSets.length})</span>
         </button>
       </div>
+
+      {/* TAB -1: WHIMSICAL MIND MAP */}
+      {activeTab === 'mindmap' && (
+        <div className="space-y-3">
+          <DsaMindMapGraph initialVariant="lpu" fitScreen={true} />
+        </div>
+      )}
 
       {/* TAB 0: INTERACTIVE PREREQUISITE FLOWCHART */}
       {activeTab === 'flowchart' && (
