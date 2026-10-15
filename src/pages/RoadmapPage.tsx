@@ -12,19 +12,19 @@ export const RoadmapPage: React.FC = () => {
   const { pathId } = useParams<{ pathId: string }>();
   const { activePortal, updateStudentActivity } = useUserStore();
 
-  // Intra-portal sub-view state: mindmap (Whimsical tree) | flowchart (DAG) | list (Roadmap groups)
-  const [subView, setSubView] = useState<'mindmap' | 'flowchart' | 'list'>('mindmap');
+  // Intra-portal sub-view state: flowchart (DAG, default) | list (Roadmap groups) | mindmap (Whimsical tree)
+  const [subView, setSubView] = useState<'flowchart' | 'list' | 'mindmap'>('flowchart');
 
   useEffect(() => {
     if (pathId === 'cpp-path' || pathId === 'dsa-roadmap') {
       setSubView('list');
     } else {
-      setSubView('mindmap');
+      setSubView('flowchart');
     }
   }, [pathId, activePortal]);
 
   useEffect(() => {
-    updateStudentActivity(`Exploring ${activePortal === 'lpu' ? 'LPU CSE Curriculum & Mind Map' : 'Global DSA Patterns Mind Map'}`);
+    updateStudentActivity(`Exploring ${activePortal === 'lpu' ? 'LPU CSE Curriculum Roadmap' : 'Global DSA Dependency Graph'}`);
   }, [activePortal, updateStudentActivity]);
 
   const isGlobal = activePortal === 'global';
@@ -36,73 +36,57 @@ export const RoadmapPage: React.FC = () => {
         <div className="flex flex-wrap items-center gap-2">
           {isGlobal ? (
             <>
-              {/* 1. Global Whimsical DSA Patterns Mind Map */}
-              <button
-                onClick={() => setSubView('mindmap')}
-                className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold transition ${
-                  subView === 'mindmap'
-                    ? 'bg-indigo-600 text-white shadow-md shadow-indigo-500/25'
-                    : 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800'
-                }`}
-              >
-                <Sparkles className="h-4 w-4 text-indigo-200" />
-                <span>DSA Patterns Mind Map</span>
-                <span className="text-[10px] uppercase font-bold px-1.5 py-0.2 rounded bg-white/20 text-white">
-                  Whimsical
-                </span>
-              </button>
-
-              {/* 2. Global DSA Flowchart */}
+              {/* 1. Global DSA Flowchart (Default) */}
               <button
                 onClick={() => setSubView('flowchart')}
                 className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold transition ${
                   subView === 'flowchart'
-                    ? 'bg-indigo-600 text-white shadow-md shadow-indigo-500/25'
+                    ? 'bg-brand-600 text-white shadow-md shadow-brand-500/25'
                     : 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800'
                 }`}
               >
                 <GitFork className="h-4 w-4" />
-                <span>Prerequisite Flowchart</span>
+                <span>Global DSA Flowchart</span>
                 <span className="text-[10px] uppercase font-bold px-1.5 py-0.2 rounded bg-indigo-500/20 text-indigo-700 dark:text-indigo-200">
-                  DAG
+                  Interactive
                 </span>
               </button>
 
-              {/* 3. Global Topic Groups List */}
+              {/* 2. Global Topic Groups List */}
               <button
                 onClick={() => setSubView('list')}
                 className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold transition ${
                   subView === 'list'
-                    ? 'bg-indigo-600 text-white shadow-md shadow-indigo-500/25'
+                    ? 'bg-brand-600 text-white shadow-md shadow-brand-500/25'
                     : 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800'
                 }`}
               >
                 <Compass className="h-4 w-4" />
                 <span>Topic Groups List</span>
                 <span className="text-[10px] uppercase font-bold px-1.5 py-0.2 rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
-                  12 Units
+                  16 Units
+                </span>
+              </button>
+
+              {/* 3. Whimsical DSA Patterns Mind Map */}
+              <button
+                onClick={() => setSubView('mindmap')}
+                className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold transition ${
+                  subView === 'mindmap'
+                    ? 'bg-indigo-600 text-white shadow-md shadow-indigo-500/25'
+                    : 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800'
+                }`}
+              >
+                <Sparkles className="h-4 w-4 text-indigo-500 dark:text-indigo-400" />
+                <span>Whimsical Mind Map</span>
+                <span className="text-[10px] uppercase font-bold px-1.5 py-0.2 rounded bg-indigo-500/15 text-indigo-700 dark:text-indigo-300">
+                  16 Branches
                 </span>
               </button>
             </>
           ) : (
             <>
-              {/* 1. LPU Academic Whimsical Mind Map */}
-              <button
-                onClick={() => setSubView('mindmap')}
-                className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold transition ${
-                  subView === 'mindmap'
-                    ? 'bg-emerald-600 text-white shadow-md shadow-emerald-500/25'
-                    : 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800'
-                }`}
-              >
-                <Sparkles className="h-4 w-4 text-emerald-200" />
-                <span>LPU Syllabus Mind Map</span>
-                <span className="text-[10px] uppercase font-bold px-1.5 py-0.2 rounded bg-white/20 text-white">
-                  Whimsical
-                </span>
-              </button>
-
-              {/* 2. LPU Academic Flowchart */}
+              {/* 1. LPU Academic Flowchart (Default) */}
               <button
                 onClick={() => setSubView('flowchart')}
                 className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold transition ${
@@ -118,7 +102,7 @@ export const RoadmapPage: React.FC = () => {
                 </span>
               </button>
 
-              {/* 3. C++ & OOP Units */}
+              {/* 2. C++ & OOP Units */}
               <button
                 onClick={() => setSubView('list')}
                 className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold transition ${
@@ -131,6 +115,22 @@ export const RoadmapPage: React.FC = () => {
                 <span>C++ & OOP Units</span>
                 <span className="text-[10px] uppercase font-bold px-1.5 py-0.2 rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
                   6 Units
+                </span>
+              </button>
+
+              {/* 3. LPU Syllabus Mind Map */}
+              <button
+                onClick={() => setSubView('mindmap')}
+                className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold transition ${
+                  subView === 'mindmap'
+                    ? 'bg-emerald-600 text-white shadow-md shadow-emerald-500/25'
+                    : 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800'
+                }`}
+              >
+                <Sparkles className="h-4 w-4 text-emerald-500 dark:text-emerald-400" />
+                <span>LPU Syllabus Mind Map</span>
+                <span className="text-[10px] uppercase font-bold px-1.5 py-0.2 rounded bg-emerald-500/15 text-emerald-700 dark:text-emerald-300">
+                  Whimsical
                 </span>
               </button>
             </>
