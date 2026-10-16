@@ -4,7 +4,8 @@ import {
   ZoomOut, 
   Scan, 
   Shuffle, 
-  Move
+  Move,
+  GitFork
 } from 'lucide-react';
 import { PROBLEMS } from '../../data/problems';
 import { useUserStore } from '../../store/userStore';
@@ -540,9 +541,27 @@ export const DsaDependencyGraph: React.FC<DsaDependencyGraphProps> = ({ fitScree
     }`}>
       {/* Top Controls & Stats Header Bar */}
       <div className="flex flex-wrap items-center justify-between gap-2 px-3 py-2 sm:px-4 sm:py-2.5 border-b border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-950/80 backdrop-blur-md z-20 relative shrink-0 transition-colors">
+        <div className="flex items-center gap-2.5">
+          <div className="h-8 w-8 rounded-xl bg-indigo-500/10 border border-indigo-500/30 flex items-center justify-center text-indigo-600 dark:text-indigo-400 font-bold shrink-0">
+            <GitFork className="h-4 w-4" />
+          </div>
+          <div>
+            <h3 className="text-xs sm:text-sm font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
+              <span>Core DSA Prerequisite Flowchart</span>
+              <span className="text-[9px] font-semibold uppercase px-1.5 py-0.2 rounded-full bg-indigo-500/15 text-indigo-700 dark:text-indigo-300 border border-indigo-500/30">
+                Interactive Graph
+              </span>
+            </h3>
+            <p className="text-[11px] text-slate-500 dark:text-slate-400 hidden xs:block">
+              Drag to pan &bull; Scroll to zoom &bull; Click node to open problem drawer
+            </p>
+          </div>
+        </div>
+
+        {/* Right side controls: Zoom, Shuffle, Solved stats */}
         <div className="flex flex-wrap items-center gap-2">
           {/* Zoom & Screen Fit Controls */}
-          <div className="flex items-center gap-1 bg-slate-100 dark:bg-slate-900 p-0.5 rounded-xl border border-slate-200 dark:border-slate-800">
+          <div className="flex items-center gap-1 bg-slate-100 dark:bg-slate-900 p-0.5 rounded-xl border border-slate-200 dark:border-slate-800 text-xs">
             <button
               onClick={() => setZoomLevel((z) => Math.min(1.6, Number((z + 0.1).toFixed(2))))}
               className="p-1 rounded-lg text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200 dark:hover:bg-slate-800 transition"
@@ -561,7 +580,7 @@ export const DsaDependencyGraph: React.FC<DsaDependencyGraphProps> = ({ fitScree
             </button>
             <button
               onClick={fitToScreen}
-              className="flex items-center gap-1 px-2 py-0.5 rounded-lg text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white bg-slate-200 dark:bg-slate-800/60 hover:bg-slate-300 dark:hover:bg-slate-800 transition text-[11px] font-semibold"
+              className="flex items-center gap-1 px-1.5 py-0.5 rounded-lg text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white bg-slate-200 dark:bg-slate-800/60 hover:bg-slate-300 dark:hover:bg-slate-800 transition text-[11px] font-semibold"
               title="Fit entire roadmap into current window"
               aria-label="Fit to window"
             >
@@ -578,14 +597,6 @@ export const DsaDependencyGraph: React.FC<DsaDependencyGraphProps> = ({ fitScree
             </button>
           </div>
 
-          <div className="hidden lg:flex items-center gap-1 text-[11px] text-slate-500 font-medium pl-1">
-            <Move className="h-3 w-3" />
-            <span>Pan canvas &bull; Scroll to zoom</span>
-          </div>
-        </div>
-
-        {/* Global Progress & Pick Random Button */}
-        <div className="flex items-center gap-2">
           <button
             onClick={handlePickRandomProblem}
             className="flex items-center gap-1 px-2.5 py-1 rounded-xl bg-slate-100 dark:bg-slate-900 hover:bg-slate-200 dark:hover:bg-slate-800 text-xs font-semibold text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-800 shadow-sm transition"
