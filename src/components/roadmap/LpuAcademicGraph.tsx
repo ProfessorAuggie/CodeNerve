@@ -6,7 +6,7 @@ import {
   Scan,
   Shuffle 
 } from 'lucide-react';
-import { PROBLEMS } from '../../data/problems';
+import { PROBLEMS, isProblemInTrack } from '../../data/problems';
 import { useUserStore } from '../../store/userStore';
 import { ProblemModal } from '../problems/ProblemModal';
 import { TopicDrawer } from './TopicDrawer';
@@ -601,7 +601,7 @@ export const LpuAcademicGraph: React.FC<LpuAcademicGraphProps> = ({ fitScreen = 
   // Overall statistics for current subject
   const subjectStats = useMemo(() => {
     const allProblems = PROBLEMS.filter(
-      (p) => p.track === 'lpu' && p.syllabusUnitIds.some((uid) => uid.startsWith(selectedSubject))
+      (p) => isProblemInTrack(p, 'lpu') && p.syllabusUnitIds.some((uid) => uid.startsWith(selectedSubject))
     );
     const total = allProblems.length;
     let solved = 0;

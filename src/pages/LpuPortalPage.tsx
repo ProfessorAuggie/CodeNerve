@@ -15,7 +15,7 @@ import {
 } from 'lucide-react';
 import { SUBJECTS, getSubjectById } from '../data/syllabus';
 import { VISUALIZER_MAPPINGS, getAlgoNerveUrl } from '../data/visualizers';
-import { PROBLEMS } from '../data/problems';
+import { PROBLEMS, isProblemInTrack } from '../data/problems';
 import { useUserStore } from '../store/userStore';
 import { ProblemModal } from '../components/problems/ProblemModal';
 import { LpuAcademicGraph } from '../components/roadmap/LpuAcademicGraph';
@@ -41,7 +41,7 @@ export const LpuPortalPage: React.FC = () => {
     }));
   };
 
-  const lpuProblemsCount = PROBLEMS.filter((p) => p.track === 'lpu').length;
+  const lpuProblemsCount = PROBLEMS.filter((p) => isProblemInTrack(p, 'lpu')).length;
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 space-y-5">
@@ -236,7 +236,7 @@ export const LpuPortalPage: React.FC = () => {
                           v.id.includes(topic.id) || topic.id.includes(v.id)
                         );
                         const topicProblems = PROBLEMS.filter((p) =>
-                          p.topicTags.includes(topic.id) || (p.track === 'lpu' && p.topicTags.some((t) => topic.id.includes(t)))
+                          p.topicTags.includes(topic.id) || (isProblemInTrack(p, 'lpu') && p.topicTags.some((t) => topic.id.includes(t)))
                         ).slice(0, 3);
 
                         return (

@@ -15,7 +15,7 @@ import {
   Edit3
 } from 'lucide-react';
 import { useUserStore } from '../../store/userStore';
-import { PROBLEMS } from '../../data/problems';
+import { PROBLEMS, isProblemInTrack } from '../../data/problems';
 import { ThemeToggle } from '../common/ThemeToggle';
 import { EditProfileModal } from '../common/EditProfileModal';
 
@@ -33,7 +33,7 @@ export const Navbar: React.FC = () => {
     logoutStudent 
   } = useUserStore();
 
-  const portalProblems = PROBLEMS.filter((p) => (p.track || 'global') === activePortal);
+  const portalProblems = PROBLEMS.filter((p) => isProblemInTrack(p, activePortal));
   const portalProblemIds = new Set(portalProblems.map((p) => p.id));
   const totalProblems = portalProblems.length;
   const solvedCount = Object.values(problemProgress).filter(

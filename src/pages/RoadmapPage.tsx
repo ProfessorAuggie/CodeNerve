@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { Compass, Code2, GitFork, GraduationCap, Sparkles, Globe } from 'lucide-react';
 import { DSA_ROADMAP, CPP_PATH } from '../data/learningPaths';
-import { PROBLEMS } from '../data/problems';
+import { PROBLEMS, isProblemInTrack } from '../data/problems';
 import { RoadmapView } from '../components/roadmap/RoadmapView';
 import { DsaDependencyGraph } from '../components/roadmap/DsaDependencyGraph';
 import { LpuAcademicGraph } from '../components/roadmap/LpuAcademicGraph';
@@ -12,7 +12,7 @@ import { useUserStore } from '../store/userStore';
 export const RoadmapPage: React.FC = () => {
   const { pathId } = useParams<{ pathId: string }>();
   const { activePortal, updateStudentActivity } = useUserStore();
-  const lpuProblemsCount = PROBLEMS.filter((p) => p.track === 'lpu').length;
+  const lpuProblemsCount = PROBLEMS.filter((p) => isProblemInTrack(p, 'lpu')).length;
 
   // Intra-portal sub-view state: flowchart (DAG, default) | list (Roadmap groups) | mindmap (Concept tree)
   const [userSelectedView, setUserSelectedView] = useState<'flowchart' | 'list' | 'mindmap' | null>(null);

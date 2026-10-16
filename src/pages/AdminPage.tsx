@@ -25,7 +25,7 @@ import {
   BookOpen
 } from 'lucide-react';
 import { useUserStore } from '../store/userStore';
-import { PROBLEMS } from '../data/problems';
+import { PROBLEMS, isProblemInTrack } from '../data/problems';
 import { EditProfileModal } from '../components/common/EditProfileModal';
 import type { StudentRecord } from '../types';
 
@@ -201,7 +201,7 @@ export const AdminPage: React.FC = () => {
 
   // Filter problems for test creator
   const availableProblemsForTest = PROBLEMS.filter((p) => {
-    const matchesTrack = targetTrack === 'all' || (p.track || 'global') === targetTrack;
+    const matchesTrack = targetTrack === 'all' || isProblemInTrack(p, targetTrack);
     const matchesSearch = 
       p.title.toLowerCase().includes(problemSearch.toLowerCase()) ||
       p.topicTags.some((t) => t.toLowerCase().includes(problemSearch.toLowerCase()));
@@ -706,7 +706,7 @@ export const AdminPage: React.FC = () => {
                 ) : (
                   filteredStudents.map((std) => {
                     const trackTarget = std.track === 'lpu' ? 'lpu' : 'global';
-                    const maxCatalogue = Math.max(1, PROBLEMS.filter((p) => p.track === trackTarget).length);
+                    const maxCatalogue = Math.max(1, PROBLEMS.filter((p) => isProblemInTrack(p, trackTarget)).length);
                     const progressPct = Math.round((std.totalSolved / maxCatalogue) * 100);
                     const approval = std.approvalStatus || 'approved';
 

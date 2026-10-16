@@ -23,7 +23,7 @@ import {
   LPU_CHECKLIST_DATA,
 } from '../data/syllabus';
 import { VISUALIZER_MAPPINGS, getAlgoNerveUrl } from '../data/visualizers';
-import { PROBLEMS } from '../data/problems';
+import { PROBLEMS, isProblemInTrack } from '../data/problems';
 import { useUserStore } from '../store/userStore';
 import { ProblemModal } from '../components/problems/ProblemModal';
 import type { Problem } from '../types';
@@ -302,7 +302,7 @@ export const SyllabusPage: React.FC = () => {
                           v.id.includes(topic.id) || topic.id.includes(v.id)
                         );
                         const topicProblems = PROBLEMS.filter((p) =>
-                          p.topicTags.includes(topic.id) || (p.track === 'lpu' && p.topicTags.some((t) => topic.id.includes(t)))
+                          p.topicTags.includes(topic.id) || (isProblemInTrack(p, 'lpu') && p.topicTags.some((t) => topic.id.includes(t)))
                         ).slice(0, 3);
 
                         return (

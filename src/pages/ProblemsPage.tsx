@@ -5,7 +5,7 @@ import {
   X, 
   Bookmark 
 } from 'lucide-react';
-import { PROBLEMS } from '../data/problems';
+import { PROBLEMS, isProblemInTrack } from '../data/problems';
 import type { Problem, ProblemStatus } from '../types';
 import { ProblemTable } from '../components/problems/ProblemTable';
 import { ProblemModal } from '../components/problems/ProblemModal';
@@ -28,17 +28,22 @@ export const ProblemsPage: React.FC = () => {
 
   const isLpu = activePortal === 'lpu';
 
-  // 1. Strictly separate problem universe by active portal (NO OVERLAPPING)
+  // 1. Filter problem universe by active portal with dual-track support
   const portalProblems = useMemo(() => {
-    return PROBLEMS.filter((p) => (p.track || 'global') === activePortal);
+    return PROBLEMS.filter((p) => isProblemInTrack(p, activePortal));
   }, [activePortal]);
 
   // 2. Extract all unique topic tags for the active portal
   const allTags = useMemo(() => {
     const set = new Set<string>();
-    portalProblems.forEach((p) => p.topicTags.forEach((t) => set.add(t)));
+    portalProblems.forEach((p) => {
+      p.topicTags.forEach((t) => {
+        if (activePortal === 'global' && (t.startsWith('lpu-') || t.startsWith('cse20'))) return;
+        set.add(t);
+      });
+    });
     return Array.from(set).sort();
-  }, [portalProblems]);
+  }, [portalProblems, activePortal]);
 
   // 3. Filter problems within active portal
   const filteredProblems = useMemo(() => {
@@ -142,7 +147,7 @@ export const ProblemsPage: React.FC = () => {
             <p className="text-xs text-slate-600 dark:text-slate-400 hidden sm:block">
               {isLpu
                 ? 'University-aligned questions for CSE202 (C++ OOP) and CSE205 (Data Structures) structured unit-by-unit with curriculum topic prerequisites.'
-                : '182 canonical, language-agnostic DSA problems (LeetCode, GFG & DSA 130) with AlgoNerve visualizers and tracking.'}
+                : `${totalCount} canonical, language-agnostic DSA problems (LeetCode, GFG & DSA 130) with AlgoNerve visualizers and tracking.`}
             </p>
           </div>
         </div>

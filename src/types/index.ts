@@ -107,7 +107,7 @@ export interface Problem {
   externalUrl: string;
   difficulty: Difficulty;
   topicTags: string[];
-  track?: 'global' | 'lpu';
+  track?: 'global' | 'lpu' | 'both';
   problemType?: string;
   estimatedTime?: number; // minutes
   prerequisites: string[];

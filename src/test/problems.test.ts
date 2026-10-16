@@ -6,7 +6,9 @@ import {
   getProblemsByPlatform, 
   getProblemsByTopic, 
   getProblemsByIds,
-  searchProblems 
+  searchProblems,
+  isProblemInTrack,
+  getProblemsByTrack
 } from '../data/problems';
 
 describe('Problem Filtering & Catalogue Helpers', () => {
@@ -106,5 +108,23 @@ describe('Problem Filtering & Catalogue Helpers', () => {
 
     expect(combined.length).toBeGreaterThan(0);
     expect(combined.every((p) => p.difficulty === 'medium' && p.platform === 'leetcode')).toBe(true);
+  });
+
+  it('supports dual-track problem mapping so Global covers all applicable DSA problems', () => {
+    const globalProblems = getProblemsByTrack('global');
+    const lpuProblems = getProblemsByTrack('lpu');
+
+    // Both tracks have rich, justified catalogues
+    expect(globalProblems.length).toBeGreaterThanOrEqual(280);
+    expect(lpuProblems.length).toBeGreaterThanOrEqual(280);
+
+    // Verify dual-track problems are included in both
+    const dualTrackProblems = PROBLEMS.filter((p) => p.track === 'both');
+    expect(dualTrackProblems.length).toBeGreaterThan(0);
+
+    dualTrackProblems.forEach((p) => {
+      expect(isProblemInTrack(p, 'global')).toBe(true);
+      expect(isProblemInTrack(p, 'lpu')).toBe(true);
+    });
   });
 });

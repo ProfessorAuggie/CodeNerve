@@ -12,7 +12,7 @@ import {
   Edit3
 } from 'lucide-react';
 import { useUserStore } from '../store/userStore';
-import { PROBLEMS } from '../data/problems';
+import { PROBLEMS, isProblemInTrack } from '../data/problems';
 import { ProblemModal } from '../components/problems/ProblemModal';
 import { EditProfileModal } from '../components/common/EditProfileModal';
 import type { Problem } from '../types';
@@ -41,8 +41,8 @@ export const DashboardPage: React.FC = () => {
   const [isEditProfileOpen, setIsEditProfileOpen] = useState(false);
   const [profileSuccessMsg, setProfileSuccessMsg] = useState<string | null>(null);
 
-  // Active portal filtered problems (zero overlap)
-  const portalProblems = PROBLEMS.filter((p) => (p.track || 'global') === activePortal);
+  // Active portal filtered problems (with dual-track support)
+  const portalProblems = PROBLEMS.filter((p) => isProblemInTrack(p, activePortal));
   const portalProblemIds = new Set(portalProblems.map((p) => p.id));
 
   // Solved counts within active portal
