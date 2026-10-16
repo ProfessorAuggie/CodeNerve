@@ -3,7 +3,6 @@ import { Link, useNavigate, useLocation, useSearchParams } from 'react-router-do
 import { 
   Code2, 
   GraduationCap, 
-  Globe, 
   Lock, 
   Mail, 
   User, 
@@ -34,7 +33,6 @@ export const LoginPage: React.FC = () => {
     logoutStudent, 
     registerStudent,
     activePortal,
-    setActivePortal,
     problemProgress,
     completedLessons,
     quizScores
@@ -43,9 +41,6 @@ export const LoginPage: React.FC = () => {
   // Tab: 'login' | 'register'
   const initialMode = searchParams.get('mode') === 'register' ? 'register' : 'login';
   const [mode, setMode] = useState<'login' | 'register'>(initialMode);
-
-  // Selected Track for Login/Register Context
-  const [selectedTrack, setSelectedTrack] = useState<'lpu' | 'global'>(activePortal);
 
   // Login Form State
   const [loginIdentifier, setLoginIdentifier] = useState('');
@@ -57,8 +52,7 @@ export const LoginPage: React.FC = () => {
   const [regName, setRegName] = useState('');
   const [regEmail, setRegEmail] = useState('');
   const [regNumber, setRegNumber] = useState('');
-  const [regSemester, setRegSemester] = useState<number>(3);
-  const [regBatch, setRegBatch] = useState('LPU B.Tech CSE (CSE202/205)');
+  const [regBatch, setRegBatch] = useState('Computer Science & Engineering');
   const [regPassword, setRegPassword] = useState('');
   const [regConfirmPassword, setRegConfirmPassword] = useState('');
 
@@ -66,23 +60,6 @@ export const LoginPage: React.FC = () => {
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
-
-  const handleSelectTrack = (track: 'lpu' | 'global') => {
-    setSelectedTrack(track);
-    setActivePortal(track);
-    if (track === 'lpu') {
-      if (!regBatch || regBatch.includes('Global')) {
-        setRegBatch('LPU B.Tech CSE (CSE202/205)');
-      }
-      if (!regEmail || regEmail.endsWith('@gmail.com')) {
-        setRegEmail(regName ? `${regName.toLowerCase().replace(/\s+/g, '.')}@lpu.in` : '');
-      }
-    } else {
-      if (!regBatch || regBatch.includes('LPU')) {
-        setRegBatch('Global DSA Cohort 2026');
-      }
-    }
-  };
 
   const handleLoginSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -152,14 +129,19 @@ export const LoginPage: React.FC = () => {
         .filter((p) => p.status === 'SOLVED')
         .map((p) => p.problemId);
 
+      const studentTrack: 'lpu' | 'global' =
+        (regEmail.toLowerCase().endsWith('@lpu.in') || /^\d{8}$/.test(regNumber.trim()))
+          ? 'lpu'
+          : (activePortal === 'lpu' ? 'lpu' : 'global');
+
       const created = registerStudent({
         name: regName.trim(),
         email: regEmail.trim(),
         registrationNumber: regNumber.trim(),
-        track: selectedTrack,
-        batch: regBatch,
+        track: studentTrack,
+        batch: regBatch.trim() || 'General Engineering Cohort',
         status: 'online',
-        currentActivity: `Registration submitted for ${selectedTrack === 'lpu' ? 'LPU CSE Track' : 'Global DSA Track'} (Pending Approval)`,
+        currentActivity: 'Registration submitted (Pending Approval)',
         lastActive: 'Just now',
         solvedProblemIds: solvedFromProgress,
         completedLessons: completedLessons || [],
@@ -221,7 +203,7 @@ export const LoginPage: React.FC = () => {
                       Signed in as {user.name}
                     </div>
                     <div className="text-[11px] text-emerald-700 dark:text-emerald-400">
-                      {user.email || user.registrationNumber || 'Student'} &bull; {user.track === 'lpu' ? 'LPU Track' : 'Global Track'}
+                      {user.email || user.registrationNumber || 'Student'} &bull; {user.batch || 'Enrolled Student'}
                     </div>
                   </div>
                 </div>
@@ -271,9 +253,9 @@ export const LoginPage: React.FC = () => {
                   <GraduationCap className="h-4 w-4" />
                 </div>
                 <div>
-                  <div className="text-xs font-bold text-slate-900 dark:text-white">Syllabus-Aligned Roadmaps</div>
+                  <div className="text-xs font-bold text-slate-900 dark:text-white">Curriculum & DSA Roadmaps</div>
                   <div className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5 leading-relaxed">
-                    Official unit breakdowns for LPU CSE202 (C++ OOP) & CSE205 (Data Structures) practical curriculum.
+                    Interactive topic breakdowns, prerequisite dependency trees, and structured coding tracks.
                   </div>
                 </div>
               </div>
@@ -345,64 +327,6 @@ export const LoginPage: React.FC = () => {
               </button>
             </div>
 
-            {/* Track Selector Bar */}
-            <div className="space-y-2">
-              <div className="flex items-center justify-between text-xs">
-                <span className="font-semibold text-slate-700 dark:text-slate-300">
-                  Select Academic Portal Track:
-                </span>
-                <span className="text-[11px] text-slate-500">
-                  {selectedTrack === 'lpu' ? 'LPU CSE Curriculum' : 'Generic Multi-language DSA'}
-                </span>
-              </div>
-
-              <div className="grid grid-cols-2 gap-2">
-                <button
-                  type="button"
-                  onClick={() => handleSelectTrack('lpu')}
-                  className={`flex items-center gap-2.5 p-3 rounded-xl border text-left transition ${
-                    selectedTrack === 'lpu'
-                      ? 'border-emerald-500 bg-emerald-50/80 dark:bg-emerald-950/30 text-emerald-900 dark:text-emerald-100 shadow-sm'
-                      : 'border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-950/40 text-slate-600 dark:text-slate-400 hover:border-slate-300 dark:hover:border-slate-700'
-                  }`}
-                >
-                  <div className={`p-2 rounded-lg ${
-                    selectedTrack === 'lpu'
-                      ? 'bg-emerald-500 text-white'
-                      : 'bg-slate-200 dark:bg-slate-800 text-slate-500'
-                  }`}>
-                    <GraduationCap className="h-4 w-4" />
-                  </div>
-                  <div>
-                    <div className="text-xs font-bold">LPU University</div>
-                    <div className="text-[10px] text-slate-500 dark:text-slate-400">CSE202 / CSE205 C++</div>
-                  </div>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => handleSelectTrack('global')}
-                  className={`flex items-center gap-2.5 p-3 rounded-xl border text-left transition ${
-                    selectedTrack === 'global'
-                      ? 'border-brand-500 bg-brand-50/80 dark:bg-brand-950/30 text-brand-900 dark:text-brand-100 shadow-sm'
-                      : 'border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-950/40 text-slate-600 dark:text-slate-400 hover:border-slate-300 dark:hover:border-slate-700'
-                  }`}
-                >
-                  <div className={`p-2 rounded-lg ${
-                    selectedTrack === 'global'
-                      ? 'bg-brand-600 text-white'
-                      : 'bg-slate-200 dark:bg-slate-800 text-slate-500'
-                  }`}>
-                    <Globe className="h-4 w-4" />
-                  </div>
-                  <div>
-                    <div className="text-xs font-bold">Global DSA</div>
-                    <div className="text-[10px] text-slate-500 dark:text-slate-400">Public DSA 130 Sheet</div>
-                  </div>
-                </button>
-              </div>
-            </div>
-
             {/* Error & Success Notification Banners */}
             {errorMsg && (
               <div className="p-3.5 rounded-xl border border-rose-300 dark:border-rose-900/60 bg-rose-50 dark:bg-rose-950/40 text-xs text-rose-800 dark:text-rose-200 flex items-start gap-2.5 animate-in fade-in duration-200">
@@ -426,7 +350,7 @@ export const LoginPage: React.FC = () => {
                 {/* Identifier Input */}
                 <div>
                   <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">
-                    {selectedTrack === 'lpu' ? 'LPU Registration Number or Student Email' : 'Student ID or Email'}
+                    Registration Number, Student ID, or Email
                   </label>
                   <div className="relative">
                     <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
@@ -437,12 +361,12 @@ export const LoginPage: React.FC = () => {
                       required
                       value={loginIdentifier}
                       onChange={(e) => setLoginIdentifier(e.target.value)}
-                      placeholder={selectedTrack === 'lpu' ? 'e.g. 12104921 or alex.rivera@lpu.in' : 'e.g. GLB-2026-88 or priya.s@gmail.com'}
+                      placeholder="e.g. 12104921, GLB-2026-88, or sahil@example.com"
                       className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 text-slate-900 dark:text-white text-xs sm:text-sm placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-500/40 focus:border-brand-500 transition shadow-inner"
                     />
                   </div>
                   <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-1">
-                    Enter your registered University Registration Number or Student Email address.
+                    Enter your registered Student ID, Registration Number, or Email address.
                   </p>
                 </div>
 
@@ -543,7 +467,7 @@ export const LoginPage: React.FC = () => {
                   {/* Student Email */}
                   <div>
                     <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">
-                      {selectedTrack === 'lpu' ? 'LPU Student Email' : 'Email Address'}
+                      Email Address
                     </label>
                     <div className="relative">
                       <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
@@ -554,7 +478,7 @@ export const LoginPage: React.FC = () => {
                         required
                         value={regEmail}
                         onChange={(e) => setRegEmail(e.target.value)}
-                        placeholder={selectedTrack === 'lpu' ? 'name@lpu.in' : 'name@example.com'}
+                        placeholder="name@example.com"
                         className="w-full pl-10 pr-3 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 text-slate-900 dark:text-white text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/40"
                       />
                     </div>
@@ -565,47 +489,30 @@ export const LoginPage: React.FC = () => {
                   {/* Registration Number / ID */}
                   <div>
                     <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">
-                      {selectedTrack === 'lpu' ? 'University Reg Number (8 Digits)' : 'Student ID / Handle'}
+                      Registration Number / Student ID
                     </label>
                     <input
                       type="text"
                       required
                       value={regNumber}
                       onChange={(e) => setRegNumber(e.target.value)}
-                      placeholder={selectedTrack === 'lpu' ? 'e.g. 12110294' : 'e.g. GLB-2026-99'}
+                      placeholder="e.g. 12110294 or STU-2026-01"
                       className="w-full px-3.5 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 text-slate-900 dark:text-white text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/40"
                     />
                   </div>
 
-                  {/* Semester or Target */}
+                  {/* Academic Program / Cohort */}
                   <div>
                     <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">
-                      {selectedTrack === 'lpu' ? 'Current Academic Semester' : 'Preparation Level'}
+                      Academic Program / Cohort
                     </label>
-                    {selectedTrack === 'lpu' ? (
-                      <select
-                        value={regSemester}
-                        onChange={(e) => setRegSemester(Number(e.target.value))}
-                        className="w-full px-3.5 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 text-slate-900 dark:text-white text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/40"
-                      >
-                        {[1, 2, 3, 4, 5, 6, 7, 8].map((s) => (
-                          <option key={s} value={s}>
-                            Semester {s} (Year {Math.ceil(s / 2)})
-                          </option>
-                        ))}
-                      </select>
-                    ) : (
-                      <select
-                        value={regBatch}
-                        onChange={(e) => setRegBatch(e.target.value)}
-                        className="w-full px-3.5 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 text-slate-900 dark:text-white text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/40"
-                      >
-                        <option value="Global DSA Cohort 2026">Global DSA Cohort 2026</option>
-                        <option value="FAANG Interview Prep 130">FAANG Interview Prep 130</option>
-                        <option value="Competitive Programming Club">Competitive Programming Club</option>
-                        <option value="Independent Self-Paced">Independent Self-Paced</option>
-                      </select>
-                    )}
+                    <input
+                      type="text"
+                      value={regBatch}
+                      onChange={(e) => setRegBatch(e.target.value)}
+                      placeholder="e.g. Computer Science / DSA Cohort"
+                      className="w-full px-3.5 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 text-slate-900 dark:text-white text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/40"
+                    />
                   </div>
                 </div>
 

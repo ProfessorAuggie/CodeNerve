@@ -22,7 +22,7 @@ describe('LoginPage Component', () => {
     expect(screen.getByText('Student Sign In')).toBeInTheDocument();
     expect(screen.getByText('Create Account')).toBeInTheDocument();
     expect(screen.getByText('Unified Academic & DSA Platform')).toBeInTheDocument();
-    expect(screen.getByText('Syllabus-Aligned Roadmaps')).toBeInTheDocument();
+    expect(screen.getByText('Curriculum & DSA Roadmaps')).toBeInTheDocument();
     expect(screen.getByText('Sign In to CodeNerve')).toBeInTheDocument();
     expect(screen.queryByText('Instant Demo Access')).not.toBeInTheDocument();
   });
@@ -42,21 +42,16 @@ describe('LoginPage Component', () => {
     expect(screen.getByPlaceholderText('e.g. Sahil Sharma')).toBeInTheDocument();
   });
 
-  it('switches between LPU and Global DSA tracks', () => {
+  it('renders generic login identifier and password fields without track-specific options', () => {
     render(
       <MemoryRouter>
         <LoginPage />
       </MemoryRouter>
     );
 
-    const lpuTrackBtn = screen.getByRole('button', { name: /lpu university/i });
-    const globalTrackBtn = screen.getByRole('button', { name: /global dsa/i });
-
-    fireEvent.click(globalTrackBtn);
-    expect(useUserStore.getState().activePortal).toBe('global');
-
-    fireEvent.click(lpuTrackBtn);
-    expect(useUserStore.getState().activePortal).toBe('lpu');
+    expect(screen.queryByRole('button', { name: /lpu university/i })).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: /global dsa/i })).not.toBeInTheDocument();
+    expect(screen.getByText(/registration number, student id, or email/i)).toBeInTheDocument();
   });
 
   it('allows student login using registered credentials', async () => {
@@ -114,13 +109,9 @@ describe('LoginPage Component', () => {
     const createAccountTab = screen.getByRole('button', { name: /create account/i });
     fireEvent.click(createAccountTab);
 
-    // Switch to LPU track explicitly
-    const lpuTrackBtn = screen.getByRole('button', { name: /lpu university/i });
-    fireEvent.click(lpuTrackBtn);
-
     const nameInput = screen.getByPlaceholderText('e.g. Sahil Sharma');
-    const emailInput = screen.getByPlaceholderText('name@lpu.in');
-    const regInput = screen.getByPlaceholderText('e.g. 12110294');
+    const emailInput = screen.getByPlaceholderText('name@example.com');
+    const regInput = screen.getByPlaceholderText(/12110294/);
     const [passwordInput, confirmInput] = screen.getAllByPlaceholderText('••••••••');
 
     fireEvent.change(nameInput, { target: { value: 'Tanvi Kapoor' } });
