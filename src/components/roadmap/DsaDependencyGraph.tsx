@@ -4,7 +4,6 @@ import {
   ZoomOut, 
   Scan, 
   Shuffle, 
-  Move,
   GitFork
 } from 'lucide-react';
 import { PROBLEMS } from '../../data/problems';
@@ -816,7 +815,7 @@ export const DsaDependencyGraph: React.FC<DsaDependencyGraphProps> = ({ fitScree
                 </div>
 
                 {/* Micro Solved Counter */}
-                <span className="text-[10px] text-slate-500 dark:text-slate-400 font-mono mt-1 opacity-80 group-hover:opacity-100">
+                <span className="text-[10.5px] text-slate-700 dark:text-slate-300 font-semibold font-mono mt-1 drop-shadow-sm">
                   {stats.solved}/{stats.total}
                 </span>
               </div>

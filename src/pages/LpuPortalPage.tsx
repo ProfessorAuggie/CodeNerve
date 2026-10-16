@@ -47,22 +47,22 @@ export const LpuPortalPage: React.FC = () => {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 space-y-5">
       {/* University Hero Header */}
-      <div className="rounded-2xl border border-emerald-500/30 bg-gradient-to-r from-emerald-950/40 via-slate-900 to-slate-950 p-5 sm:p-6 shadow-xl relative overflow-hidden text-white">
+      <div className="rounded-2xl border border-emerald-200 dark:border-emerald-500/30 bg-gradient-to-r from-emerald-50/90 via-white to-emerald-50/40 dark:from-emerald-950/40 dark:via-slate-900 dark:to-slate-950 p-5 sm:p-6 shadow-xl relative overflow-hidden text-slate-900 dark:text-white transition-colors">
         <div className="absolute top-0 right-0 w-96 h-96 bg-brand-500/10 rounded-full blur-3xl pointer-events-none" />
 
         <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-5">
           <div className="space-y-2">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 border border-emerald-500/30">
               <GraduationCap className="h-4 w-4" />
               <span>Lovely Professional University &bull; School of Computer Science & Engineering</span>
             </div>
 
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
               LPU B.Tech CSE Academic Portal
             </h1>
 
-            <p className="text-xs sm:text-sm text-slate-300 max-w-2xl leading-relaxed">
-              University-aligned study portal with structured syllabi for <strong className="text-white">CSE202</strong> (Object Oriented Programming) and <strong className="text-white">CSE205</strong> (Data Structures & Algorithms), complete with topic prerequisites, 114 curriculum checklist items, and faculty assignments.
+            <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 max-w-2xl leading-relaxed">
+              University-aligned study portal with structured syllabi for <strong className="text-emerald-700 dark:text-white">CSE202</strong> (Object Oriented Programming) and <strong className="text-emerald-700 dark:text-white">CSE205</strong> (Data Structures & Algorithms), complete with topic prerequisites, 114 curriculum checklist items, and faculty assignments.
             </p>
           </div>
 
@@ -78,22 +78,22 @@ export const LpuPortalPage: React.FC = () => {
         </div>
 
         {/* Portal Quick Stats */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-5 pt-4 border-t border-slate-800/80">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-5 pt-4 border-t border-slate-200 dark:border-slate-800/80">
           <div>
-            <div className="text-xl font-bold text-white">12 Units</div>
-            <div className="text-xs text-slate-400">Total Syllabus Units</div>
+            <div className="text-xl font-bold text-slate-900 dark:text-white">12 Units</div>
+            <div className="text-xs text-slate-500 dark:text-slate-400">Total Syllabus Units</div>
           </div>
           <div>
-            <div className="text-xl font-bold text-emerald-400">114 Topics</div>
-            <div className="text-xs text-slate-400">Official Syllabus Checklist</div>
+            <div className="text-xl font-bold text-emerald-600 dark:text-emerald-400">114 Topics</div>
+            <div className="text-xs text-slate-500 dark:text-slate-400">Official Syllabus Checklist</div>
           </div>
           <div>
-            <div className="text-xl font-bold text-brand-400">82 Problems</div>
-            <div className="text-xs text-slate-400">Curated C++ Problem Bank</div>
+            <div className="text-xl font-bold text-brand-600 dark:text-brand-400">82 Problems</div>
+            <div className="text-xs text-slate-500 dark:text-slate-400">Curated C++ Problem Bank</div>
           </div>
           <div>
-            <div className="text-xl font-bold text-purple-400">{customProblemSets.length} Active</div>
-            <div className="text-xs text-slate-400">Faculty Problem Sets</div>
+            <div className="text-xl font-bold text-purple-600 dark:text-purple-400">{customProblemSets.length} Active</div>
+            <div className="text-xs text-slate-500 dark:text-slate-400">Faculty Problem Sets</div>
           </div>
         </div>
       </div>

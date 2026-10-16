@@ -2,13 +2,10 @@ import React, { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { 
   Code2, 
-  BookOpen, 
   Terminal, 
   Sparkles, 
   GraduationCap, 
   CheckCircle2, 
-  User, 
-  ShieldCheck, 
   Menu, 
   X, 
   Globe, 
@@ -32,7 +29,6 @@ export const Navbar: React.FC = () => {
     problemProgress, 
     activePortal, 
     setActivePortal, 
-    isAdminAuthenticated, 
     isStudentAuthenticated, 
     logoutStudent 
   } = useUserStore();

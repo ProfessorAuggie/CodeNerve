@@ -1,17 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { 
   X, 
   User, 
   Mail, 
   GraduationCap, 
   Globe, 
-  CheckCircle2, 
   AlertCircle, 
   Save, 
-  ShieldCheck, 
   Hash, 
-  Activity, 
-  Sparkles 
+  Activity 
 } from 'lucide-react';
 import { useUserStore } from '../../store/userStore';
 import type { StudentRecord, ApprovalStatus } from '../../types';
@@ -33,56 +30,82 @@ export const EditProfileModal: React.FC<EditProfileModalProps> = ({
 }) => {
   const { user, updateUserProfile, updateStudentByAdmin } = useUserStore();
 
+  const getInitialValues = () => {
+    if (mode === 'admin-student' && student) {
+      return {
+        name: student.name || '',
+        email: student.email || '',
+        registrationNumber: student.registrationNumber || '',
+        track: student.track || 'lpu',
+        batch: student.batch || '',
+        approvalStatus: student.approvalStatus || 'approved',
+        studentStatus: student.status || 'online',
+        currentActivity: student.currentActivity || '',
+        university: student.track === 'lpu' ? 'Lovely Professional University (LPU)' : 'Global Student Cohort',
+        semester: 3,
+      };
+    } else if (mode === 'admin-self') {
+      return {
+        name: user.name || 'Dr. Auggie',
+        email: user.email || 'faculty.cse@lpu.in',
+        registrationNumber: user.registrationNumber || 'FAC-1001',
+        university: user.university || 'Lovely Professional University (LPU)',
+        batch: user.batch || 'Head of CSE Faculty',
+        track: 'lpu' as const,
+        approvalStatus: 'approved' as const,
+        studentStatus: 'online' as const,
+        currentActivity: '',
+        semester: 3,
+      };
+    } else {
+      return {
+        name: user.name || '',
+        email: user.email || '',
+        registrationNumber: user.registrationNumber || '',
+        university: user.university || 'Lovely Professional University (LPU)',
+        semester: user.semester || 3,
+        track: user.track || 'lpu',
+        batch: user.batch || 'LPU B.Tech CSE (CSE202/205)',
+        approvalStatus: 'approved' as const,
+        studentStatus: 'online' as const,
+        currentActivity: '',
+      };
+    }
+  };
+
+  const initial = getInitialValues();
+  const targetKey = `${mode}-${student?.id || user.id || 'self'}`;
+  const [prevTargetKey, setPrevTargetKey] = useState(targetKey);
+
   // Form Fields
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [registrationNumber, setRegistrationNumber] = useState('');
-  const [university, setUniversity] = useState('');
-  const [semester, setSemester] = useState<number>(3);
-  const [track, setTrack] = useState<'lpu' | 'global'>('lpu');
-  const [batch, setBatch] = useState('');
-  const [approvalStatus, setApprovalStatus] = useState<ApprovalStatus>('approved');
-  const [studentStatus, setStudentStatus] = useState<'online' | 'idle' | 'offline'>('online');
-  const [currentActivity, setCurrentActivity] = useState('');
+  const [name, setName] = useState(initial.name);
+  const [email, setEmail] = useState(initial.email);
+  const [registrationNumber, setRegistrationNumber] = useState(initial.registrationNumber);
+  const [university, setUniversity] = useState(initial.university);
+  const [semester, setSemester] = useState<number>(initial.semester);
+  const [track, setTrack] = useState<'lpu' | 'global'>(initial.track);
+  const [batch, setBatch] = useState(initial.batch);
+  const [approvalStatus, setApprovalStatus] = useState<ApprovalStatus>(initial.approvalStatus);
+  const [studentStatus, setStudentStatus] = useState<'online' | 'idle' | 'offline'>(initial.studentStatus);
+  const [currentActivity, setCurrentActivity] = useState(initial.currentActivity);
   
   // UI Status
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Initialize form state depending on mode
-  useEffect(() => {
-    if (!isOpen) return;
-    setErrorMsg(null);
-
-    if (mode === 'admin-student' && student) {
-      setName(student.name || '');
-      setEmail(student.email || '');
-      setRegistrationNumber(student.registrationNumber || '');
-      setTrack(student.track || 'lpu');
-      setBatch(student.batch || '');
-      setApprovalStatus(student.approvalStatus || 'approved');
-      setStudentStatus(student.status || 'online');
-      setCurrentActivity(student.currentActivity || '');
-      setUniversity(student.track === 'lpu' ? 'Lovely Professional University (LPU)' : 'Global Student Cohort');
-      setSemester(3);
-    } else if (mode === 'admin-self') {
-      setName(user.name || 'Dr. Auggie');
-      setEmail(user.email || 'faculty.cse@lpu.in');
-      setRegistrationNumber(user.registrationNumber || 'FAC-1001');
-      setUniversity(user.university || 'Lovely Professional University (LPU)');
-      setBatch(user.batch || 'Head of CSE Faculty');
-      setTrack('lpu');
-    } else {
-      // student-self
-      setName(user.name || '');
-      setEmail(user.email || '');
-      setRegistrationNumber(user.registrationNumber || '');
-      setUniversity(user.university || 'Lovely Professional University (LPU)');
-      setSemester(user.semester || 3);
-      setTrack(user.track || 'lpu');
-      setBatch(user.batch || 'LPU B.Tech CSE (CSE202/205)');
-    }
-  }, [isOpen, mode, student, user]);
+  if (targetKey !== prevTargetKey) {
+    setPrevTargetKey(targetKey);
+    setName(initial.name);
+    setEmail(initial.email);
+    setRegistrationNumber(initial.registrationNumber);
+    setUniversity(initial.university);
+    setSemester(initial.semester);
+    setTrack(initial.track);
+    setBatch(initial.batch);
+    setApprovalStatus(initial.approvalStatus);
+    setStudentStatus(initial.studentStatus);
+    setCurrentActivity(initial.currentActivity);
+  }
 
   if (!isOpen) return null;
 
@@ -140,7 +163,7 @@ export const EditProfileModal: React.FC<EditProfileModalProps> = ({
 
         setIsSubmitting(false);
         onClose();
-      } catch (err) {
+      } catch {
         setIsSubmitting(false);
         setErrorMsg('An error occurred while saving profile changes.');
       }

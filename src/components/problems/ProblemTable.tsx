@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { 
   CheckCircle2, 
   Hourglass, 
@@ -31,12 +31,14 @@ export const ProblemTable: React.FC<ProblemTableProps> = ({
 }) => {
   const { problemProgress, updateProblemStatus, bookmarks, toggleBookmark } = useUserStore();
   const [perPage, setPerPage] = useState<number | 'all'>(pageSize);
+  const [prevProblemsLength, setPrevProblemsLength] = useState(problems.length);
   const [currentPage, setCurrentPage] = useState<number>(1);
 
   // Reset to page 1 whenever filter results change
-  useEffect(() => {
+  if (problems.length !== prevProblemsLength) {
+    setPrevProblemsLength(problems.length);
     setCurrentPage(1);
-  }, [problems.length]);
+  }
 
   const totalPages = perPage === 'all' ? 1 : Math.max(1, Math.ceil(problems.length / (perPage as number)));
   const safeCurrentPage = Math.min(currentPage, totalPages);

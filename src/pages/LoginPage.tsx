@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Link, useNavigate, useLocation, useSearchParams } from 'react-router-dom';
 import { 
   Code2, 
@@ -13,8 +13,7 @@ import {
   Eye, 
   EyeOff, 
   Sparkles, 
-  ShieldCheck, 
-  Zap, 
+  ShieldCheck,
   Terminal,
   LogOut,
   UserPlus,
@@ -68,16 +67,10 @@ export const LoginPage: React.FC = () => {
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Sync mode from URL params if changes
-  useEffect(() => {
-    if (searchParams.get('mode') === 'register') {
-      setMode('register');
-    }
-  }, [searchParams]);
-
-  // Adjust default batch when track changes
-  useEffect(() => {
-    if (selectedTrack === 'lpu') {
+  const handleSelectTrack = (track: 'lpu' | 'global') => {
+    setSelectedTrack(track);
+    setActivePortal(track);
+    if (track === 'lpu') {
       if (!regBatch || regBatch.includes('Global')) {
         setRegBatch('LPU B.Tech CSE (CSE202/205)');
       }
@@ -89,7 +82,7 @@ export const LoginPage: React.FC = () => {
         setRegBatch('Global DSA Cohort 2026');
       }
     }
-  }, [selectedTrack, regName]);
+  };
 
   const handleLoginSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -104,7 +97,7 @@ export const LoginPage: React.FC = () => {
       if (res.success) {
         setSuccessMsg(res.message);
         setTimeout(() => {
-          const redirectTo = (location.state as any)?.from || (res.student?.track === 'lpu' ? '/lpu' : '/dashboard');
+          const redirectTo = (location.state as { from?: string } | null)?.from || (res.student?.track === 'lpu' ? '/lpu' : '/dashboard');
           navigate(redirectTo);
         }, 600);
       } else {
@@ -366,10 +359,7 @@ export const LoginPage: React.FC = () => {
               <div className="grid grid-cols-2 gap-2">
                 <button
                   type="button"
-                  onClick={() => {
-                    setSelectedTrack('lpu');
-                    setActivePortal('lpu');
-                  }}
+                  onClick={() => handleSelectTrack('lpu')}
                   className={`flex items-center gap-2.5 p-3 rounded-xl border text-left transition ${
                     selectedTrack === 'lpu'
                       ? 'border-emerald-500 bg-emerald-50/80 dark:bg-emerald-950/30 text-emerald-900 dark:text-emerald-100 shadow-sm'
@@ -391,10 +381,7 @@ export const LoginPage: React.FC = () => {
 
                 <button
                   type="button"
-                  onClick={() => {
-                    setSelectedTrack('global');
-                    setActivePortal('global');
-                  }}
+                  onClick={() => handleSelectTrack('global')}
                   className={`flex items-center gap-2.5 p-3 rounded-xl border text-left transition ${
                     selectedTrack === 'global'
                       ? 'border-brand-500 bg-brand-50/80 dark:bg-brand-950/30 text-brand-900 dark:text-brand-100 shadow-sm'

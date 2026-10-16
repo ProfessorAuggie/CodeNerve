@@ -62,16 +62,16 @@ export const RoadmapView: React.FC<RoadmapViewProps> = ({ roadmap }) => {
   return (
     <div className="space-y-8">
       {/* Top Banner & Overall Progress */}
-      <div className="rounded-2xl border border-slate-800 bg-gradient-to-r from-slate-900 via-indigo-950/30 to-slate-900 p-6 shadow-xl backdrop-blur-sm flex flex-col md:flex-row md:items-center justify-between gap-6">
+      <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-gradient-to-r from-indigo-50/90 via-white to-indigo-50/40 dark:from-slate-900 dark:via-indigo-950/30 dark:to-slate-900 p-6 shadow-xl backdrop-blur-sm flex flex-col md:flex-row md:items-center justify-between gap-6 transition-colors">
         <div>
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-brand-500/10 text-brand-300 border border-brand-500/20 mb-2">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-brand-500/10 text-brand-700 dark:text-brand-300 border border-brand-500/20 mb-2">
             <Compass className="h-3.5 w-3.5" />
             <span>Interactive Learning Path</span>
           </div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
             {roadmap.title}
           </h1>
-          <p className="text-sm text-slate-400 mt-1 max-w-2xl">
+          <p className="text-sm text-slate-600 dark:text-slate-400 mt-1 max-w-2xl">
             {roadmap.description}
           </p>
         </div>
@@ -79,12 +79,12 @@ export const RoadmapView: React.FC<RoadmapViewProps> = ({ roadmap }) => {
         <div className="flex flex-col items-start md:items-end gap-3 shrink-0">
           <div className="flex items-center gap-3">
             <div className="text-right">
-              <div className="text-xl font-bold text-white">
-                {solvedInPath} <span className="text-slate-500 text-sm">/ {totalInPath}</span>
+              <div className="text-xl font-bold text-slate-900 dark:text-white">
+                {solvedInPath} <span className="text-slate-400 dark:text-slate-500 text-sm">/ {totalInPath}</span>
               </div>
-              <div className="text-xs text-slate-400">Problems Solved</div>
+              <div className="text-xs text-slate-500 dark:text-slate-400">Problems Solved</div>
             </div>
-            <div className="h-12 w-12 rounded-full border-4 border-slate-800 flex items-center justify-center font-bold text-sm text-brand-400 bg-slate-950">
+            <div className="h-12 w-12 rounded-full border-4 border-slate-200 dark:border-slate-800 flex items-center justify-center font-bold text-sm text-brand-600 dark:text-brand-400 bg-white dark:bg-slate-950 shadow-sm">
               {roadmapPercent}%
             </div>
           </div>
@@ -92,13 +92,13 @@ export const RoadmapView: React.FC<RoadmapViewProps> = ({ roadmap }) => {
           <div className="flex items-center gap-2 text-xs">
             <button
               onClick={expandAll}
-              className="px-2.5 py-1 rounded-md bg-slate-800 text-slate-300 hover:text-white hover:bg-slate-700 transition"
+              className="px-2.5 py-1 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200 dark:hover:bg-slate-700 transition font-medium border border-slate-200 dark:border-transparent"
             >
               Expand All
             </button>
             <button
               onClick={collapseAll}
-              className="px-2.5 py-1 rounded-md bg-slate-800 text-slate-300 hover:text-white hover:bg-slate-700 transition"
+              className="px-2.5 py-1 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200 dark:hover:bg-slate-700 transition font-medium border border-slate-200 dark:border-transparent"
             >
               Collapse All
             </button>
@@ -132,42 +132,42 @@ export const RoadmapView: React.FC<RoadmapViewProps> = ({ roadmap }) => {
           return (
             <div
               key={group.id}
-              className="rounded-2xl border border-slate-800 bg-slate-900/60 shadow-lg transition hover:border-slate-700/80 overflow-hidden"
+              className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/60 shadow-md transition hover:border-slate-300 dark:hover:border-slate-700/80 overflow-hidden"
             >
               {/* Group Header Card */}
               <div
                 onClick={() => toggleGroup(group.id)}
-                className="p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 cursor-pointer select-none bg-slate-900/90 hover:bg-slate-850 transition"
+                className="p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 cursor-pointer select-none bg-slate-50/80 dark:bg-slate-900/90 hover:bg-slate-100 dark:hover:bg-slate-850 transition"
               >
                 <div className="flex items-start sm:items-center gap-3.5">
-                  <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-slate-800 text-xl shadow-inner border border-slate-700/60 shrink-0">
+                  <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-white dark:bg-slate-800 text-xl shadow-sm border border-slate-200 dark:border-slate-700/60 shrink-0">
                     {group.icon}
                   </div>
                   <div>
                     <div className="flex items-center gap-2">
-                      <span className="text-xs font-semibold uppercase text-brand-400 tracking-wider">
+                      <span className="text-xs font-semibold uppercase text-brand-600 dark:text-brand-400 tracking-wider">
                         Step {group.order}
                       </span>
                       {prereqGroups.length > 0 && (
-                        <span className="text-[10px] px-2 py-0.5 rounded-full bg-slate-800 text-slate-400 border border-slate-700">
+                        <span className="text-[10px] px-2 py-0.5 rounded-full bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-400 border border-slate-300 dark:border-slate-700">
                           Requires: {prereqGroups.map((p) => p.title).join(', ')}
                         </span>
                       )}
                     </div>
-                    <h3 className="text-base sm:text-lg font-bold text-white tracking-tight">
+                    <h3 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white tracking-tight">
                       {group.title}
                     </h3>
-                    <p className="text-xs text-slate-400 mt-0.5">{group.description}</p>
+                    <p className="text-xs text-slate-600 dark:text-slate-400 mt-0.5">{group.description}</p>
                   </div>
                 </div>
 
                 <div className="flex items-center justify-between sm:justify-end gap-4 shrink-0">
                   <div className="flex items-center gap-3">
                     <div className="text-right">
-                      <div className="text-xs font-semibold text-slate-200">
+                      <div className="text-xs font-semibold text-slate-700 dark:text-slate-200">
                         {groupSolved}/{groupProblemIds.length} Solved
                       </div>
-                      <div className="h-1.5 w-24 overflow-hidden rounded-full bg-slate-800 mt-1">
+                      <div className="h-1.5 w-24 overflow-hidden rounded-full bg-slate-200 dark:bg-slate-800 mt-1">
                         <div
                           className="h-full bg-emerald-500 transition-all duration-300"
                           style={{ width: `${groupPercent}%` }}
@@ -176,7 +176,7 @@ export const RoadmapView: React.FC<RoadmapViewProps> = ({ roadmap }) => {
                     </div>
                   </div>
 
-                  <div className="p-1 rounded-lg bg-slate-800 text-slate-400">
+                  <div className="p-1 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400">
                     {isExpanded ? <ChevronUp className="h-5 w-5" /> : <ChevronDown className="h-5 w-5" />}
                   </div>
                 </div>
@@ -184,7 +184,7 @@ export const RoadmapView: React.FC<RoadmapViewProps> = ({ roadmap }) => {
 
               {/* Collapsible Problems List */}
               {isExpanded && (
-                <div className="border-t border-slate-800/80 bg-slate-950/40 p-4 space-y-2">
+                <div className="border-t border-slate-200 dark:border-slate-800/80 bg-slate-50/60 dark:bg-slate-950/40 p-4 space-y-2">
                   {groupProblems.length === 0 ? (
                     <div className="text-xs text-slate-500 py-3 text-center">
                       Theoretical foundational topic — explore connected lessons and visualizers.
@@ -208,8 +208,8 @@ export const RoadmapView: React.FC<RoadmapViewProps> = ({ roadmap }) => {
                             onClick={() => setSelectedProblem(problem)}
                             className={`flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3 rounded-xl border transition cursor-pointer ${
                               isSolved
-                                ? 'bg-emerald-950/10 border-emerald-900/30 hover:border-emerald-700/50'
-                                : 'bg-slate-900/60 border-slate-800 hover:border-slate-700'
+                                ? 'bg-emerald-50 dark:bg-emerald-950/10 border-emerald-300 dark:border-emerald-900/30 hover:border-emerald-500 dark:hover:border-emerald-700/50'
+                                : 'bg-white dark:bg-slate-900/60 border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700'
                             }`}
                           >
                             <div className="flex items-center gap-3">
@@ -223,12 +223,12 @@ export const RoadmapView: React.FC<RoadmapViewProps> = ({ roadmap }) => {
                                 }}
                                 className={`h-6 w-6 rounded-lg flex items-center justify-center transition border shrink-0 ${
                                   isSolved
-                                    ? 'bg-emerald-500/20 border-emerald-500 text-emerald-400'
+                                    ? 'bg-emerald-500/20 border-emerald-500 text-emerald-600 dark:text-emerald-400'
                                     : isAttempted
-                                    ? 'bg-amber-500/20 border-amber-500 text-amber-400'
+                                    ? 'bg-amber-500/20 border-amber-500 text-amber-600 dark:text-amber-400'
                                     : isRevision
-                                    ? 'bg-purple-500/20 border-purple-500 text-purple-400'
-                                    : 'border-slate-700 bg-slate-800 text-slate-500 hover:border-slate-500'
+                                    ? 'bg-purple-500/20 border-purple-500 text-purple-600 dark:text-purple-400'
+                                    : 'border-slate-300 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 text-slate-400 dark:text-slate-500 hover:border-slate-400'
                                 }`}
                                 title={isSolved ? 'Mark uncompleted' : 'Mark solved'}
                               >
@@ -239,7 +239,7 @@ export const RoadmapView: React.FC<RoadmapViewProps> = ({ roadmap }) => {
                                 ) : isRevision ? (
                                   <RotateCcw className="h-3.5 w-3.5" />
                                 ) : (
-                                  <div className="h-2 w-2 rounded-full bg-slate-600" />
+                                  <div className="h-2 w-2 rounded-full bg-slate-400 dark:bg-slate-600" />
                                 )}
                               </button>
 
@@ -248,8 +248,8 @@ export const RoadmapView: React.FC<RoadmapViewProps> = ({ roadmap }) => {
                                   <span
                                     className={`text-xs font-semibold ${
                                       isSolved
-                                        ? 'text-slate-400 line-through'
-                                        : 'text-white hover:text-brand-300'
+                                        ? 'text-slate-400 dark:text-slate-500 line-through'
+                                        : 'text-slate-900 dark:text-white hover:text-brand-600 dark:hover:text-brand-300'
                                     }`}
                                   >
                                     {problem.title}
@@ -260,7 +260,7 @@ export const RoadmapView: React.FC<RoadmapViewProps> = ({ roadmap }) => {
                                     {problem.difficulty}
                                   </span>
                                 </div>
-                                <div className="text-[11px] text-slate-400 mt-0.5 line-clamp-1">
+                                <div className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5 line-clamp-1">
                                   {problem.description}
                                 </div>
                               </div>
@@ -272,10 +272,10 @@ export const RoadmapView: React.FC<RoadmapViewProps> = ({ roadmap }) => {
                                   href={getAlgoNerveUrl(matchedVisualizer.algorithmId)}
                                   target="_blank"
                                   rel="noopener noreferrer"
-                                  className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-semibold rounded-lg bg-brand-500/10 text-brand-300 border border-brand-500/30 hover:bg-brand-500/20 transition"
+                                  className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-semibold rounded-lg bg-brand-500/10 text-brand-700 dark:text-brand-300 border border-brand-500/30 hover:bg-brand-500/20 transition"
                                   title="Visualize Algorithm on AlgoNerve (new tab)"
                                 >
-                                  <Sparkles className="h-3.5 w-3.5 text-brand-400" />
+                                  <Sparkles className="h-3.5 w-3.5 text-brand-600 dark:text-brand-400" />
                                   <span>Visualizer</span>
                                 </a>
                               )}
@@ -284,7 +284,7 @@ export const RoadmapView: React.FC<RoadmapViewProps> = ({ roadmap }) => {
                                 href={problem.externalUrl}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-medium rounded-lg bg-slate-800 text-slate-300 hover:text-white hover:bg-slate-700 transition"
+                                className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-medium rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200 dark:hover:bg-slate-700 border border-slate-200 dark:border-transparent transition"
                               >
                                 <span>Solve</span>
                                 <ExternalLink className="h-3 w-3" />

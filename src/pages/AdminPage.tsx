@@ -15,24 +15,19 @@ import {
   Unlock, 
   Key, 
   UserPlus, 
-  Eye, 
   X,
   ExternalLink,
-  ChevronRight,
-  Sparkles,
   BarChart3,
   Check,
   AlertCircle,
   RefreshCw,
   Edit3,
-  BookOpen,
-  Award,
-  CheckSquare
+  BookOpen
 } from 'lucide-react';
 import { useUserStore } from '../store/userStore';
 import { PROBLEMS } from '../data/problems';
 import { EditProfileModal } from '../components/common/EditProfileModal';
-import type { StudentRecord, AssignedTest } from '../types';
+import type { StudentRecord } from '../types';
 
 export const AdminPage: React.FC = () => {
   const { 
@@ -962,12 +957,27 @@ export const AdminPage: React.FC = () => {
                   </label>
                   <select
                     value={targetTrack}
-                    onChange={(e) => setTargetTrack(e.target.value as any)}
+                    onChange={(e) => setTargetTrack(e.target.value as 'all' | 'global' | 'lpu')}
                     className="w-full rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 px-3 py-2 text-xs text-slate-900 dark:text-slate-200 focus:outline-none focus:border-purple-500"
                   >
                     <option value="lpu">🎓 LPU Academic Portal</option>
                     <option value="global">🌐 Global DSA Track</option>
                     <option value="all">All Cohorts</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">
+                    Subject Code
+                  </label>
+                  <select
+                    value={subjectCode}
+                    onChange={(e) => setSubjectCode(e.target.value)}
+                    className="w-full rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 px-3 py-2 text-xs text-slate-900 dark:text-slate-200 focus:outline-none focus:border-purple-500"
+                  >
+                    <option value="CSE205">CSE205 (Data Structures)</option>
+                    <option value="CSE202">CSE202 (OOP C++)</option>
+                    <option value="DSA-GLOBAL">DSA (Global Track)</option>
                   </select>
                 </div>
 
@@ -1226,7 +1236,7 @@ export const AdminPage: React.FC = () => {
                 </label>
                 <select
                   value={newStudentTrack}
-                  onChange={(e) => setNewStudentTrack(e.target.value as any)}
+                  onChange={(e) => setNewStudentTrack(e.target.value as 'lpu' | 'global')}
                   className="w-full rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 px-3 py-2.5 text-xs text-slate-900 dark:text-slate-200 focus:outline-none focus:border-indigo-500"
                 >
                   <option value="lpu">🎓 LPU Academic Portal</option>
@@ -1592,7 +1602,7 @@ export const AdminPage: React.FC = () => {
 
                   {selectedStudent.quizScores && Object.keys(selectedStudent.quizScores).length > 0 ? (
                     <div className="divide-y divide-slate-100 dark:divide-slate-800 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950">
-                      {Object.entries(selectedStudent.quizScores).map(([quizId, q]: [string, any]) => {
+                      {Object.entries(selectedStudent.quizScores).map(([quizId, q]) => {
                         const pct = Math.round((q.score / (q.total || 1)) * 100);
                         return (
                           <div key={quizId} className="p-3 flex items-center justify-between gap-3 hover:bg-slate-100 dark:hover:bg-slate-900 transition">
@@ -1640,7 +1650,7 @@ export const AdminPage: React.FC = () => {
 
                   {selectedStudent.assignedTestSubmissions && Object.keys(selectedStudent.assignedTestSubmissions).length > 0 ? (
                     <div className="divide-y divide-slate-100 dark:divide-slate-800 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950">
-                      {Object.entries(selectedStudent.assignedTestSubmissions).map(([testId, sub]: [string, any]) => {
+                      {Object.entries(selectedStudent.assignedTestSubmissions).map(([testId, sub]) => {
                         const pct = Math.round((sub.score / (sub.total || 1)) * 100);
                         return (
                           <div key={testId} className="p-3 flex items-center justify-between gap-3 hover:bg-slate-100 dark:hover:bg-slate-900 transition">

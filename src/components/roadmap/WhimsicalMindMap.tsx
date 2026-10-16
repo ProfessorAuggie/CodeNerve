@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useRef, useCallback, useEffect } from 'react';
+import React, { useState, useMemo, useRef, useCallback } from 'react';
 import {
   ZoomIn,
   ZoomOut,
@@ -7,9 +7,7 @@ import {
   FolderOpen,
   Folder,
   X,
-  BookOpen,
-  CheckCircle2,
-  Maximize2
+  CheckCircle2
 } from 'lucide-react';
 import { WHIMSICAL_DSA_TREE, type WhimsicalTreeNode } from '../../data/whimsicalDsaTreeData';
 import { PROBLEMS } from '../../data/problems';
@@ -406,13 +404,14 @@ export const WhimsicalMindMap: React.FC<WhimsicalMindMapProps> = ({ fitScreen = 
     );
   };
 
-  // Auto-expand nodes that match search
-  useEffect(() => {
-    if (!queryLower) return;
-    const matchingAncestors = new Set<string>();
+  const handleSearchChange = (query: string) => {
+    setSearchQuery(query);
+    const qLower = query.trim().toLowerCase();
+    if (!qLower) return;
 
+    const matchingAncestors = new Set<string>();
     const searchRec = (node: WhimsicalTreeNode, path: string[]) => {
-      const match = node.title.toLowerCase().includes(queryLower);
+      const match = node.title.toLowerCase().includes(qLower);
       if (match) {
         path.forEach((id) => matchingAncestors.add(id));
       }
@@ -430,7 +429,7 @@ export const WhimsicalMindMap: React.FC<WhimsicalMindMapProps> = ({ fitScreen = 
         return next;
       });
     }
-  }, [queryLower, treeData]);
+  };
 
   // Render all nodes recursively
   const renderNode = (node: PositionedNode): React.ReactNode => {
@@ -683,7 +682,7 @@ export const WhimsicalMindMap: React.FC<WhimsicalMindMapProps> = ({ fitScreen = 
             <input
               type="text"
               value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+              onChange={(e) => handleSearchChange(e.target.value)}
               placeholder="Search patterns..."
               className="pl-8 pr-7 py-1.5 bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-xs text-slate-800 dark:text-slate-200 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-indigo-500 w-40 sm:w-52 transition shadow-inner"
             />

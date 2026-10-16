@@ -8,14 +8,11 @@ import {
   CheckCircle2, 
   ArrowRight, 
   ExternalLink,
-  Code2,
   Cpu,
-  Layers,
   Zap,
   Play,
   RotateCcw,
-  Check,
-  Search
+  Check
 } from 'lucide-react';
 import { PROBLEMS } from '../data/problems';
 import { useUserStore } from '../store/userStore';

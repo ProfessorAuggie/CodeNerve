@@ -4,7 +4,6 @@ import {
   CheckCircle2, 
   RotateCcw, 
   Bookmark, 
-  User, 
   ExternalLink, 
   Trash2, 
   RefreshCw,
@@ -28,7 +27,6 @@ export const DashboardPage: React.FC = () => {
     resetProgress,
     activePortal,
     isStudentAuthenticated,
-    logoutStudent,
     updateStudentActivity
   } = useUserStore();
 

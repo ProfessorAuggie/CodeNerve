@@ -684,13 +684,6 @@ export const LpuAcademicGraph: React.FC<LpuAcademicGraphProps> = ({ fitScreen = 
     updateProblemStatus(problemId, next);
   };
 
-  const examColors: Record<string, string> = {
-    'CA-1': 'bg-blue-500/15 text-blue-300 border-blue-500/30',
-    'MTE': 'bg-amber-500/15 text-amber-300 border-amber-500/30',
-    'CA-2': 'bg-purple-500/15 text-purple-300 border-purple-500/30',
-    'ETE': 'bg-rose-500/15 text-rose-300 border-rose-500/30',
-  };
-
   return (
     <div className={`relative w-full bg-slate-50 dark:bg-[#090c14] overflow-hidden transition-all duration-200 flex flex-col ${
       fitScreen
@@ -1005,7 +998,7 @@ export const LpuAcademicGraph: React.FC<LpuAcademicGraphProps> = ({ fitScreen = 
                   </div>
                 </div>
 
-                <span className="text-[10px] text-slate-500 dark:text-slate-400 font-mono mt-1 opacity-80 group-hover:opacity-100">
+                <span className="text-[10.5px] text-slate-700 dark:text-slate-300 font-semibold font-mono mt-1 drop-shadow-sm">
                   {stats.solved}/{stats.total} Solved
                 </span>
               </div>

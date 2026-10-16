@@ -49,7 +49,7 @@ const AlgoNerveRedirect: React.FC = () => {
 };
 
 export const App: React.FC = () => {
-  const { theme, setTheme } = useUserStore();
+  const { theme } = useUserStore();
 
   useEffect(() => {
     const applyTheme = () => {

@@ -6,9 +6,6 @@ import {
   UserPlus, 
   ShieldAlert, 
   CheckCircle2, 
-  Sparkles, 
-  ArrowRight,
-  Terminal,
   Bookmark,
   GraduationCap
 } from 'lucide-react';
