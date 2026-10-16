@@ -44,6 +44,8 @@ export const LpuPortalPage: React.FC = () => {
     }));
   };
 
+  const lpuProblemsCount = PROBLEMS.filter((p) => p.track === 'lpu').length;
+
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 space-y-5">
       {/* University Hero Header */}
@@ -88,7 +90,7 @@ export const LpuPortalPage: React.FC = () => {
             <div className="text-xs text-slate-500 dark:text-slate-400">Official Syllabus Checklist</div>
           </div>
           <div>
-            <div className="text-xl font-bold text-brand-600 dark:text-brand-400">82 Problems</div>
+            <div className="text-xl font-bold text-brand-600 dark:text-brand-400">{lpuProblemsCount} Problems</div>
             <div className="text-xs text-slate-500 dark:text-slate-400">Curated C++ Problem Bank</div>
           </div>
           <div>

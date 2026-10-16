@@ -705,7 +705,8 @@ export const AdminPage: React.FC = () => {
                   )
                 ) : (
                   filteredStudents.map((std) => {
-                    const maxCatalogue = std.track === 'lpu' ? 82 : 182;
+                    const trackTarget = std.track === 'lpu' ? 'lpu' : 'global';
+                    const maxCatalogue = Math.max(1, PROBLEMS.filter((p) => p.track === trackTarget).length);
                     const progressPct = Math.round((std.totalSolved / maxCatalogue) * 100);
                     const approval = std.approvalStatus || 'approved';
 

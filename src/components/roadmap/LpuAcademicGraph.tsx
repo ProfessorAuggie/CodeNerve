@@ -77,24 +77,11 @@ export const CSE205_NODES: LpuNodeData[] = [
     problemIds: ['p-lpu-bubble-sort-1', 'p-lpu-insertion-sort-1', 'p-lpu-selection-sort-1'],
   },
 
-  // Level 2: Advanced Sorting & Linked Lists
-  {
-    id: 'cse205-adv-sorting',
-    unitNumber: 2,
-    unitCode: 'Unit 2',
-    title: 'Quick & Merge Sort',
-    category: 'core',
-    x: 710,
-    y: 240,
-    prerequisites: ['Bubble, Insert & Select Sort', 'Divide and conquer recursion'],
-    description: 'Divide and conquer partitioning, recursive stack unwinding, and guaranteed O(n log n) merges.',
-    visualizerId: 'merge-sort',
-    problemIds: ['p-lpu-merge-sort-1', 'p-lpu-quick-sort-1'],
-  },
+  // Level 2: Linked Lists & Stacks/Queues
   {
     id: 'cse205-linked-lists',
-    unitNumber: 3,
-    unitCode: 'Unit 3',
+    unitNumber: 2,
+    unitCode: 'Unit 2',
     title: 'Singly & Doubly Linked Lists',
     category: 'core',
     x: 250,
@@ -104,12 +91,10 @@ export const CSE205_NODES: LpuNodeData[] = [
     visualizerId: 'singly-linked-list',
     problemIds: ['p-lpu-ll-middle-1', 'p-lpu-ll-reverse-1', 'p-lpu-dll-1', 'p-lpu-ll-cycle-1', 'p-lpu-cll-1'],
   },
-
-  // Level 3: Linear Abstract Data Types
   {
     id: 'cse205-stacks-queues',
-    unitNumber: 4,
-    unitCode: 'Unit 4',
+    unitNumber: 3,
+    unitCode: 'Unit 3',
     title: 'Stacks & Circular Queues',
     category: 'core',
     x: 440,
@@ -120,11 +105,24 @@ export const CSE205_NODES: LpuNodeData[] = [
     problemIds: ['p-lpu-stack-valid-parens-1', 'p-lpu-queue-1', 'p-lpu-circular-queue-1', 'p-lpu-min-stack-1', 'p-lpu-stack-postfix-1'],
   },
 
-  // Level 4: Non-Linear Trees
+  // Level 3: Advanced Sorting & Trees
+  {
+    id: 'cse205-adv-sorting',
+    unitNumber: 4,
+    unitCode: 'Unit 4',
+    title: 'Quick & Merge Sort',
+    category: 'core',
+    x: 710,
+    y: 240,
+    prerequisites: ['Bubble, Insert & Select Sort', 'Divide and conquer recursion'],
+    description: 'Divide and conquer partitioning, recursive stack unwinding, and guaranteed O(n log n) merges.',
+    visualizerId: 'merge-sort',
+    problemIds: ['p-lpu-merge-sort-1', 'p-lpu-quick-sort-1'],
+  },
   {
     id: 'cse205-trees',
-    unitNumber: 5,
-    unitCode: 'Unit 5',
+    unitNumber: 4,
+    unitCode: 'Unit 4',
     title: 'Binary Trees & BST Traversals',
     category: 'core',
     x: 440,
@@ -505,26 +503,117 @@ export const LpuAcademicGraph: React.FC<LpuAcademicGraphProps> = ({ fitScreen = 
   const nodeProblemsMap = useMemo(() => {
     const map: Record<string, Problem[]> = {};
     for (const node of currentNodes) {
-      map[node.id] = PROBLEMS.filter((p) => node.problemIds.includes(p.id));
+      const explicit = PROBLEMS.filter((p) => node.problemIds.includes(p.id));
+      const explicitIds = new Set(node.problemIds);
+
+      // Collect problems in this subject matching this node's unit & topics
+      const unitKey = `${selectedSubject}-u${node.unitNumber}`;
+      const additional = PROBLEMS.filter((p) => {
+        if (p.track !== 'lpu' || explicitIds.has(p.id)) return false;
+        if (!p.syllabusUnitIds.includes(unitKey)) return false;
+
+        const titleL = p.title.toLowerCase();
+        const tagL = p.topicTags.join(' ').toLowerCase();
+
+        if (node.id === 'cse205-searching') {
+          return titleL.includes('search') || tagL.includes('search');
+        }
+        if (node.id === 'cse205-sorting') {
+          return titleL.includes('sort') || tagL.includes('sorting') || titleL.includes('3sum');
+        }
+        if (node.id === 'cse205-arrays') {
+          return !titleL.includes('search') && !titleL.includes('sort') && !titleL.includes('3sum');
+        }
+        if (node.id === 'cse205-linked-lists') {
+          return true;
+        }
+        if (node.id === 'cse205-stacks-queues') {
+          return true;
+        }
+        if (node.id === 'cse205-adv-sorting') {
+          return titleL.includes('sort') || tagL.includes('sorting');
+        }
+        if (node.id === 'cse205-trees') {
+          return !titleL.includes('sort') && !tagL.includes('sorting');
+        }
+        if (node.id === 'cse205-avl') {
+          return titleL.includes('avl') || titleL.includes('balanced') || tagL.includes('balance');
+        }
+        if (node.id === 'cse205-heaps') {
+          return titleL.includes('heap') || titleL.includes('priority') || titleL.includes('kth') || tagL.includes('heap');
+        }
+        if (node.id === 'cse205-graphs') {
+          return titleL.includes('graph') || titleL.includes('bfs') || titleL.includes('dfs') || titleL.includes('island') || titleL.includes('course');
+        }
+        if (node.id === 'cse205-spanning-trees') {
+          return titleL.includes('spanning') || titleL.includes('mst') || titleL.includes('dijkstra') || titleL.includes('network');
+        }
+        if (node.id === 'cse205-hashing') {
+          return titleL.includes('hash') || tagL.includes('hashing') || titleL.includes('map');
+        }
+
+        // For CSE202 nodes:
+        if (node.id === 'cse202-pointers') {
+          return titleL.includes('pointer') || tagL.includes('pointer');
+        }
+        if (node.id === 'cse202-overloading') {
+          return titleL.includes('overload') || tagL.includes('function');
+        }
+        if (node.id === 'cse202-basics') {
+          return !titleL.includes('pointer') && !titleL.includes('overload');
+        }
+        if (node.id === 'cse202-constructors') {
+          return titleL.includes('constructor') || titleL.includes('destructor');
+        }
+        if (node.id === 'cse202-classes') {
+          return !titleL.includes('constructor') && !titleL.includes('destructor');
+        }
+        if (node.id === 'cse202-operator-overload') {
+          return true;
+        }
+        if (node.id === 'cse202-polymorphism') {
+          return titleL.includes('virtual') || titleL.includes('polymorph');
+        }
+        if (node.id === 'cse202-abstract') {
+          return titleL.includes('abstract') || titleL.includes('interface');
+        }
+        if (node.id === 'cse202-inheritance') {
+          return !titleL.includes('virtual') && !titleL.includes('abstract');
+        }
+        if (node.id === 'cse202-templates') {
+          return titleL.includes('template');
+        }
+        if (node.id === 'cse202-stl') {
+          return true;
+        }
+        if (node.id === 'cse202-files') {
+          return true;
+        }
+
+        return true;
+      });
+
+      map[node.id] = [...explicit, ...additional];
     }
     return map;
-  }, [currentNodes]);
+  }, [currentNodes, selectedSubject]);
 
   // Overall statistics for current subject
   const subjectStats = useMemo(() => {
-    const allProblemIds = new Set<string>();
-    currentNodes.forEach((n) => n.problemIds.forEach((pid) => allProblemIds.add(pid)));
-    const total = allProblemIds.size;
+    const allProblems = PROBLEMS.filter(
+      (p) => p.track === 'lpu' && p.syllabusUnitIds.some((uid) => uid.startsWith(selectedSubject))
+    );
+    const total = allProblems.length;
     let solved = 0;
-    allProblemIds.forEach((pid) => {
-      if (problemProgress[pid]?.status === 'SOLVED') solved++;
+    allProblems.forEach((p) => {
+      if (problemProgress[p.id]?.status === 'SOLVED') solved++;
     });
     return {
       total,
       solved,
       percent: total > 0 ? Math.round((solved / total) * 100) : 0,
     };
-  }, [currentNodes, problemProgress]);
+  }, [selectedSubject, problemProgress]);
 
   // Backward DAG trace calculation on hover
   const hoveredPrereqTrace = useMemo(() => {

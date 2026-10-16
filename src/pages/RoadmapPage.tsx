@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { Compass, Code2, GitFork, GraduationCap, Sparkles, Globe } from 'lucide-react';
 import { DSA_ROADMAP, CPP_PATH } from '../data/learningPaths';
+import { PROBLEMS } from '../data/problems';
 import { RoadmapView } from '../components/roadmap/RoadmapView';
 import { DsaDependencyGraph } from '../components/roadmap/DsaDependencyGraph';
 import { LpuAcademicGraph } from '../components/roadmap/LpuAcademicGraph';
@@ -11,6 +12,7 @@ import { useUserStore } from '../store/userStore';
 export const RoadmapPage: React.FC = () => {
   const { pathId } = useParams<{ pathId: string }>();
   const { activePortal, updateStudentActivity } = useUserStore();
+  const lpuProblemsCount = PROBLEMS.filter((p) => p.track === 'lpu').length;
 
   // Intra-portal sub-view state: flowchart (DAG, default) | list (Roadmap groups) | mindmap (Concept tree)
   const [userSelectedView, setUserSelectedView] = useState<'flowchart' | 'list' | 'mindmap' | null>(null);
@@ -120,7 +122,7 @@ export const RoadmapPage: React.FC = () => {
               <div className="text-xs text-slate-500 dark:text-slate-400">Official Curriculum</div>
             </div>
             <div>
-              <div className="text-xl font-bold text-brand-600 dark:text-brand-400">82 Problems</div>
+              <div className="text-xl font-bold text-brand-600 dark:text-brand-400">{lpuProblemsCount} Problems</div>
               <div className="text-xs text-slate-500 dark:text-slate-400">University Bank</div>
             </div>
             <div>
