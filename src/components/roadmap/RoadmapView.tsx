@@ -22,14 +22,7 @@ interface RoadmapViewProps {
 
 export const RoadmapView: React.FC<RoadmapViewProps> = ({ roadmap }) => {
   const { problemProgress, updateProblemStatus } = useUserStore();
-  const [expandedGroups, setExpandedGroups] = useState<Record<string, boolean>>(() => {
-    // Expand first 3 groups by default
-    const initial: Record<string, boolean> = {};
-    roadmap.groups.slice(0, 3).forEach((g) => {
-      initial[g.id] = true;
-    });
-    return initial;
-  });
+  const [expandedGroups, setExpandedGroups] = useState<Record<string, boolean>>({});
   const [selectedProblem, setSelectedProblem] = useState<Problem | null>(null);
 
   const toggleGroup = (groupId: string) => {

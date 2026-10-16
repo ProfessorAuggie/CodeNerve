@@ -67,27 +67,8 @@ export const WhimsicalMindMap: React.FC<WhimsicalMindMapProps> = ({ fitScreen = 
     return map;
   }, []);
 
-  // Track expanded node IDs. By default expand categories for immediate visual richness
-  const [expandedIds, setExpandedIds] = useState<Set<string>>(() => {
-    const initial = new Set<string>();
-    // Default: expand all categories and their first subtopics
-    treeData.forEach((cat) => {
-      initial.add(cat.id);
-      if (cat.children) {
-        cat.children.forEach((sub) => {
-          initial.add(sub.id);
-          if (sub.children) {
-            sub.children.forEach((leaf) => {
-              if (leaf.children) {
-                initial.add(leaf.id);
-              }
-            });
-          }
-        });
-      }
-    });
-    return initial;
-  });
+  // Track expanded node IDs. By default collapse everything so user can expand directly
+  const [expandedIds, setExpandedIds] = useState<Set<string>>(() => new Set<string>());
 
   // Search filter
   const [searchQuery, setSearchQuery] = useState('');

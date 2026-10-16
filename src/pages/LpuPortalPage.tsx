@@ -24,10 +24,7 @@ import type { Problem } from '../types';
 export const LpuPortalPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'syllabus' | 'flowchart' | 'assignments'>('syllabus');
   const [selectedSubjectId, setSelectedSubjectId] = useState<string>('cse205');
-  const [expandedUnits, setExpandedUnits] = useState<Record<string, boolean>>({
-    'cse205-u1': true,
-    'cse202-u1': true,
-  });
+  const [expandedUnits, setExpandedUnits] = useState<Record<string, boolean>>({});
   const [selectedProblem, setSelectedProblem] = useState<Problem | null>(null);
 
   const { completedLessons, markLessonComplete, problemProgress, customProblemSets, updateStudentActivity } = useUserStore();

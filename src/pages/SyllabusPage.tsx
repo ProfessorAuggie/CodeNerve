@@ -36,10 +36,7 @@ export const SyllabusPage: React.FC = () => {
   const [selectedProblem, setSelectedProblem] = useState<Problem | null>(null);
 
   // Expanded state for units accordion
-  const [expandedUnits, setExpandedUnits] = useState<Record<string, boolean>>({
-    'cse202-u1': true,
-    'cse205-u1': true,
-  });
+  const [expandedUnits, setExpandedUnits] = useState<Record<string, boolean>>({});
 
   const { completedLessons, markLessonComplete, problemProgress } = useUserStore();
 
