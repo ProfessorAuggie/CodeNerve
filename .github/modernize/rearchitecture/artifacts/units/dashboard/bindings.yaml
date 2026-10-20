@@ -1,9 +1,0 @@
-unit: dashboard
-bindings:
-  - type: route-declaration
-    name: "Route path=/dashboard"
-    source_loc: "src/App.tsx:108"
-    target: "DashboardPage"
-    must_appear_in_target: true
-    notes: "Student analytics route."
-runtime_config: []

@@ -1,7 +1,0 @@
-unit: administration
-commit: false
-candidate_splits:
-  - id: "src/pages/AdminPage.tsx:32-1839"
-    drivers: [concern_split, lifecycle_split, change_cadence_split]
-    rationale: "Authentication gate, live roster, student onboarding, test assignment, and profile/detail views are a large multi-purpose unit."
-    source_slice: {file: "src/pages/AdminPage.tsx", lines: [32, 1839]}

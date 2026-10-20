@@ -1,9 +1,0 @@
-unit: problems
-bindings:
-  - type: route-declaration
-    name: "Route path=/problems"
-    source_loc: "src/App.tsx:92"
-    target: "ProblemsPage"
-    must_appear_in_target: true
-    notes: "Problem catalogue route."
-runtime_config: []

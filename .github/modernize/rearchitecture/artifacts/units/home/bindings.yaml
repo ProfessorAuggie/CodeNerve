@@ -1,9 +1,0 @@
-unit: home
-bindings:
-  - type: route-declaration
-    name: "Route path=/"
-    source_loc: "src/App.tsx:85"
-    target: "HomePage"
-    must_appear_in_target: true
-    notes: "Default landing route."
-runtime_config: []

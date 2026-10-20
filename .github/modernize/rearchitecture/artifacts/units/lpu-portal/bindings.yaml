@@ -1,9 +1,0 @@
-unit: lpu-portal
-bindings:
-  - type: route-declaration
-    name: "Route paths=/university and /lpu"
-    source_loc: "src/App.tsx:98-99"
-    target: "LpuPortalPage"
-    must_appear_in_target: true
-    notes: "Two URLs expose the same LPU portal."
-runtime_config: []

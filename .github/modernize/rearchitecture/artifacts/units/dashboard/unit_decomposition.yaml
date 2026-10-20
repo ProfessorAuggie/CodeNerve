@@ -1,7 +1,0 @@
-unit: dashboard
-commit: false
-candidate_splits:
-  - id: "src/pages/DashboardPage.tsx:20-459"
-    drivers: [concern_split]
-    rationale: "Metrics, revision queue, bookmarks, custom sets, and profile editing are all managed in one page."
-    source_slice: {file: "src/pages/DashboardPage.tsx", lines: [20, 459]}

@@ -1,7 +1,0 @@
-unit: syllabus
-commit: false
-candidate_splits:
-  - id: "src/pages/SyllabusPage.tsx:31-527"
-    drivers: [concern_split, data_ownership_split]
-    rationale: "Academic hierarchy browsing, checklist filtering, problem modal state, and completion tracking form separate concerns."
-    source_slice: {file: "src/pages/SyllabusPage.tsx", lines: [31, 527]}
