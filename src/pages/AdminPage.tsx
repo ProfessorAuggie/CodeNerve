@@ -49,7 +49,7 @@ export const AdminPage: React.FC = () => {
 
   // Authentication Form State
   const [passcode, setPasscode] = useState('');
-  const [authError, setAuthError] = useState(false);
+  const [authError, setAuthError] = useState<string | null>(null);
   const [isSyncing, setIsSyncing] = useState(false);
 
   // Active Admin Tab
@@ -119,15 +119,15 @@ export const AdminPage: React.FC = () => {
     try {
       const result = await authenticateAdminRemote(passcode);
       if (!result.success) {
-        setAuthError(true);
-        setTimeout(() => setAuthError(false), 3000);
+        setAuthError(result.message);
+        setTimeout(() => setAuthError(null), 3000);
         return;
       }
       setPasscode('');
     } catch (error: unknown) {
       console.error('Admin authentication failed.', error);
-      setAuthError(true);
-      setTimeout(() => setAuthError(false), 3000);
+      setAuthError(error instanceof Error ? error.message : 'Administrator authentication failed.');
+      setTimeout(() => setAuthError(null), 3000);
     }
   };
 
@@ -265,7 +265,7 @@ export const AdminPage: React.FC = () => {
             <div>
               {authError && (
                 <p className="text-xs text-rose-500 dark:text-rose-400 mt-1.5 font-medium animate-in fade-in">
-                  Invalid faculty credentials or this account is not an administrator.
+                  {authError}
                 </p>
               )}
             </div>

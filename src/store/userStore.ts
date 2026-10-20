@@ -820,8 +820,8 @@ export const useUserStore = create<UserState>()(
 
       // Admin Authentication Actions
       authenticateAdmin: (passcode) => {
-        const cleaned = passcode.trim().toLowerCase();
-        if (cleaned === 'admin123' || cleaned === 'faculty' || cleaned === 'admin' || cleaned === 'codenerve') {
+        const cleaned = passcode.trim();
+        if (cleaned === 'CodeNerve#26') {
           set((state) => ({
             isAdminAuthenticated: true,
             user: {

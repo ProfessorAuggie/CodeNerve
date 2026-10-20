@@ -8,7 +8,7 @@ describe('EditProfileModal Component', () => {
   beforeEach(() => {
     localStorage.clear();
     useUserStore.getState().logoutStudent();
-    useUserStore.getState().authenticateAdmin('admin123');
+    useUserStore.getState().authenticateAdmin('CodeNerve#26');
   });
 
   it('allows a student to edit their own profile', async () => {
