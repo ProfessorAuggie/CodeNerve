@@ -1,0 +1,7 @@
+unit: authentication
+commit: false
+candidate_splits:
+  - id: "src/pages/LoginPage.tsx:23-615"
+    drivers: [concern_split, lifecycle_split]
+    rationale: "Login, registration, password visibility, redirect handling, and approval messaging share one page lifecycle."
+    source_slice: {file: "src/pages/LoginPage.tsx", lines: [23, 615]}

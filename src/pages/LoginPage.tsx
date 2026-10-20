@@ -28,14 +28,10 @@ export const LoginPage: React.FC = () => {
   const { 
     user, 
     isStudentAuthenticated, 
-    students, 
-    loginStudent, 
-    logoutStudent, 
-    registerStudent,
+    loginStudentRemote,
+    registerStudentRemote,
+    logoutStudentRemote,
     activePortal,
-    problemProgress,
-    completedLessons,
-    quizScores
   } = useUserStore();
 
   // Tab: 'login' | 'register'
@@ -61,29 +57,32 @@ export const LoginPage: React.FC = () => {
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleLoginSubmit = (e: React.FormEvent) => {
+  const handleLoginSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMsg(null);
     setSuccessMsg(null);
     setIsSubmitting(true);
 
-    setTimeout(() => {
-      const res = loginStudent(loginIdentifier, loginPassword);
+    try {
+      const res = await loginStudentRemote(loginIdentifier, loginPassword);
       setIsSubmitting(false);
 
       if (res.success) {
         setSuccessMsg(res.message);
         setTimeout(() => {
-          const redirectTo = (location.state as { from?: string } | null)?.from || (res.student?.track === 'lpu' ? '/lpu' : '/dashboard');
+          const redirectTo = (location.state as { from?: string } | null)?.from || (res.profile?.track === 'lpu' ? '/lpu' : '/dashboard');
           navigate(redirectTo);
         }, 600);
       } else {
         setErrorMsg(res.message);
       }
-    }, 300);
+    } catch (error) {
+      setIsSubmitting(false);
+      setErrorMsg(error instanceof Error ? error.message : 'Unable to sign in right now.');
+    }
   };
 
-  const handleRegisterSubmit = (e: React.FormEvent) => {
+  const handleRegisterSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMsg(null);
     setSuccessMsg(null);
@@ -111,54 +110,32 @@ export const LoginPage: React.FC = () => {
 
     setIsSubmitting(true);
 
-    setTimeout(() => {
-      // Check if student with same email or reg number already exists
-      const existing = students.find(
-        (s) =>
-          s.email.toLowerCase() === regEmail.trim().toLowerCase() ||
-          s.registrationNumber.toLowerCase() === regNumber.trim().toLowerCase()
-      );
-
-      if (existing) {
-        setIsSubmitting(false);
-        setErrorMsg(`An account with this ${existing.email.toLowerCase() === regEmail.trim().toLowerCase() ? 'email' : 'registration number'} already exists. Please sign in instead.`);
-        return;
-      }
-
-      const solvedFromProgress = Object.values(problemProgress || {})
-        .filter((p) => p.status === 'SOLVED')
-        .map((p) => p.problemId);
-
+    try {
       const studentTrack: 'lpu' | 'global' =
         (regEmail.toLowerCase().endsWith('@lpu.in') || /^\d{8}$/.test(regNumber.trim()))
           ? 'lpu'
           : (activePortal === 'lpu' ? 'lpu' : 'global');
-
-      const created = registerStudent({
+      const created = await registerStudentRemote({
         name: regName.trim(),
         email: regEmail.trim(),
+        password: regPassword,
         registrationNumber: regNumber.trim(),
-        track: studentTrack,
         batch: regBatch.trim() || 'General Engineering Cohort',
-        status: 'online',
-        currentActivity: 'Registration submitted (Pending Approval)',
-        lastActive: 'Just now',
-        solvedProblemIds: solvedFromProgress,
-        completedLessons: completedLessons || [],
-        quizScores: quizScores || {},
-        approvalStatus: 'pending',
-      }, false);
-
+        track: studentTrack,
+      });
       setIsSubmitting(false);
       setSuccessMsg(`Registration request submitted for ${created.name}! Your account is pending administrator approval. Once approved, you can sign in with your credentials.`);
-      setLoginIdentifier(created.registrationNumber || created.email);
+      setLoginIdentifier(regEmail.trim());
       setRegPassword('');
       setRegConfirmPassword('');
       
       setTimeout(() => {
         setMode('login');
       }, 1800);
-    }, 400);
+    } catch (error) {
+      setIsSubmitting(false);
+      setErrorMsg(error instanceof Error ? error.message : 'Unable to create your account right now.');
+    }
   };
 
   return (
@@ -209,8 +186,10 @@ export const LoginPage: React.FC = () => {
                 </div>
                 <button
                   onClick={() => {
-                    logoutStudent();
-                    setSuccessMsg('You have been signed out.');
+                    void logoutStudentRemote().then(
+                      () => setSuccessMsg('You have been signed out.'),
+                      (error: unknown) => setErrorMsg(error instanceof Error ? error.message : 'Unable to sign out right now.')
+                    );
                   }}
                   className="p-1.5 rounded-lg text-slate-500 hover:text-rose-600 dark:text-slate-400 dark:hover:text-rose-400 hover:bg-white dark:hover:bg-slate-900 transition"
                   title="Sign out of current account"
@@ -229,8 +208,10 @@ export const LoginPage: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => {
-                    logoutStudent();
-                    setLoginIdentifier('');
+                    void logoutStudentRemote().then(
+                      () => setLoginIdentifier(''),
+                      (error: unknown) => setErrorMsg(error instanceof Error ? error.message : 'Unable to sign out right now.')
+                    );
                   }}
                   className="py-1.5 px-3 rounded-xl border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300 text-xs font-medium hover:bg-slate-100 dark:hover:bg-slate-800 transition"
                 >

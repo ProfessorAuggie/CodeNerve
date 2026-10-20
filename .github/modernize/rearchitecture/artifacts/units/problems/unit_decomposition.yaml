@@ -1,0 +1,7 @@
+unit: problems
+commit: false
+candidate_splits:
+  - id: "src/pages/ProblemsPage.tsx:14-296"
+    drivers: [concern_split]
+    rationale: "Search/filter derivation, page telemetry, table rendering, and modal orchestration are co-located."
+    source_slice: {file: "src/pages/ProblemsPage.tsx", lines: [14, 296]}

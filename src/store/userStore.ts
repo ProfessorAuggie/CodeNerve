@@ -1,6 +1,16 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import type { ProblemProgress, ProblemStatus, UserRole, UserProfile, StudentRecord, AssignedTest } from '../types';
+import { isSupabaseConfigured, supabase } from '../lib/supabase';
+import {
+  loadStudentData,
+  registerStudentRemote,
+  saveProblemProgress,
+  saveQuizScore,
+  setBookmark,
+  setLessonCompletion,
+  signInStudent,
+} from '../lib/supabaseData';
 
 interface CustomProblemSet {
   id: string;
@@ -57,7 +67,10 @@ interface UserState {
 
   // Student Authentication Actions
   loginStudent: (identifier: string, password?: string) => { success: boolean; message: string; student?: StudentRecord };
+  loginStudentRemote: (identifier: string, password: string) => Promise<{ success: boolean; message: string; profile?: UserProfile }>;
+  restoreRemoteSession: () => Promise<void>;
   logoutStudent: () => void;
+  logoutStudentRemote: () => Promise<void>;
 
   // Admin Actions
   authenticateAdmin: (passcode: string) => boolean;
@@ -80,6 +93,14 @@ interface UserState {
     },
     autoLogin?: boolean
   ) => StudentRecord;
+  registerStudentRemote: (input: {
+    name: string;
+    email: string;
+    password: string;
+    registrationNumber: string;
+    batch: string;
+    track: 'global' | 'lpu';
+  }) => Promise<{ name: string }>;
 }
 
 const INITIAL_STUDENTS: StudentRecord[] = [];
@@ -327,6 +348,13 @@ export const useUserStore = create<UserState>()(
 
           broadcastCohortSync();
 
+          if (isSupabaseConfigured && state.user.id !== 'guest') {
+            const progress = newProgressMap[problemId];
+            void saveProblemProgress(state.user.id, progress).catch((error: unknown) => {
+              console.error('Failed to save problem progress to Supabase.', error);
+            });
+          }
+
           return {
             problemProgress: newProgressMap,
             students: updatedStudents,
@@ -342,6 +370,11 @@ export const useUserStore = create<UserState>()(
         set((state) => {
           const list = state.bookmarks || [];
           const isBookmarked = list.includes(problemId);
+          if (isSupabaseConfigured && state.user.id !== 'guest') {
+            void setBookmark(state.user.id, problemId, !isBookmarked).catch((error: unknown) => {
+              console.error('Failed to save bookmark to Supabase.', error);
+            });
+          }
           return {
             bookmarks: isBookmarked
               ? list.filter((id) => id !== problemId)
@@ -389,6 +422,12 @@ export const useUserStore = create<UserState>()(
 
           broadcastCohortSync();
 
+          if (isSupabaseConfigured && state.user.id !== 'guest') {
+            void setLessonCompletion(state.user.id, lessonId, completed).catch((error: unknown) => {
+              console.error('Failed to save lesson progress to Supabase.', error);
+            });
+          }
+
           return {
             completedLessons: nextList,
             students: updatedStudents,
@@ -429,6 +468,12 @@ export const useUserStore = create<UserState>()(
           });
 
           broadcastCohortSync();
+
+          if (isSupabaseConfigured && state.user.id !== 'guest') {
+            void saveQuizScore(state.user.id, quizId, score, total).catch((error: unknown) => {
+              console.error('Failed to save quiz score to Supabase.', error);
+            });
+          }
 
           return {
             quizScores: newQuizScores,
@@ -669,6 +714,77 @@ export const useUserStore = create<UserState>()(
         };
       },
 
+      loginStudentRemote: async (identifier, password) => {
+        if (!isSupabaseConfigured) {
+          console.warn('Supabase is not configured; using the legacy in-memory login fallback.');
+          const legacyResult = get().loginStudent(identifier, password);
+          if (!legacyResult.success || !legacyResult.student) return legacyResult;
+          const student = legacyResult.student;
+          return {
+            success: true,
+            message: legacyResult.message,
+            profile: {
+              id: student.id,
+              name: student.name,
+              email: student.email,
+              role: 'student',
+              university: student.university || 'CodeNerve Explorer',
+              semester: student.semester || 1,
+              registrationNumber: student.registrationNumber,
+              batch: student.batch,
+              track: student.track,
+              avatar: student.avatar,
+              approvalStatus: student.approvalStatus,
+            },
+          };
+        }
+        const result = await signInStudent(identifier, password);
+        if (!result.success || !result.profile) return result;
+
+        const data = await loadStudentData(result.profile.id);
+        set({
+          user: result.profile,
+          isStudentAuthenticated: true,
+          activePortal: result.profile.track || 'global',
+          hasChosenTrack: true,
+          problemProgress: data.problemProgress,
+          bookmarks: data.bookmarks,
+          completedLessons: data.completedLessons,
+          quizScores: data.quizScores,
+        });
+        return result;
+      },
+
+      restoreRemoteSession: async () => {
+        if (!isSupabaseConfigured || !supabase) return;
+        const { data, error } = await supabase.auth.getSession();
+        if (error) throw error;
+        if (!data.session?.user) return;
+
+        const { data: profileRow, error: profileError } = await supabase
+          .from('profiles')
+          .select('*')
+          .eq('id', data.session.user.id)
+          .single();
+        if (profileError) throw profileError;
+        const profile = {
+          ...profileRow,
+          id: String(profileRow.id),
+          role: profileRow.role as UserRole,
+          semester: Number(profileRow.semester),
+          registrationNumber: profileRow.registration_number ?? undefined,
+          approvalStatus: profileRow.approval_status,
+        } as UserProfile;
+        const studentData = await loadStudentData(profile.id);
+        set({
+          user: profile,
+          isStudentAuthenticated: true,
+          activePortal: profile.track || 'global',
+          hasChosenTrack: true,
+          ...studentData,
+        });
+      },
+
       logoutStudent: () => {
         broadcastCohortSync();
         set({
@@ -679,6 +795,14 @@ export const useUserStore = create<UserState>()(
           completedLessons: [],
           quizScores: {},
         });
+      },
+
+      logoutStudentRemote: async () => {
+        if (supabase) {
+          const { error } = await supabase.auth.signOut();
+          if (error) throw error;
+        }
+        get().logoutStudent();
       },
 
       // Admin Authentication Actions
@@ -963,9 +1087,30 @@ export const useUserStore = create<UserState>()(
 
         return newStudent;
       },
+
+      registerStudentRemote: async (input) => {
+        if (!isSupabaseConfigured) {
+          console.warn('Supabase is not configured; using the legacy in-memory registration fallback.');
+          const student = get().registerStudent({
+            name: input.name,
+            email: input.email,
+            registrationNumber: input.registrationNumber,
+            batch: input.batch,
+            track: input.track,
+            approvalStatus: 'pending',
+          }, false);
+          return { name: student.name };
+        }
+        return registerStudentRemote(input);
+      },
     }),
     {
-      name: 'codenerve_user_storage_v2',
+      name: 'codenerve_preferences_v3',
+      partialize: (state) => ({
+        theme: state.theme,
+        activePortal: state.activePortal,
+        hasChosenTrack: state.hasChosenTrack,
+      }),
       onRehydrateStorage: () => (state) => {
         if (state && typeof document !== 'undefined') {
           const theme = state.theme || 'system';
@@ -995,7 +1140,7 @@ export const useUserStore = create<UserState>()(
 // Cross-tab real-time cohort synchronization
 if (typeof window !== 'undefined') {
   window.addEventListener('storage', (event) => {
-    if (event.key === 'codenerve_user_storage_v2') {
+    if (event.key === 'codenerve_preferences_v3') {
       try {
         useUserStore.persist.rehydrate();
         useUserStore.getState().syncCohortData();

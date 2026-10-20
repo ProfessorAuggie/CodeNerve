@@ -24,4 +24,7 @@ dist-ssr
 *.sw?
 
 # Local CI workflow (requires workflow OAuth scope to push)
-.github/
+.github/*
+!.github/modernize/
+!.github/modernize/rearchitecture/
+!.github/modernize/rearchitecture/**

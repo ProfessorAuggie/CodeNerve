@@ -1,0 +1,7 @@
+unit: lpu-portal
+commit: false
+candidate_splits:
+  - id: "src/pages/LpuPortalPage.tsx:24-412"
+    drivers: [concern_split, data_ownership_split]
+    rationale: "Subject navigation, topic checklist rendering, problem modal integration, and custom sets are co-located."
+    source_slice: {file: "src/pages/LpuPortalPage.tsx", lines: [24, 412]}

@@ -1,0 +1,22 @@
+unit: syllabus
+side_effects:
+  - source_loc: "src/pages/SyllabusPage.tsx:41"
+    effect: "Reads and writes completed lesson state through the shared store."
+    must_preserve: true
+branches:
+  - source_loc: "src/pages/SyllabusPage.tsx:53-85"
+    condition: "Subject, unit, search, and view-mode filters are selected."
+    behavior: "Shows matching units/checklist entries and associated problem/visualizer links."
+    must_preserve: true
+  - source_loc: "src/pages/SyllabusPage.tsx:316"
+    condition: "User marks a topic complete."
+    behavior: "Persists lesson completion."
+    must_preserve: true
+error_paths: []
+concurrency:
+  model: sync
+  tx_boundary:
+    source_loc: "src/store/userStore.ts:209"
+    scope: "Completion changes persist synchronously."
+    isolation: "Browser storage serialization"
+    must_preserve: true

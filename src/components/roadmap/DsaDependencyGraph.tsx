@@ -809,7 +809,7 @@ export const DsaDependencyGraph: React.FC<DsaDependencyGraphProps> = ({ fitScree
                           ? 'bg-sky-500'
                           : 'bg-indigo-500 dark:bg-indigo-400/80'
                       }`}
-                      style={{ width: `${Math.max(15, stats.percent)}%` }}
+                      style={{ width: stats.percent > 0 ? `${Math.max(8, stats.percent)}%` : '0%' }}
                     />
                   </div>
                 </div>

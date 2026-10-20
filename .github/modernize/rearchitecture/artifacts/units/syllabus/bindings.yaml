@@ -1,0 +1,15 @@
+unit: syllabus
+bindings:
+  - type: route-declaration
+    name: "Route path=/syllabus"
+    source_loc: "src/App.tsx:95"
+    target: "SyllabusPage"
+    must_appear_in_target: true
+    notes: "Academic syllabus route."
+  - type: route-declaration
+    name: "Legacy route path=/quizzes"
+    source_loc: "src/App.tsx:105"
+    target: "SyllabusPage"
+    must_appear_in_target: true
+    notes: "Legacy quiz URL currently aliases the syllabus page."
+runtime_config: []

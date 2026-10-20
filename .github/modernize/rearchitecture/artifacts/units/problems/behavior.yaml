@@ -1,0 +1,25 @@
+unit: problems
+side_effects:
+  - source_loc: "src/pages/ProblemsPage.tsx:15-19"
+    effect: "Updates the active student's activity to identify the selected problem track."
+    must_preserve: true
+  - source_loc: "src/components/problems/ProblemModal.tsx:1"
+    effect: "Problem actions invoke shared progress/bookmark state and external navigation."
+    must_preserve: true
+branches:
+  - source_loc: "src/pages/ProblemsPage.tsx:41-86"
+    condition: "Track, search, platform, difficulty, tag, bookmark, or status filters are set."
+    behavior: "Filters the catalogue without changing source data."
+    must_preserve: true
+  - source_loc: "src/store/userStore.ts:276-286"
+    condition: "Guest attempts progress/bookmark action."
+    behavior: "Opens AuthPromptModal instead of mutating progress."
+    must_preserve: true
+error_paths: []
+concurrency:
+  model: sync
+  tx_boundary:
+    source_loc: "src/store/userStore.ts:209"
+    scope: "Progress and bookmark updates persist as one Zustand state update."
+    isolation: "Browser storage serialization"
+    must_preserve: true

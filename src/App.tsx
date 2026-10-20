@@ -49,7 +49,13 @@ const AlgoNerveRedirect: React.FC = () => {
 };
 
 export const App: React.FC = () => {
-  const { theme } = useUserStore();
+  const { theme, restoreRemoteSession } = useUserStore();
+
+  useEffect(() => {
+    void restoreRemoteSession().catch((error: unknown) => {
+      console.error('Failed to restore the Supabase session.', error);
+    });
+  }, [restoreRemoteSession]);
 
   useEffect(() => {
     const applyTheme = () => {

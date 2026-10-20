@@ -1,0 +1,185 @@
+units:
+  - name: home
+    trigger: page
+    trigger_detail: "GET /"
+    source_anchors:
+      - path: src/pages/HomePage.tsx
+        line: 131
+    exported_signature:
+      - method: "React.FC HomePage()"
+        source_loc: "src/pages/HomePage.tsx:131"
+        stability: must_preserve
+    dynamic_entrypoints: []
+    depends_on: []
+    shared_refs:
+      - module: user-store
+        used_fields: [setActivePortal]
+      - module: static-content-catalog
+        used_fields: [PROBLEMS]
+      - module: layout-shell
+        used_fields: [Navbar, Footer]
+
+  - name: roadmap
+    trigger: page
+    trigger_detail: "GET /roadmap and GET /roadmap/:pathId"
+    source_anchors:
+      - path: src/pages/RoadmapPage.tsx
+        line: 12
+    exported_signature:
+      - method: "React.FC RoadmapPage()"
+        source_loc: "src/pages/RoadmapPage.tsx:12"
+        stability: must_preserve
+    dynamic_entrypoints: []
+    depends_on: []
+    shared_refs:
+      - module: user-store
+        used_fields: [activePortal, updateStudentActivity]
+      - module: static-content-catalog
+        used_fields: [PROBLEMS, LEARNING_PATHS]
+
+  - name: problems
+    trigger: page
+    trigger_detail: "GET /problems"
+    source_anchors:
+      - path: src/pages/ProblemsPage.tsx
+        line: 14
+    exported_signature:
+      - method: "React.FC ProblemsPage()"
+        source_loc: "src/pages/ProblemsPage.tsx:14"
+        stability: must_preserve
+    dynamic_entrypoints: []
+    depends_on: []
+    shared_refs:
+      - module: user-store
+        used_fields: [problemProgress, bookmarks, activePortal, updateStudentActivity]
+      - module: static-content-catalog
+        used_fields: [PROBLEMS, isProblemInTrack]
+
+  - name: syllabus
+    trigger: page
+    trigger_detail: "GET /syllabus and GET /quizzes"
+    source_anchors:
+      - path: src/pages/SyllabusPage.tsx
+        line: 31
+    exported_signature:
+      - method: "React.FC SyllabusPage()"
+        source_loc: "src/pages/SyllabusPage.tsx:31"
+        stability: must_preserve
+    dynamic_entrypoints: []
+    depends_on: []
+    shared_refs:
+      - module: user-store
+        used_fields: [completedLessons, markLessonComplete, problemProgress]
+      - module: static-content-catalog
+        used_fields: [SUBJECTS, PROBLEMS, VISUALIZER_MAPPINGS]
+
+  - name: lpu-portal
+    trigger: page
+    trigger_detail: "GET /university and GET /lpu"
+    source_anchors:
+      - path: src/pages/LpuPortalPage.tsx
+        line: 24
+    exported_signature:
+      - method: "React.FC LpuPortalPage()"
+        source_loc: "src/pages/LpuPortalPage.tsx:24"
+        stability: must_preserve
+    dynamic_entrypoints: []
+    depends_on: []
+    shared_refs:
+      - module: user-store
+        used_fields: [completedLessons, markLessonComplete, problemProgress, customProblemSets, updateStudentActivity]
+      - module: static-content-catalog
+        used_fields: [SUBJECTS, PROBLEMS, VISUALIZER_MAPPINGS]
+
+  - name: lesson
+    trigger: page
+    trigger_detail: "GET /lesson/:lessonId"
+    source_anchors:
+      - path: src/pages/LessonPage.tsx
+        line: 21
+    exported_signature:
+      - method: "React.FC LessonPage()"
+        source_loc: "src/pages/LessonPage.tsx:21"
+        stability: must_preserve
+    dynamic_entrypoints: []
+    depends_on: []
+    shared_refs:
+      - module: user-store
+        used_fields: [completedLessons, markLessonComplete]
+      - module: static-content-catalog
+        used_fields: [LESSONS, PROBLEMS, SUBJECTS, VISUALIZER_MAPPINGS]
+
+  - name: dashboard
+    trigger: page
+    trigger_detail: "GET /dashboard"
+    source_anchors:
+      - path: src/pages/DashboardPage.tsx
+        line: 20
+    exported_signature:
+      - method: "React.FC DashboardPage()"
+        source_loc: "src/pages/DashboardPage.tsx:20"
+        stability: must_preserve
+    dynamic_entrypoints: []
+    depends_on: []
+    shared_refs:
+      - module: user-store
+        used_fields: [problemProgress, bookmarks, completedLessons, quizScores, customProblemSets, updateStudentActivity]
+      - module: static-content-catalog
+        used_fields: [PROBLEMS]
+
+  - name: administration
+    trigger: page
+    trigger_detail: "GET /admin and GET /teacher"
+    source_anchors:
+      - path: src/pages/AdminPage.tsx
+        line: 32
+      - path: src/pages/TeacherPage.tsx
+        line: 5
+    exported_signature:
+      - method: "React.FC AdminPage()"
+        source_loc: "src/pages/AdminPage.tsx:32"
+        stability: must_preserve
+      - method: "React.FC TeacherPage()"
+        source_loc: "src/pages/TeacherPage.tsx:5"
+        stability: must_preserve
+    dynamic_entrypoints: []
+    depends_on: []
+    shared_refs:
+      - module: user-store
+        used_fields: [students, assignedTests, isAdminAuthenticated, authenticateAdmin, registerStudent, approveStudent, disapproveStudent, updateStudentByAdmin, assignTest, deleteAssignedTest]
+      - module: static-content-catalog
+        used_fields: [PROBLEMS]
+      - module: layout-shell
+        used_fields: [EditProfileModal]
+
+  - name: authentication
+    trigger: page
+    trigger_detail: "GET /login, GET /signin, and GET /register"
+    source_anchors:
+      - path: src/pages/LoginPage.tsx
+        line: 23
+    exported_signature:
+      - method: "React.FC LoginPage()"
+        source_loc: "src/pages/LoginPage.tsx:23"
+        stability: must_preserve
+    dynamic_entrypoints: []
+    depends_on: []
+    shared_refs:
+      - module: user-store
+        used_fields: [loginStudent, registerStudent, isStudentAuthenticated]
+
+  - name: algonerve-redirect
+    trigger: page
+    trigger_detail: "GET /visualize, GET /visualize/:id, and GET /documentation"
+    source_anchors:
+      - path: src/App.tsx
+        line: 23
+    exported_signature:
+      - method: "React.FC AlgoNerveRedirect()"
+        source_loc: "src/App.tsx:23"
+        stability: frozen
+    dynamic_entrypoints: []
+    depends_on: []
+    shared_refs:
+      - module: application-config
+        used_fields: [APP_CONFIG.algonerve]

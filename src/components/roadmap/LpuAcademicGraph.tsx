@@ -1082,7 +1082,7 @@ export const LpuAcademicGraph: React.FC<LpuAcademicGraphProps> = ({ fitScreen = 
                   <div className="mt-2 h-1 w-full rounded-full bg-slate-200 dark:bg-[#0e121e] overflow-hidden">
                     <div
                       className="h-full bg-emerald-500 transition-all duration-300"
-                      style={{ width: `${Math.max(15, stats.percent)}%` }}
+                      style={{ width: stats.percent > 0 ? `${Math.max(8, stats.percent)}%` : '0%' }}
                     />
                   </div>
                 </div>

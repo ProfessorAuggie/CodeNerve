@@ -16,6 +16,7 @@ import {
 import { SUBJECTS, getSubjectById } from '../data/syllabus';
 import { VISUALIZER_MAPPINGS, getAlgoNerveUrl } from '../data/visualizers';
 import { PROBLEMS, isProblemInTrack } from '../data/problems';
+import { LESSONS } from '../data/lessons';
 import { useUserStore } from '../store/userStore';
 import { ProblemModal } from '../components/problems/ProblemModal';
 import { LpuAcademicGraph } from '../components/roadmap/LpuAcademicGraph';
@@ -294,8 +295,22 @@ export const LpuPortalPage: React.FC = () => {
                               </div>
                             </div>
 
-                            {/* Action Buttons: Visualizer & Problem Badges */}
+                            {/* Action Buttons: Visualizer, Lesson & Problem Badges */}
                             <div className="flex flex-wrap items-center gap-2 shrink-0 self-start lg:self-center">
+                              {(() => {
+                                const topicLesson = LESSONS.find((l) => l.topicIds.includes(topic.id));
+                                const lessonTargetUrl = topicLesson ? `/lesson/${topicLesson.id}` : `/lesson/${topic.id}`;
+                                return (
+                                  <Link
+                                    to={lessonTargetUrl}
+                                    className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg bg-brand-500/10 text-brand-700 dark:text-brand-300 border border-brand-500/30 hover:bg-brand-500/20 transition shadow-sm"
+                                    title={topicLesson ? `Read interactive lesson: ${topicLesson.title}` : `Open curriculum guide for ${topic.title}`}
+                                  >
+                                    <BookOpen className="h-3.5 w-3.5 text-brand-500 dark:text-brand-400" />
+                                    <span>Lesson</span>
+                                  </Link>
+                                );
+                              })()}
                               {matchedVis && (
                                 <a
                                   href={getAlgoNerveUrl(matchedVis.algorithmId)}

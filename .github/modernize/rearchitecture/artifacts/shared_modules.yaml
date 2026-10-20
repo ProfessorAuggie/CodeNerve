@@ -1,0 +1,104 @@
+modules:
+  - name: user-store
+    kind: store
+    source_loc: "src/store/userStore.ts:13"
+    used_by_units: [home, roadmap, problems, syllabus, lpu-portal, lesson, dashboard, administration, authentication]
+    fields:
+      - name: user
+        type: "UserProfile"
+      - name: problemProgress
+        type: "Record<string, ProblemProgress>"
+      - name: bookmarks
+        type: "string[]"
+      - name: completedLessons
+        type: "string[]"
+      - name: quizScores
+        type: "Record<string, QuizScore>"
+      - name: customProblemSets
+        type: "CustomProblemSet[]"
+      - name: students
+        type: "StudentRecord[]"
+      - name: assignedTests
+        type: "AssignedTest[]"
+      - name: isAdminAuthenticated
+        type: "boolean"
+      - name: isStudentAuthenticated
+        type: "boolean"
+      - name: updateProblemStatus
+        type: "(problemId, status, notes?, submissionUrl?) => void"
+      - name: toggleBookmark
+        type: "(problemId) => void"
+      - name: markLessonComplete
+        type: "(lessonId, completed?) => void"
+      - name: updateStudentActivity
+        type: "(activity) => void"
+      - name: loginStudent
+        type: "(identifier, password?) => LoginResult"
+      - name: registerStudent
+        type: "(student, autoLogin?) => StudentRecord"
+      - name: authenticateAdmin
+        type: "(passcode) => boolean"
+      - name: assignTest
+        type: "(test) => void"
+      - name: approveStudent
+        type: "(studentId) => void"
+      - name: disapproveStudent
+        type: "(studentId) => void"
+      - name: updateStudentByAdmin
+        type: "(studentId, updates) => void"
+    god_class: true
+    split_candidate: true
+    migration_strategy: split
+    notes: "One persisted store owns identity, learning progress, admin roster, assignments, theme, and cross-tab synchronization."
+
+  - name: static-content-catalog
+    kind: dto
+    source_loc: "src/data/problems.ts:7"
+    used_by_units: [home, roadmap, problems, syllabus, lpu-portal, lesson, dashboard, administration]
+    fields:
+      - name: PROBLEMS
+        type: "Problem[]"
+      - name: SUBJECTS
+        type: "Subject[]"
+      - name: LESSONS
+        type: "Lesson[]"
+      - name: LEARNING_PATHS
+        type: "LearningPath[]"
+      - name: VISUALIZER_MAPPINGS
+        type: "VisualizerMapping[]"
+      - name: isProblemInTrack
+        type: "(problem, track) => boolean"
+      - name: getLessonById
+        type: "(id) => Lesson | undefined"
+    god_class: false
+    split_candidate: false
+    migration_strategy: copy
+    notes: "Compiled, read-mostly educational data is imported directly by multiple pages."
+
+  - name: layout-shell
+    kind: utility
+    source_loc: "src/components/layout/Navbar.tsx:1"
+    used_by_units: [home, administration]
+    fields:
+      - name: Navbar
+        type: "React.FC"
+      - name: Footer
+        type: "React.FC"
+      - name: EditProfileModal
+        type: "React.FC<EditProfileModalProps>"
+    god_class: false
+    split_candidate: false
+    migration_strategy: copy
+    notes: "Shared chrome and profile editing surface mounted by the application shell or admin flow."
+
+  - name: application-config
+    kind: config
+    source_loc: "src/lib/config.ts:4"
+    used_by_units: [algonerve-redirect]
+    fields:
+      - name: APP_CONFIG
+        type: "readonly application configuration object"
+    god_class: false
+    split_candidate: false
+    migration_strategy: copy
+    notes: "Centralizes branding and external AlgoNerve/platform metadata."

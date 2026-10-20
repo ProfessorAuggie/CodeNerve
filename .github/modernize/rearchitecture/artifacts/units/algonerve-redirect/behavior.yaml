@@ -1,0 +1,22 @@
+unit: algonerve-redirect
+side_effects:
+  - source_loc: "src/App.tsx:29"
+    effect: "Assigns window.location.href to the external AlgoNerve URL."
+    must_preserve: true
+branches:
+  - source_loc: "src/App.tsx:25-26"
+    condition: "Route parameter id exists."
+    behavior: "Appends /visualize/:id; otherwise uses the AlgoNerve root."
+    must_preserve: true
+  - source_loc: "src/App.tsx:34-44"
+    condition: "Browser navigation has not completed."
+    behavior: "Shows a spinner, destination text, and a new-tab fallback link."
+    must_preserve: true
+error_paths: []
+concurrency:
+  model: sync
+  tx_boundary:
+    source_loc: "src/App.tsx:29"
+    scope: "No local transaction; navigation is a browser side effect."
+    isolation: "Browser navigation"
+    must_preserve: true

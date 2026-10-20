@@ -1,0 +1,34 @@
+unit: authentication
+side_effects:
+  - source_loc: "src/pages/LoginPage.tsx:71-79"
+    effect: "Successful student login updates persisted user/session state and navigates to the requested redirect."
+    must_preserve: true
+  - source_loc: "src/pages/LoginPage.tsx:122-153"
+    effect: "Registration creates a pending student record."
+    must_preserve: true
+branches:
+  - source_loc: "src/pages/LoginPage.tsx:74-79"
+    condition: "loginStudent returns success."
+    behavior: "Navigates to redirectTo."
+    must_preserve: true
+  - source_loc: "src/store/userStore.ts:579-598"
+    condition: "Student approval is pending or disapproved."
+    behavior: "Rejects login with an approval-status message."
+    must_preserve: true
+  - source_loc: "src/pages/LoginPage.tsx:91-120"
+    condition: "Registration fields are missing, passwords are short, or passwords differ."
+    behavior: "Shows validation error and does not register."
+    must_preserve: true
+error_paths:
+  - source_loc: "src/store/userStore.ts:561-578"
+    trigger: "Blank or unknown login identifier."
+    outcome: "Returns a failure message without changing authenticated state."
+    contract: "LoginResult { success: false, message }."
+    must_preserve: true
+concurrency:
+  model: sync
+  tx_boundary:
+    source_loc: "src/store/userStore.ts:561-675"
+    scope: "Login/registration update profile, roster, and progress state synchronously."
+    isolation: "Browser storage serialization"
+    must_preserve: true

@@ -1,0 +1,7 @@
+unit: lesson
+commit: false
+candidate_splits:
+  - id: "src/pages/LessonPage.tsx:21-374"
+    drivers: [concern_split]
+    rationale: "Lesson resolution, Markdown/code presentation, visualizer links, problem links, and completion controls are combined."
+    source_slice: {file: "src/pages/LessonPage.tsx", lines: [21, 374]}

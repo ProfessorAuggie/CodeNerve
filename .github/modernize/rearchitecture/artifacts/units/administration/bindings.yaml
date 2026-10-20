@@ -1,0 +1,9 @@
+unit: administration
+bindings:
+  - type: route-declaration
+    name: "Route paths=/admin and /teacher"
+    source_loc: "src/App.tsx:111-112"
+    target: "AdminPage / TeacherPage"
+    must_appear_in_target: true
+    notes: "TeacherPage is a compatibility alias that renders AdminPage."
+runtime_config: []

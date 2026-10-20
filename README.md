@@ -13,7 +13,7 @@
 - 🗺️ **Interactive Flowchart Roadmaps**: Prerequisite-aware learning graphs for **Data Structures & Algorithms** and **Object-Oriented C++** with pan/zoom canvas and slide-over topic drawers.
 - 🎓 **University Syllabus Integration**: Native alignment with **Lovely Professional University (LPU)** B.Tech CSE curricula (**CSE202** Object Oriented Programming & **CSE205** Data Structures and Algorithms).
 - 💻 **Centralized External Problem Catalogue**: Verified problem entries linking out to **LeetCode**, **GeeksforGeeks**, and **HackerRank** without copyright reproduction.
-- 📊 **Student Progress & Revision Queue**: LocalStorage-persisted tracker for `SOLVED`, `ATTEMPTED`, and `REVISION_NEEDED` statuses, personal solution notes, and bookmarks.
+- 📊 **Student Progress & Revision Queue**: Supabase/Postgres-persisted tracker for `SOLVED`, `ATTEMPTED`, and `REVISION_NEEDED` statuses, personal solution notes, and bookmarks.
 - 📝 **Assessments & Quizzes**: Real-time knowledge verification with multiple-choice and C++ code-trace questions.
 - 🛡️ **Instructor Portal (Teacher Mode)**: Custom problem set creator for classroom assignments and targeted revision batches.
 
@@ -74,6 +74,8 @@ CodeNerve/
 │   ├── App.tsx             # Root router & layout shell
 │   ├── main.tsx            # React application entry point
 │   └── index.css           # Global typography & design system tokens
+├── supabase/
+│   └── migrations/         # Database schema and row-level security policies
 ├── tailwind.config.js      # Custom brand palettes & dark theme tokens
 ├── vite.config.ts          # Vite build config
 ├── tsconfig.json           # TypeScript configuration
@@ -109,6 +111,21 @@ CodeNerve/
    ```bash
    npm run build
    ```
+
+### Supabase setup
+
+1. Create a Supabase project and enable Email/Password authentication.
+2. Apply `supabase/migrations/20261020190000_initial_schema.sql` in the Supabase SQL Editor or with the Supabase CLI.
+3. Create a local `.env.local` file:
+   ```text
+   VITE_SUPABASE_URL=https://your-project.supabase.co
+   VITE_SUPABASE_ANON_KEY=your-anon-key
+   ```
+4. Add the same variables to the Vercel project environment settings.
+
+Student registration creates a Supabase Auth user and a `pending` profile. An administrator must approve the profile before sign-in is accepted. Learner progress is stored in the `problem_progress`, `problem_bookmarks`, `lesson_progress`, and `quiz_scores` tables and protected by row-level security. The anon key is safe for browser use; never expose a service-role key.
+
+When these variables are absent, automated tests and local UI previews use a clearly warned in-memory compatibility fallback. Configure Supabase before deploying or evaluating persistence. The existing `/admin` passcode flow remains a client-side legacy surface and should not be used as production administrator authentication until an admin Auth flow is added.
 
 ---
 

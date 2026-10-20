@@ -1,0 +1,22 @@
+unit: roadmap
+side_effects:
+  - source_loc: "src/pages/RoadmapPage.tsx:24-26"
+    effect: "Updates the active student's current activity when viewing a roadmap."
+    must_preserve: true
+branches:
+  - source_loc: "src/pages/RoadmapPage.tsx:14-23"
+    condition: "activePortal is global or lpu."
+    behavior: "Chooses global dependency/mind-map views or the LPU academic graph."
+    must_preserve: true
+  - source_loc: "src/pages/RoadmapPage.tsx:12-295"
+    condition: "pathId is supplied."
+    behavior: "Selects the requested learning-path context."
+    must_preserve: true
+error_paths: []
+concurrency:
+  model: sync
+  tx_boundary:
+    source_loc: "src/store/userStore.ts:209"
+    scope: "Activity state is synchronously persisted."
+    isolation: "Browser storage serialization"
+    must_preserve: true

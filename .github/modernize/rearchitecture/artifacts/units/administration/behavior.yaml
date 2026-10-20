@@ -1,0 +1,33 @@
+unit: administration
+side_effects:
+  - source_loc: "src/pages/AdminPage.tsx:113"
+    effect: "Authenticates the admin session through the shared store."
+    must_preserve: true
+  - source_loc: "src/pages/AdminPage.tsx:149-177"
+    effect: "Creates student records and assigned tests in persisted state."
+    must_preserve: true
+  - source_loc: "src/pages/AdminPage.tsx:475-907"
+    effect: "Approves/disapproves/deletes/edits roster records and displays cohort telemetry."
+    must_preserve: true
+branches:
+  - source_loc: "src/pages/AdminPage.tsx:214-296"
+    condition: "isAdminAuthenticated is false."
+    behavior: "Shows the admin passcode gate instead of command center."
+    must_preserve: true
+  - source_loc: "src/pages/AdminPage.tsx:55-200"
+    condition: "Students, filters, or assigned tests change."
+    behavior: "Recomputes roster metrics and active-tab content."
+    must_preserve: true
+error_paths:
+  - source_loc: "src/pages/AdminPage.tsx:113-120"
+    trigger: "Invalid admin passcode."
+    outcome: "Remains unauthenticated and displays an invalid-passcode message."
+    contract: "Client-side boolean failure; no HTTP status."
+    must_preserve: true
+concurrency:
+  model: sync
+  tx_boundary:
+    source_loc: "src/store/userStore.ts:685-901"
+    scope: "Admin mutations update the persisted store and broadcast a sync signal."
+    isolation: "Browser storage serialization"
+    must_preserve: true

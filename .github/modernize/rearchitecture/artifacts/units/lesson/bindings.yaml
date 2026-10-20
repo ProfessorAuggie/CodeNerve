@@ -1,0 +1,9 @@
+unit: lesson
+bindings:
+  - type: route-declaration
+    name: "Route path=/lesson/:lessonId"
+    source_loc: "src/App.tsx:102"
+    target: "LessonPage"
+    must_appear_in_target: true
+    notes: "lessonId is read from route params."
+runtime_config: []

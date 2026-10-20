@@ -1,0 +1,7 @@
+unit: roadmap
+commit: false
+candidate_splits:
+  - id: "src/pages/RoadmapPage.tsx:12-295"
+    drivers: [concern_split]
+    rationale: "The page coordinates multiple graph implementations, portal selection, route parameters, and activity telemetry."
+    source_slice: {file: "src/pages/RoadmapPage.tsx", lines: [12, 295]}

@@ -1,0 +1,9 @@
+unit: authentication
+bindings:
+  - type: route-declaration
+    name: "Route paths=/login, /signin, and /register"
+    source_loc: "src/App.tsx:115-117"
+    target: "LoginPage"
+    must_appear_in_target: true
+    notes: "Three URLs expose the same login/registration page."
+runtime_config: []
