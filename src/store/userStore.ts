@@ -4,12 +4,15 @@ import type { ProblemProgress, ProblemStatus, UserRole, UserProfile, StudentReco
 import { isSupabaseConfigured, supabase } from '../lib/supabase';
 import {
   loadStudentData,
+  loadAdminRoster,
   registerStudentRemote,
   saveProblemProgress,
   saveQuizScore,
   setBookmark,
   setLessonCompletion,
   signInStudent,
+  signInAdmin,
+  updateStudentApproval,
 } from '../lib/supabaseData';
 
 interface CustomProblemSet {
@@ -58,6 +61,7 @@ interface UserState {
   updateStudentActivity: (activity: string) => void;
   recordAssignedTestSubmission: (testId: string, score: number, total: number) => void;
   syncCohortData: () => void;
+  syncAdminRoster: () => Promise<void>;
 
   // Guest Task Guard & Auth Modal
   isAuthModalOpen: boolean;
@@ -74,6 +78,7 @@ interface UserState {
 
   // Admin Actions
   authenticateAdmin: (passcode: string) => boolean;
+  authenticateAdminRemote: (email: string, password: string) => Promise<{ success: boolean; message: string }>;
   logoutAdmin: () => void;
   assignTest: (test: Omit<AssignedTest, 'id' | 'createdAt' | 'submissionsCount'>) => void;
   deleteAssignedTest: (testId: string) => void;
@@ -572,6 +577,12 @@ export const useUserStore = create<UserState>()(
         broadcastCohortSync();
       },
 
+      syncAdminRoster: async () => {
+        if (!isSupabaseConfigured || !supabase || !get().isAdminAuthenticated) return;
+        const remoteStudents = await loadAdminRoster();
+        set({ students: remoteStudents });
+      },
+
       addCustomProblemSet: (setInfo) => {
         if (!get().isStudentAuthenticated || get().user.id === 'guest') {
           get().openAuthModal('create custom problem sets');
@@ -829,6 +840,26 @@ export const useUserStore = create<UserState>()(
         return false;
       },
 
+      authenticateAdminRemote: async (email, password) => {
+        if (!isSupabaseConfigured) {
+          return {
+            success: get().authenticateAdmin(password),
+            message: 'Use the local admin passcode in preview mode.',
+          };
+        }
+        const result = await signInAdmin(email, password);
+        if (!result.success || !result.profile) return result;
+        set({
+          user: result.profile,
+          isAdminAuthenticated: true,
+          isStudentAuthenticated: false,
+          activePortal: result.profile.track || 'lpu',
+          hasChosenTrack: true,
+        });
+        await get().syncAdminRoster();
+        return { success: true, message: result.message };
+      },
+
       logoutAdmin: () =>
         set({ isAdminAuthenticated: false, user: { ...defaultUser, role: 'student' } }),
 
@@ -857,6 +888,11 @@ export const useUserStore = create<UserState>()(
 
       // Admin Student Approval & Management Actions
       approveStudent: (studentId: string) => {
+        if (isSupabaseConfigured) {
+          void updateStudentApproval(studentId, 'approved').catch((error: unknown) => {
+            console.error('Failed to approve student in Supabase.', error);
+          });
+        }
         set((state) => {
           const updatedStudents = (state.students || []).map((s) => {
             if (s.id === studentId) {
@@ -884,6 +920,11 @@ export const useUserStore = create<UserState>()(
       },
 
       disapproveStudent: (studentId: string) => {
+        if (isSupabaseConfigured) {
+          void updateStudentApproval(studentId, 'disapproved').catch((error: unknown) => {
+            console.error('Failed to disapprove student in Supabase.', error);
+          });
+        }
         set((state) => {
           const isCurrent = state.user.id === studentId;
           const updatedStudents = (state.students || []).map((s) =>

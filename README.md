@@ -125,7 +125,19 @@ CodeNerve/
 
 Student registration creates a Supabase Auth user and a `pending` profile. An administrator must approve the profile before sign-in is accepted. Learner progress is stored in the `problem_progress`, `problem_bookmarks`, `lesson_progress`, and `quiz_scores` tables and protected by row-level security. The anon key is safe for browser use; never expose a service-role key.
 
-When these variables are absent, automated tests and local UI previews use a clearly warned in-memory compatibility fallback. Configure Supabase before deploying or evaluating persistence. The existing `/admin` passcode flow remains a client-side legacy surface and should not be used as production administrator authentication until an admin Auth flow is added.
+#### Faculty admin access
+
+Create a faculty account in Supabase Authentication, then assign its profile a faculty role in the SQL Editor:
+
+```sql
+update public.profiles
+set role = 'admin', approval_status = 'approved'
+where email = 'admin@example.com';
+```
+
+Apply `supabase/migrations/20261020193000_admin_roster_access.sql` after the initial schema migration. The `/admin` portal signs in with the faculty Supabase email/password and loads registered students directly from `profiles`, including approval status and progress summaries. The old client-side passcode is only available in an unconfigured local preview and must not be used for production access.
+
+When these variables are absent, automated tests and local UI previews use a clearly warned in-memory compatibility fallback. Configure Supabase before deploying or evaluating persistence.
 
 ---
 

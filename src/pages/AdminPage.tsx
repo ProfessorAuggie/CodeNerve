@@ -35,7 +35,7 @@ export const AdminPage: React.FC = () => {
     students, 
     assignedTests, 
     isAdminAuthenticated, 
-    authenticateAdmin, 
+    authenticateAdminRemote,
     logoutAdmin, 
     assignTest, 
     deleteAssignedTest,
@@ -43,10 +43,12 @@ export const AdminPage: React.FC = () => {
     disapproveStudent,
     deleteStudent,
     registerStudent,
-    syncCohortData 
+    syncCohortData,
+    syncAdminRoster
   } = useUserStore();
 
   // Authentication Form State
+  const [adminEmail, setAdminEmail] = useState('');
   const [passcode, setPasscode] = useState('');
   const [authError, setAuthError] = useState(false);
   const [isSyncing, setIsSyncing] = useState(false);
@@ -72,8 +74,13 @@ export const AdminPage: React.FC = () => {
 
   // Auto-sync roster on component mount
   useEffect(() => {
-    syncCohortData();
-  }, [syncCohortData]);
+    if (isAdminAuthenticated) {
+      void syncAdminRoster().catch((error: unknown) => {
+        console.error('Failed to load the Supabase admin roster.', error);
+      });
+      syncCohortData();
+    }
+  }, [isAdminAuthenticated, syncAdminRoster, syncCohortData]);
 
   // Manual cohort re-sync handler
   const handleManualSync = () => {
@@ -108,14 +115,21 @@ export const AdminPage: React.FC = () => {
   const [studentCreatedSuccess, setStudentCreatedSuccess] = useState(false);
 
   // Handle Admin Passcode Login
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    const success = authenticateAdmin(passcode);
-    if (!success) {
+    try {
+      const result = await authenticateAdminRemote(adminEmail, passcode);
+      if (!result.success) {
+        setAuthError(true);
+        setTimeout(() => setAuthError(false), 3000);
+        return;
+      }
+      setPasscode('');
+      setAdminEmail('');
+    } catch (error: unknown) {
+      console.error('Admin authentication failed.', error);
       setAuthError(true);
       setTimeout(() => setAuthError(false), 3000);
-    } else {
-      setPasscode('');
     }
   };
 
@@ -236,22 +250,37 @@ export const AdminPage: React.FC = () => {
           <form onSubmit={handleLogin} className="mt-8 space-y-4">
             <div>
               <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2 font-mono">
-                Faculty Passcode
+                Faculty Email
+              </label>
+              <div className="relative">
+                <input
+                  type="email"
+                  value={adminEmail}
+                  onChange={(e) => setAdminEmail(e.target.value)}
+                  placeholder="admin@your-domain.com"
+                  autoFocus
+                  className="w-full rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 pl-10 pr-4 py-3 text-sm text-slate-900 dark:text-slate-200 placeholder:text-slate-400 dark:placeholder:text-slate-600 focus:outline-none focus:border-purple-500 transition font-mono"
+                />
+                <Key className="absolute left-3.5 top-3.5 h-4 w-4 text-slate-400" />
+              </div>
+            </div>
+            <div>
+              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2 font-mono">
+                Faculty Password
               </label>
               <div className="relative">
                 <input
                   type="password"
                   value={passcode}
                   onChange={(e) => setPasscode(e.target.value)}
-                  placeholder="Enter admin passcode (e.g. admin123)"
-                  autoFocus
+                  placeholder="Enter your Supabase password"
                   className="w-full rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 pl-10 pr-4 py-3 text-sm text-slate-900 dark:text-slate-200 placeholder:text-slate-400 dark:placeholder:text-slate-600 focus:outline-none focus:border-purple-500 transition font-mono"
                 />
                 <Key className="absolute left-3.5 top-3.5 h-4 w-4 text-slate-400" />
               </div>
               {authError && (
                 <p className="text-xs text-rose-500 dark:text-rose-400 mt-1.5 font-medium animate-in fade-in">
-                  Invalid passcode. Try <code className="text-rose-600 dark:text-rose-300 font-bold font-mono">admin123</code>.
+                  Invalid faculty credentials or this account is not an administrator.
                 </p>
               )}
             </div>
@@ -267,7 +296,7 @@ export const AdminPage: React.FC = () => {
 
           <div className="mt-6 pt-5 border-t border-slate-200 dark:border-slate-800/80 text-center">
             <p className="text-[11px] text-slate-500">
-              Default testing key: <code className="text-purple-600 dark:text-purple-300 font-mono font-bold">admin123</code>
+              Your Supabase profile must have the <code className="text-purple-600 dark:text-purple-300 font-mono font-bold">admin</code> or <code className="text-purple-600 dark:text-purple-300 font-mono font-bold">teacher</code> role.
             </p>
           </div>
         </div>

@@ -1,9 +1,30 @@
-import type { ProblemProgress, ProblemStatus, UserProfile } from '../types';
+import type { ProblemProgress, ProblemStatus, StudentRecord, UserProfile } from '../types';
 import { isSupabaseConfigured, supabase } from './supabase';
 
 export interface RemoteStudentProfile extends UserProfile {
   approvalStatus: NonNullable<UserProfile['approvalStatus']>;
 }
+
+const studentRecordFromProfile = (row: Record<string, unknown>): StudentRecord => ({
+  id: String(row.id),
+  name: String(row.name ?? ''),
+  email: String(row.email ?? ''),
+  registrationNumber: String(row.registration_number ?? ''),
+  avatar: row.avatar ? String(row.avatar) : undefined,
+  university: String(row.university ?? 'CodeNerve Explorer'),
+  semester: Number(row.semester ?? 1),
+  track: row.track === 'lpu' ? 'lpu' : 'global',
+  batch: String(row.batch ?? 'Independent Study'),
+  joinedAt: String(row.created_at ?? new Date().toISOString()),
+  status: 'offline',
+  currentActivity: 'Registered learner',
+  lastActive: String(row.updated_at ?? row.created_at ?? ''),
+  solvedProblemIds: [],
+  totalSolved: 0,
+  completedLessons: [],
+  quizScores: {},
+  approvalStatus: (row.approval_status as StudentRecord['approvalStatus']) ?? 'pending',
+});
 
 const requireSupabase = () => {
   if (!isSupabaseConfigured || !supabase) {
@@ -73,6 +94,81 @@ export async function signInStudent(identifier: string, password: string) {
   }
 
   return { success: true, message: `Welcome back, ${profile.name}!`, profile };
+}
+
+export async function signInAdmin(email: string, password: string) {
+  const client = requireSupabase();
+  const { data, error } = await client.auth.signInWithPassword({ email: email.trim(), password });
+  if (error) return { success: false, message: error.message };
+  if (!data.user) return { success: false, message: 'Authentication did not return a user session.' };
+
+  const { data: row, error: profileError } = await client
+    .from('profiles')
+    .select('*')
+    .eq('id', data.user.id)
+    .single();
+  if (profileError) {
+    await client.auth.signOut();
+    throw profileError;
+  }
+  if (row.role !== 'admin' && row.role !== 'teacher') {
+    await client.auth.signOut();
+    return { success: false, message: 'This account does not have faculty administrator access.' };
+  }
+
+  return { success: true, message: `Welcome, ${row.name}.`, profile: profileFromRow(row) };
+}
+
+export async function loadAdminRoster(): Promise<StudentRecord[]> {
+  const client = requireSupabase();
+  const [{ data: profiles, error: profilesError }, { data: progress, error: progressError }, { data: lessons, error: lessonsError }, { data: quizzes, error: quizzesError }] =
+    await Promise.all([
+      client.from('profiles').select('*').eq('role', 'student').order('created_at', { ascending: false }),
+      client.from('problem_progress').select('user_id, problem_id, status').eq('status', 'SOLVED'),
+      client.from('lesson_progress').select('user_id, lesson_id').eq('completed', true),
+      client.from('quiz_scores').select('user_id, quiz_id, score, total, completed_at'),
+    ]);
+  if (profilesError) throw profilesError;
+  if (progressError) throw progressError;
+  if (lessonsError) throw lessonsError;
+  if (quizzesError) throw quizzesError;
+
+  const solvedByUser = new Map<string, string[]>();
+  for (const row of progress ?? []) {
+    solvedByUser.set(row.user_id, [...(solvedByUser.get(row.user_id) ?? []), row.problem_id]);
+  }
+  const lessonsByUser = new Map<string, string[]>();
+  for (const row of lessons ?? []) {
+    lessonsByUser.set(row.user_id, [...(lessonsByUser.get(row.user_id) ?? []), row.lesson_id]);
+  }
+  const quizzesByUser = new Map<string, StudentRecord['quizScores']>();
+  for (const row of quizzes ?? []) {
+    quizzesByUser.set(row.user_id, {
+      ...(quizzesByUser.get(row.user_id) ?? {}),
+      [row.quiz_id]: { score: row.score, total: row.total, date: row.completed_at },
+    });
+  }
+
+  return (profiles ?? []).map((row) => {
+    const student = studentRecordFromProfile(row);
+    const solvedProblemIds = solvedByUser.get(student.id) ?? [];
+    return {
+      ...student,
+      solvedProblemIds,
+      totalSolved: solvedProblemIds.length,
+      completedLessons: lessonsByUser.get(student.id) ?? [],
+      quizScores: quizzesByUser.get(student.id) ?? {},
+    };
+  });
+}
+
+export async function updateStudentApproval(studentId: string, approvalStatus: NonNullable<UserProfile['approvalStatus']>) {
+  const { error } = await requireSupabase()
+    .from('profiles')
+    .update({ approval_status: approvalStatus, updated_at: new Date().toISOString() })
+    .eq('id', studentId)
+    .eq('role', 'student');
+  if (error) throw error;
 }
 
 export async function registerStudentRemote(input: {
