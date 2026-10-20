@@ -78,7 +78,7 @@ interface UserState {
 
   // Admin Actions
   authenticateAdmin: (passcode: string) => boolean;
-  authenticateAdminRemote: (email: string, password: string) => Promise<{ success: boolean; message: string }>;
+  authenticateAdminRemote: (password: string) => Promise<{ success: boolean; message: string }>;
   logoutAdmin: () => void;
   assignTest: (test: Omit<AssignedTest, 'id' | 'createdAt' | 'submissionsCount'>) => void;
   deleteAssignedTest: (testId: string) => void;
@@ -579,7 +579,9 @@ export const useUserStore = create<UserState>()(
 
       syncAdminRoster: async () => {
         if (!isSupabaseConfigured || !supabase || !get().isAdminAuthenticated) return;
-        const remoteStudents = await loadAdminRoster();
+        const token = sessionStorage.getItem('codenerve_admin_gateway_token');
+        if (!token) return;
+        const remoteStudents = await loadAdminRoster(token);
         set({ students: remoteStudents });
       },
 
@@ -840,15 +842,16 @@ export const useUserStore = create<UserState>()(
         return false;
       },
 
-      authenticateAdminRemote: async (email, password) => {
+      authenticateAdminRemote: async (password) => {
         if (!isSupabaseConfigured) {
           return {
             success: get().authenticateAdmin(password),
             message: 'Use the local admin passcode in preview mode.',
           };
         }
-        const result = await signInAdmin(email, password);
+        const result = await signInAdmin(password);
         if (!result.success || !result.profile) return result;
+        sessionStorage.setItem('codenerve_admin_gateway_token', result.token);
         set({
           user: result.profile,
           isAdminAuthenticated: true,
@@ -861,7 +864,10 @@ export const useUserStore = create<UserState>()(
       },
 
       logoutAdmin: () =>
-        set({ isAdminAuthenticated: false, user: { ...defaultUser, role: 'student' } }),
+        (() => {
+          if (typeof sessionStorage !== 'undefined') sessionStorage.removeItem('codenerve_admin_gateway_token');
+          set({ isAdminAuthenticated: false, user: { ...defaultUser, role: 'student' } });
+        })(),
 
       // Admin Test Assignment Action
       assignTest: (testData) =>
@@ -889,7 +895,9 @@ export const useUserStore = create<UserState>()(
       // Admin Student Approval & Management Actions
       approveStudent: (studentId: string) => {
         if (isSupabaseConfigured) {
-          void updateStudentApproval(studentId, 'approved').catch((error: unknown) => {
+          const token = typeof sessionStorage !== 'undefined' ? sessionStorage.getItem('codenerve_admin_gateway_token') : null;
+          if (!token) return;
+          void updateStudentApproval(token, studentId, 'approved').catch((error: unknown) => {
             console.error('Failed to approve student in Supabase.', error);
           });
         }
@@ -921,7 +929,9 @@ export const useUserStore = create<UserState>()(
 
       disapproveStudent: (studentId: string) => {
         if (isSupabaseConfigured) {
-          void updateStudentApproval(studentId, 'disapproved').catch((error: unknown) => {
+          const token = typeof sessionStorage !== 'undefined' ? sessionStorage.getItem('codenerve_admin_gateway_token') : null;
+          if (!token) return;
+          void updateStudentApproval(token, studentId, 'disapproved').catch((error: unknown) => {
             console.error('Failed to disapprove student in Supabase.', error);
           });
         }

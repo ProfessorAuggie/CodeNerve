@@ -127,15 +127,16 @@ Student registration creates a Supabase Auth user and a `pending` profile. An ad
 
 #### Faculty admin access
 
-Create a faculty account in Supabase Authentication, then assign its profile a faculty role in the SQL Editor:
+Deploy `supabase/functions/admin-gateway/index.ts` as the `admin-gateway` Edge Function and configure these server-side secrets:
 
-```sql
-update public.profiles
-set role = 'admin', approval_status = 'approved'
-where email = 'admin@example.com';
+```text
+ADMIN_PASSWORD=CodeNerve#26
+ADMIN_EMAIL=professorauggie@gmail.com
+ADMIN_GATEWAY_SECRET=<long-random-secret>
+SUPABASE_SERVICE_ROLE_KEY=<Supabase service role key>
 ```
 
-Apply `supabase/migrations/20261020193000_admin_roster_access.sql` after the initial schema migration. The `/admin` portal signs in with the faculty Supabase email/password and loads registered students directly from `profiles`, including approval status and progress summaries. The old client-side passcode is only available in an unconfigured local preview and must not be used for production access.
+Never put these values in `.env.local`, frontend code, Git, or chat. The function keeps the password and service-role key server-side, issues a short-lived signed gateway token, and handles admin roster reads and approval updates. The `/admin` portal requires only the password.
 
 When these variables are absent, automated tests and local UI previews use a clearly warned in-memory compatibility fallback. Configure Supabase before deploying or evaluating persistence.
 
