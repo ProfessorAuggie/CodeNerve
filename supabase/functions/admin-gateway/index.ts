@@ -59,6 +59,7 @@ Deno.serve(async (request) => {
       if (!body.password || body.password !== Deno.env.get('ADMIN_PASSWORD')) return json({ message: 'Invalid administrator password.' }, 401);
       const { data: profile, error } = await service.from('profiles').select('*').eq('email', Deno.env.get('ADMIN_EMAIL')).single();
       if (error) throw error;
+      if (profile.role !== 'admin' && profile.role !== 'teacher') return json({ message: 'Administrator profile is not enabled.' }, 403);
       return json({ token: await signToken(), profile });
     }
 
