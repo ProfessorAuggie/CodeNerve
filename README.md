@@ -138,6 +138,21 @@ SUPABASE_SERVICE_ROLE_KEY=<Supabase service role key>
 
 Never put these values in `.env.local`, frontend code, Git, or chat. The function keeps the password and service-role key server-side, issues a short-lived signed gateway token, and handles admin roster reads and approval updates. The `/admin` portal requires only the password.
 
+#### Google Sheets export
+
+Supabase remains the source of truth. To export the student roster and solved-problem activity to Google Sheets:
+
+1. Create or open a Google Sheet and open **Extensions → Apps Script**.
+2. Copy [`google-apps-script/CodeNerveSync.gs`](./google-apps-script/CodeNerveSync.gs) into the Apps Script editor.
+3. In **Project Settings → Script Properties**, add:
+   - `SUPABASE_URL`: your Supabase project URL.
+   - `SUPABASE_SERVICE_ROLE_KEY`: your service-role key. Keep this only in Apps Script properties; never commit or paste it into the frontend.
+   - `SPREADSHEET_ID`: the ID from the Google Sheet URL.
+4. Run `syncCodeNerve` once and approve the Google authorization prompt.
+5. Use the **CodeNerve → Install daily sync** menu to create a daily export.
+
+The script creates `Student Roster` and `Progress Summary` sheets. It is one-way (Supabase → Sheets), so spreadsheet edits do not alter authentication or learner progress.
+
 When these variables are absent, automated tests and local UI previews use a clearly warned in-memory compatibility fallback. Configure Supabase before deploying or evaluating persistence.
 
 ---
