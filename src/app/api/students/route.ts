@@ -3,6 +3,8 @@ import { connectDB } from '@/lib/db';
 import { User } from '@/models/User';
 import { verifyAuth } from '@/lib/serverAuth';
 
+export const dynamic = 'force-dynamic';
+
 export async function GET(req: Request) {
   try {
     // Enforce Admin / Faculty Authorization

@@ -5,6 +5,8 @@ import { User } from '@/models/User';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'codenerve_super_secret_jwt_key_2026_change_in_production';
 
+export const dynamic = 'force-dynamic';
+
 export async function GET(req: Request) {
   try {
     const authHeader = req.headers.get('authorization');

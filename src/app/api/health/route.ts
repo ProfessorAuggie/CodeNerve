@@ -2,6 +2,8 @@ import { NextResponse } from 'next/server';
 import mongoose from 'mongoose';
 import { connectDB } from '@/lib/db';
 
+export const dynamic = 'force-dynamic';
+
 export async function GET() {
   let isConnected = false;
   let dbName = '';
