@@ -1,5 +1,7 @@
+'use client';
+
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from '../../lib/router';
 import { Code2, Sparkles } from 'lucide-react';
 import { APP_CONFIG } from '../../lib/config';
 

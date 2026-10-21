@@ -1,3 +1,5 @@
+'use client';
+
 import React, { Component, type ErrorInfo, type ReactNode } from 'react';
 import { AlertTriangle, RotateCcw, Home, LayoutDashboard, ChevronDown, ChevronUp } from 'lucide-react';
 
@@ -16,13 +18,6 @@ interface ErrorBoundaryState {
 
 /**
  * Reusable React Error Boundary for CodeNerve.
- * 
- * Catches render-time errors, lifecycle errors, and constructor errors in descendant component trees.
- * Note: React Error Boundaries do NOT catch:
- * - Event handler errors (use standard try/catch inside handlers)
- * - Asynchronous callbacks (e.g. setTimeout, requestAnimationFrame, unhandled Promises)
- * - Server-side rendering errors
- * - Errors thrown within the Error Boundary itself
  */
 export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
   constructor(props: ErrorBoundaryProps) {
@@ -40,7 +35,7 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
     // Log error to console in development
-    if (import.meta.env.DEV) {
+    if (process.env.NODE_ENV !== 'production') {
       console.error('[CodeNerve ErrorBoundary] Caught render error:', error, errorInfo);
     }
   }
@@ -62,7 +57,7 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
         return this.props.fallback;
       }
 
-      const isDev = import.meta.env.DEV;
+      const isDev = process.env.NODE_ENV !== 'production';
       const section = this.props.sectionName || 'Application View';
 
       return (

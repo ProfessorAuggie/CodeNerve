@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import type { ProblemProgress, ProblemStatus, UserRole, UserProfile, StudentRecord, AssignedTest } from '../types';
+import { setStoredToken, setStoredAdminToken, apiUpdateStudentApproval, apiDeleteStudent } from '../lib/api';
 
 interface CustomProblemSet {
   id: string;
@@ -57,10 +58,13 @@ interface UserState {
 
   // Student Authentication Actions
   loginStudent: (identifier: string, password?: string) => { success: boolean; message: string; student?: StudentRecord };
+  setAuthenticatedStudentFromBackend: (backendUser: any) => void;
   logoutStudent: () => void;
 
   // Admin Actions
   authenticateAdmin: (passcode: string) => boolean;
+  setAuthenticatedAdminFromBackend: (adminUser: any) => void;
+  setStudentsFromBackend: (studentsList: any[]) => void;
   logoutAdmin: () => void;
   assignTest: (test: Omit<AssignedTest, 'id' | 'createdAt' | 'submissionsCount'>) => void;
   deleteAssignedTest: (testId: string) => void;
@@ -669,7 +673,80 @@ export const useUserStore = create<UserState>()(
         };
       },
 
+      setAuthenticatedStudentFromBackend: (backendUser: any) => {
+        const id = backendUser._id || backendUser.id;
+        const userProfile: UserProfile = {
+          id,
+          name: backendUser.name,
+          email: backendUser.email,
+          role: backendUser.role || 'student',
+          university: backendUser.university || (backendUser.track === 'lpu' ? 'Lovely Professional University (LPU)' : 'Global Student Cohort'),
+          semester: backendUser.semester || 3,
+          registrationNumber: backendUser.registrationNumber,
+          batch: backendUser.batch || 'Computer Science & Engineering',
+          track: backendUser.track || 'global',
+          avatar: backendUser.avatar || '',
+          approvalStatus: backendUser.approvalStatus || 'approved',
+        };
+
+        const studentRec: StudentRecord = {
+          id,
+          name: backendUser.name,
+          email: backendUser.email,
+          registrationNumber: backendUser.registrationNumber,
+          track: backendUser.track || 'global',
+          batch: backendUser.batch || 'Computer Science & Engineering',
+          joinedAt: backendUser.createdAt || new Date().toISOString(),
+          status: 'online',
+          currentActivity: backendUser.currentActivity || 'Active learner · CodeNerve',
+          lastActive: 'Just now',
+          solvedProblemIds: backendUser.solvedProblemIds || [],
+          totalSolved: (backendUser.solvedProblemIds || []).length,
+          completedLessons: backendUser.completedLessons || [],
+          quizScores: backendUser.quizScores || {},
+          approvalStatus: backendUser.approvalStatus || 'approved',
+        };
+
+        set((state) => {
+          const updatedProgress = { ...state.problemProgress };
+          if (backendUser.solvedProblemIds && backendUser.solvedProblemIds.length > 0) {
+            backendUser.solvedProblemIds.forEach((pid: string) => {
+              if (!updatedProgress[pid]) {
+                updatedProgress[pid] = {
+                  problemId: pid,
+                  status: 'SOLVED',
+                  lastUpdated: new Date().toISOString(),
+                  solvedAt: new Date().toISOString(),
+                };
+              }
+            });
+          }
+
+          const existingIndex = (state.students || []).findIndex(
+            (s) => s.id === id || s.email === backendUser.email || s.registrationNumber === backendUser.registrationNumber
+          );
+          let newStudents = [...(state.students || [])];
+          if (existingIndex >= 0) {
+            newStudents[existingIndex] = { ...newStudents[existingIndex], ...studentRec };
+          } else {
+            newStudents = [studentRec, ...newStudents];
+          }
+
+          broadcastCohortSync();
+
+          return {
+            user: userProfile,
+            isStudentAuthenticated: true,
+            activePortal: backendUser.track || 'global',
+            hasChosenTrack: true,
+            problemProgress: updatedProgress,
+            students: newStudents,
+          };
+        });
+      },
+
       logoutStudent: () => {
+        setStoredToken(null);
         broadcastCohortSync();
         set({
           isStudentAuthenticated: false,
@@ -705,8 +782,49 @@ export const useUserStore = create<UserState>()(
         return false;
       },
 
-      logoutAdmin: () =>
-        set({ isAdminAuthenticated: false, user: { ...defaultUser, role: 'student' } }),
+      setAuthenticatedAdminFromBackend: (adminUser: any) => {
+        set((state) => ({
+          isAdminAuthenticated: true,
+          user: {
+            id: adminUser?.id || 'admin-001',
+            name: adminUser?.name || 'Dr. Auggie',
+            email: adminUser?.email || 'auggie.hod@lpu.in',
+            role: 'admin',
+            university: adminUser?.university || 'Lovely Professional University (LPU)',
+            semester: 0,
+            registrationNumber: adminUser?.registrationNumber || 'FAC-1001',
+            batch: adminUser?.batch || 'Head of CSE Faculty',
+            track: 'lpu',
+            approvalStatus: 'approved',
+          },
+        }));
+      },
+
+      setStudentsFromBackend: (backendStudents: any[]) => {
+        const mapped: StudentRecord[] = backendStudents.map((b) => ({
+          id: b._id || b.id,
+          name: b.name,
+          email: b.email,
+          registrationNumber: b.registrationNumber,
+          track: b.track || 'global',
+          batch: b.batch || 'Computer Science & Engineering',
+          joinedAt: b.createdAt || new Date().toISOString(),
+          status: b.status || 'offline',
+          currentActivity: b.currentActivity || 'Active learner · CodeNerve',
+          lastActive: b.lastActive ? new Date(b.lastActive).toLocaleDateString() : 'Recently',
+          solvedProblemIds: b.solvedProblemIds || [],
+          totalSolved: (b.solvedProblemIds || []).length,
+          completedLessons: b.completedLessons || [],
+          quizScores: b.quizScores || {},
+          approvalStatus: b.approvalStatus || 'approved',
+        }));
+        set({ students: mapped });
+      },
+
+      logoutAdmin: () => {
+        setStoredAdminToken(null);
+        set({ isAdminAuthenticated: false, user: { ...defaultUser, role: 'student' } });
+      },
 
       // Admin Test Assignment Action
       assignTest: (testData) =>
@@ -733,6 +851,11 @@ export const useUserStore = create<UserState>()(
 
       // Admin Student Approval & Management Actions
       approveStudent: (studentId: string) => {
+        // Backend DB sync
+        apiUpdateStudentApproval(studentId, 'approved').catch((err) => {
+          console.error('API approval sync error:', err);
+        });
+
         set((state) => {
           const updatedStudents = (state.students || []).map((s) => {
             if (s.id === studentId) {
@@ -760,6 +883,11 @@ export const useUserStore = create<UserState>()(
       },
 
       disapproveStudent: (studentId: string) => {
+        // Backend DB sync
+        apiUpdateStudentApproval(studentId, 'disapproved').catch((err) => {
+          console.error('API disapproval sync error:', err);
+        });
+
         set((state) => {
           const isCurrent = state.user.id === studentId;
           const updatedStudents = (state.students || []).map((s) =>
@@ -786,6 +914,11 @@ export const useUserStore = create<UserState>()(
       },
 
       deleteStudent: (studentId: string) => {
+        // Backend DB deletion
+        apiDeleteStudent(studentId).catch((err) => {
+          console.error('API delete student error:', err);
+        });
+
         set((state) => {
           const isCurrent = state.user.id === studentId;
           const updatedStudents = (state.students || []).filter((s) => s.id !== studentId);

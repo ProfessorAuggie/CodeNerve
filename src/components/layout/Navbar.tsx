@@ -1,5 +1,7 @@
+'use client';
+
 import React, { useState } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from '../../lib/router';
 import { 
   Code2, 
   Terminal, 
@@ -91,7 +93,7 @@ export const Navbar: React.FC = () => {
                   navigate('/roadmap');
                 }
               }}
-              className={`flex items-center gap-1.5 px-2.5 sm:px-3 py-1 rounded-lg font-bold transition text-xs cursor-pointer ${
+              className={`flex items-center gap-1.5 px-2 sm:px-3 py-1 rounded-lg font-bold transition text-xs cursor-pointer ${
                 activePortal === 'global'
                   ? 'bg-indigo-600 text-white shadow-md shadow-indigo-500/30 ring-1 ring-white/20'
                   : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
@@ -99,7 +101,7 @@ export const Navbar: React.FC = () => {
               title="Generic Public Coding Track (Language Agnostic: Python, Java, C++, JS, Go)"
             >
               <Globe className="h-3.5 w-3.5" />
-              <span>Global DSA</span>
+              <span className="hidden sm:inline">Global DSA</span>
             </button>
 
             <button
@@ -107,7 +109,7 @@ export const Navbar: React.FC = () => {
                 setActivePortal('lpu');
                 navigate('/lpu');
               }}
-              className={`flex items-center gap-1.5 px-2.5 sm:px-3 py-1 rounded-lg font-bold transition text-xs cursor-pointer ${
+              className={`flex items-center gap-1.5 px-2 sm:px-3 py-1 rounded-lg font-bold transition text-xs cursor-pointer ${
                 activePortal === 'lpu'
                   ? 'bg-emerald-600 text-white shadow-md shadow-emerald-500/30 ring-1 ring-white/20'
                   : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
@@ -115,7 +117,7 @@ export const Navbar: React.FC = () => {
               title="Lovely Professional University Academic Portal (CSE202 / CSE205)"
             >
               <GraduationCap className="h-3.5 w-3.5" />
-              <span>LPU Portal</span>
+              <span className="hidden sm:inline">LPU Portal</span>
             </button>
           </div>
         </div>
